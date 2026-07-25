@@ -1,0 +1,6 @@
+# https://kapilrana.dev/robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap (update host when deploying)
+Sitemap: https://kapilrana.dev/sitemap.xml

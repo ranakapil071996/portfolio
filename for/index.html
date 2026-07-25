@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Company-themed resumes — Kapil Rana</title>
+  <meta name="description" content="Shareable company-themed resume links for Kapil Rana (SDE III). Pick a company brand theme." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="icon" href="../favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/company-resume.css" />
+  <style>
+    body { background: #f1f5f9; font-family: Inter, system-ui, sans-serif; color: #0f172a; }
+    .hub-nav { max-width: 960px; margin: 0 auto; padding: 1rem 1.25rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .hub-nav a { font-weight: 600; color: #2563eb; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="hub-nav">
+    <a href="../">← Portfolio</a>
+    <a href="../assets/Kapil_Rana_Resume.pdf" download>Download PDF</a>
+  </div>
+  <div class="hub-wrap">
+    <h1>Company-themed resumes</h1>
+    <p class="hub-sub">
+      Share a dedicated URL with each hiring team. Every page uses the same resume content,
+      styled with that company’s public brand colors and identity.
+      Example: <code>/wolt/</code>, <code>/revolut/</code>, <code>/n8n/</code>
+    </p>
+    <div class="hub-grid" id="hub-grid"></div>
+  </div>
+  <script src="../js/companies-data.js"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById("hub-grid");
+      var list = window.COMPANY_LIST || [];
+      list.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      grid.innerHTML = list.map(function (c) {
+        return (
+          '<a class="hub-card" href="../' + c.slug + '/" style="--card-color:' + c.primary + '">' +
+          '<div class="hub-swatch"></div>' +
+          "<strong>" + c.name + "</strong>" +
+          "<span>" + c.industry + "</span>" +
+          "<span style='display:block;margin-top:0.35rem;font-size:0.72rem;color:#94a3b8'>" +
+          (c.layout || "classic") + " · " + (c.threeMode || "3d") + " · " + (c.particlesMode || "particles") +
+          "</span>" +
+          '<span class="hub-path">/' + c.slug + "/</span>" +
+          "</a>"
+        );
+      }).join("");
+    })();
+  </script>
+</body>
+</html>
