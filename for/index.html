@@ -16,22 +16,23 @@
   </style>
 </head>
 <body>
-  <div class="hub-nav">
+  <div class="hub-nav"><div id="lang-switcher" class="lang-switcher"></div>
     <a href="../">← Portfolio</a>
     <a href="../assets/Kapil_Rana_Resume.pdf" download>Download PDF</a>
   </div>
   <div class="hub-wrap">
-    <h1>Company-themed resumes</h1>
+    <h1 data-i18n="companyUi.hubTitle">Company-themed resumes</h1>
     <p class="hub-sub">
-      Share a dedicated URL with each hiring team. Every page uses the same resume content,
-      styled with that company’s public brand colors and identity.
+      <span data-i18n="companyUi.hubSub">Share a dedicated URL with each hiring team. Every page uses the same resume content, styled with that company’s public brand colors and identity.</span>
       Example: <code>/wolt/</code>, <code>/revolut/</code>, <code>/n8n/</code>
     </p>
     <div class="hub-grid" id="hub-grid"></div>
   </div>
+  <script src="../js/i18n.js"></script>
   <script src="../js/companies-data.js"></script>
   <script>
     (function () {
+      function run() {
       var grid = document.getElementById("hub-grid");
       var list = window.COMPANY_LIST || [];
       list.sort(function (a, b) { return a.name.localeCompare(b.name); });
@@ -48,6 +49,11 @@
           "</a>"
         );
       }).join("");
+      }
+      if (window.I18n) {
+        var q = new URLSearchParams(location.search).get("lang");
+        window.I18n.init({ base: "../", lang: q || undefined }).then(run).catch(run);
+      } else run();
     })();
   </script>
 </body>

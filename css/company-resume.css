@@ -787,3 +787,23 @@ body.layout-aurora .cr-pitch-card {
     --c-muted: #444 !important;
   }
 }
+
+/* i18n switcher on company pages */
+.cr-actions .lang-switcher { margin-right: 0.25rem; }
+.lang-select {
+  appearance: none;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 1.6rem 0.4rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--c-primary) 30%, transparent);
+  background: var(--c-surface);
+  color: var(--c-text);
+  cursor: pointer;
+}
+html[dir="rtl"] .cr-actions { flex-direction: row-reverse; }
+html[dir="rtl"] body { text-align: start; }
+html[dir="rtl"] .job-head { flex-direction: row-reverse; }
+html[dir="rtl"] .skill-row { direction: rtl; }
+html[dir="rtl"] .cr-banner-inner { direction: rtl; }

@@ -14,6 +14,14 @@
     return Math.max(y, 1);
   }
 
+  function ui(key, fallback) {
+    if (window.I18n && window.I18n.getDict()) {
+      var v = window.I18n.t("companyUi." + key);
+      if (v && v.indexOf("companyUi.") !== 0) return v;
+    }
+    return fallback;
+  }
+
   function esc(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -95,9 +103,9 @@
         return (
           '<article class="impact-card cr-reveal"><h3>' +
           esc(imp.company) +
-          '</h3><p><span class="lbl">Business</span>' +
+          '</h3><p><span class="lbl">' + esc(ui('business','Business')) + '</span>' +
           esc(imp.business) +
-          '</p><p><span class="lbl">Tech</span>' +
+          '</p><p><span class="lbl">' + esc(ui('tech','Tech')) + '</span>' +
           esc(imp.tech) +
           "</p></article>"
         );
@@ -107,19 +115,19 @@
 
   function sectionsHtml(resume, summary) {
     return (
-      '<section class="cr-section cr-reveal"><h2>Professional Summary</h2><p>' +
+      '<section class="cr-section cr-reveal"><h2>' + esc(ui('summary','Professional Summary')) + '</h2><p>' +
       esc(summary) +
       "</p></section>" +
-      '<section class="cr-section cr-reveal"><h2>Technical Skills</h2><dl>' +
+      '<section class="cr-section cr-reveal"><h2>' + esc(ui('skills','Technical Skills')) + '</h2><dl>' +
       skillsHtml(resume) +
       "</dl></section>" +
-      '<section class="cr-section cr-reveal"><h2>Professional Experience</h2>' +
+      '<section class="cr-section cr-reveal"><h2>' + esc(ui('experience','Professional Experience')) + '</h2>' +
       expHtml(resume) +
       "</section>" +
-      '<section class="cr-section cr-reveal"><h2>Business &amp; Tech Impact</h2>' +
+      '<section class="cr-section cr-reveal"><h2>' + esc(ui('impact','Business & Tech Impact')) + '</h2>' +
       impactHtml(resume) +
       "</section>" +
-      '<section class="cr-section cr-reveal"><h2>Education</h2><div class="edu"><div><strong>' +
+      '<section class="cr-section cr-reveal"><h2>' + esc(ui('education','Education')) + '</h2><div class="edu"><div><strong>' +
       esc(resume.education.school) +
       "</strong> · " +
       esc(resume.education.location) +
@@ -146,16 +154,28 @@
       esc(c.name) +
       "</span></a>" +
       '<div class="cr-actions">' +
+      '<div class="lang-switcher" id="lang-switcher"></div>' +
       '<a class="cr-btn" href="' +
       base +
-      'for/">All companies</a>' +
+      "for/?lang=" +
+      (window.I18n ? window.I18n.getLang() : "en") +
+      '">' +
+      esc(ui("allCompanies", "All companies")) +
+      "</a>" +
       '<a class="cr-btn" href="' +
       base +
-      '">Portfolio</a>' +
+      (window.I18n ? window.I18n.getLang() + "/" : "") +
+      '">' +
+      esc(ui("portfolio", "Portfolio")) +
+      "</a>" +
       '<a class="cr-btn" href="' +
       base +
-      'assets/Kapil_Rana_Resume.pdf" download>PDF</a>' +
-      '<button type="button" class="cr-btn cr-btn-primary" id="print-btn">Print</button>' +
+      'assets/Kapil_Rana_Resume.pdf" download>' +
+      esc(ui("pdf", "PDF")) +
+      "</a>" +
+      '<button type="button" class="cr-btn cr-btn-primary" id="print-btn">' +
+      esc(ui("print", "Print")) +
+      "</button>" +
       "</div></div></header>"
     );
   }
@@ -271,6 +291,12 @@
     }
 
     applyTheme(c);
+
+    // i18n: shared locales, no duplicated resume components
+    var langPromise = window.I18n
+      ? window.I18n.init({ base: "../", lang: window.__LANG })
+      : Promise.resolve(null);
+
     document.title = resume.name + " — Resume for " + c.name + " · " + (c.layout || "classic");
     var desc = document.getElementById("meta-desc");
     if (desc) {
@@ -293,12 +319,12 @@
       '<div id="cr-particles" aria-hidden="true"></div>' +
       '<div class="cr-noise" aria-hidden="true"></div>' +
       '<div class="cr-shell">' +
-      '<a class="skip" href="#resume-main">Skip to resume</a>' +
+      '<a class="skip" href="#resume-main">' + esc(ui("skip","Skip to resume")) + '</a>' +
       topBar(c, base) +
       banner(c, resume, base, layout) +
-      '<div class="cr-pitch"><div class="cr-pitch-card cr-reveal"><strong>Why this version for ' +
-      esc(c.name) +
-      ":</strong> " +
+      '<div class="cr-pitch"><div class="cr-pitch-card cr-reveal"><strong>' +
+      esc(ui("whyFor", "Why this version for {company}:").replace("{company}", c.name)) +
+      "</strong> " +
       esc(c.pitch) +
       ' <span style="opacity:0.7">· Theme: ' +
       esc(layout) +
@@ -344,7 +370,16 @@
   }
 
   function boot() {
-    render(resolveSlug());
+    var slug = resolveSlug();
+    var start = function () {
+      render(slug);
+    };
+    if (window.I18n) {
+      var q = new URLSearchParams(location.search).get("lang");
+      window.I18n.init({ base: "../", lang: window.__LANG || q || undefined }).then(start).catch(start);
+    } else {
+      start();
+    }
   }
 
   if (document.readyState === "loading") {

@@ -7,6 +7,11 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
+  /* ---------- i18n (single component tree; no page duplicates) ---------- */
+  if (window.I18n) {
+    window.I18n.init({ base: window.__I18N_BASE || "" }).catch(function () {});
+  }
+
   /* ---------- Year + dynamic experience ---------- */
   const yearEl = $("#year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -26,14 +31,18 @@
   window.__YEARS_EXP = yearsExp;
 
   // Sync year labels — ONLY span[data-years-exp], never <html>
-  $$("span[data-years-exp]").forEach((el) => {
-    el.textContent = String(yearsExp);
-  });
-  const yearsStat = $("[data-count-years]");
-  if (yearsStat) {
-    yearsStat.setAttribute("data-count", String(yearsExp));
-    yearsStat.textContent = String(yearsExp);
+  function syncYearsLabels() {
+    $$("span[data-years-exp]").forEach((el) => {
+      el.textContent = String(yearsExp);
+    });
+    const yearsStat = $("[data-count-years]");
+    if (yearsStat) {
+      yearsStat.setAttribute("data-count", String(yearsExp));
+      if (!yearsStat.dataset.counted) yearsStat.textContent = String(yearsExp);
+    }
   }
+  syncYearsLabels();
+  document.addEventListener("i18n:changed", syncYearsLabels);
 
   /* ---------- Theme (light / dark) ---------- */
   const themeToggle = $("#theme-toggle");

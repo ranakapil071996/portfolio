@@ -73,6 +73,26 @@ Sun/moon toggle in the nav switches **light / dark** mode. Preference is stored 
 HTML · CSS · Vanilla JS · Three.js r128 · particles.js 2.0
 
 
+## Internationalization (i18n)
+
+**Languages:** English, German, French, Spanish, Japanese, Arabic (RTL), Hindi  
+
+**Single component tree** — no duplicated page bodies. UI uses `data-i18n` keys; copy lives in `i18n/locales/*.json`.
+
+| Requirement | Implementation |
+|-------------|----------------|
+| RTL | `dir="rtl"` + `.rtl` CSS for Arabic |
+| SEO per language | Routes `/en/`, `/de/`, `/fr/`, `/es/`, `/ja/`, `/ar/`, `/hi/` with baked meta |
+| Localized metadata | `meta.title` / `meta.description` per locale |
+| Localized Open Graph | `og:title`, `og:description`, `og:locale`, image alt |
+| Localized sitemap | `sitemap.xml` with `xhtml:link` hreflang alternates |
+| Localized structured data | JSON-LD Person / WebSite / ProfilePage updated by `js/i18n.js` |
+
+Examples:
+- `https://ranakapil071996.github.io/portfolio/de/`
+- `https://ranakapil071996.github.io/portfolio/ar/` (RTL)
+- Company pages: `/wolt/?lang=de` (shared resume component + locale)
+
 ## Company-themed resume routes
 
 Share a branded resume URL per company. Same content, company brand theme (colors + logo).
