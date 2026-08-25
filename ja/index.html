@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" dir="ltr" data-lang="ja">
+<html lang="ja" dir="ltr" data-lang="ja" data-theme="dark">
 <head>
   <script>window.__LANG="ja";window.__I18N_BASE="../";</script>
 
@@ -133,16 +133,14 @@
     (function () {
       try {
         var t = localStorage.getItem("theme");
-        if (!t) t = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        if (t !== "light" && t !== "dark") t = "dark";
         document.documentElement.setAttribute("data-theme", t);
       } catch (e) {
         document.documentElement.setAttribute("data-theme", "dark");
       }
+      try { if (history.scrollRestoration) history.scrollRestoration = "manual"; } catch (e0) {}
       var start = new Date(2018, 8, 1);
-      var now = new Date();
-      var years = now.getFullYear() - start.getFullYear();
-      var m = now.getMonth() - start.getMonth();
-      if (m < 0 || (m === 0 && now.getDate() < start.getDate())) years--;
+      var years = Math.round((Date.now() - start.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
       if (years < 1) years = 1;
       window.__YEARS_EXP = years;
       window.__CAREER_START = "2018-09-01";
@@ -275,6 +273,7 @@
           <span class="pill">Next.js</span>
           <span class="pill">TypeScript</span>
           <span class="pill">Node.js</span>
+          <span class="pill">React Native</span>
           <span class="pill">Prismic CMS</span>
           <span class="pill">AWS</span>
         </div>
@@ -357,6 +356,7 @@
                 <h4 class="impact-col-title tech" data-i18n="impact.tech">Tech impact</h4>
                 <ul>
                   <li>Driving <strong>Next.js SSR</strong> with <strong>Prismic CMS</strong> for dynamic, content-composed UI on banking surfaces.</li>
+                  <li>Built and own the <strong>Node.js Prismic service</strong> that serves CMS content to Internet Banking — fullstack, not UI-only.</li>
                   <li>Integrated <strong>Cloudflare</strong> for CDN/caching and attack mitigation on Airtel Payments web properties.</li>
                   <li>Implemented <strong>Google reCAPTCHA</strong> to harden forms and critical user actions against automated abuse.</li>
                   <li>Owned React/TypeScript architecture, scalable UI patterns, and high-traffic frontend performance.</li>
@@ -365,7 +365,7 @@
               </div>
             </div>
             <div class="tech-row">
-              <span>Next.js</span><span>Prismic CMS</span><span>Cloudflare</span><span>reCAPTCHA</span><span>React</span><span>TypeScript</span><span>Kong</span><span>Kibana</span>
+              <span>Next.js</span><span>Prismic CMS</span><span>Node.js</span><span>Cloudflare</span><span>reCAPTCHA</span><span>React</span><span>TypeScript</span><span>Kong</span><span>Kibana</span>
             </div>
           </article>
 
@@ -396,8 +396,8 @@
                 <ul>
                   <li>Led a team of <strong>4 engineers</strong> across React product surfaces with Redux Toolkit / RTK Query.</li>
                   <li>Built real-time chat and live features with <strong>Socket.io</strong> and <strong>Node.js</strong> integrations.</li>
-                  <li>Shipped <strong>React Native</strong> Waiter App with Firebase and offline-first order management.</li>
-                  <li>Defined API requirements and contracts with backend teams across multi-product merchant tooling.</li>
+                  <li>Shipped the <strong>React Native</strong> Waiter App with Firebase and offline-first order management.</li>
+                  <li>Owned the <strong>Node.js backend</strong> for the Waiter App — APIs, order sync, and offline-ready service flows.</li>
                 </ul>
               </div>
             </div>
@@ -429,7 +429,7 @@
                 <h4 class="impact-col-title tech" data-i18n="impact.tech">Tech impact</h4>
                 <ul>
                   <li>Built template management UI with <strong>React, Redux, and Ant Design</strong>.</li>
-                  <li>Delivered a high-performance <strong>Node.js</strong> + Lottie Web rendering pipeline for dynamic creatives.</li>
+                  <li>Owned the <strong>video generation backend</strong> — a high-performance <strong>Node.js</strong> + Lottie Web service that rendered dynamic creatives at scale.</li>
                 </ul>
               </div>
             </div>
@@ -453,14 +453,14 @@
               <div class="impact-col">
                 <h4 class="impact-col-title business" data-i18n="impact.business">Business impact</h4>
                 <ul>
-                  <li>Launched patient- and partner-facing digital health experiences: video consults, chat, EMR, lab booking.</li>
+                  <li>Launched <strong>patient and doctor</strong> digital health apps: video consults, chat, EMR, lab booking.</li>
                   <li>Improved partner/ops efficiency with an Admin Portal for bulk operations and media workflows.</li>
                 </ul>
               </div>
               <div class="impact-col">
                 <h4 class="impact-col-title tech" data-i18n="impact.tech">Tech impact</h4>
                 <ul>
-                  <li>Built web and mobile apps with <strong>React, React Native, and Material UI</strong>.</li>
+                  <li>Built the <strong>React Native patient app and doctor app</strong>, plus web with React and Material UI.</li>
                   <li>Implemented <strong>Node.js APIs</strong> with Google Auth, bulk upload, media optimization, and real-time notifications.</li>
                 </ul>
               </div>
@@ -528,15 +528,16 @@
             <ul class="check-list">
               <li data-i18n="about.how1">Lead the team day-to-day — planning, priorities, and delivery in Jira</li>
               <li data-i18n="about.how2">Ship strong React/TypeScript UX with clear ownership and quality bars</li>
-              <li data-i18n="about.how3">Collaborate with backend engineers on APIs and architecture decisions</li>
+              <li data-i18n="about.how3">Own Node.js services and partner on API contracts and architecture</li>
               <li data-i18n="about.how4">Stay close to production: logs, health dashboards, and gateway config</li>
             </ul>
           </div>
           <div class="about-card glass reveal" data-delay="160">
             <h3 data-i18n="about.shipTitle">What I ship</h3>
-            <p><span data-i18n="about.shipBody" data-i18n-mode="html">Deep experience in <strong>React, Next.js (SSR)</strong>, <strong>TypeScript</strong>, and <strong>Node.js</strong> —
-              including <strong>Prismic CMS</strong> for dynamic, content-driven UI. Also React Native, API collaboration,
-              <strong>AWS</strong>, private servers, and databases (<strong>MongoDB</strong> &amp; <strong>SQL</strong>).</span></p>
+            <p><span data-i18n="about.shipBody" data-i18n-mode="html">Full-stack: <strong>React, Next.js (SSR)</strong>, <strong>TypeScript</strong>, and <strong>Node.js</strong> services —
+              including a <strong>Prismic</strong> backend, waiter-app APIs, and a video generation service. Also
+              <strong>React Native</strong> (DotPe waiter app; Meddo patient &amp; doctor apps),
+              <strong>AWS</strong>, and databases (<strong>MongoDB</strong> &amp; <strong>SQL</strong>).</span></p>
           </div>
         </div>
       </div>
@@ -576,12 +577,13 @@
                 <h3>Sr. Manager – SDE III · Internet Banking</h3>
                 <span class="chevron" aria-hidden="true"></span>
               </div>
-              <p class="timeline-blurb">Internet Banking · ~1M users/day · Next.js SSR · Prismic CMS · Team of 4</p>
+              <p class="timeline-blurb">Internet Banking · ~1M users/day · Next.js SSR · Node.js Prismic service · Team of 4</p>
             </button>
             <div class="timeline-body">
             <div class="timeline-body-inner"><ul>
                 <li>Lead a team of <strong>4 engineers</strong> delivering Internet Banking UI and journeys for <strong>~1 million users per day</strong>.</li>
                 <li>Building dynamic, content-driven experiences with <strong>Next.js server-side rendering</strong> and <strong>Prismic CMS</strong> for flexible UI composition.</li>
+                <li>Built and own the <strong>Node.js Prismic service</strong> that delivers CMS content to banking UI — fullstack ownership of the content path.</li>
                 <li>Improved page load with <strong>Cloudflare</strong> caching/CDN and hardened the surface against attacks; added <strong>Google reCAPTCHA</strong> on critical flows.</li>
                 <li>Own <strong>React/TypeScript</strong> architecture, frontend performance, accessibility, and scalable UI for high-traffic financial flows.</li>
                 <li>Drive day-to-day delivery in <strong>Jira</strong> — planning, prioritization, mentoring, and stakeholder alignment.</li>
@@ -590,10 +592,10 @@
                 <li>Ensure <strong>RBI-compliant</strong> workflows and production-ready customer experience.</li>
               </ul>
               <div class="tech-row">
-                <span>Next.js</span><span>Prismic CMS</span><span>Cloudflare</span><span>reCAPTCHA</span><span>React</span><span>TypeScript</span><span>Kong</span><span>Jira</span>
+                <span>Next.js</span><span>Prismic CMS</span><span>Node.js</span><span>Cloudflare</span><span>reCAPTCHA</span><span>React</span><span>TypeScript</span><span>Kong</span><span>Jira</span>
               </div>
               <div class="employer-note">
-                <strong><span data-i18n="experience.why">Why this matters to you:</span></strong> proven ownership of bank-scale product UI with team leadership and production awareness — not just tickets.
+                <strong><span data-i18n="experience.why">Why this matters to you:</span></strong> fullstack ownership of a bank-scale surface — UI plus the Node.js Prismic service — with team leadership and production awareness.
               </div></div>
           </div>
         </article>
@@ -610,7 +612,7 @@
                 <h3>Software Engineer II · Web &amp; Platform</h3>
                 <span class="chevron" aria-hidden="true"></span>
               </div>
-              <p class="timeline-blurb">Merchant billing · F&amp;B 50k+ DAU · WhatsApp marketing · React Native waiter app</p>
+              <p class="timeline-blurb">Merchant billing · F&amp;B 50k+ DAU · React Native waiter app + Node.js backend</p>
             </button>
             <div class="timeline-body">
             <div class="timeline-body-inner"><ul>
@@ -618,14 +620,14 @@
                 <li>Built F&amp;B ordering features for <strong>50k+ DAU</strong>, contributing to <strong>₹1 Cr+ daily revenue</strong>.</li>
                 <li>Implemented analytics dashboards and WhatsApp Marketing (Meta) with React, Redux Toolkit, and RTK Query.</li>
                 <li>Delivered real-time chat with <strong>Socket.io</strong> and contributed Node.js integrations for merchant tools.</li>
-                <li>Shipped a <strong>React Native</strong> Waiter App with Firebase and offline-ready order flows.</li>
-                <li>Collaborated with backend teams on <strong>API requirements and integration contracts</strong>.</li>
+                <li>Shipped the <strong>React Native</strong> Waiter App with Firebase and offline-ready order flows.</li>
+                <li>Owned the <strong>Node.js backend</strong> for the Waiter App — APIs, order sync, and service integration.</li>
               </ul>
               <div class="tech-row">
                 <span>React</span><span>TypeScript</span><span>Redux Toolkit</span><span>RTK Query</span><span>Node.js</span><span>Socket.io</span><span>React Native</span>
               </div>
               <div class="employer-note">
-                <strong><span data-i18n="experience.why">Why this matters to you:</span></strong> multi-product ownership with revenue-linked metrics, strong UI delivery, and healthy backend collaboration.
+                <strong><span data-i18n="experience.why">Why this matters to you:</span></strong> fullstack + mobile — React products, a React Native waiter app, and the Node.js service behind it, with revenue-linked metrics.
               </div></div>
           </div>
         </article>
@@ -642,12 +644,12 @@
                 <h3>Software Engineer</h3>
                 <span class="chevron" aria-hidden="true"></span>
               </div>
-              <p class="timeline-blurb">Video template platform · Lottie rendering pipeline · marketing creatives</p>
+              <p class="timeline-blurb">Video template UI · Node.js video generation backend · Lottie</p>
             </button>
             <div class="timeline-body">
             <div class="timeline-body-inner"><ul>
                 <li>Built Hubvid Tech video template management with React, Redux, and Ant Design.</li>
-                <li>High-performance video rendering pipeline with Node.js and Lottie Web for dynamic creatives.</li>
+                <li>Owned the <strong>video generation backend</strong> — Node.js + Lottie Web service rendering dynamic creatives at scale.</li>
               </ul>
               <div class="tech-row">
                 <span>React</span><span>Redux</span><span>Ant Design</span><span>Node.js</span><span>Lottie</span>
@@ -667,11 +669,11 @@
                 <h3>Software Engineer</h3>
                 <span class="chevron" aria-hidden="true"></span>
               </div>
-              <p class="timeline-blurb">Telehealth apps · video consult · EMR · admin portal &amp; APIs</p>
+              <p class="timeline-blurb">React Native patient &amp; doctor apps · video consult · EMR · Node APIs</p>
             </button>
             <div class="timeline-body">
             <div class="timeline-body-inner"><ul>
-                <li>Patient- and partner-facing apps: React, React Native, Material UI — video consults, chat, EMR, lab booking.</li>
+                <li>Built <strong>React Native patient and doctor apps</strong> plus web (React, Material UI) — video consults, chat, EMR, lab booking.</li>
                 <li>Admin Portal &amp; Node.js APIs: Google Auth, bulk upload, media optimization, real-time notifications.</li>
               </ul>
               <div class="tech-row">

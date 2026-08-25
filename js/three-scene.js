@@ -45,19 +45,19 @@
       sat: 0x60a5fa,
     },
     light: {
-      // Richer blues/teals that read well on pale backgrounds
-      core: 0x2563eb,
-      emissive: 0x1d4ed8,
-      emissiveI: 0.55,
-      opacity: 0.88,
-      wire: 0x1e40af,
-      wireOp: 0.45,
-      ring1: 0x7c3aed,
-      ring2: 0x0d9488,
-      stars: 0x3b82f6,
-      amb: 0x94a3b8,
-      canvasOp: "0.85",
-      sat: 0x4f46e5,
+      // Softer, less saturated so hero copy stays readable over the globe
+      core: 0x3b82f6,
+      emissive: 0x1e40af,
+      emissiveI: 0.28,
+      opacity: 0.42,
+      wire: 0x1d4ed8,
+      wireOp: 0.22,
+      ring1: 0x6366f1,
+      ring2: 0x0f766e,
+      stars: 0x64748b,
+      amb: 0xcbd5e1,
+      canvasOp: "0.5",
+      sat: 0x6366f1,
     },
   };
 
@@ -83,35 +83,37 @@
     }
     if (torus && torus.material) {
       torus.material.color.setHex(p.ring1);
-      torus.material.opacity = key === "light" ? 0.7 : 0.5;
+      torus.material.opacity = key === "light" ? 0.38 : 0.5;
       torus.material.needsUpdate = true;
     }
     if (torus2 && torus2.material) {
       torus2.material.color.setHex(p.ring2);
-      torus2.material.opacity = key === "light" ? 0.55 : 0.32;
+      torus2.material.opacity = key === "light" ? 0.28 : 0.32;
       torus2.material.needsUpdate = true;
     }
     if (stars && stars.material) {
       stars.material.color.setHex(p.stars);
-      stars.material.opacity = key === "light" ? 0.55 : 0.75;
+      stars.material.opacity = key === "light" ? 0.28 : 0.75;
       stars.material.needsUpdate = true;
     }
     if (satellites) {
       satellites.forEach(function (s) {
         if (s.material) {
           s.material.color.setHex(p.sat);
-          s.material.opacity = key === "light" ? 0.9 : 0.75;
+          s.material.opacity = key === "light" ? 0.45 : 0.75;
         }
       });
     }
     if (ambLight) ambLight.color.setHex(p.amb);
-    if (dirLight) dirLight.intensity = key === "light" ? 1.1 : 0.85;
-    if (fillLight) fillLight.intensity = key === "light" ? 0.65 : 0.45;
+    if (dirLight) dirLight.intensity = key === "light" ? 0.7 : 0.85;
+    if (fillLight) fillLight.intensity = key === "light" ? 0.35 : 0.45;
     if (coreLight) {
       coreLight.color.setHex(p.core);
-      coreLight.intensity = key === "light" ? 0.9 : 0.55;
+      coreLight.intensity = key === "light" ? 0.4 : 0.55;
     }
-    canvas.style.opacity = p.canvasOp;
+    // Leave canvas opacity to CSS so light-mode masks are not overwritten
+    if (key !== "light") canvas.style.opacity = p.canvasOp;
+    else canvas.style.removeProperty("opacity");
   }
 
   function init() {
@@ -270,7 +272,7 @@
       applyPalette(e.detail && e.detail.theme === "light" ? "light" : "dark");
     });
 
-    if (!reducedMotion) start();
+    if (!reducedMotion && !document.documentElement.classList.contains("story-playing")) start();
     else renderer.render(scene, camera);
   }
 

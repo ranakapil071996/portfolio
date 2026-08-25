@@ -87,10 +87,10 @@
     "howTitle": "How I work",
     "how1": "Lead the team day-to-day — planning, priorities, and delivery in Jira",
     "how2": "Ship strong React/TypeScript UX with clear ownership and quality bars",
-    "how3": "Collaborate with backend engineers on APIs and architecture decisions",
+    "how3": "Own Node.js services and partner on API contracts and architecture",
     "how4": "Stay close to production: logs, health dashboards, and gateway config",
     "shipTitle": "What I ship",
-    "shipBody": "Deep experience in <strong>React, Next.js (SSR)</strong>, <strong>TypeScript</strong>, and <strong>Node.js</strong> — including <strong>Prismic CMS</strong> for dynamic, content-driven UI. Also React Native, API collaboration, <strong>AWS</strong>, private servers, and databases (<strong>MongoDB</strong> & <strong>SQL</strong>)."
+    "shipBody": "Full-stack: <strong>React, Next.js (SSR)</strong>, <strong>TypeScript</strong>, and <strong>Node.js</strong> services — including a <strong>Prismic</strong> backend, waiter-app APIs, and a video generation service. Also <strong>React Native</strong> (DotPe waiter app; Meddo patient & doctor apps), <strong>AWS</strong>, and databases (<strong>MongoDB</strong> & <strong>SQL</strong>)."
   },
   "experience": {
     "num": "03",

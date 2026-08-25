@@ -7,10 +7,7 @@
   function yearsExp() {
     if (typeof window.__YEARS_EXP === "number") return window.__YEARS_EXP;
     var start = new Date(2018, 8, 1);
-    var now = new Date();
-    var y = now.getFullYear() - start.getFullYear();
-    var m = now.getMonth() - start.getMonth();
-    if (m < 0 || (m === 0 && now.getDate() < start.getDate())) y--;
+    var y = Math.round((Date.now() - start.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
     return Math.max(y, 1);
   }
 

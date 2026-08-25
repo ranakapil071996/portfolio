@@ -19,10 +19,7 @@
   /** Career start: Sept 2018 (Skill & Lotto — first full-time role) */
   function calcYearsExp(start) {
     const s = start || new Date(2018, 8, 1);
-    const now = new Date();
-    let years = now.getFullYear() - s.getFullYear();
-    const m = now.getMonth() - s.getMonth();
-    if (m < 0 || (m === 0 && now.getDate() < s.getDate())) years--;
+    const years = Math.round((Date.now() - s.getTime()) / (365.25 * 24 * 60 * 60 * 1000));
     return Math.max(years, 1);
   }
 
@@ -418,8 +415,8 @@
       name: "React Native",
       cat: "mobile",
       level: 85,
-      desc: "Waiter app (offline-ready) and healthcare patient/partner apps with Firebase.",
-      used: "DotPe · Meddo",
+      desc: "Waiter app (offline-ready) at DotPe, plus patient and doctor apps at Meddo Health — with Firebase.",
+      used: "DotPe Waiter App · Meddo patient & doctor apps",
     },
     {
       name: "Node.js",
@@ -691,5 +688,12 @@
       link.href = "assets/Kapil_Rana_Resume.pdf";
       document.head.appendChild(link);
     });
+  }
+
+  /* ---------- Story mode (interview walkthrough) ---------- */
+  if (document.getElementById("hero")) {
+    var story = document.createElement("script");
+    story.src = (window.__I18N_BASE || "") + "js/story-mode.js";
+    document.body.appendChild(story);
   }
 })();
