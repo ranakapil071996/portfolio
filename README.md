@@ -59,7 +59,7 @@ python3 -m http.server 8080
 
 ## Theme
 
-Sun/moon toggle in the nav switches **light / dark** mode. Preference is stored in `localStorage` (`theme`) and respects system preference on first visit.
+Sun/moon toggle in the nav switches **light / dark** mode. **Dark is the default.** Preference is stored in `localStorage` (`theme`); first visit and any invalid stored value use dark.
 
 ## Customize
 

@@ -124,13 +124,16 @@
       el.style.display = "none";
       return;
     }
+    if (document.documentElement.classList.contains("story-playing")) {
+      return;
+    }
 
     destroyExisting();
     particlesJS("particles-js", config());
     booted = true;
 
     // Theme-aware opacity
-    el.style.opacity = isLight() ? "0.55" : "0.7";
+    el.style.opacity = isLight() ? "0.22" : "0.7";
   }
 
   function onTheme() {
