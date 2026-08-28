@@ -44,18 +44,18 @@
         title: "Introduction",
         target: ".hero-content",
         align: "start",
-        audio: "assets/story-voice/welcome.mp3",
+        audio: "assets/story-voice/welcome.mp3?v=kapil2",
         text:
-          "Hi, I'm Kapil Rana. I'm a Senior Manager and SDE III at Airtel Payments Bank. I'll walk you through this portfolio the way I would in an interview: impact first, then the technology.",
+          "Hi, I'm Kapil Rana, I'm a Senior Manager and SDE III at Airtel Payments Bank. I walk you through this portfolio the way I would in an interview: impact first, then the technologies.",
       },
       {
         id: "positioning",
         title: "What I do",
         target: ".hero-stats",
         align: "start",
-        audio: "assets/story-voice/positioning.mp3",
+        audio: "assets/story-voice/positioning.mp3?v=kapil2",
         text:
-          "I have {years} years of full-stack experience in React, Next.js, TypeScript, Node.js, and React Native. I lead Internet Banking for about a million users a day, and I manage a team of four. I have shipped products across five companies, mostly in fintech and commerce.",
+          "I have {years} years of full-stack experience in React, Next.js, TypeScript, Node.js and React Native. I led Internet Banking for about a million users a day and I manage a team of 4. I ship products across 5 companies mostly in fintech, commerce, advertising, marketing.",
       },
       {
         id: "impact",
@@ -63,81 +63,83 @@
         target: "#impact-heading",
         align: "start",
         action: "impact:all",
-        audio: "assets/story-voice/impact.mp3",
+        audio: "assets/story-voice/impact.mp3?v=kapil2",
         text:
-          "I organize each role by business impact and technical impact. First, what changed for users and revenue. Then the stack that made it possible. Let's start with Airtel, my current role.",
+          "I organize each role by business impact and technical impact. First, what changed for users and revenue, then the stack that made it possible. Let's start with Airtel, my current role.",
       },
       {
         id: "airtel",
         title: "Airtel Payments Bank",
         target: '[data-impact-company="airtel"]',
         action: "impact:airtel",
-        audio: "assets/story-voice/airtel.mp3",
+        audio: "assets/story-voice/airtel.mp3?v=kapil2",
         text:
-          "At Airtel, I own the Internet Banking experience under RBI compliance. We improved page speed with Next.js server-side rendering, Cloudflare caching, and Core Web Vitals work. We reduced bot abuse with Cloudflare security and Google reCAPTCHA. I also own a NestJS backend on Node.js. In front of that service I run a Kong gateway for load balancing, with plugins for CORS, JWT, and rate limiting. On the content side, Next.js and Prismic sit on a Node.js Prismic service I built. In production I use Kibana and Grafana.",
+          "At Airtel, I own the internet banking experience under RBI compliance. We improved page speed with Next.js server-side rendering, Cloudflare caching and Core Web Vitals. We reduced bot abuse with Cloudflare security and Google reCAPTCHA. I own a NestJS backend also on Node.js in front of that service. I run a Kong gateway for load balancing with plugins for CORS, JWT and rate limiting. On the content side, Next.js and Prismic sits on a Node.js Prismic service I built. In production, I use Kibana and Grafana for logging and monitoring.",
       },
       {
         id: "dotpe",
         title: "DotPe",
         target: '[data-impact-company="dotpe"]',
         action: "impact:dotpe",
-        audio: "assets/story-voice/dotpe.mp3",
+        audio: "assets/story-voice/dotpe.mp3?v=kapil2",
         text:
-          "Before Airtel I was a Software Engineer II at DotPe, from 2021 to 2025. I led four engineers on merchant billing: invoicing, inventory, GST, and analytics. Food ordering reached fifty thousand daily users and over one crore rupees a day. I built the React Native waiter app and owned the Node.js backend behind it — APIs, order sync, and offline-ready flows. We also shipped real-time chat with Socket.io and Firebase.",
+          "Before Airtel, I was a software engineer II at DotPe. From 2020 to 2025, I led 4 engineers on merchant billing, invoicing, inventory, GST and analytics. Food ordering reached 50,000 daily users and over a crore a day. I built the React Native waiter app and owned the Node.js backend behind it. APIs, order sync and offline-ready flows. We also shipped real-time chat with Socket.io and Firebase.",
       },
       {
         id: "tyroo",
         title: "Tyroo",
         target: '[data-impact-company="tyroo"]',
         action: "impact:tyroo",
-        audio: "assets/story-voice/tyroo.mp3",
+        audio: "assets/story-voice/tyroo.mp3?v=kapil2",
         text:
-          "At Tyroo I built the video template UI in React, Redux, and Ant Design. I also owned the video generation backend: a Node.js and Lottie service that rendered marketing videos at scale.",
+          "At Tyroo, I built the video template UI in React, Redux and Ant Design. I also owned the video generation backend, a Node.js service and a Lottie service that rendered marketing videos at scale.",
       },
       {
         id: "meddo",
         title: "Meddo Health",
         target: '[data-impact-company="meddo"]',
         action: "impact:meddo",
-        audio: "assets/story-voice/meddo.mp3",
+        audio: "assets/story-voice/meddo.mp3?v=kapil2",
         text:
-          "At Meddo Health I built the React Native patient app and the doctor app, plus the web product. Those apps covered video consults, chat, EMR, and lab booking. I also wrote Node.js APIs for Google Auth, bulk upload, and media.",
+          "At Meddo Health, I built the React Native patient app, the doctor app plus the web product. Those covered video consults, chats, EMR and lab bookings. I also wrote Node.js APIs for Google Auth, bulk upload and media.",
       },
       {
         id: "lotto",
         title: "Skill and Lotto",
         target: '[data-impact-company="lotto"]',
         action: "impact:lotto",
-        audio: "assets/story-voice/lotto.mp3",
+        audio: "assets/story-voice/lotto.mp3?v=kapil2",
         text:
-          "My first role was at Skill and Lotto. I built an online lottery platform and back-office tools with JavaScript, jQuery, PHP, and Bootstrap.",
+          "My first role was at Skill and Lotto. I built an online platform and back-office tools with JavaScript, jQuery, PHP and Bootstrap.",
       },
       {
         id: "about",
         title: "How I work",
         target: "#about-heading",
         align: "start",
-        audio: "assets/story-voice/about.mp3",
+        audio: "assets/story-voice/about.mp3?v=kapil2",
         text:
-          "Day to day I run the team in Jira: planning, priorities, and delivery. I keep a high bar on React and TypeScript quality. I own Node.js and NestJS services, and I work with other engineers on API contracts. After we ship, I stay in the logs and dashboards — Kibana, Grafana, and Kong.",
+          "Day to day, I run the team in Jira, planning, priorities and delivery. I keep a high bar on React, TypeScript, quality. I own Node.js and NestJS services and I work with other engineers on API contracts and backend designing. After we ship, I stay in logs and dashboards using Kibana, Grafana and Kong.",
       },
       {
         id: "exp-airtel",
         title: "Airtel — full story",
         target: '.timeline-item[data-company="airtel"]',
+        align: "start",
         action: "job:airtel",
-        audio: "assets/story-voice/exp-airtel.mp3",
+        audio: "assets/story-voice/exp-airtel.mp3?v=kapil2",
         text:
-          "This is the full Airtel role. I lead four engineers. We ship Next.js with Prismic, a NestJS backend, and Kong for load balancing, JWT, CORS, and rate limiting. Page speed comes from server-side rendering, Cloudflare caching, and Web Vitals. I own this surface end to end, not just tickets.",
+          "This is the full Airtel role. I lead four engineers, we ship Next.js with Prismic and NestJS backend and Kong for load balancing, JWT, CORS and rate limiting. Page speed comes from server-side rendering, Cloudflare caching and Web Vitals. I own this surface end-to-end, not just tickets.",
       },
       {
         id: "exp-dotpe",
         title: "DotPe — full story",
         target: '.timeline-item[data-company="dotpe"]',
+        align: "start",
         action: "job:dotpe",
-        audio: "assets/story-voice/exp-dotpe.mp3",
+        audio: "assets/story-voice/exp-dotpe.mp3?v=kapil2",
         text:
-          "DotPe is the multi-product chapter: billing, WhatsApp marketing, live chat, the React Native waiter app, and the Node.js service behind it. It was revenue-linked work across web, mobile, and backend.",
+          "DotPe is a multi-product chapter: billing, WhatsApp marketing, live chat, the React Native waiter app, the Node.js behind it. It was revenue-linked work, across web, mobile and backend.",
       },
       {
         id: "skills",
@@ -145,27 +147,27 @@
         target: "#skills-heading",
         align: "start",
         action: "skill:React.js",
-        audio: "assets/story-voice/skills.mp3",
+        audio: "assets/story-voice/skills.mp3?v=kapil2",
         text:
-          "Skills are grouped into frontend, backend, mobile, DevOps, and leadership. React and TypeScript are the core. On the backend I have owned NestJS and Node services for Prismic, the waiter app, and video generation. On mobile: waiter, patient, and doctor apps in React Native. Then Express, MongoDB, SQL, AWS, Docker, Kong, Kibana, and Grafana.",
+          "Skills are grouped into frontend, backend, mobile, DevOps and leadership. React and TypeScript and Node are the core. On the backend, I own NestJS and Node service for Prismic. The waiter app is built on React Native and the video generation tool is built on Node.js backend. On mobile, waiter app, patient app, doctor app is on React Native. Then Express, MongoDB, SQL, AWS, Docker, Kong, Kibana and Grafana.",
       },
       {
         id: "education",
         title: "Education",
         target: "#education-heading",
         align: "start",
-        audio: "assets/story-voice/education.mp3",
+        audio: "assets/story-voice/education.mp3?v=kapil2",
         text:
-          "I completed a B.Tech in Computer Science at K.R. Mangalam University, from 2014 to 2018. Since then I have worked at product companies in Gurgaon.",
+          "I completed B.Tech in Computer Science engineering at K.R. Mangalam University from 2014 to 2018. Since then, I have worked at product companies in Gurgaon.",
       },
       {
         id: "close",
         title: "Next step",
         target: "#contact-heading",
         align: "start",
-        audio: "assets/story-voice/close.mp3",
+        audio: "assets/story-voice/close.mp3?v=kapil2",
         text:
-          "That's the walkthrough. If you'd like to talk, email or LinkedIn is easiest. You can also download the PDF. Restart this anytime from the avatar.",
+          "That's the walkthrough. If you would like to talk, email or LinkedIn is the easiest, or you can contact me on my number. You can also download the PDF, restart this anytime from the avatar. Thank you.",
       },
     ];
   }
@@ -176,6 +178,7 @@
     muted: false,
     typing: null,
     advanceTimer: 0,
+    spotTimer: 0,
     captionRaf: 0,
     utterance: null,
     player: null,
@@ -512,8 +515,20 @@
     els.next.disabled = false;
 
     applyAction(step.action);
+    var instant = !!(step.action && step.action.indexOf("job:") === 0);
     requestAnimationFrame(function () {
-      spot(step.target, step.align);
+      requestAnimationFrame(function () {
+        spot(step.target, step.align, instant);
+        var timeline = document.getElementById("timeline");
+        if (timeline) timeline.classList.remove("story-layout-lock");
+        if (instant) {
+          clearTimeout(state.spotTimer);
+          state.spotTimer = setTimeout(function () {
+            if (!state.playing || state.list[state.index] !== step) return;
+            spot(step.target, step.align, true);
+          }, 80);
+        }
+      });
     });
 
     var text = fill(step.text);
@@ -538,12 +553,15 @@
       if (btn) btn.click();
     }
     if (kind === "job") {
+      var timeline = document.getElementById("timeline");
+      if (timeline) timeline.classList.add("story-layout-lock");
       document.querySelectorAll(".timeline-item").forEach(function (item) {
         var on = item.getAttribute("data-company") === val;
         item.classList.toggle("open", on);
         var b = item.querySelector("[data-expand]");
         if (b) b.setAttribute("aria-expanded", on ? "true" : "false");
       });
+      if (timeline) void timeline.offsetHeight;
     }
     if (kind === "skill") {
       var all = document.querySelector('.skill-cat[data-skill-cat="all"]');
@@ -555,7 +573,7 @@
     }
   }
 
-  function spot(sel, align) {
+  function spot(sel, align, instant) {
     clearSpot();
     if (!sel) return;
     var el = document.querySelector(sel);
@@ -565,18 +583,22 @@
     var navH = nav ? nav.getBoundingClientRect().height : 72;
     var pad = navH + 28;
     var block = align || "center";
-    var elTop = el.getBoundingClientRect().top + window.pageYOffset;
+    var measure =
+      el.classList && el.classList.contains("timeline-item")
+        ? el.querySelector(".timeline-header") || el
+        : el;
+    var elTop = measure.getBoundingClientRect().top + window.pageYOffset;
     var top;
     if (block === "start") {
       top = elTop - pad;
     } else {
-      var mid = elTop + el.offsetHeight / 2;
+      var mid = elTop + measure.offsetHeight / 2;
       top = mid - window.innerHeight * 0.4;
       if (top > elTop - pad) top = elTop - pad;
     }
     window.scrollTo({
       top: Math.max(0, top),
-      behavior: reduced ? "auto" : "smooth",
+      behavior: instant || reduced ? "auto" : "smooth",
     });
   }
 
@@ -712,6 +734,7 @@
 
   function clearTimers() {
     clearTimeout(state.advanceTimer);
+    clearTimeout(state.spotTimer);
     if (state.captionRaf) {
       cancelAnimationFrame(state.captionRaf);
       state.captionRaf = 0;
@@ -787,7 +810,7 @@
   }
 
   function loadWordTimings() {
-    state.wordsReady = fetch(basePath() + "assets/story-voice/words.json")
+    state.wordsReady = fetch(basePath() + "assets/story-voice/words.json?v=kapil2")
       .then(function (r) {
         if (!r.ok) throw new Error("words");
         return r.json();

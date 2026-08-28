@@ -1,2402 +1,2359 @@
 {
   "years": 8,
+  "source": "kapilaudio.wav",
   "texts": {
-    "welcome": "Hi, I'm Kapil Rana. I'm a Senior Manager and SDE III at Airtel Payments Bank. I'll walk you through this portfolio the way I would in an interview: impact first, then the technology.",
-    "positioning": "I have 8 years of full-stack experience in React, Next.js, TypeScript, Node.js, and React Native. I lead Internet Banking for about a million users a day, and I manage a team of four. I have shipped products across five companies, mostly in fintech and commerce.",
-    "impact": "I organize each role by business impact and technical impact. First, what changed for users and revenue. Then the stack that made it possible. Let's start with Airtel, my current role.",
-    "airtel": "At Airtel, I own the Internet Banking experience under RBI compliance. We improved page speed with Next.js server-side rendering, Cloudflare caching, and Core Web Vitals work. We reduced bot abuse with Cloudflare security and Google reCAPTCHA. I also own a NestJS backend on Node.js. In front of that service I run a Kong gateway for load balancing, with plugins for CORS, JWT, and rate limiting. On the content side, Next.js and Prismic sit on a Node.js Prismic service I built. In production I use Kibana and Grafana.",
-    "dotpe": "Before Airtel I was a Software Engineer II at DotPe, from 2021 to 2025. I led four engineers on merchant billing: invoicing, inventory, GST, and analytics. Food ordering reached fifty thousand daily users and over one crore rupees a day. I built the React Native waiter app and owned the Node.js backend behind it \u2014 APIs, order sync, and offline-ready flows. We also shipped real-time chat with Socket.io and Firebase.",
-    "tyroo": "At Tyroo I built the video template UI in React, Redux, and Ant Design. I also owned the video generation backend: a Node.js and Lottie service that rendered marketing videos at scale.",
-    "meddo": "At Meddo Health I built the React Native patient app and the doctor app, plus the web product. Those apps covered video consults, chat, EMR, and lab booking. I also wrote Node.js APIs for Google Auth, bulk upload, and media.",
-    "lotto": "My first role was at Skill and Lotto. I built an online lottery platform and back-office tools with JavaScript, jQuery, PHP, and Bootstrap.",
-    "about": "Day to day I run the team in Jira: planning, priorities, and delivery. I keep a high bar on React and TypeScript quality. I own Node.js and NestJS services, and I work with other engineers on API contracts. After we ship, I stay in the logs and dashboards \u2014 Kibana, Grafana, and Kong.",
-    "exp-airtel": "This is the full Airtel role. I lead four engineers. We ship Next.js with Prismic, a NestJS backend, and Kong for load balancing, JWT, CORS, and rate limiting. Page speed comes from server-side rendering, Cloudflare caching, and Web Vitals. I own this surface end to end, not just tickets.",
-    "exp-dotpe": "DotPe is the multi-product chapter: billing, WhatsApp marketing, live chat, the React Native waiter app, and the Node.js service behind it. It was revenue-linked work across web, mobile, and backend.",
-    "skills": "Skills are grouped into frontend, backend, mobile, DevOps, and leadership. React and TypeScript are the core. On the backend I have owned NestJS and Node services for Prismic, the waiter app, and video generation. On mobile: waiter, patient, and doctor apps in React Native. Then Express, MongoDB, SQL, AWS, Docker, Kong, Kibana, and Grafana.",
-    "education": "I completed a B.Tech in Computer Science at K.R. Mangalam University, from 2014 to 2018. Since then I have worked at product companies in Gurgaon.",
-    "close": "That's the walkthrough. If you'd like to talk, email or LinkedIn is easiest. You can also download the PDF. Restart this anytime from the avatar."
+    "welcome": "Hi, I'm Kapil Rana, I'm a Senior Manager and SDE III at Airtel Payments Bank. I walk you through this portfolio the way I would in an interview: impact first, then the technologies.",
+    "positioning": "I have 8 years of full-stack experience in React, Next.js, TypeScript, Node.js and React Native. I led Internet Banking for about a million users a day and I manage a team of 4. I ship products across 5 companies mostly in fintech, commerce, advertising, marketing.",
+    "impact": "I organize each role by business impact and technical impact. First, what changed for users and revenue, then the stack that made it possible. Let's start with Airtel, my current role.",
+    "airtel": "At Airtel, I own the internet banking experience under RBI compliance. We improved page speed with Next.js server-side rendering, Cloudflare caching and Core Web Vitals. We reduced bot abuse with Cloudflare security and Google reCAPTCHA. I own a NestJS backend also on Node.js in front of that service. I run a Kong gateway for load balancing with plugins for CORS, JWT and rate limiting. On the content side, Next.js and Prismic sits on a Node.js Prismic service I built. In production, I use Kibana and Grafana for logging and monitoring.",
+    "dotpe": "Before Airtel, I was a software engineer II at DotPe. From 2020 to 2025, I led 4 engineers on merchant billing, invoicing, inventory, GST and analytics. Food ordering reached 50,000 daily users and over a crore a day. I built the React Native waiter app and owned the Node.js backend behind it. APIs, order sync and offline-ready flows. We also shipped real-time chat with Socket.io and Firebase.",
+    "tyroo": "At Tyroo, I built the video template UI in React, Redux and Ant Design. I also owned the video generation backend, a Node.js service and a Lottie service that rendered marketing videos at scale.",
+    "meddo": "At Meddo Health, I built the React Native patient app, the doctor app plus the web product. Those covered video consults, chats, EMR and lab bookings. I also wrote Node.js APIs for Google Auth, bulk upload and media.",
+    "lotto": "My first role was at Skill and Lotto. I built an online platform and back-office tools with JavaScript, jQuery, PHP and Bootstrap.",
+    "about": "Day to day, I run the team in Jira, planning, priorities and delivery. I keep a high bar on React, TypeScript, quality. I own Node.js and NestJS services and I work with other engineers on API contracts and backend designing. After we ship, I stay in logs and dashboards using Kibana, Grafana and Kong.",
+    "exp-airtel": "This is the full Airtel role. I lead four engineers, we ship Next.js with Prismic and NestJS backend and Kong for load balancing, JWT, CORS and rate limiting. Page speed comes from server-side rendering, Cloudflare caching and Web Vitals. I own this surface end-to-end, not just tickets.",
+    "exp-dotpe": "DotPe is a multi-product chapter: billing, WhatsApp marketing, live chat, the React Native waiter app, the Node.js behind it. It was revenue-linked work, across web, mobile and backend.",
+    "skills": "Skills are grouped into frontend, backend, mobile, DevOps and leadership. React and TypeScript and Node are the core. On the backend, I own NestJS and Node service for Prismic. The waiter app is built on React Native and the video generation tool is built on Node.js backend. On mobile, waiter app, patient app, doctor app is on React Native. Then Express, MongoDB, SQL, AWS, Docker, Kong, Kibana and Grafana.",
+    "education": "I completed B.Tech in Computer Science engineering at K.R. Mangalam University from 2014 to 2018. Since then, I have worked at product companies in Gurgaon.",
+    "close": "That's the walkthrough. If you would like to talk, email or LinkedIn is the easiest, or you can contact me on my number. You can also download the PDF, restart this anytime from the avatar. Thank you."
   },
   "words": {
     "welcome": [
       {
-        "t": 0.092,
-        "w": "Hi"
+        "t": 0.104,
+        "w": "Hi,"
       },
       {
-        "t": 0.654,
+        "t": 0.975,
         "w": "I'm"
       },
       {
-        "t": 0.915,
+        "t": 1.315,
         "w": "Kapil"
       },
       {
-        "t": 1.217,
-        "w": "Rana"
+        "t": 1.575,
+        "w": "Rana,"
       },
       {
-        "t": 2.302,
+        "t": 2.275,
         "w": "I'm"
       },
       {
-        "t": 2.552,
-        "w": "a"
+        "t": 2.415,
+        "w": "a Senior"
       },
       {
-        "t": 2.646,
-        "w": "Senior"
-      },
-      {
-        "t": 3.094,
+        "t": 2.695,
         "w": "Manager"
       },
       {
-        "t": 3.75,
+        "t": 3.115,
         "w": "and"
       },
       {
-        "t": 4.021,
-        "w": "SDE"
+        "t": 3.495,
+        "w": "SDE III"
       },
       {
-        "t": 4.479,
-        "w": "III"
-      },
-      {
-        "t": 4.844,
+        "t": 4.235,
         "w": "at"
       },
       {
-        "t": 5.115,
+        "t": 4.495,
         "w": "Airtel"
       },
       {
-        "t": 5.49,
+        "t": 4.915,
         "w": "Payments"
       },
       {
-        "t": 5.906,
-        "w": "Bank"
+        "t": 5.235,
+        "w": "Bank."
       },
       {
-        "t": 7.031,
-        "w": "I'll"
-      },
-      {
-        "t": 7.219,
-        "w": "walk"
-      },
-      {
-        "t": 7.469,
-        "w": "you"
-      },
-      {
-        "t": 7.594,
-        "w": "through"
-      },
-      {
-        "t": 7.854,
-        "w": "this"
-      },
-      {
-        "t": 8.042,
-        "w": "portfolio"
-      },
-      {
-        "t": 8.677,
-        "w": "the"
-      },
-      {
-        "t": 8.792,
-        "w": "way"
-      },
-      {
-        "t": 9.052,
+        "t": 6.035,
         "w": "I"
       },
       {
-        "t": 9.219,
-        "w": "would"
+        "t": 6.255,
+        "w": "walk"
       },
       {
-        "t": 9.51,
-        "w": "in"
+        "t": 6.515,
+        "w": "you"
       },
       {
-        "t": 9.677,
-        "w": "an"
+        "t": 6.675,
+        "w": "through"
       },
       {
-        "t": 9.927,
-        "w": "interview"
+        "t": 6.835,
+        "w": "this"
       },
       {
-        "t": 10.615,
-        "w": "impact"
+        "t": 7.075,
+        "w": "portfolio"
       },
       {
-        "t": 11.042,
-        "w": "first"
-      },
-      {
-        "t": 11.625,
-        "w": "then"
-      },
-      {
-        "t": 11.833,
+        "t": 7.475,
         "w": "the"
       },
       {
-        "t": 11.948,
-        "w": "technology"
+        "t": 7.795,
+        "w": "way"
+      },
+      {
+        "t": 7.975,
+        "w": "I"
+      },
+      {
+        "t": 8.135,
+        "w": "would"
+      },
+      {
+        "t": 8.335,
+        "w": "in"
+      },
+      {
+        "t": 8.935,
+        "w": "an"
+      },
+      {
+        "t": 9.055,
+        "w": "interview:"
+      },
+      {
+        "t": 9.415,
+        "w": "impact"
+      },
+      {
+        "t": 10.275,
+        "w": "first,"
+      },
+      {
+        "t": 10.555,
+        "w": "then"
+      },
+      {
+        "t": 11.115,
+        "w": "the"
+      },
+      {
+        "t": 11.255,
+        "w": "technologies."
       }
     ],
     "positioning": [
       {
-        "t": 0.092,
+        "t": 0.112,
         "w": "I"
       },
       {
-        "t": 0.217,
+        "t": 0.343,
         "w": "have"
       },
       {
-        "t": 0.54,
+        "t": 0.483,
         "w": "8"
       },
       {
-        "t": 0.748,
+        "t": 0.843,
         "w": "years"
       },
       {
-        "t": 1.102,
+        "t": 1.043,
         "w": "of"
       },
       {
-        "t": 1.258,
+        "t": 1.263,
         "w": "full-stack"
       },
       {
-        "t": 1.769,
+        "t": 1.663,
         "w": "experience"
       },
       {
-        "t": 2.477,
+        "t": 2.183,
         "w": "in"
       },
       {
-        "t": 2.612,
-        "w": "React"
+        "t": 2.443,
+        "w": "React,"
       },
       {
-        "t": 3.237,
-        "w": "Next"
+        "t": 2.963,
+        "w": "Next.js,"
       },
       {
-        "t": 3.612,
-        "w": "."
+        "t": 3.403,
+        "w": "TypeScript,"
       },
       {
-        "t": 3.862,
-        "w": "js"
+        "t": 4.143,
+        "w": "Node.js"
       },
       {
-        "t": 4.55,
-        "w": "TypeScript"
-      },
-      {
-        "t": 5.196,
-        "w": "Node"
-      },
-      {
-        "t": 5.519,
-        "w": "."
-      },
-      {
-        "t": 5.779,
-        "w": "js"
-      },
-      {
-        "t": 6.383,
+        "t": 4.323,
         "w": "and"
       },
       {
-        "t": 6.571,
+        "t": 4.683,
         "w": "React"
       },
       {
-        "t": 6.883,
-        "w": "Native"
+        "t": 4.983,
+        "w": "Native."
       },
       {
-        "t": 8.01,
+        "t": 5.763,
         "w": "I"
       },
       {
-        "t": 8.156,
-        "w": "lead"
+        "t": 6.003,
+        "w": "led"
       },
       {
-        "t": 8.49,
+        "t": 6.203,
         "w": "Internet"
       },
       {
-        "t": 8.917,
+        "t": 6.503,
         "w": "Banking"
       },
       {
-        "t": 9.312,
+        "t": 6.983,
         "w": "for"
       },
       {
-        "t": 9.542,
+        "t": 7.283,
         "w": "about"
       },
       {
-        "t": 9.906,
+        "t": 7.543,
         "w": "a"
       },
       {
-        "t": 9.969,
+        "t": 7.723,
         "w": "million"
       },
       {
-        "t": 10.344,
+        "t": 8.003,
         "w": "users"
       },
       {
-        "t": 10.802,
+        "t": 8.383,
         "w": "a"
       },
       {
-        "t": 10.865,
+        "t": 8.623,
         "w": "day"
       },
       {
-        "t": 11.469,
+        "t": 8.823,
         "w": "and"
       },
       {
-        "t": 11.646,
+        "t": 9.363,
         "w": "I"
       },
       {
-        "t": 11.781,
+        "t": 9.483,
         "w": "manage"
       },
       {
-        "t": 12.198,
+        "t": 9.803,
         "w": "a"
       },
       {
-        "t": 12.271,
+        "t": 9.963,
         "w": "team"
       },
       {
-        "t": 12.604,
+        "t": 10.183,
         "w": "of"
       },
       {
-        "t": 12.781,
-        "w": "four"
+        "t": 10.363,
+        "w": "4."
       },
       {
-        "t": 13.833,
+        "t": 10.623,
         "w": "I"
       },
       {
-        "t": 13.948,
-        "w": "have"
+        "t": 11.223,
+        "w": "ship"
       },
       {
-        "t": 14.188,
-        "w": "shipped"
-      },
-      {
-        "t": 14.51,
+        "t": 11.503,
         "w": "products"
       },
       {
-        "t": 15.042,
+        "t": 12.443,
         "w": "across"
       },
       {
-        "t": 15.469,
-        "w": "five"
+        "t": 12.823,
+        "w": "5"
       },
       {
-        "t": 15.75,
+        "t": 13.203,
         "w": "companies"
       },
       {
-        "t": 16.583,
+        "t": 13.603,
         "w": "mostly"
       },
       {
-        "t": 17.125,
-        "w": "in"
+        "t": 14.023,
+        "w": "in fintech,"
       },
       {
-        "t": 17.292,
-        "w": "fintech"
+        "t": 14.983,
+        "w": "commerce,"
       },
       {
-        "t": 17.771,
-        "w": "and"
+        "t": 15.803,
+        "w": "advertising,"
       },
       {
-        "t": 17.979,
-        "w": "commerce"
+        "t": 16.703,
+        "w": "marketing."
       }
     ],
     "impact": [
       {
-        "t": 0.092,
+        "t": 0.099,
         "w": "I"
       },
       {
-        "t": 0.279,
+        "t": 0.306,
         "w": "organize"
       },
       {
-        "t": 0.883,
+        "t": 0.626,
         "w": "each"
       },
       {
-        "t": 1.133,
+        "t": 1.446,
         "w": "role"
       },
       {
-        "t": 1.415,
+        "t": 1.746,
         "w": "by"
       },
       {
-        "t": 1.613,
+        "t": 2.666,
         "w": "business"
       },
       {
-        "t": 2.05,
+        "t": 3.006,
         "w": "impact"
       },
       {
-        "t": 2.581,
+        "t": 3.446,
         "w": "and"
       },
       {
-        "t": 2.862,
+        "t": 3.846,
         "w": "technical"
       },
       {
-        "t": 3.352,
-        "w": "impact"
+        "t": 4.266,
+        "w": "impact."
       },
       {
-        "t": 4.542,
-        "w": "First"
+        "t": 5.086,
+        "w": "First,"
       },
       {
-        "t": 5.094,
+        "t": 6.326,
         "w": "what"
       },
       {
-        "t": 5.365,
+        "t": 6.566,
         "w": "changed"
       },
       {
-        "t": 5.781,
+        "t": 6.826,
         "w": "for"
       },
       {
-        "t": 6.0,
+        "t": 7.046,
         "w": "users"
       },
       {
-        "t": 6.5,
+        "t": 7.326,
         "w": "and"
       },
       {
-        "t": 6.688,
-        "w": "revenue"
+        "t": 7.646,
+        "w": "revenue,"
       },
       {
-        "t": 7.812,
-        "w": "Then"
+        "t": 8.586,
+        "w": "then"
       },
       {
-        "t": 8.021,
+        "t": 8.946,
         "w": "the"
       },
       {
-        "t": 8.125,
+        "t": 9.086,
         "w": "stack"
       },
       {
-        "t": 8.448,
+        "t": 9.466,
         "w": "that"
       },
       {
-        "t": 8.719,
+        "t": 9.926,
         "w": "made"
       },
       {
-        "t": 9.042,
+        "t": 10.126,
         "w": "it"
       },
       {
-        "t": 9.146,
-        "w": "possible"
+        "t": 10.226,
+        "w": "possible."
       },
       {
-        "t": 10.365,
+        "t": 11.306,
         "w": "Let's"
       },
       {
-        "t": 10.688,
+        "t": 11.586,
         "w": "start"
       },
       {
-        "t": 11.073,
+        "t": 11.786,
         "w": "with"
       },
       {
-        "t": 11.344,
-        "w": "Airtel"
+        "t": 12.066,
+        "w": "Airtel,"
       },
       {
-        "t": 11.927,
+        "t": 12.826,
         "w": "my"
       },
       {
-        "t": 12.104,
+        "t": 12.966,
         "w": "current"
       },
       {
-        "t": 12.406,
-        "w": "role"
+        "t": 13.146,
+        "w": "role."
       }
     ],
     "airtel": [
       {
-        "t": 0.092,
+        "t": 0.17,
         "w": "At"
       },
       {
-        "t": 0.321,
-        "w": "Airtel"
+        "t": 0.41,
+        "w": "Airtel,"
       },
       {
-        "t": 1.008,
+        "t": 1.15,
         "w": "I"
       },
       {
-        "t": 1.217,
+        "t": 1.37,
         "w": "own"
       },
       {
-        "t": 1.425,
+        "t": 1.53,
         "w": "the"
       },
       {
-        "t": 1.602,
-        "w": "Internet"
+        "t": 1.69,
+        "w": "internet"
       },
       {
-        "t": 2.029,
-        "w": "Banking"
+        "t": 1.93,
+        "w": "banking"
       },
       {
-        "t": 2.467,
+        "t": 2.35,
         "w": "experience"
       },
       {
-        "t": 3.133,
+        "t": 2.91,
         "w": "under"
       },
       {
-        "t": 3.487,
+        "t": 3.39,
         "w": "RBI"
       },
       {
-        "t": 3.967,
-        "w": "compliance"
+        "t": 3.87,
+        "w": "compliance."
       },
       {
-        "t": 5.344,
+        "t": 4.33,
         "w": "We"
       },
       {
-        "t": 5.573,
+        "t": 5.27,
         "w": "improved"
       },
       {
-        "t": 6.042,
+        "t": 5.71,
         "w": "page"
       },
       {
-        "t": 6.427,
+        "t": 6.29,
         "w": "speed"
       },
       {
-        "t": 6.802,
+        "t": 6.55,
         "w": "with"
       },
       {
-        "t": 7.083,
-        "w": "Next"
+        "t": 6.85,
+        "w": "Next.js"
       },
       {
-        "t": 7.49,
-        "w": "."
-      },
-      {
-        "t": 7.74,
-        "w": "js"
-      },
-      {
-        "t": 8.177,
+        "t": 7.37,
         "w": "server-side"
       },
       {
-        "t": 8.833,
-        "w": "rendering"
+        "t": 8.13,
+        "w": "rendering,"
       },
       {
-        "t": 9.615,
+        "t": 8.93,
         "w": "Cloudflare"
       },
       {
-        "t": 10.115,
+        "t": 9.49,
         "w": "caching"
       },
       {
-        "t": 10.74,
+        "t": 9.93,
         "w": "and"
       },
       {
-        "t": 10.927,
+        "t": 10.63,
         "w": "Core"
       },
       {
-        "t": 11.177,
+        "t": 10.87,
         "w": "Web"
       },
       {
-        "t": 11.438,
-        "w": "Vitals"
+        "t": 11.09,
+        "w": "Vitals."
       },
       {
-        "t": 11.896,
-        "w": "work"
-      },
-      {
-        "t": 12.99,
+        "t": 12.01,
         "w": "We"
       },
       {
-        "t": 13.135,
+        "t": 12.19,
         "w": "reduced"
       },
       {
-        "t": 13.604,
+        "t": 12.55,
         "w": "bot"
       },
       {
-        "t": 13.885,
+        "t": 12.89,
         "w": "abuse"
       },
       {
-        "t": 14.344,
+        "t": 13.19,
         "w": "with"
       },
       {
-        "t": 14.615,
+        "t": 13.67,
         "w": "Cloudflare"
       },
       {
-        "t": 15.135,
+        "t": 14.23,
         "w": "security"
       },
       {
-        "t": 15.906,
+        "t": 14.69,
         "w": "and"
       },
       {
-        "t": 16.115,
+        "t": 15.37,
         "w": "Google"
       },
       {
-        "t": 16.448,
-        "w": "reCAPTCHA"
+        "t": 15.61,
+        "w": "reCAPTCHA."
       },
       {
-        "t": 18.469,
+        "t": 16.673,
         "w": "I"
       },
       {
-        "t": 18.656,
-        "w": "also"
-      },
-      {
-        "t": 19.073,
+        "t": 16.89,
         "w": "own"
       },
       {
-        "t": 19.312,
+        "t": 17.15,
         "w": "a"
       },
       {
-        "t": 19.396,
+        "t": 17.27,
         "w": "NestJS"
       },
       {
-        "t": 20.021,
+        "t": 17.69,
         "w": "backend"
       },
       {
-        "t": 20.531,
+        "t": 17.95,
+        "w": "also"
+      },
+      {
+        "t": 18.45,
         "w": "on"
       },
       {
-        "t": 20.708,
-        "w": "Node"
+        "t": 18.93,
+        "w": "Node.js"
       },
       {
-        "t": 21.073,
-        "w": "."
+        "t": 19.47,
+        "w": "in"
       },
       {
-        "t": 21.333,
-        "w": "js"
-      },
-      {
-        "t": 22.531,
-        "w": "In"
-      },
-      {
-        "t": 22.635,
+        "t": 19.97,
         "w": "front"
       },
       {
-        "t": 22.969,
+        "t": 20.15,
         "w": "of"
       },
       {
-        "t": 23.104,
+        "t": 20.37,
         "w": "that"
       },
       {
-        "t": 23.333,
-        "w": "service"
+        "t": 20.63,
+        "w": "service."
       },
       {
-        "t": 23.812,
+        "t": 21.69,
         "w": "I"
       },
       {
-        "t": 23.969,
+        "t": 22.21,
         "w": "run"
       },
       {
-        "t": 24.25,
+        "t": 22.77,
         "w": "a"
       },
       {
-        "t": 24.302,
+        "t": 22.95,
         "w": "Kong"
       },
       {
-        "t": 24.594,
+        "t": 23.35,
         "w": "gateway"
       },
       {
-        "t": 25.021,
+        "t": 23.65,
         "w": "for"
       },
       {
-        "t": 25.26,
+        "t": 23.95,
         "w": "load"
       },
       {
-        "t": 25.562,
+        "t": 24.19,
         "w": "balancing"
       },
       {
-        "t": 26.458,
+        "t": 24.61,
         "w": "with"
       },
       {
-        "t": 26.656,
+        "t": 25.19,
         "w": "plugins"
       },
       {
-        "t": 27.094,
+        "t": 25.51,
         "w": "for"
       },
       {
-        "t": 27.271,
-        "w": "CORS"
+        "t": 25.93,
+        "w": "CORS,"
       },
       {
-        "t": 27.833,
+        "t": 26.81,
         "w": "JWT"
       },
       {
-        "t": 28.667,
+        "t": 27.33,
         "w": "and"
       },
       {
-        "t": 28.865,
+        "t": 27.87,
         "w": "rate"
       },
       {
-        "t": 29.115,
-        "w": "limiting"
+        "t": 28.53,
+        "w": "limiting."
       },
       {
-        "t": 30.323,
+        "t": 28.83,
         "w": "On"
       },
       {
-        "t": 30.479,
+        "t": 29.73,
         "w": "the"
       },
       {
-        "t": 30.552,
+        "t": 29.83,
         "w": "content"
       },
       {
-        "t": 30.958,
-        "w": "side"
+        "t": 30.13,
+        "w": "side,"
       },
       {
-        "t": 31.552,
-        "w": "Next"
+        "t": 31.17,
+        "w": "Next.js"
       },
       {
-        "t": 31.927,
-        "w": "."
-      },
-      {
-        "t": 32.167,
-        "w": "js"
-      },
-      {
-        "t": 32.708,
+        "t": 31.75,
         "w": "and"
       },
       {
-        "t": 32.875,
+        "t": 32.03,
         "w": "Prismic"
       },
       {
-        "t": 33.281,
-        "w": "sit"
+        "t": 32.69,
+        "w": "sits"
       },
       {
-        "t": 33.604,
+        "t": 33.31,
         "w": "on"
       },
       {
-        "t": 33.76,
+        "t": 33.99,
         "w": "a"
       },
       {
-        "t": 33.802,
-        "w": "Node"
+        "t": 34.13,
+        "w": "Node.js"
       },
       {
-        "t": 34.156,
-        "w": "."
-      },
-      {
-        "t": 34.448,
-        "w": "js"
-      },
-      {
-        "t": 34.844,
+        "t": 34.55,
         "w": "Prismic"
       },
       {
-        "t": 35.219,
+        "t": 35.01,
         "w": "service"
       },
       {
-        "t": 35.698,
+        "t": 35.37,
         "w": "I"
       },
       {
-        "t": 35.854,
-        "w": "built"
+        "t": 35.85,
+        "w": "built."
       },
       {
-        "t": 36.896,
+        "t": 36.51,
         "w": "In"
       },
       {
-        "t": 37.01,
-        "w": "production"
+        "t": 36.75,
+        "w": "production,"
       },
       {
-        "t": 37.583,
+        "t": 37.41,
         "w": "I"
       },
       {
-        "t": 37.771,
+        "t": 37.49,
         "w": "use"
       },
       {
-        "t": 38.052,
+        "t": 37.65,
         "w": "Kibana"
       },
       {
-        "t": 38.573,
+        "t": 38.07,
         "w": "and"
       },
       {
-        "t": 38.792,
+        "t": 38.43,
         "w": "Grafana"
+      },
+      {
+        "t": 38.97,
+        "w": "for"
+      },
+      {
+        "t": 39.71,
+        "w": "logging"
+      },
+      {
+        "t": 40.09,
+        "w": "and"
+      },
+      {
+        "t": 40.29,
+        "w": "monitoring."
       }
     ],
     "dotpe": [
       {
-        "t": 0.092,
+        "t": 0.089,
         "w": "Before"
       },
       {
-        "t": 0.519,
-        "w": "Airtel"
+        "t": 0.438,
+        "w": "Airtel,"
       },
       {
-        "t": 0.873,
+        "t": 0.998,
         "w": "I"
       },
       {
-        "t": 1.029,
+        "t": 1.198,
         "w": "was"
       },
       {
-        "t": 1.29,
+        "t": 1.478,
         "w": "a"
       },
       {
-        "t": 1.342,
-        "w": "Software"
+        "t": 1.858,
+        "w": "software"
       },
       {
-        "t": 1.967,
-        "w": "Engineer"
+        "t": 2.098,
+        "w": "engineer"
       },
       {
-        "t": 2.456,
+        "t": 2.478,
         "w": "II"
       },
       {
-        "t": 2.56,
+        "t": 2.798,
         "w": "at"
       },
       {
-        "t": 2.706,
-        "w": "DotPe"
+        "t": 3.118,
+        "w": "DotPe."
       },
       {
-        "t": 3.467,
-        "w": "from 2021 to 2025"
+        "t": 3.938,
+        "w": "From"
       },
       {
-        "t": 6.938,
+        "t": 4.158,
+        "w": "2020"
+      },
+      {
+        "t": 4.778,
+        "w": "to"
+      },
+      {
+        "t": 5.098,
+        "w": "2025,"
+      },
+      {
+        "t": 6.312,
         "w": "I"
       },
       {
-        "t": 7.062,
+        "t": 6.618,
         "w": "led"
       },
       {
-        "t": 7.312,
-        "w": "four"
+        "t": 6.838,
+        "w": "4"
       },
       {
-        "t": 7.677,
+        "t": 7.198,
         "w": "engineers"
       },
       {
-        "t": 8.323,
+        "t": 7.618,
         "w": "on"
       },
       {
-        "t": 8.458,
+        "t": 8.358,
         "w": "merchant"
       },
       {
-        "t": 8.906,
-        "w": "billing"
+        "t": 8.638,
+        "w": "billing,"
       },
       {
-        "t": 9.469,
-        "w": "invoicing"
+        "t": 9.258,
+        "w": "invoicing,"
       },
       {
-        "t": 10.271,
-        "w": "inventory"
+        "t": 9.758,
+        "w": "inventory,"
       },
       {
-        "t": 11.01,
+        "t": 10.498,
         "w": "GST"
       },
       {
-        "t": 11.729,
+        "t": 10.738,
         "w": "and"
       },
       {
-        "t": 11.99,
-        "w": "analytics"
+        "t": 11.198,
+        "w": "analytics."
       },
       {
-        "t": 13.292,
+        "t": 12.418,
         "w": "Food"
       },
       {
-        "t": 13.646,
+        "t": 12.738,
         "w": "ordering"
       },
       {
-        "t": 14.062,
+        "t": 13.078,
         "w": "reached"
       },
       {
-        "t": 14.448,
-        "w": "fifty"
+        "t": 13.398,
+        "w": "50,000"
       },
       {
-        "t": 14.792,
-        "w": "thousand"
-      },
-      {
-        "t": 15.188,
+        "t": 14.258,
         "w": "daily"
       },
       {
-        "t": 15.531,
+        "t": 14.458,
         "w": "users"
       },
       {
-        "t": 16.188,
+        "t": 14.858,
         "w": "and"
       },
       {
-        "t": 16.438,
+        "t": 15.318,
         "w": "over"
       },
       {
-        "t": 16.719,
-        "w": "one"
-      },
-      {
-        "t": 16.99,
-        "w": "crore"
-      },
-      {
-        "t": 17.25,
-        "w": "rupees"
-      },
-      {
-        "t": 17.677,
+        "t": 15.638,
         "w": "a"
       },
       {
-        "t": 17.771,
-        "w": "day"
+        "t": 15.818,
+        "w": "crore"
       },
       {
-        "t": 18.771,
+        "t": 16.238,
+        "w": "a"
+      },
+      {
+        "t": 16.538,
+        "w": "day."
+      },
+      {
+        "t": 17.215,
         "w": "I"
       },
       {
-        "t": 18.906,
+        "t": 17.398,
         "w": "built"
       },
       {
-        "t": 19.229,
+        "t": 17.598,
         "w": "the"
       },
       {
-        "t": 19.333,
+        "t": 17.778,
         "w": "React"
       },
       {
-        "t": 19.708,
+        "t": 18.058,
         "w": "Native"
       },
       {
-        "t": 20.125,
+        "t": 18.418,
         "w": "waiter"
       },
       {
-        "t": 20.562,
+        "t": 19.498,
         "w": "app"
       },
       {
-        "t": 20.875,
+        "t": 19.738,
         "w": "and"
       },
       {
-        "t": 21.135,
+        "t": 20.298,
         "w": "owned"
       },
       {
-        "t": 21.344,
+        "t": 20.658,
         "w": "the"
       },
       {
-        "t": 21.479,
-        "w": "Node"
+        "t": 20.858,
+        "w": "Node.js"
       },
       {
-        "t": 21.833,
-        "w": "."
-      },
-      {
-        "t": 22.083,
-        "w": "js"
-      },
-      {
-        "t": 22.5,
+        "t": 21.298,
         "w": "backend"
       },
       {
-        "t": 22.99,
+        "t": 22.078,
         "w": "behind"
       },
       {
-        "t": 23.406,
-        "w": "it"
+        "t": 22.618,
+        "w": "it."
       },
       {
-        "t": 23.656,
-        "w": "APIs"
+        "t": 23.318,
+        "w": "APIs,"
       },
       {
-        "t": 24.427,
+        "t": 24.198,
         "w": "order"
       },
       {
-        "t": 24.698,
+        "t": 24.378,
         "w": "sync"
       },
       {
-        "t": 25.24,
+        "t": 24.638,
         "w": "and"
       },
       {
-        "t": 25.427,
+        "t": 25.458,
         "w": "offline-ready"
       },
       {
-        "t": 25.99,
-        "w": "flows"
+        "t": 25.758,
+        "w": "flows."
       },
       {
-        "t": 27.115,
+        "t": 26.578,
         "w": "We"
       },
       {
-        "t": 27.302,
+        "t": 26.718,
         "w": "also"
       },
       {
-        "t": 27.625,
+        "t": 26.998,
         "w": "shipped"
       },
       {
-        "t": 27.99,
+        "t": 27.338,
         "w": "real-time"
       },
       {
-        "t": 28.531,
+        "t": 27.938,
         "w": "chat"
       },
       {
-        "t": 28.781,
+        "t": 28.258,
         "w": "with"
       },
       {
-        "t": 28.99,
+        "t": 28.598,
         "w": "Socket.io"
       },
       {
-        "t": 30.156,
+        "t": 29.158,
         "w": "and"
       },
       {
-        "t": 30.375,
-        "w": "Firebase"
+        "t": 29.478,
+        "w": "Firebase."
       }
     ],
     "tyroo": [
       {
-        "t": 0.092,
+        "t": 0.093,
         "w": "At"
       },
       {
-        "t": 0.321,
-        "w": "Tyroo"
+        "t": 0.364,
+        "w": "Tyroo,"
       },
       {
-        "t": 0.717,
+        "t": 0.964,
         "w": "I"
       },
       {
-        "t": 0.894,
+        "t": 1.204,
         "w": "built"
       },
       {
-        "t": 1.217,
+        "t": 1.404,
         "w": "the"
       },
       {
-        "t": 1.331,
+        "t": 1.524,
         "w": "video"
       },
       {
-        "t": 1.685,
+        "t": 1.824,
         "w": "template"
       },
       {
-        "t": 2.154,
+        "t": 2.224,
         "w": "UI"
       },
       {
-        "t": 2.56,
+        "t": 3.164,
         "w": "in"
       },
       {
-        "t": 2.696,
-        "w": "React"
+        "t": 3.584,
+        "w": "React,"
       },
       {
-        "t": 3.237,
+        "t": 4.184,
         "w": "Redux"
       },
       {
-        "t": 3.842,
+        "t": 4.424,
         "w": "and"
       },
       {
-        "t": 4.081,
-        "w": "Ant"
+        "t": 4.644,
+        "w": "Ant Design."
       },
       {
-        "t": 4.3,
-        "w": "Design"
-      },
-      {
-        "t": 5.5,
+        "t": 5.604,
         "w": "I"
       },
       {
-        "t": 5.698,
+        "t": 5.904,
         "w": "also"
       },
       {
-        "t": 6.083,
+        "t": 6.204,
         "w": "owned"
       },
       {
-        "t": 6.312,
+        "t": 6.504,
         "w": "the"
       },
       {
-        "t": 6.438,
+        "t": 6.644,
         "w": "video"
       },
       {
-        "t": 6.792,
+        "t": 6.864,
         "w": "generation"
       },
       {
-        "t": 7.323,
-        "w": "backend"
+        "t": 7.284,
+        "w": "backend,"
       },
       {
-        "t": 8.104,
+        "t": 8.004,
         "w": "a"
       },
       {
-        "t": 8.188,
-        "w": "Node"
+        "t": 8.124,
+        "w": "Node.js"
       },
       {
-        "t": 8.51,
-        "w": "."
-      },
-      {
-        "t": 8.781,
-        "w": "js"
-      },
-      {
-        "t": 9.365,
-        "w": "and"
-      },
-      {
-        "t": 9.594,
-        "w": "Lottie"
-      },
-      {
-        "t": 9.896,
+        "t": 8.304,
         "w": "service"
       },
       {
-        "t": 10.302,
+        "t": 8.764,
+        "w": "and"
+      },
+      {
+        "t": 9.464,
+        "w": "a"
+      },
+      {
+        "t": 9.604,
+        "w": "Lottie"
+      },
+      {
+        "t": 9.904,
+        "w": "service"
+      },
+      {
+        "t": 10.144,
         "w": "that"
       },
       {
-        "t": 10.562,
+        "t": 10.424,
         "w": "rendered"
       },
       {
-        "t": 10.948,
+        "t": 10.744,
         "w": "marketing"
       },
       {
-        "t": 11.448,
+        "t": 11.204,
         "w": "videos"
       },
       {
-        "t": 11.979,
+        "t": 11.564,
         "w": "at"
       },
       {
-        "t": 12.167,
-        "w": "scale"
+        "t": 11.844,
+        "w": "scale."
       }
     ],
     "meddo": [
       {
-        "t": 0.092,
+        "t": 0.097,
         "w": "At"
       },
       {
-        "t": 0.269,
+        "t": 0.281,
         "w": "Meddo"
       },
       {
-        "t": 0.644,
-        "w": "Health"
+        "t": 0.581,
+        "w": "Health,"
       },
       {
-        "t": 1.029,
+        "t": 1.341,
         "w": "I"
       },
       {
-        "t": 1.206,
+        "t": 1.561,
         "w": "built"
       },
       {
-        "t": 1.519,
+        "t": 1.761,
         "w": "the"
       },
       {
-        "t": 1.633,
+        "t": 1.921,
         "w": "React"
       },
       {
-        "t": 1.998,
+        "t": 2.221,
         "w": "Native"
       },
       {
-        "t": 2.383,
+        "t": 2.521,
         "w": "patient"
       },
       {
-        "t": 2.894,
-        "w": "app"
+        "t": 2.901,
+        "w": "app,"
       },
       {
-        "t": 3.196,
-        "w": "and"
-      },
-      {
-        "t": 3.373,
+        "t": 3.701,
         "w": "the"
       },
       {
-        "t": 3.498,
+        "t": 3.861,
         "w": "doctor"
       },
       {
-        "t": 3.925,
+        "t": 4.081,
         "w": "app"
       },
       {
-        "t": 4.425,
+        "t": 4.441,
         "w": "plus"
       },
       {
-        "t": 4.654,
+        "t": 4.741,
         "w": "the"
       },
       {
-        "t": 4.79,
+        "t": 4.921,
         "w": "web"
       },
       {
-        "t": 5.029,
-        "w": "product"
+        "t": 5.101,
+        "w": "product."
       },
       {
-        "t": 6.167,
+        "t": 5.881,
         "w": "Those"
       },
       {
-        "t": 6.521,
-        "w": "apps"
-      },
-      {
-        "t": 6.802,
+        "t": 6.221,
         "w": "covered"
       },
       {
-        "t": 7.146,
+        "t": 6.541,
         "w": "video"
       },
       {
-        "t": 7.5,
-        "w": "consults"
+        "t": 6.841,
+        "w": "consults,"
       },
       {
-        "t": 8.333,
-        "w": "chat"
+        "t": 7.501,
+        "w": "chats,"
       },
       {
-        "t": 8.802,
+        "t": 8.141,
         "w": "EMR"
       },
       {
-        "t": 9.479,
+        "t": 8.641,
         "w": "and"
       },
       {
-        "t": 9.667,
+        "t": 8.901,
         "w": "lab"
       },
       {
-        "t": 9.917,
-        "w": "booking"
+        "t": 9.121,
+        "w": "bookings."
       },
       {
-        "t": 11.062,
+        "t": 9.981,
         "w": "I"
       },
       {
-        "t": 11.26,
+        "t": 10.201,
         "w": "also"
       },
       {
-        "t": 11.594,
+        "t": 10.481,
         "w": "wrote"
       },
       {
-        "t": 11.906,
-        "w": "Node"
+        "t": 10.821,
+        "w": "Node.js"
       },
       {
-        "t": 12.26,
-        "w": "."
-      },
-      {
-        "t": 12.531,
-        "w": "js"
-      },
-      {
-        "t": 13.01,
+        "t": 11.721,
         "w": "APIs"
       },
       {
-        "t": 13.552,
+        "t": 12.061,
         "w": "for"
       },
       {
-        "t": 13.74,
+        "t": 12.801,
         "w": "Google"
       },
       {
-        "t": 14.094,
-        "w": "Auth"
+        "t": 13.041,
+        "w": "Auth,"
       },
       {
-        "t": 14.656,
+        "t": 13.681,
         "w": "bulk"
       },
       {
-        "t": 14.885,
+        "t": 13.781,
         "w": "upload"
       },
       {
-        "t": 15.438,
+        "t": 14.121,
         "w": "and"
       },
       {
-        "t": 15.625,
-        "w": "media"
+        "t": 14.661,
+        "w": "media."
       }
     ],
     "lotto": [
       {
-        "t": 0.092,
+        "t": 0.098,
         "w": "My"
       },
       {
-        "t": 0.258,
+        "t": 0.349,
         "w": "first"
       },
       {
-        "t": 0.623,
+        "t": 0.629,
         "w": "role"
       },
       {
-        "t": 0.915,
+        "t": 0.849,
         "w": "was"
       },
       {
-        "t": 1.165,
+        "t": 1.209,
         "w": "at"
       },
       {
-        "t": 1.331,
+        "t": 1.649,
         "w": "Skill"
       },
       {
-        "t": 1.821,
+        "t": 1.929,
         "w": "and"
       },
       {
-        "t": 2.04,
-        "w": "Lotto"
+        "t": 2.089,
+        "w": "Lotto."
       },
       {
-        "t": 3.177,
+        "t": 3.149,
         "w": "I"
       },
       {
-        "t": 3.302,
+        "t": 3.309,
         "w": "built"
       },
       {
-        "t": 3.625,
+        "t": 3.549,
         "w": "an"
       },
       {
-        "t": 3.885,
+        "t": 3.729,
         "w": "online"
       },
       {
-        "t": 4.323,
-        "w": "lottery"
-      },
-      {
-        "t": 4.688,
+        "t": 4.049,
         "w": "platform"
       },
       {
-        "t": 5.417,
+        "t": 4.669,
         "w": "and"
       },
       {
-        "t": 5.594,
+        "t": 5.729,
         "w": "back-office"
       },
       {
-        "t": 6.167,
+        "t": 5.929,
         "w": "tools"
       },
       {
-        "t": 6.604,
+        "t": 6.169,
         "w": "with"
       },
       {
-        "t": 6.854,
-        "w": "JavaScript"
+        "t": 6.409,
+        "w": "JavaScript,"
       },
       {
-        "t": 7.677,
-        "w": "jQuery"
+        "t": 7.149,
+        "w": "jQuery,"
       },
       {
-        "t": 8.375,
+        "t": 8.249,
         "w": "PHP"
       },
       {
-        "t": 9.135,
+        "t": 8.669,
         "w": "and"
       },
       {
-        "t": 9.312,
-        "w": "Bootstrap"
+        "t": 9.109,
+        "w": "Bootstrap."
       }
     ],
     "about": [
       {
-        "t": 0.092,
+        "t": 0.087,
         "w": "Day"
       },
       {
-        "t": 0.279,
+        "t": 0.318,
         "w": "to"
       },
       {
-        "t": 0.425,
-        "w": "day"
+        "t": 0.458,
+        "w": "day,"
       },
       {
-        "t": 0.717,
+        "t": 1.118,
         "w": "I"
       },
       {
-        "t": 0.904,
+        "t": 1.418,
         "w": "run"
       },
       {
-        "t": 1.123,
+        "t": 1.578,
         "w": "the"
       },
       {
-        "t": 1.238,
+        "t": 1.718,
         "w": "team"
       },
       {
-        "t": 1.633,
+        "t": 1.998,
         "w": "in"
       },
       {
-        "t": 1.8,
-        "w": "Jira"
+        "t": 2.178,
+        "w": "Jira,"
       },
       {
-        "t": 2.352,
-        "w": "planning"
+        "t": 2.898,
+        "w": "planning,"
       },
       {
-        "t": 2.946,
+        "t": 3.518,
         "w": "priorities"
       },
       {
-        "t": 3.696,
+        "t": 3.878,
         "w": "and"
       },
       {
-        "t": 3.883,
-        "w": "delivery"
+        "t": 4.678,
+        "w": "delivery."
       },
       {
-        "t": 5.062,
+        "t": 5.505,
         "w": "I"
       },
       {
-        "t": 5.198,
+        "t": 5.698,
         "w": "keep"
       },
       {
-        "t": 5.521,
+        "t": 5.898,
         "w": "a"
       },
       {
-        "t": 5.583,
+        "t": 6.078,
         "w": "high"
       },
       {
-        "t": 5.812,
+        "t": 6.278,
         "w": "bar"
       },
       {
-        "t": 6.156,
+        "t": 6.478,
         "w": "on"
       },
       {
-        "t": 6.333,
-        "w": "React"
+        "t": 6.638,
+        "w": "React,"
       },
       {
-        "t": 6.792,
-        "w": "and"
+        "t": 7.598,
+        "w": "TypeScript,"
       },
       {
-        "t": 7.0,
-        "w": "TypeScript"
+        "t": 8.638,
+        "w": "quality."
       },
       {
-        "t": 7.552,
-        "w": "quality"
-      },
-      {
-        "t": 8.719,
+        "t": 9.378,
         "w": "I"
       },
       {
-        "t": 8.938,
+        "t": 9.958,
         "w": "own"
       },
       {
-        "t": 9.177,
-        "w": "Node"
+        "t": 10.298,
+        "w": "Node.js"
       },
       {
-        "t": 9.521,
-        "w": "."
-      },
-      {
-        "t": 9.792,
-        "w": "js"
-      },
-      {
-        "t": 10.281,
+        "t": 10.938,
         "w": "and"
       },
       {
-        "t": 10.479,
+        "t": 11.438,
         "w": "NestJS"
       },
       {
-        "t": 11.125,
+        "t": 11.998,
         "w": "services"
       },
       {
-        "t": 12.062,
+        "t": 12.398,
         "w": "and"
       },
       {
-        "t": 12.229,
+        "t": 13.198,
         "w": "I"
       },
       {
-        "t": 12.354,
+        "t": 13.378,
         "w": "work"
       },
       {
-        "t": 12.802,
+        "t": 14.078,
         "w": "with"
       },
       {
-        "t": 13.083,
+        "t": 14.338,
         "w": "other"
       },
       {
-        "t": 13.417,
+        "t": 14.578,
         "w": "engineers"
       },
       {
-        "t": 14.062,
+        "t": 14.958,
         "w": "on"
       },
       {
-        "t": 14.312,
+        "t": 15.278,
         "w": "API"
       },
       {
-        "t": 14.708,
+        "t": 15.598,
         "w": "contracts"
       },
       {
-        "t": 16.042,
+        "t": 16.038,
+        "w": "and"
+      },
+      {
+        "t": 16.918,
+        "w": "backend"
+      },
+      {
+        "t": 17.718,
+        "w": "designing."
+      },
+      {
+        "t": 18.514,
         "w": "After"
       },
       {
-        "t": 16.375,
+        "t": 18.918,
         "w": "we"
       },
       {
-        "t": 16.521,
-        "w": "ship"
+        "t": 19.098,
+        "w": "ship,"
       },
       {
-        "t": 17.094,
+        "t": 19.578,
         "w": "I"
       },
       {
-        "t": 17.25,
+        "t": 19.658,
         "w": "stay"
       },
       {
-        "t": 17.615,
+        "t": 19.898,
         "w": "in"
       },
       {
-        "t": 17.708,
-        "w": "the"
-      },
-      {
-        "t": 17.812,
+        "t": 20.038,
         "w": "logs"
       },
       {
-        "t": 18.292,
+        "t": 20.298,
         "w": "and"
       },
       {
-        "t": 18.469,
+        "t": 20.638,
         "w": "dashboards"
       },
       {
-        "t": 19.271,
-        "w": "Kibana"
+        "t": 21.058,
+        "w": "using"
       },
       {
-        "t": 19.885,
+        "t": 21.718,
+        "w": "Kibana,"
+      },
+      {
+        "t": 22.418,
         "w": "Grafana"
       },
       {
-        "t": 20.604,
+        "t": 22.818,
         "w": "and"
       },
       {
-        "t": 20.823,
-        "w": "Kong"
+        "t": 23.158,
+        "w": "Kong."
       }
     ],
     "exp-airtel": [
       {
-        "t": 0.092,
+        "t": 0.086,
         "w": "This"
       },
       {
-        "t": 0.373,
+        "t": 0.307,
         "w": "is"
       },
       {
-        "t": 0.519,
+        "t": 0.447,
         "w": "the"
       },
       {
-        "t": 0.633,
+        "t": 0.567,
         "w": "full"
       },
       {
-        "t": 0.967,
+        "t": 0.787,
         "w": "Airtel"
       },
       {
-        "t": 1.342,
-        "w": "role"
+        "t": 1.007,
+        "w": "role."
       },
       {
-        "t": 2.375,
+        "t": 1.827,
         "w": "I"
       },
       {
-        "t": 2.531,
+        "t": 1.927,
         "w": "lead"
       },
       {
-        "t": 2.823,
+        "t": 2.127,
         "w": "four"
       },
       {
-        "t": 3.188,
-        "w": "engineers"
+        "t": 2.447,
+        "w": "engineers,"
       },
       {
-        "t": 4.552,
-        "w": "We"
+        "t": 3.167,
+        "w": "we"
       },
       {
-        "t": 4.698,
+        "t": 3.267,
         "w": "ship"
       },
       {
-        "t": 4.969,
-        "w": "Next"
+        "t": 3.507,
+        "w": "Next.js"
       },
       {
-        "t": 5.344,
-        "w": "."
-      },
-      {
-        "t": 5.604,
-        "w": "js"
-      },
-      {
-        "t": 6.042,
+        "t": 4.067,
         "w": "with"
       },
       {
-        "t": 6.25,
+        "t": 5.127,
         "w": "Prismic"
       },
       {
-        "t": 7.052,
-        "w": "a"
+        "t": 5.707,
+        "w": "and"
       },
       {
-        "t": 7.125,
+        "t": 6.107,
         "w": "NestJS"
       },
       {
-        "t": 7.698,
+        "t": 6.727,
         "w": "backend"
       },
       {
-        "t": 8.479,
+        "t": 7.007,
         "w": "and"
       },
       {
-        "t": 8.677,
+        "t": 7.607,
         "w": "Kong"
       },
       {
-        "t": 8.938,
+        "t": 7.847,
         "w": "for"
       },
       {
-        "t": 9.167,
+        "t": 8.087,
         "w": "load"
       },
       {
-        "t": 9.448,
-        "w": "balancing"
+        "t": 8.287,
+        "w": "balancing,"
       },
       {
-        "t": 10.146,
-        "w": "JWT"
+        "t": 9.167,
+        "w": "JWT,"
       },
       {
-        "t": 10.958,
+        "t": 9.707,
         "w": "CORS"
       },
       {
-        "t": 11.448,
+        "t": 10.027,
         "w": "and"
       },
       {
-        "t": 11.646,
+        "t": 10.347,
         "w": "rate"
       },
       {
-        "t": 11.906,
-        "w": "limiting"
+        "t": 10.547,
+        "w": "limiting."
       },
       {
-        "t": 13.125,
-        "w": "Page"
+        "t": 11.387,
+        "w": "Page speed"
       },
       {
-        "t": 13.448,
-        "w": "speed"
-      },
-      {
-        "t": 13.802,
+        "t": 11.787,
         "w": "comes"
       },
       {
-        "t": 14.135,
+        "t": 12.127,
         "w": "from"
       },
       {
-        "t": 14.365,
+        "t": 12.407,
         "w": "server-side"
       },
       {
-        "t": 15.0,
-        "w": "rendering"
+        "t": 13.007,
+        "w": "rendering,"
       },
       {
-        "t": 15.781,
+        "t": 13.547,
         "w": "Cloudflare"
       },
       {
-        "t": 16.323,
+        "t": 13.947,
         "w": "caching"
       },
       {
-        "t": 16.917,
+        "t": 14.347,
         "w": "and"
       },
       {
-        "t": 17.115,
+        "t": 15.327,
         "w": "Web"
       },
       {
-        "t": 17.344,
-        "w": "Vitals"
+        "t": 15.587,
+        "w": "Vitals."
       },
       {
-        "t": 18.594,
+        "t": 16.487,
         "w": "I"
       },
       {
-        "t": 18.802,
+        "t": 16.547,
         "w": "own"
       },
       {
-        "t": 19.031,
+        "t": 16.767,
         "w": "this"
       },
       {
-        "t": 19.281,
+        "t": 16.927,
         "w": "surface"
       },
       {
-        "t": 19.844,
-        "w": "end"
+        "t": 17.287,
+        "w": "end-to-end,"
       },
       {
-        "t": 20.031,
-        "w": "to"
-      },
-      {
-        "t": 20.229,
-        "w": "end"
-      },
-      {
-        "t": 20.635,
+        "t": 18.207,
         "w": "not"
       },
       {
-        "t": 20.917,
+        "t": 18.347,
         "w": "just"
       },
       {
-        "t": 21.281,
-        "w": "tickets"
+        "t": 18.627,
+        "w": "tickets."
       }
     ],
     "exp-dotpe": [
       {
-        "t": 0.092,
+        "t": 0.155,
         "w": "DotPe"
       },
       {
-        "t": 0.56,
+        "t": 0.755,
         "w": "is"
       },
       {
-        "t": 0.685,
-        "w": "the"
+        "t": 1.355,
+        "w": "a"
       },
       {
-        "t": 0.79,
+        "t": 1.475,
         "w": "multi-product"
       },
       {
-        "t": 1.498,
-        "w": "chapter"
+        "t": 2.095,
+        "w": "chapter:"
       },
       {
-        "t": 2.081,
-        "w": "billing"
+        "t": 2.435,
+        "w": "billing,"
       },
       {
-        "t": 2.727,
+        "t": 3.353,
         "w": "WhatsApp"
       },
       {
-        "t": 3.185,
-        "w": "marketing"
+        "t": 3.855,
+        "w": "marketing,"
       },
       {
-        "t": 4.019,
+        "t": 4.615,
         "w": "live"
       },
       {
-        "t": 4.31,
-        "w": "chat"
+        "t": 4.735,
+        "w": "chat,"
       },
       {
-        "t": 4.883,
+        "t": 5.795,
         "w": "the"
       },
       {
-        "t": 4.967,
+        "t": 5.835,
         "w": "React"
       },
       {
-        "t": 5.3,
+        "t": 6.115,
         "w": "Native"
       },
       {
-        "t": 5.675,
+        "t": 6.455,
         "w": "waiter"
       },
       {
-        "t": 6.008,
-        "w": "app"
+        "t": 6.635,
+        "w": "app,"
       },
       {
-        "t": 6.456,
-        "w": "and"
-      },
-      {
-        "t": 6.612,
+        "t": 7.575,
         "w": "the"
       },
       {
-        "t": 6.748,
-        "w": "Node"
+        "t": 7.675,
+        "w": "Node.js"
       },
       {
-        "t": 7.102,
-        "w": "."
-      },
-      {
-        "t": 7.373,
-        "w": "js"
-      },
-      {
-        "t": 7.758,
-        "w": "service"
-      },
-      {
-        "t": 8.175,
+        "t": 8.215,
         "w": "behind"
       },
       {
-        "t": 8.56,
-        "w": "it"
+        "t": 8.675,
+        "w": "it."
       },
       {
-        "t": 9.479,
+        "t": 9.495,
         "w": "It"
       },
       {
-        "t": 9.573,
+        "t": 9.655,
         "w": "was"
       },
       {
-        "t": 9.875,
+        "t": 9.855,
         "w": "revenue-linked"
       },
       {
-        "t": 10.479,
-        "w": "work"
+        "t": 10.715,
+        "w": "work,"
       },
       {
-        "t": 10.833,
+        "t": 11.535,
         "w": "across"
       },
       {
-        "t": 11.219,
-        "w": "web"
+        "t": 11.855,
+        "w": "web,"
       },
       {
-        "t": 11.698,
+        "t": 12.295,
         "w": "mobile"
       },
       {
-        "t": 12.344,
+        "t": 12.555,
         "w": "and"
       },
       {
-        "t": 12.542,
-        "w": "backend"
+        "t": 13.035,
+        "w": "backend."
       }
     ],
     "skills": [
       {
-        "t": 0.092,
+        "t": 0.104,
         "w": "Skills"
       },
       {
-        "t": 0.487,
+        "t": 0.439,
         "w": "are"
       },
       {
-        "t": 0.665,
+        "t": 0.759,
         "w": "grouped"
       },
       {
-        "t": 1.04,
+        "t": 0.959,
         "w": "into"
       },
       {
-        "t": 1.279,
-        "w": "frontend"
+        "t": 1.239,
+        "w": "frontend,"
       },
       {
-        "t": 1.894,
-        "w": "backend"
+        "t": 1.879,
+        "w": "backend,"
       },
       {
-        "t": 2.54,
-        "w": "mobile"
+        "t": 2.459,
+        "w": "mobile,"
       },
       {
-        "t": 3.123,
+        "t": 3.059,
         "w": "DevOps"
       },
       {
-        "t": 3.967,
+        "t": 3.219,
         "w": "and"
       },
       {
-        "t": 4.175,
-        "w": "leadership"
+        "t": 3.699,
+        "w": "leadership."
       },
       {
-        "t": 5.458,
+        "t": 4.799,
         "w": "React"
       },
       {
-        "t": 5.844,
+        "t": 5.119,
         "w": "and"
       },
       {
-        "t": 6.104,
+        "t": 5.339,
         "w": "TypeScript"
       },
       {
-        "t": 6.719,
-        "w": "are"
-      },
-      {
-        "t": 6.896,
-        "w": "the"
-      },
-      {
-        "t": 7.0,
-        "w": "core"
-      },
-      {
-        "t": 8.042,
-        "w": "On"
-      },
-      {
-        "t": 8.198,
-        "w": "the"
-      },
-      {
-        "t": 8.292,
-        "w": "backend"
-      },
-      {
-        "t": 8.729,
-        "w": "I"
-      },
-      {
-        "t": 8.875,
-        "w": "have"
-      },
-      {
-        "t": 9.198,
-        "w": "owned"
-      },
-      {
-        "t": 9.469,
-        "w": "NestJS"
-      },
-      {
-        "t": 10.302,
+        "t": 6.299,
         "w": "and"
       },
       {
-        "t": 10.479,
+        "t": 6.719,
         "w": "Node"
       },
       {
-        "t": 10.781,
-        "w": "services"
+        "t": 6.959,
+        "w": "are"
       },
       {
-        "t": 11.354,
-        "w": "for"
-      },
-      {
-        "t": 11.552,
-        "w": "Prismic"
-      },
-      {
-        "t": 12.312,
+        "t": 7.459,
         "w": "the"
       },
       {
-        "t": 12.396,
-        "w": "waiter"
+        "t": 7.579,
+        "w": "core."
       },
       {
-        "t": 12.802,
-        "w": "app"
-      },
-      {
-        "t": 13.219,
-        "w": "and"
-      },
-      {
-        "t": 13.406,
-        "w": "video"
-      },
-      {
-        "t": 13.75,
-        "w": "generation"
-      },
-      {
-        "t": 15.052,
+        "t": 8.299,
         "w": "On"
       },
       {
-        "t": 15.208,
-        "w": "mobile"
+        "t": 8.399,
+        "w": "the"
       },
       {
-        "t": 15.75,
+        "t": 8.479,
+        "w": "backend,"
+      },
+      {
+        "t": 9.299,
+        "w": "I"
+      },
+      {
+        "t": 9.319,
+        "w": "own"
+      },
+      {
+        "t": 9.499,
+        "w": "NestJS"
+      },
+      {
+        "t": 10.099,
+        "w": "and"
+      },
+      {
+        "t": 10.719,
+        "w": "Node"
+      },
+      {
+        "t": 10.999,
+        "w": "service"
+      },
+      {
+        "t": 11.319,
+        "w": "for"
+      },
+      {
+        "t": 11.639,
+        "w": "Prismic."
+      },
+      {
+        "t": 12.339,
+        "w": "The"
+      },
+      {
+        "t": 12.419,
         "w": "waiter"
       },
       {
-        "t": 16.427,
-        "w": "patient"
+        "t": 12.619,
+        "w": "app"
       },
       {
-        "t": 17.062,
-        "w": "and"
+        "t": 12.919,
+        "w": "is"
       },
       {
-        "t": 17.229,
-        "w": "doctor"
+        "t": 13.359,
+        "w": "built"
       },
       {
-        "t": 17.708,
-        "w": "apps"
+        "t": 13.519,
+        "w": "on"
       },
       {
-        "t": 18.062,
-        "w": "in"
-      },
-      {
-        "t": 18.208,
+        "t": 13.779,
         "w": "React"
       },
       {
-        "t": 18.562,
+        "t": 14.519,
         "w": "Native"
       },
       {
-        "t": 19.698,
-        "w": "Then"
-      },
-      {
-        "t": 19.969,
-        "w": "Express"
-      },
-      {
-        "t": 20.656,
-        "w": "MongoDB"
-      },
-      {
-        "t": 21.542,
-        "w": "SQL"
-      },
-      {
-        "t": 22.208,
-        "w": "AWS"
-      },
-      {
-        "t": 23.042,
-        "w": "Docker"
-      },
-      {
-        "t": 23.542,
-        "w": "Kong"
-      },
-      {
-        "t": 23.927,
-        "w": "Kibana"
-      },
-      {
-        "t": 24.51,
+        "t": 14.899,
         "w": "and"
       },
       {
-        "t": 24.708,
-        "w": "Grafana"
+        "t": 15.319,
+        "w": "the"
+      },
+      {
+        "t": 15.419,
+        "w": "video"
+      },
+      {
+        "t": 15.659,
+        "w": "generation"
+      },
+      {
+        "t": 16.059,
+        "w": "tool"
+      },
+      {
+        "t": 16.459,
+        "w": "is"
+      },
+      {
+        "t": 16.659,
+        "w": "built"
+      },
+      {
+        "t": 16.879,
+        "w": "on"
+      },
+      {
+        "t": 17.079,
+        "w": "Node.js"
+      },
+      {
+        "t": 17.559,
+        "w": "backend."
+      },
+      {
+        "t": 18.619,
+        "w": "On"
+      },
+      {
+        "t": 18.759,
+        "w": "mobile,"
+      },
+      {
+        "t": 19.319,
+        "w": "waiter"
+      },
+      {
+        "t": 19.499,
+        "w": "app,"
+      },
+      {
+        "t": 20.099,
+        "w": "patient"
+      },
+      {
+        "t": 20.359,
+        "w": "app,"
+      },
+      {
+        "t": 20.819,
+        "w": "doctor"
+      },
+      {
+        "t": 20.999,
+        "w": "app"
+      },
+      {
+        "t": 21.319,
+        "w": "is"
+      },
+      {
+        "t": 21.559,
+        "w": "on"
+      },
+      {
+        "t": 21.719,
+        "w": "React"
+      },
+      {
+        "t": 21.979,
+        "w": "Native."
+      },
+      {
+        "t": 22.859,
+        "w": "Then"
+      },
+      {
+        "t": 23.099,
+        "w": "Express,"
+      },
+      {
+        "t": 23.559,
+        "w": "MongoDB,"
+      },
+      {
+        "t": 24.019,
+        "w": "SQL,"
+      },
+      {
+        "t": 24.519,
+        "w": "AWS,"
+      },
+      {
+        "t": 25.559,
+        "w": "Docker,"
+      },
+      {
+        "t": 26.079,
+        "w": "Kong,"
+      },
+      {
+        "t": 26.339,
+        "w": "Kibana"
+      },
+      {
+        "t": 26.659,
+        "w": "and"
+      },
+      {
+        "t": 27.159,
+        "w": "Grafana."
       }
     ],
     "education": [
       {
-        "t": 0.092,
+        "t": 0.097,
         "w": "I"
       },
       {
-        "t": 0.217,
+        "t": 0.375,
         "w": "completed"
       },
       {
-        "t": 0.81,
-        "w": "a"
+        "t": 0.855,
+        "w": "B.Tech"
       },
       {
-        "t": 0.935,
-        "w": "B"
-      },
-      {
-        "t": 1.29,
-        "w": "Tech"
-      },
-      {
-        "t": 1.54,
+        "t": 1.515,
         "w": "in"
       },
       {
-        "t": 1.685,
+        "t": 1.615,
         "w": "Computer"
       },
       {
-        "t": 2.144,
+        "t": 1.895,
         "w": "Science"
       },
       {
-        "t": 2.758,
+        "t": 2.275,
+        "w": "engineering"
+      },
+      {
+        "t": 2.615,
         "w": "at"
       },
       {
-        "t": 2.956,
+        "t": 3.695,
         "w": "K.R."
       },
       {
-        "t": 3.258,
+        "t": 4.395,
         "w": "Mangalam"
       },
       {
-        "t": 3.685,
+        "t": 4.775,
         "w": "University"
       },
       {
-        "t": 4.654,
-        "w": "from 2014 to 2018"
+        "t": 5.335,
+        "w": "from"
       },
       {
-        "t": 8.031,
+        "t": 5.755,
+        "w": "2014"
+      },
+      {
+        "t": 7.535,
+        "w": "to"
+      },
+      {
+        "t": 7.935,
+        "w": "2018."
+      },
+      {
+        "t": 9.035,
         "w": "Since"
       },
       {
-        "t": 8.323,
-        "w": "then"
+        "t": 9.375,
+        "w": "then,"
       },
       {
-        "t": 8.615,
+        "t": 9.775,
         "w": "I"
       },
       {
-        "t": 8.792,
+        "t": 10.075,
         "w": "have"
       },
       {
-        "t": 9.021,
+        "t": 10.235,
         "w": "worked"
       },
       {
-        "t": 9.438,
+        "t": 10.495,
         "w": "at"
       },
       {
-        "t": 9.635,
+        "t": 10.675,
         "w": "product"
       },
       {
-        "t": 10.083,
+        "t": 10.855,
         "w": "companies"
       },
       {
-        "t": 10.667,
+        "t": 11.415,
         "w": "in"
       },
       {
-        "t": 10.812,
-        "w": "Gurgaon"
+        "t": 11.755,
+        "w": "Gurgaon."
       }
     ],
     "close": [
@@ -2405,100 +2362,148 @@
         "w": "That's"
       },
       {
-        "t": 0.373,
+        "t": 0.418,
         "w": "the"
       },
       {
-        "t": 0.487,
-        "w": "walkthrough"
+        "t": 0.538,
+        "w": "walkthrough."
       },
       {
-        "t": 1.781,
+        "t": 1.518,
         "w": "If"
       },
       {
-        "t": 1.938,
-        "w": "you'd"
+        "t": 1.518,
+        "w": "you"
       },
       {
-        "t": 2.188,
+        "t": 1.638,
+        "w": "would"
+      },
+      {
+        "t": 1.738,
         "w": "like"
       },
       {
-        "t": 2.448,
+        "t": 2.518,
         "w": "to"
       },
       {
-        "t": 2.562,
-        "w": "talk"
+        "t": 2.758,
+        "w": "talk,"
       },
       {
-        "t": 3.083,
+        "t": 3.758,
         "w": "email"
       },
       {
-        "t": 3.531,
+        "t": 3.918,
         "w": "or"
       },
       {
-        "t": 3.719,
+        "t": 5.178,
         "w": "LinkedIn"
       },
       {
-        "t": 4.177,
+        "t": 5.438,
         "w": "is"
       },
       {
-        "t": 4.417,
-        "w": "easiest"
+        "t": 5.878,
+        "w": "the"
       },
       {
-        "t": 5.615,
-        "w": "You"
+        "t": 6.038,
+        "w": "easiest,"
       },
       {
-        "t": 5.75,
+        "t": 6.718,
+        "w": "or"
+      },
+      {
+        "t": 7.098,
+        "w": "you"
+      },
+      {
+        "t": 7.218,
         "w": "can"
       },
       {
-        "t": 6.01,
+        "t": 7.398,
+        "w": "contact"
+      },
+      {
+        "t": 7.778,
+        "w": "me"
+      },
+      {
+        "t": 8.098,
+        "w": "on"
+      },
+      {
+        "t": 8.498,
+        "w": "my"
+      },
+      {
+        "t": 8.658,
+        "w": "number."
+      },
+      {
+        "t": 9.478,
+        "w": "You"
+      },
+      {
+        "t": 9.878,
+        "w": "can"
+      },
+      {
+        "t": 10.018,
         "w": "also"
       },
       {
-        "t": 6.302,
+        "t": 10.218,
         "w": "download"
       },
       {
-        "t": 6.76,
+        "t": 10.618,
         "w": "the"
       },
       {
-        "t": 6.885,
-        "w": "PDF"
+        "t": 10.798,
+        "w": "PDF,"
       },
       {
-        "t": 8.177,
-        "w": "Restart"
+        "t": 11.678,
+        "w": "restart"
       },
       {
-        "t": 8.698,
+        "t": 11.958,
         "w": "this"
       },
       {
-        "t": 8.99,
+        "t": 12.238,
         "w": "anytime"
       },
       {
-        "t": 9.458,
+        "t": 12.598,
         "w": "from"
       },
       {
-        "t": 9.688,
+        "t": 13.358,
         "w": "the"
       },
       {
-        "t": 9.802,
-        "w": "avatar"
+        "t": 13.538,
+        "w": "avatar."
+      },
+      {
+        "t": 13.818,
+        "w": "Thank"
+      },
+      {
+        "t": 14.658,
+        "w": "you."
       }
     ]
   }
