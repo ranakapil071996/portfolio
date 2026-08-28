@@ -24,73 +24,90 @@ def steps():
     return [
         (
             "welcome",
-            "Hey, I'm Kapil Rana. Senior Manager, SDE III, at Airtel Payments Bank. I'll walk you through this the way I would in an interview — impact first, then the tech.",
+            "Hi, I'm Kapil Rana. I'm a Senior Manager and SDE III at Airtel Payments Bank. I'll walk you through this portfolio the way I would in an interview: impact first, then the technology.",
         ),
         (
             "positioning",
-            f"I've been doing this for {y} years now. Full-stack — React, Next.js, TypeScript, Node.js services, and React Native. I lead Internet Banking for about a million users a day, and a team of four. Five companies so far, mostly fintech and commerce.",
+            f"I have {y} years of full-stack experience in React, Next.js, TypeScript, Node.js, and React Native. I lead Internet Banking for about a million users a day, and I manage a team of four. I have shipped products across five companies, mostly in fintech and commerce.",
         ),
         (
             "impact",
-            "I split every role into business impact and tech impact. Business first — what changed for users and revenue. Then the stack that made it possible. Let's start with Airtel. That's current.",
+            "I organize each role by business impact and technical impact. First, what changed for users and revenue. Then the stack that made it possible. Let's start with Airtel, my current role.",
         ),
         (
             "airtel",
-            "At Airtel I own Internet Banking UI under RBI rules. We improved the speed of pages with Cloudflare edge caching. We cut bots with Cloudflare security and Google reCAPTCHA. The UI is Next.js server rendering plus Prismic CMS. I also built the Node.js Prismic service that serves that content — so the CMS path is fullstack. I sit on Kong for JWT and CORS, and I use Kibana and Grafana in production.",
+            "At Airtel, I own the Internet Banking experience under RBI compliance. We improved page speed with Next.js server-side rendering, Cloudflare caching, and Core Web Vitals work. We reduced bot abuse with Cloudflare security and Google reCAPTCHA. I also own a NestJS backend on Node.js. In front of that service I run a Kong gateway for load balancing, with plugins for CORS, JWT, and rate limiting. On the content side, Next.js and Prismic sit on a Node.js Prismic service I built. In production I use Kibana and Grafana.",
         ),
         (
             "dotpe",
-            "Before Airtel I was at DotPe, Software Engineer Two, twenty twenty one to twenty twenty five. I led four engineers on merchant billing — invoicing, inventory, GST, analytics. Food ordering hit fifty thousand daily users and over a crore rupees a day. I built the React Native waiter app, and I owned the Node.js backend behind it — APIs, order sync, offline-ready flows. Also Socket.io chat and Firebase.",
+            "Before Airtel I was a Software Engineer II at DotPe, from 2021 to 2025. I led four engineers on merchant billing: invoicing, inventory, GST, and analytics. Food ordering reached fifty thousand daily users and over one crore rupees a day. I built the React Native waiter app and owned the Node.js backend behind it — APIs, order sync, and offline-ready flows. We also shipped real-time chat with Socket.io and Firebase.",
         ),
         (
-            "earlier",
-            "Before DotPe: Tyroo — React template UI, and I owned the video generation backend, a Node.js plus Lottie service that rendered creatives at scale. Meddo Health was telehealth — I built the React Native patient app and doctor app, plus web, and Node APIs for auth and bulk upload. First job was Skill and Lotto, JavaScript, jQuery, PHP, and Bootstrap.",
+            "tyroo",
+            "At Tyroo I built the video template UI in React, Redux, and Ant Design. I also owned the video generation backend: a Node.js and Lottie service that rendered marketing videos at scale.",
+        ),
+        (
+            "meddo",
+            "At Meddo Health I built the React Native patient app and the doctor app, plus the web product. Those apps covered video consults, chat, EMR, and lab booking. I also wrote Node.js APIs for Google Auth, bulk upload, and media.",
+        ),
+        (
+            "lotto",
+            "My first role was at Skill and Lotto. I built an online lottery platform and back-office tools with JavaScript, jQuery, PHP, and Bootstrap.",
         ),
         (
             "about",
-            "Day to day I run the team in Jira — planning, priorities, delivery. I hold a high bar on React and TypeScript. I sit with backend on API contracts. And I don't disappear after deploy. Logs, dashboards, gateway config — I'm in there.",
+            "Day to day I run the team in Jira: planning, priorities, and delivery. I keep a high bar on React and TypeScript quality. I own Node.js and NestJS services, and I work with other engineers on API contracts. After we ship, I stay in the logs and dashboards — Kibana, Grafana, and Kong.",
         ),
         (
             "exp-airtel",
-            "If you open the Airtel role, that's the longer version. Team of four, Next.js, the Node.js Prismic service, Cloudflare, reCAPTCHA, accessibility, RBI-compliant journeys. I'm not just taking tickets. I own that surface end to end.",
+            "This is the full Airtel role. I lead four engineers. We ship Next.js with Prismic, a NestJS backend, and Kong for load balancing, JWT, CORS, and rate limiting. Page speed comes from server-side rendering, Cloudflare caching, and Web Vitals. I own this surface end to end, not just tickets.",
         ),
         (
             "exp-dotpe",
-            "DotPe is the multi-product chapter. Billing, WhatsApp marketing, live chat, plus the React Native waiter app and its Node.js backend. Revenue-linked work, fullstack and mobile.",
+            "DotPe is the multi-product chapter: billing, WhatsApp marketing, live chat, the React Native waiter app, and the Node.js service behind it. It was revenue-linked work across web, mobile, and backend.",
         ),
         (
             "skills",
-            "Skills are grouped — frontend, backend, mobile, DevOps, leadership. React and TypeScript are the core. Node.js services I have owned — Prismic, waiter-app APIs, video generation. React Native for waiter, patient, and doctor apps. Then Express, Mongo, SQL, AWS, Docker, Kong, Kibana, Grafana.",
+            "Skills are grouped into frontend, backend, mobile, DevOps, and leadership. React and TypeScript are the core. On the backend I have owned NestJS and Node services for Prismic, the waiter app, and video generation. On mobile: waiter, patient, and doctor apps in React Native. Then Express, MongoDB, SQL, AWS, Docker, Kong, Kibana, and Grafana.",
         ),
         (
             "education",
-            "I did B.Tech in Computer Science at K.R. Mangalam University, twenty fourteen to twenty eighteen. After that it's been product companies in Gurgaon.",
+            "I completed a B.Tech in Computer Science at K.R. Mangalam University, from 2014 to 2018. Since then I have worked at product companies in Gurgaon.",
         ),
         (
             "close",
-            "That's the set. If you want to talk, email or LinkedIn is easiest. PDF is there too. You can restart this anytime from the avatar.",
+            "That's the walkthrough. If you'd like to talk, email or LinkedIn is easiest. You can also download the PDF. Restart this anytime from the avatar.",
         ),
     ]
 
 
-async def render(sid, text):
-    comm = Communicate(text, VOICE, rate=RATE, boundary="WordBoundary")
-    audio = bytearray()
-    words = []
-    async for chunk in comm.stream():
-        kind = chunk.get("type")
-        if kind == "audio":
-            audio.extend(chunk["data"])
-        elif kind == "WordBoundary":
-            words.append(
-                {
-                    "t": round(chunk["offset"] / 10_000_000, 3),
-                    "w": chunk["text"],
-                }
-            )
-    dest = OUT / f"{sid}.mp3"
-    dest.write_bytes(bytes(audio))
-    return sid, text, words, dest.stat().st_size
+async def render(sid, text, attempts=3):
+    last_err = None
+    for attempt in range(attempts):
+        try:
+            comm = Communicate(text, VOICE, rate=RATE, boundary="WordBoundary")
+            audio = bytearray()
+            words = []
+            async for chunk in comm.stream():
+                kind = chunk.get("type")
+                if kind == "audio":
+                    audio.extend(chunk["data"])
+                elif kind == "WordBoundary":
+                    words.append(
+                        {
+                            "t": round(chunk["offset"] / 10_000_000, 3),
+                            "w": chunk["text"],
+                        }
+                    )
+            if not audio:
+                raise RuntimeError("empty audio")
+            dest = OUT / f"{sid}.mp3"
+            dest.write_bytes(bytes(audio))
+            return sid, text, words, dest.stat().st_size
+        except Exception as err:
+            last_err = err
+            await asyncio.sleep(1.2 * (attempt + 1))
+    raise last_err
 
 
 async def main():

@@ -401,7 +401,7 @@
       name: "Performance Optimization",
       cat: "frontend",
       level: 90,
-      desc: "Load-time and render efficiency for high-traffic Internet Banking and commerce UIs.",
+      desc: "Page speed via Next.js SSR, Cloudflare caching, and Core Web Vitals on high-traffic Internet Banking and commerce UIs.",
       used: "Airtel · DotPe",
     },
     {
@@ -422,8 +422,15 @@
       name: "Node.js",
       cat: "backend",
       level: 86,
-      desc: "Backend services with Express — REST APIs, admin backends, rendering pipelines, and product integrations with TypeScript/JS.",
-      used: "Tyroo · Meddo · DotPe · platform services",
+      desc: "Backend services with Express and NestJS — REST APIs, admin backends, rendering pipelines, and product integrations with TypeScript/JS.",
+      used: "Airtel · Tyroo · Meddo · DotPe · platform services",
+    },
+    {
+      name: "NestJS",
+      cat: "backend",
+      level: 84,
+      desc: "Own a NestJS Node.js service for Internet Banking — APIs behind Kong for load balancing, JWT, CORS, and rate limiting.",
+      used: "Airtel Payments Bank",
     },
     {
       name: "Express",
@@ -457,7 +464,7 @@
       name: "Kong",
       cat: "backend",
       level: 80,
-      desc: "Configure Kong API Gateway for backend APIs — traffic control, authentication, and cross-origin policies.",
+      desc: "Kong API Gateway in front of NestJS — load balancing plus plugins for CORS, JWT, and rate limiting.",
       used: "Airtel Payments Bank",
     },
     {

@@ -11,13 +11,13 @@ window.RESUME_CONTENT = {
   linkedinLabel: "linkedin.com/in/kapilrana07",
   careerStart: "2018-09-01",
   summary:
-    "Full-stack Senior Software Engineer (SDE III) and engineering manager with {years}+ years building high-scale applications using React, Next.js, TypeScript, Node.js, and React Native for fintech, commerce, and healthcare. Currently leads Internet Banking at Airtel Payments Bank (~1M users/day), shipping Next.js SSR UI plus a Node.js Prismic service, with Cloudflare caching and Google reCAPTCHA. Hands-on across APIs, AWS, MongoDB/SQL, production ops, and Kong API Gateway.",
+    "Full-stack Senior Software Engineer (SDE III) and engineering manager with {years}+ years building high-scale applications using React, Next.js, TypeScript, Node.js, NestJS, and React Native for fintech, commerce, and healthcare. Currently leads Internet Banking at Airtel Payments Bank (~1M users/day): Next.js SSR UI, a NestJS backend behind Kong (load balancing, CORS, JWT, rate limiting), a Node.js Prismic service, Cloudflare caching, and Core Web Vitals. Hands-on across APIs, AWS, MongoDB/SQL, and production ops.",
   skills: [
     { label: "Languages", value: "JavaScript (ES6+), TypeScript, HTML5, CSS3/SCSS, SQL" },
     { label: "Frontend", value: "React.js, Next.js (SSR), Prismic CMS, Redux Toolkit, RTK Query, Material UI, Tailwind CSS, Google reCAPTCHA, Webpack, Jest, A11y, Performance" },
-    { label: "Backend", value: "Node.js, Express, REST APIs, Prismic service, waiter-app APIs, video generation service, Socket.io, Firebase, API design & contracts" },
+    { label: "Backend", value: "Node.js, NestJS, Express, REST APIs, Prismic service, waiter-app APIs, video generation service, Socket.io, Firebase, API design & contracts" },
     { label: "Databases", value: "MongoDB, SQL" },
-    { label: "Cloud & Infra", value: "AWS, Cloudflare (CDN/caching, security), Private servers, Docker, Nginx, Kong API Gateway, JWT, CORS" },
+    { label: "Cloud & Infra", value: "AWS, Cloudflare (CDN/caching, security), Private servers, Docker, Nginx, Kong API Gateway (load balancing, JWT, CORS, rate limiting)" },
     { label: "Observability", value: "Kibana, Grafana, Prometheus" },
     { label: "Mobile", value: "React Native (DotPe Waiter App; Meddo patient & doctor apps)" },
     { label: "Delivery", value: "Jira, Agile/Scrum, Team Leadership, Mentorship" },
@@ -31,9 +31,10 @@ window.RESUME_CONTENT = {
       bullets: [
         "Lead a team of 4 engineers delivering Internet Banking UI for ~1 million users/day.",
         "Building dynamic UI with Next.js SSR and Prismic CMS; own the Node.js Prismic service that serves CMS content to banking UI.",
-        "Improved page load via Cloudflare edge caching/CDN; mitigated attacks with Cloudflare security and Google reCAPTCHA.",
+        "Improved page speed with Next.js SSR, Cloudflare caching, and Core Web Vitals; mitigated attacks with Cloudflare security and Google reCAPTCHA.",
+        "Own a NestJS (Node.js) backend; Kong gateway in front for load balancing and plugins (CORS, JWT, rate limiting).",
         "Own React/TypeScript architecture, performance, accessibility; drive delivery in Jira; partner on API contracts.",
-        "Production reliability: Kibana, Grafana, Kong (JWT, CORS); RBI-compliant customer journeys.",
+        "Production reliability: Kibana and Grafana; RBI-compliant customer journeys.",
       ],
     },
     {
@@ -82,9 +83,9 @@ window.RESUME_CONTENT = {
     {
       company: "Airtel Payments Bank",
       business:
-        "~1M users/day Internet Banking; faster loads via Cloudflare caching; reduced abuse with Cloudflare security + Google reCAPTCHA; CMS-driven iteration.",
+        "~1M users/day Internet Banking; faster pages via Next.js SSR, Cloudflare caching, and Web Vitals; reduced abuse with Cloudflare security + Google reCAPTCHA; CMS-driven iteration.",
       tech:
-        "Next.js SSR + Prismic CMS; owned Node.js Prismic service; Cloudflare CDN/security; reCAPTCHA; React/TS; Kibana/Grafana; Kong JWT/CORS.",
+        "Next.js SSR + Prismic CMS; Node.js Prismic service; NestJS backend; Kong (load balancing, CORS, JWT, rate limiting); Cloudflare; reCAPTCHA; Kibana/Grafana.",
     },
     {
       company: "DotPe",
