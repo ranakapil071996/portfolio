@@ -52,7 +52,7 @@
     "eyebrow": "منفتح على فرص ذات أثر",
     "name": "كابيل رانا",
     "role": "Sr. Manager · SDE III · Airtel Payments Bank",
-    "tagline": "مهندس برمجيات وقائد فرق بخبرة <strong><span data-years-exp>7</span>+ سنوات</strong> في بناء منتجات <strong>React و Next.js و TypeScript و Node.js</strong> واسعة النطاق للتقنية المالية والتجارة — قيادة الفرق وأداء الواجهة والموثوقية التشغيلية لمنصات تخدم <strong>~1 مليون مستخدم/يوم</strong>.",
+    "tagline": "مهندس برمجيات وقائد فرق بخبرة <strong><span data-years-exp>8</span>+ سنوات</strong> في بناء منتجات <strong>React و Next.js و TypeScript و Node.js</strong> واسعة النطاق للتقنية المالية والتجارة — قيادة الفرق وأداء الواجهة والموثوقية التشغيلية لمنصات تخدم <strong>~1 مليون مستخدم/يوم</strong>.",
     "statYears": "سنوات الخبرة",
     "statUsers": "مستخدمون / يوم",
     "statTeam": "حجم الفريق",
@@ -127,7 +127,7 @@
   "contact": {
     "num": "06",
     "title": "لنعمل معًا",
-    "sub": "منفتح على نقاشات Senior Engineer / SDE III / Engineering Manager",
+    "sub": "منفتح على نقاشات Senior Engineer / SDE III",
     "email": "البريد",
     "phone": "الهاتف",
     "linkedin": "LinkedIn",
@@ -136,12 +136,12 @@
     "location": "مقيم في جورجاون، الهند · منفتح على العمل عن بُعد / هجين"
   },
   "footer": {
-    "copy": "© {year} كابيل رانا. معرض أداء أولًا · متاح · جاهز لـ SEO.",
+    "copy": "© {year} كابيل رانا.",
     "backTop": "العودة للأعلى",
     "backTopShort": "للأعلى"
   },
   "companyUi": {
-    "loading": "جاري تحميل السيرة المخصّصة…",
+    "loading": "جارٍ تحميل السيرة…",
     "notFound": "السيرة غير موجودة",
     "browse": "تصفح سير الشركات",
     "allCompanies": "كل الشركات",
@@ -160,8 +160,8 @@
     "themedFor": "مخصّص لـ",
     "allThemes": "كل سمات الشركات",
     "skip": "تخطّي إلى السيرة",
-    "hubTitle": "سير ذاتية بسمة الشركة",
-    "hubSub": "شارك رابطًا مخصصًا لكل فريق توظيف. نفس المحتوى بهوية علامة الشركة.",
+    "hubTitle": "سير ذاتية للشركات",
+    "hubSub": "شارك رابطًا مخصصًا لكل فريق توظيف.",
     "downloadPdf": "تنزيل PDF"
   },
   "langNames": {

@@ -279,6 +279,15 @@
   outline-offset: 4px;
 }
 
+#timeline.story-layout-lock .timeline-item,
+#timeline.story-layout-lock .timeline-body {
+  transition: none !important;
+}
+
+.timeline-item.story-spot {
+  scroll-margin-top: calc(var(--nav-h) + 28px);
+}
+
 #impact-heading,
 #about-heading,
 #experience-heading,

@@ -276,7 +276,7 @@ window.COMPANIES = {
     primary: "#00D26A",
     primaryDark: "#00A854",
     secondary: "#0A0A0A",
-    accent: "#0A0A0A",
+    accent: "#FFFFFF",
     bg: "#F2FBF6",
     surface: "#FFFFFF",
     text: "#0A0A0A",

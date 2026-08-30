@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Company-themed resumes — Kapil Rana</title>
-  <meta name="description" content="Shareable company-themed resume links for Kapil Rana (SDE III). Pick a company brand theme." />
+  <title>Company resumes — Kapil Rana</title>
+  <meta name="description" content="Shareable company resume links for Kapil Rana (SDE III)." />
   <meta name="theme-color" content="#0f172a" />
   <link rel="icon" href="../favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -21,10 +21,9 @@
     <a href="../assets/Kapil_Rana_Resume.pdf" download>Download PDF</a>
   </div>
   <div class="hub-wrap">
-    <h1 data-i18n="companyUi.hubTitle">Company-themed resumes</h1>
+    <h1 data-i18n="companyUi.hubTitle">Company resumes</h1>
     <p class="hub-sub">
-      <span data-i18n="companyUi.hubSub">Share a dedicated URL with each hiring team. Every page uses the same resume content, styled with that company’s public brand colors and identity.</span>
-      Example: <code>/wolt/</code>, <code>/revolut/</code>, <code>/n8n/</code>
+      <span data-i18n="companyUi.hubSub">Share a dedicated URL with each hiring team.</span>
     </p>
     <div class="hub-grid" id="hub-grid"></div>
   </div>
@@ -42,9 +41,6 @@
           '<div class="hub-swatch"></div>' +
           "<strong>" + c.name + "</strong>" +
           "<span>" + c.industry + "</span>" +
-          "<span style='display:block;margin-top:0.35rem;font-size:0.72rem;color:#94a3b8'>" +
-          (c.layout || "classic") + " · " + (c.threeMode || "3d") + " · " + (c.particlesMode || "particles") +
-          "</span>" +
           '<span class="hub-path">/' + c.slug + "/</span>" +
           "</a>"
         );

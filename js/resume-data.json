@@ -1,0 +1,699 @@
+{
+  "name": "Kapil Rana",
+  "title": "Sr. Manager – SDE III · Software Engineer",
+  "heroRole": "Sr. Manager · SDE III · Airtel Payments Bank",
+  "location": "Gurgaon, India",
+  "locationLine": "Based in Gurgaon, India · Open to remote / hybrid",
+  "email": "rana.kapil071996@gmail.com",
+  "phone": "+91-9717360112",
+  "phoneHref": "+919717360112",
+  "linkedin": "https://linkedin.com/in/kapilrana07/",
+  "linkedinLabel": "linkedin.com/in/kapilrana07",
+  "careerStart": "2018-09-01",
+  "pdf": "assets/Kapil_Rana_Resume.pdf",
+  "profile": "assets/profile.png",
+  "heroTaglineHtml": "Software engineer & people lead with <strong><span data-years-exp>{years}</span>+ years</strong> shipping high-scale <strong>React, Next.js, TypeScript & Node.js</strong> products for fintech and commerce — leading teams, owning UI performance, and collaborating on APIs & production reliability for platforms serving <strong>~1M users/day</strong>.",
+  "summary": "Full-stack Senior Software Engineer (SDE III) with {years}+ years building high-scale applications using React, Next.js, TypeScript, Node.js, NestJS, and React Native for fintech, commerce, and healthcare. Currently leads Internet Banking at Airtel Payments Bank (~1M users/day): Next.js SSR UI, a NestJS backend behind Kong (load balancing, CORS, JWT, rate limiting), a Node.js Prismic service, Cloudflare caching, and Core Web Vitals. Hands-on across APIs, AWS, MongoDB/SQL, and production ops.",
+  "pills": [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "React Native",
+    "Prismic CMS",
+    "AWS"
+  ],
+  "stats": [
+    {
+      "value": "{years}",
+      "suffix": "+",
+      "label": "Years Exp",
+      "years": true
+    },
+    {
+      "value": "1",
+      "suffix": "M",
+      "label": "Users / Day"
+    },
+    {
+      "value": "4",
+      "suffix": "",
+      "label": "Team Size Led"
+    },
+    {
+      "value": "5",
+      "suffix": "",
+      "label": "Companies"
+    }
+  ],
+  "about": {
+    "builderTitle": "Builder & Leader",
+    "builderBodyHtml": "I lead Internet Banking delivery at <strong>Airtel Payments Bank</strong> (SDE III) for a platform serving <strong>~1 million users per day</strong>. My focus is product UI quality, team execution, and shipping reliable customer journeys under RBI compliance. Previously at <strong>DotPe</strong>, I led 4 engineers on billing & F&B products (50k+ DAU, ₹1 Cr+ daily revenue).",
+    "howTitle": "How I work",
+    "how": [
+      "Lead the team day-to-day — planning, priorities, and delivery in Jira",
+      "Ship strong React/TypeScript UX with clear ownership and quality bars",
+      "Own Node.js services and partner on API contracts and architecture",
+      "Stay close to production: logs, health dashboards, and gateway config"
+    ],
+    "shipTitle": "What I ship",
+    "shipBodyHtml": "Full-stack: <strong>React, Next.js (SSR)</strong>, <strong>TypeScript</strong>, and <strong>Node.js</strong> services — including a <strong>Prismic</strong> backend, waiter-app APIs, and a video generation service. Also <strong>React Native</strong> (DotPe waiter app; Meddo patient & doctor apps), <strong>AWS</strong>, and databases (<strong>MongoDB</strong> & <strong>SQL</strong>)."
+  },
+  "education": {
+    "school": "K.R. Mangalam University",
+    "location": "Haryana, India",
+    "degree": "B.Tech – Computer Science and Engineering",
+    "dates": "2014 – 2018"
+  },
+  "skillGroups": [
+    {
+      "label": "Languages",
+      "value": "JavaScript (ES6+), TypeScript, HTML5, CSS3/SCSS, SQL"
+    },
+    {
+      "label": "Frontend",
+      "value": "React.js, Next.js (SSR), Prismic CMS, Redux Toolkit, RTK Query, Material UI, Tailwind CSS, Google reCAPTCHA, Webpack, Jest, A11y, Performance"
+    },
+    {
+      "label": "Backend",
+      "value": "Node.js, NestJS, Express, REST APIs, Prismic service, waiter-app APIs, video generation service, Socket.io, Firebase, API design & contracts"
+    },
+    {
+      "label": "Databases",
+      "value": "MongoDB, SQL"
+    },
+    {
+      "label": "Cloud & Infra",
+      "value": "AWS, Cloudflare (CDN/caching, security), Private servers, Docker, Nginx, Kong API Gateway (load balancing, JWT, CORS, rate limiting)"
+    },
+    {
+      "label": "Observability",
+      "value": "Kibana, Grafana, Prometheus"
+    },
+    {
+      "label": "Mobile",
+      "value": "React Native (DotPe Waiter App; Meddo patient & doctor apps)"
+    },
+    {
+      "label": "Delivery",
+      "value": "Jira, Agile/Scrum, Team Leadership, Mentorship"
+    }
+  ],
+  "impact": [
+    {
+      "id": "airtel",
+      "filter": "Airtel",
+      "company": "Airtel Payments Bank",
+      "role": "Sr. Manager – SDE III",
+      "dates": "June 2025 – Present",
+      "current": true,
+      "metrics": [
+        {
+          "value": "~1M",
+          "label": "Users / day"
+        },
+        {
+          "value": "4",
+          "label": "Engineers led"
+        }
+      ],
+      "business": [
+        "Deliver Internet Banking experiences for a <strong>~1 million users/day</strong> platform under regulated banking constraints.",
+        "Improve page speed with <strong>Next.js SSR</strong>, <strong>Cloudflare caching</strong>, and <strong>Core Web Vitals</strong> work — faster journeys on high-traffic flows.",
+        "Reduce abuse and bot risk using <strong>Cloudflare security</strong> and <strong>Google reCAPTCHA</strong> on sensitive banking interactions.",
+        "Enable faster product iteration via CMS-driven pages — non-eng stakeholders can shape content without full release cycles.",
+        "Keep delivery predictable for leadership with clear Jira planning and cross-functional alignment (Product, Compliance, Backend)."
+      ],
+      "tech": [
+        "Driving <strong>Next.js SSR</strong> with <strong>Prismic CMS</strong> for dynamic, content-composed UI on banking surfaces.",
+        "Built and own the <strong>Node.js Prismic service</strong> that serves CMS content to Internet Banking — full-stack, not UI-only.",
+        "Own a <strong>NestJS</strong> (Node.js) backend for Internet Banking services.",
+        "Run <strong>Kong</strong> in front of that backend for <strong>load balancing</strong> and plugins: <strong>CORS</strong>, <strong>JWT</strong>, and <strong>rate limiting</strong>.",
+        "Integrated <strong>Cloudflare</strong> for CDN/caching and attack mitigation on Airtel Payments web properties.",
+        "Implemented <strong>Google reCAPTCHA</strong> to harden forms and critical user actions against automated abuse.",
+        "Owned React/TypeScript architecture, Web Vitals, and high-traffic frontend performance.",
+        "Production ops: <strong>Kibana</strong> and <strong>Grafana</strong> for logs and service health."
+      ],
+      "techRow": [
+        "Next.js",
+        "SSR",
+        "Prismic CMS",
+        "NestJS",
+        "Node.js",
+        "Kong",
+        "Cloudflare",
+        "Web Vitals",
+        "React",
+        "TypeScript"
+      ],
+      "impactSummary": {
+        "business": "~1M users/day Internet Banking; faster pages via Next.js SSR, Cloudflare caching, and Web Vitals; reduced abuse with Cloudflare security + Google reCAPTCHA; CMS-driven iteration.",
+        "tech": "Next.js SSR + Prismic CMS; Node.js Prismic service; NestJS backend; Kong (load balancing, CORS, JWT, rate limiting); Cloudflare; reCAPTCHA; Kibana/Grafana."
+      }
+    },
+    {
+      "id": "dotpe",
+      "filter": "DotPe",
+      "company": "DotPe",
+      "role": "Software Engineer II",
+      "dates": "Oct 2021 – May 2025",
+      "metrics": [
+        {
+          "value": "50k+",
+          "label": "DAU"
+        },
+        {
+          "value": "₹1Cr+",
+          "label": "Daily revenue"
+        }
+      ],
+      "business": [
+        "Shipped merchant <strong>Billing</strong> product (invoicing, inventory, GST, analytics) used by <strong>thousands of merchants</strong>.",
+        "Contributed to F&amp;B ordering features powering <strong>50k+ DAU</strong> and <strong>₹1 Cr+ daily revenue</strong>.",
+        "Grew merchant marketing reach with WhatsApp Marketing (Meta) and conversion-focused SEO/analytics work.",
+        "Improved restaurant operations with a Waiter App — faster order capture and offline-ready floor workflows."
+      ],
+      "tech": [
+        "Led a team of <strong>4 engineers</strong> across React product surfaces with Redux Toolkit / RTK Query.",
+        "Built real-time chat and live features with <strong>Socket.io</strong> and <strong>Node.js</strong> integrations.",
+        "Shipped the <strong>React Native</strong> Waiter App with Firebase and offline-first order management.",
+        "Owned the <strong>Node.js backend</strong> for the Waiter App — APIs, order sync, and offline-ready service flows."
+      ],
+      "techRow": [
+        "React",
+        "TypeScript",
+        "Redux Toolkit",
+        "Node.js",
+        "Socket.io",
+        "React Native",
+        "Firebase"
+      ],
+      "impactSummary": {
+        "business": "Merchant billing for thousands; 50k+ DAU F&B; ₹1 Cr+ daily revenue contribution.",
+        "tech": "Led 4 engineers; React/TS dashboards; Socket.io/Node real-time; React Native Waiter App + owned Node.js waiter backend."
+      }
+    },
+    {
+      "id": "tyroo",
+      "filter": "Tyroo",
+      "company": "Tyroo",
+      "role": "Software Engineer",
+      "dates": "July 2020 – Oct 2021",
+      "metrics": [
+        {
+          "value": "Video",
+          "label": "Creative ops"
+        }
+      ],
+      "business": [
+        "Enabled marketing teams to manage and ship video templates faster via Hubvid Tech.",
+        "Reduced creative turnaround by automating dynamic marketing video generation at scale."
+      ],
+      "tech": [
+        "Built template management UI with <strong>React, Redux, and Ant Design</strong>.",
+        "Owned the <strong>video generation backend</strong> — a high-performance <strong>Node.js</strong> + Lottie Web service that rendered dynamic creatives at scale."
+      ],
+      "techRow": [
+        "React",
+        "Redux",
+        "Ant Design",
+        "Node.js",
+        "Lottie"
+      ],
+      "impactSummary": {
+        "business": "Faster marketing creative turnaround via template & automated video pipeline.",
+        "tech": "React/Redux template UI; owned Node.js video generation backend with Lottie."
+      }
+    },
+    {
+      "id": "meddo",
+      "filter": "Meddo",
+      "company": "Meddo Health",
+      "role": "Software Engineer",
+      "dates": "June 2019 – July 2020",
+      "metrics": [
+        {
+          "value": "Telehealth",
+          "label": "Patient apps"
+        }
+      ],
+      "business": [
+        "Launched <strong>patient and doctor</strong> digital health apps: video consults, chat, EMR, lab booking.",
+        "Improved partner/ops efficiency with an Admin Portal for bulk operations and media workflows."
+      ],
+      "tech": [
+        "Built the <strong>React Native patient app and doctor app</strong>, plus web with React and Material UI.",
+        "Implemented <strong>Node.js APIs</strong> with Google Auth, bulk upload, media optimization, and real-time notifications."
+      ],
+      "techRow": [
+        "React",
+        "React Native",
+        "Material UI",
+        "Node.js",
+        "APIs"
+      ],
+      "impactSummary": {
+        "business": "Digital health journeys (consults, chat, EMR, labs) for patients and partners.",
+        "tech": "React Native patient & doctor apps; React web; Node.js APIs with auth, bulk upload, media optimization."
+      }
+    },
+    {
+      "id": "lotto",
+      "filter": "Skill & Lotto",
+      "company": "Skill & Lotto Solutions",
+      "role": "Software Engineer",
+      "dates": "Sept 2018 – June 2019",
+      "metrics": [
+        {
+          "value": "Lottery",
+          "label": "Platform"
+        }
+      ],
+      "business": [
+        "Launched an online lottery experience for digital ticket sales and customer engagement.",
+        "Supported physical lottery operations with back-office tooling for sales and ops teams."
+      ],
+      "tech": [
+        "Built web platform and admin flows using <strong>JavaScript, jQuery, PHP, and Bootstrap</strong>.",
+        "Established foundation for full-stack product delivery early in career."
+      ],
+      "techRow": [
+        "JavaScript",
+        "jQuery",
+        "PHP",
+        "Bootstrap"
+      ],
+      "impactSummary": {
+        "business": "Online lottery sales + ops back-office for physical lottery channels.",
+        "tech": "JS/jQuery/PHP/Bootstrap full-stack delivery."
+      }
+    }
+  ],
+  "experience": [
+    {
+      "id": "airtel",
+      "company": "Airtel Payments Bank",
+      "location": "Gurgaon",
+      "locationFull": "Gurgaon, India",
+      "role": "Sr. Manager – SDE III · Internet Banking",
+      "roleShort": "Sr. Manager – SDE III",
+      "dates": "June 2025 – Present",
+      "current": true,
+      "tags": [
+        "leadership",
+        "fintech",
+        "fullstack"
+      ],
+      "blurb": "Internet Banking · ~1M users/day · Next.js SSR · NestJS + Kong · Web Vitals · Team of 4",
+      "note": "full-stack ownership of a bank-scale surface — Next.js UI, NestJS services, and Kong — with team leadership and production awareness.",
+      "techRow": [
+        "Next.js",
+        "SSR",
+        "Prismic CMS",
+        "NestJS",
+        "Kong",
+        "Cloudflare",
+        "Web Vitals",
+        "React",
+        "TypeScript",
+        "Jira"
+      ],
+      "bullets": [
+        "Lead a team of <strong>4 engineers</strong> delivering Internet Banking UI and journeys for <strong>~1 million users per day</strong>.",
+        "Building dynamic, content-driven experiences with <strong>Next.js server-side rendering</strong> and <strong>Prismic CMS</strong> for flexible UI composition.",
+        "Built and own the <strong>Node.js Prismic service</strong> that delivers CMS content to banking UI — full-stack ownership of the content path.",
+        "Own a <strong>NestJS</strong> (Node.js) backend, with a <strong>Kong</strong> gateway in front for load balancing and plugins (CORS, JWT, rate limiting).",
+        "Improved page speed with <strong>Next.js SSR</strong>, <strong>Cloudflare</strong> caching, and <strong>Core Web Vitals</strong>; added <strong>Google reCAPTCHA</strong> on critical flows.",
+        "Own <strong>React/TypeScript</strong> architecture, frontend performance, accessibility, and scalable UI for high-traffic financial flows.",
+        "Drive day-to-day delivery in <strong>Jira</strong> — planning, prioritization, mentoring, and stakeholder alignment.",
+        "Partner with backend engineers on <strong>API contracts and system architecture</strong> to ship banking features end-to-end.",
+        "Support production reliability using <strong>Kibana</strong> for log analysis and <strong>Grafana</strong> for service health.",
+        "Ensure <strong>RBI-compliant</strong> workflows and production-ready customer experience."
+      ]
+    },
+    {
+      "id": "dotpe",
+      "company": "DotPe",
+      "location": "Gurgaon",
+      "locationFull": "Gurgaon, India",
+      "role": "Software Engineer II · Web & Platform",
+      "roleShort": "Software Engineer II",
+      "dates": "Oct 2021 – May 2025",
+      "tags": [
+        "leadership",
+        "mobile",
+        "fullstack"
+      ],
+      "blurb": "Merchant billing · F&B 50k+ DAU · React Native waiter app + Node.js backend",
+      "note": "fullstack + mobile — React products, a React Native waiter app, and the Node.js service behind it, with revenue-linked metrics.",
+      "techRow": [
+        "React",
+        "TypeScript",
+        "Redux Toolkit",
+        "RTK Query",
+        "Node.js",
+        "Socket.io",
+        "React Native"
+      ],
+      "bullets": [
+        "Led <strong>4 engineers</strong> shipping merchant Billing UI (invoicing, inventory, GST, analytics, bulk ops) for thousands of merchants.",
+        "Built F&amp;B ordering features for <strong>50k+ DAU</strong>, contributing to <strong>₹1 Cr+ daily revenue</strong>.",
+        "Implemented analytics dashboards and WhatsApp Marketing (Meta) with React, Redux Toolkit, and RTK Query.",
+        "Delivered real-time chat with <strong>Socket.io</strong> and contributed Node.js integrations for merchant tools.",
+        "Shipped the <strong>React Native</strong> Waiter App with Firebase and offline-ready order flows.",
+        "Owned the <strong>Node.js backend</strong> for the Waiter App — APIs, order sync, and service integration."
+      ]
+    },
+    {
+      "id": "tyroo",
+      "company": "Tyroo",
+      "location": "Gurgaon",
+      "locationFull": "Gurgaon, India",
+      "role": "Software Engineer",
+      "roleShort": "Software Engineer",
+      "dates": "July 2020 – Oct 2021",
+      "tags": [
+        "fullstack"
+      ],
+      "blurb": "Video template UI · Node.js video generation backend · Lottie",
+      "techRow": [
+        "React",
+        "Redux",
+        "Ant Design",
+        "Node.js",
+        "Lottie"
+      ],
+      "bullets": [
+        "Built Hubvid Tech video template management with React, Redux, and Ant Design.",
+        "Owned the <strong>video generation backend</strong> — Node.js + Lottie Web service rendering dynamic creatives at scale."
+      ]
+    },
+    {
+      "id": "meddo",
+      "company": "Meddo Health",
+      "location": "Gurgaon",
+      "locationFull": "Gurgaon, India",
+      "role": "Software Engineer",
+      "roleShort": "Software Engineer",
+      "dates": "June 2019 – July 2020",
+      "tags": [
+        "mobile",
+        "fullstack"
+      ],
+      "blurb": "React Native patient & doctor apps · video consult · EMR · Node APIs",
+      "techRow": [
+        "React",
+        "React Native",
+        "Material UI",
+        "Node.js"
+      ],
+      "bullets": [
+        "Built <strong>React Native patient and doctor apps</strong> plus web (React, Material UI) — video consults, chat, EMR, lab booking.",
+        "Admin Portal &amp; Node.js APIs: Google Auth, bulk upload, media optimization, real-time notifications."
+      ]
+    },
+    {
+      "id": "lotto",
+      "company": "Skill & Lotto Solutions",
+      "location": "Gurgaon",
+      "locationFull": "Gurgaon, India",
+      "role": "Software Engineer",
+      "roleShort": "Software Engineer",
+      "dates": "Sept 2018 – June 2019",
+      "tags": [
+        "fullstack"
+      ],
+      "blurb": "Online lottery platform · back-office operations tooling",
+      "techRow": [
+        "JavaScript",
+        "jQuery",
+        "PHP",
+        "Bootstrap"
+      ],
+      "bullets": [
+        "Online lottery platform and back-office for physical lottery sales using JavaScript, jQuery, PHP, Bootstrap."
+      ]
+    }
+  ],
+  "skillChips": [
+    {
+      "name": "React.js",
+      "cat": "frontend",
+      "level": 95,
+      "desc": "Primary UI stack for {years}+ years — architecture, design systems, and performance-sensitive banking & commerce interfaces.",
+      "used": "Airtel Payments Bank · DotPe · Tyroo · Meddo"
+    },
+    {
+      "name": "Next.js",
+      "cat": "frontend",
+      "level": 88,
+      "desc": "Server-side rendering and App/Pages architecture for high-traffic product surfaces — currently powering dynamic Internet Banking UI.",
+      "used": "Airtel Payments Bank (current)"
+    },
+    {
+      "name": "Prismic CMS",
+      "cat": "frontend",
+      "level": 82,
+      "desc": "Headless CMS integration with Next.js for dynamic, content-driven UI composition without hard-coding every layout.",
+      "used": "Airtel Payments Bank (current)"
+    },
+    {
+      "name": "Cloudflare",
+      "cat": "devops",
+      "level": 80,
+      "desc": "Edge caching/CDN to improve page load and Cloudflare security controls to help prevent attacks on Internet Banking web properties.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "Google reCAPTCHA",
+      "cat": "frontend",
+      "level": 78,
+      "desc": "Bot and abuse protection on sensitive banking forms and critical user actions.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "TypeScript",
+      "cat": "frontend",
+      "level": 92,
+      "desc": "Typed large codebases across React/Next.js UIs and Node services — safer refactors and clearer API contracts.",
+      "used": "Airtel · DotPe · Node backends"
+    },
+    {
+      "name": "Redux Toolkit / RTK Query",
+      "cat": "frontend",
+      "level": 90,
+      "desc": "State management and data fetching for dashboards, billing flows, and multi-product merchant tools.",
+      "used": "DotPe"
+    },
+    {
+      "name": "JavaScript (ES6+)",
+      "cat": "frontend",
+      "level": 95,
+      "desc": "Language depth for architecture decisions, tooling, and mentoring across the team.",
+      "used": "All roles"
+    },
+    {
+      "name": "HTML5 / CSS3 / SCSS",
+      "cat": "frontend",
+      "level": 90,
+      "desc": "Accessible, responsive interfaces and maintainable styling systems.",
+      "used": "All roles"
+    },
+    {
+      "name": "Tailwind CSS",
+      "cat": "frontend",
+      "level": 85,
+      "desc": "Utility-first styling for consistent, fast product UI delivery.",
+      "used": "DotPe · product UIs"
+    },
+    {
+      "name": "Material UI",
+      "cat": "frontend",
+      "level": 88,
+      "desc": "Enterprise dense UIs for admin portals and healthcare-style applications.",
+      "used": "Meddo · product apps"
+    },
+    {
+      "name": "Styled Components",
+      "cat": "frontend",
+      "level": 82,
+      "desc": "Component-scoped styling for design-system-driven React apps.",
+      "used": "DotPe"
+    },
+    {
+      "name": "Webpack",
+      "cat": "frontend",
+      "level": 78,
+      "desc": "Bundling, code-splitting, and production build optimization for SPA performance.",
+      "used": "Product platforms"
+    },
+    {
+      "name": "Jest / Testing",
+      "cat": "frontend",
+      "level": 80,
+      "desc": "Unit and component tests protecting critical money and order flows.",
+      "used": "DotPe · Airtel"
+    },
+    {
+      "name": "Performance Optimization",
+      "cat": "frontend",
+      "level": 90,
+      "desc": "Page speed via Next.js SSR, Cloudflare caching, and Core Web Vitals on high-traffic Internet Banking and commerce UIs.",
+      "used": "Airtel · DotPe"
+    },
+    {
+      "name": "Accessibility",
+      "cat": "frontend",
+      "level": 85,
+      "desc": "Inclusive UX ownership for regulated banking customer journeys.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "React Native",
+      "cat": "mobile",
+      "level": 85,
+      "desc": "Waiter app (offline-ready) at DotPe, plus patient and doctor apps at Meddo Health — with Firebase.",
+      "used": "DotPe Waiter App · Meddo patient & doctor apps"
+    },
+    {
+      "name": "Node.js",
+      "cat": "backend",
+      "level": 86,
+      "desc": "Backend services with Express and NestJS — REST APIs, admin backends, rendering pipelines, and product integrations with TypeScript/JS.",
+      "used": "Airtel · Tyroo · Meddo · DotPe · platform services"
+    },
+    {
+      "name": "NestJS",
+      "cat": "backend",
+      "level": 84,
+      "desc": "Own a NestJS Node.js service for Internet Banking — APIs behind Kong for load balancing, JWT, CORS, and rate limiting.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "Express",
+      "cat": "backend",
+      "level": 84,
+      "desc": "HTTP APIs and middleware for admin portals, bulk ops, and service integrations.",
+      "used": "Meddo · DotPe · internal services"
+    },
+    {
+      "name": "MongoDB",
+      "cat": "backend",
+      "level": 80,
+      "desc": "Document data modeling and queries for product features and service persistence.",
+      "used": "Product backends · services"
+    },
+    {
+      "name": "SQL",
+      "cat": "backend",
+      "level": 80,
+      "desc": "Relational data design, queries, and integrations for transactional application workflows.",
+      "used": "Product backends · reporting flows"
+    },
+    {
+      "name": "API Design",
+      "cat": "backend",
+      "level": 86,
+      "desc": "Collaborate with backend engineers to define requirements, contracts, and architecture for product features.",
+      "used": "Airtel · DotPe"
+    },
+    {
+      "name": "Kong",
+      "cat": "backend",
+      "level": 80,
+      "desc": "Kong API Gateway in front of NestJS — load balancing plus plugins for CORS, JWT, and rate limiting.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "JWT",
+      "cat": "backend",
+      "level": 80,
+      "desc": "Token-based authentication for secure access to backend APIs in banking workflows.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "CORS",
+      "cat": "backend",
+      "level": 78,
+      "desc": "Cross-origin resource policies for browser clients calling protected banking APIs.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "Socket.io",
+      "cat": "backend",
+      "level": 80,
+      "desc": "Real-time chat and live updates for merchant marketing and operations tools.",
+      "used": "DotPe"
+    },
+    {
+      "name": "Firebase",
+      "cat": "backend",
+      "level": 78,
+      "desc": "Auth, realtime data, and offline-capable mobile flows for restaurant operations.",
+      "used": "DotPe Waiter App"
+    },
+    {
+      "name": "AWS",
+      "cat": "devops",
+      "level": 78,
+      "desc": "Cloud infrastructure experience for deploying and operating application services and related resources.",
+      "used": "Cloud deployments · platform work"
+    },
+    {
+      "name": "Private Servers",
+      "cat": "devops",
+      "level": 76,
+      "desc": "Own private server management — provisioning, maintenance, and keeping app services healthy.",
+      "used": "Self-managed infrastructure"
+    },
+    {
+      "name": "Kibana",
+      "cat": "devops",
+      "level": 84,
+      "desc": "Production log analysis to diagnose issues on a high-traffic banking platform.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "Grafana",
+      "cat": "devops",
+      "level": 84,
+      "desc": "Monitor server and service health for Internet Banking at ~1M users/day.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "Prometheus",
+      "cat": "devops",
+      "level": 72,
+      "desc": "Metrics-backed observability alongside Grafana for production awareness.",
+      "used": "Production systems"
+    },
+    {
+      "name": "Docker / Nginx",
+      "cat": "devops",
+      "level": 72,
+      "desc": "Containerized services and reverse-proxy setups for reliable delivery.",
+      "used": "Platform deployments"
+    },
+    {
+      "name": "Jira",
+      "cat": "soft",
+      "level": 92,
+      "desc": "Day-to-day team management — backlog, sprint planning, prioritization, and delivery tracking.",
+      "used": "Airtel Payments Bank"
+    },
+    {
+      "name": "Team Leadership",
+      "cat": "soft",
+      "level": 90,
+      "desc": "Led squads of 4 engineers — mentoring, architecture decisions, and cross-functional delivery.",
+      "used": "Airtel · DotPe"
+    },
+    {
+      "name": "Agile / Scrum",
+      "cat": "soft",
+      "level": 88,
+      "desc": "Iterative delivery with Product, Design, Backend, and Compliance partners.",
+      "used": "All product companies"
+    }
+  ]
+}

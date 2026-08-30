@@ -3,7 +3,7 @@
     "lang": "hi",
     "dir": "ltr",
     "title": "कपिल राना | SDE III · सॉफ़्टवेयर इंजीनियर · React, Next.js, Node.js",
-    "description": "कपिल राना — SDE III और इंजीनियरिंग मैनेजर। React, Next.js, TypeScript, Node.js। Airtel Payments Bank में ~1M उपयोगकर्ता/दिन का Internet Banking। गुड़गाँव, भारत।",
+    "description": "कपिल राना — SDE III। React, Next.js, TypeScript, Node.js। Airtel Payments Bank में ~1M उपयोगकर्ता/दिन का Internet Banking। गुड़गाँव, भारत।",
     "ogTitle": "कपिल राना | SDE III · सॉफ़्टवेयर इंजीनियर",
     "ogDescription": "सीनियर इंजीनियर और टीम लीड। React, Next.js, TypeScript, Node.js। ~1M उपयोगकर्ता/दिन Internet Banking।",
     "ogLocale": "hi_IN",
@@ -14,7 +14,7 @@
   },
   "jsonLd": {
     "jobTitle": "Sr. Manager – SDE III",
-    "description": "React, Next.js, TypeScript और Node.js में विशेषज्ञ सॉफ़्टवेयर इंजीनियर और इंजीनियरिंग मैनेजर। ~1M उपयोगकर्ता/दिन Internet Banking।",
+    "description": "React, Next.js, TypeScript और Node.js में विशेषज्ञ सॉफ़्टवेयर इंजीनियर। ~1M उपयोगकर्ता/दिन Internet Banking।",
     "worksFor": "Airtel Payments Bank",
     "knowsAbout": [
       "React",
@@ -52,7 +52,7 @@
     "eyebrow": "प्रभावशाली अवसरों के लिए खुला",
     "name": "कपिल राना",
     "role": "Sr. Manager · SDE III · Airtel Payments Bank",
-    "tagline": "सॉफ़्टवेयर इंजीनियर और पीपल लीड — <strong><span data-years-exp>7</span>+ वर्षों</strong> से फिनटेक और कॉमर्स के लिए बड़े पैमाने के <strong>React, Next.js, TypeScript और Node.js</strong> उत्पाद। टीम लीडरशिप, UI प्रदर्शन और प्रोडक्शन विश्वसनीयता — <strong>~1M उपयोगकर्ता/दिन</strong> वाले प्लेटफ़ॉर्म।",
+    "tagline": "सॉफ़्टवेयर इंजीनियर और पीपल लीड — <strong><span data-years-exp>8</span>+ वर्षों</strong> से फिनटेक और कॉमर्स के लिए बड़े पैमाने के <strong>React, Next.js, TypeScript और Node.js</strong> उत्पाद। टीम लीडरशिप, UI प्रदर्शन और प्रोडक्शन विश्वसनीयता — <strong>~1M उपयोगकर्ता/दिन</strong> वाले प्लेटफ़ॉर्म।",
     "statYears": "वर्ष अनुभव",
     "statUsers": "उपयोगकर्ता / दिन",
     "statTeam": "टीम आकार",
@@ -127,7 +127,7 @@
   "contact": {
     "num": "06",
     "title": "आइए साथ काम करें",
-    "sub": "सीनियर इंजीनियर / SDE III / EM बातचीत के लिए खुला",
+    "sub": "सीनियर इंजीनियर / SDE III बातचीत के लिए खुला",
     "email": "ईमेल",
     "phone": "फ़ोन",
     "linkedin": "LinkedIn",
@@ -136,12 +136,12 @@
     "location": "गुड़गाँव, भारत · रिमोट / हाइब्रिड के लिए खुला"
   },
   "footer": {
-    "copy": "© {year} कपिल राना। परफ़ॉर्मेंस-फर्स्ट पोर्टफोलियो · एक्सेसिबल · SEO-ready।",
+    "copy": "© {year} कपिल राना।",
     "backTop": "ऊपर जाएँ",
     "backTopShort": "ऊपर"
   },
   "companyUi": {
-    "loading": "थीम वाला रिज़्यूमे लोड हो रहा है…",
+    "loading": "रिज़्यूमे लोड हो रहा है…",
     "notFound": "रिज़्यूमे नहीं मिला",
     "browse": "कंपनी रिज़्यूमे देखें",
     "allCompanies": "सभी कंपनियाँ",
@@ -160,8 +160,8 @@
     "themedFor": "थीम",
     "allThemes": "सभी कंपनी थीम",
     "skip": "रिज़्यूमे पर जाएँ",
-    "hubTitle": "कंपनी-थीम रिज़्यूमे",
-    "hubSub": "हर हायरिंग टीम के साथ अलग URL साझा करें। वही सामग्री, कंपनी ब्रांड रंग।",
+    "hubTitle": "कंपनी रिज़्यूमे",
+    "hubSub": "हर हायरिंग टीम के साथ अलग URL साझा करें।",
     "downloadPdf": "PDF डाउनलोड"
   },
   "langNames": {

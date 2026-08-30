@@ -3,7 +3,7 @@
     "lang": "ja",
     "dir": "ltr",
     "title": "Kapil Rana | SDE III · ソフトウェアエンジニア · React, Next.js, Node.js",
-    "description": "Kapil Rana — SDE III / エンジニアリングマネージャー。React、Next.js、TypeScript、Node.js。Airtel Payments Bank の Internet Banking（約100万人/日）。インド・グルガオン。",
+    "description": "Kapil Rana — SDE III。React、Next.js、TypeScript、Node.js。Airtel Payments Bank の Internet Banking（約100万人/日）。インド・グルガオン。",
     "ogTitle": "Kapil Rana | SDE III · ソフトウェアエンジニア",
     "ogDescription": "シニアエンジニア兼リード。React、Next.js、TypeScript、Node.js。約100万人/日の Internet Banking。",
     "ogLocale": "ja_JP",
@@ -14,7 +14,7 @@
   },
   "jsonLd": {
     "jobTitle": "Sr. Manager – SDE III",
-    "description": "React、Next.js、TypeScript、Node.js を専門とするソフトウェアエンジニア / エンジニアリングマネージャー。約100万人/日の Internet Banking をリード。",
+    "description": "React、Next.js、TypeScript、Node.js を専門とするソフトウェアエンジニア。約100万人/日の Internet Banking をリード。",
     "worksFor": "Airtel Payments Bank",
     "knowsAbout": [
       "React",
@@ -52,7 +52,7 @@
     "eyebrow": "インパクトのある機会を歓迎",
     "name": "Kapil Rana",
     "role": "Sr. Manager · SDE III · Airtel Payments Bank",
-    "tagline": "フィンテックとコマース向けの大規模 <strong>React / Next.js / TypeScript / Node.js</strong> プロダクトを <strong><span data-years-exp>7</span>年以上</strong>構築してきたソフトウェアエンジニア兼ピープルリード。チームリード、UI パフォーマンス、API・本番信頼性を担い、<strong>約100万人/日</strong>のプラットフォームに貢献。",
+    "tagline": "フィンテックとコマース向けの大規模 <strong>React / Next.js / TypeScript / Node.js</strong> プロダクトを <strong><span data-years-exp>8</span>年以上</strong>構築してきたソフトウェアエンジニア兼ピープルリード。チームリード、UI パフォーマンス、API・本番信頼性を担い、<strong>約100万人/日</strong>のプラットフォームに貢献。",
     "statYears": "経験年数",
     "statUsers": "ユーザー/日",
     "statTeam": "チーム規模",
@@ -127,7 +127,7 @@
   "contact": {
     "num": "06",
     "title": "一緒に働きましょう",
-    "sub": "シニアエンジニア / SDE III / EM の会話を歓迎",
+    "sub": "シニアエンジニア / SDE III の会話を歓迎",
     "email": "メール",
     "phone": "電話",
     "linkedin": "LinkedIn",
@@ -136,12 +136,12 @@
     "location": "インド・グルガオン拠点 · リモート / ハイブリッド可"
   },
   "footer": {
-    "copy": "© {year} Kapil Rana. パフォーマンス重視 · アクセシブル · SEO 対応。",
+    "copy": "© {year} Kapil Rana.",
     "backTop": "ページ上部へ",
     "backTopShort": "上部へ"
   },
   "companyUi": {
-    "loading": "テーマ付き履歴書を読み込み中…",
+    "loading": "履歴書を読み込み中…",
     "notFound": "履歴書が見つかりません",
     "browse": "企業別履歴書を見る",
     "allCompanies": "すべての企業",
@@ -160,8 +160,8 @@
     "themedFor": "テーマ対象",
     "allThemes": "すべての企業テーマ",
     "skip": "履歴書へスキップ",
-    "hubTitle": "企業テーマの履歴書",
-    "hubSub": "採用チームごとに専用 URL を共有。同じ内容、企業ブランドの色とトーン。",
+    "hubTitle": "企業向け履歴書",
+    "hubSub": "採用チームごとに専用 URL を共有。",
     "downloadPdf": "PDF をダウンロード"
   },
   "langNames": {

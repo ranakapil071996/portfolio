@@ -12,6 +12,11 @@
     window.I18n.init({ base: window.__I18N_BASE || "" }).catch(function () {});
   }
 
+  function startAfterContent(resume) {
+    if (window.ResumeRender && resume) {
+      window.ResumeRender.fillPage(resume, { base: window.__I18N_BASE || "" });
+    }
+
   /* ---------- Year + dynamic experience ---------- */
   const yearEl = $("#year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -169,10 +174,8 @@
     reveals.forEach((el) => {
       if (!el.classList.contains("in")) revObs.observe(el);
     });
-    // Failsafe: never leave content invisible if IO misses
-    setTimeout(() => {
-      reveals.forEach((el) => el.classList.add("in"));
-    }, 1200);
+    // Show rendered resume cards immediately — filters feel instant
+    reveals.forEach((el) => el.classList.add("in"));
   } else {
     reveals.forEach((el) => el.classList.add("in"));
   }
@@ -239,379 +242,10 @@
     runCounters(false);
   }
 
-  /* ---------- Experience expand / filter ---------- */
-  $$("[data-expand]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const item = btn.closest(".timeline-item");
-      if (!item) return;
-      const open = item.classList.toggle("open");
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-  });
-
-  // Open first item by default for employers
-  const firstItem = $(".timeline-item");
-  if (firstItem) {
-    firstItem.classList.add("open");
-    const b = firstItem.querySelector("[data-expand]");
-    if (b) b.setAttribute("aria-expanded", "true");
+  /* ---------- Experience / impact / skills (from js/resume-data.json) ---------- */
+  if (window.ResumeRender) {
+    window.ResumeRender.bindAll(resume || window.RESUME_CONTENT);
   }
-
-  function bindFilterGroup(selector, onChange) {
-    const buttons = $$(selector);
-    buttons.forEach((btn) => {
-      btn.setAttribute("aria-pressed", btn.classList.contains("active") ? "true" : "false");
-      btn.addEventListener("click", () => {
-        buttons.forEach((b) => {
-          b.classList.remove("active");
-          b.setAttribute("aria-pressed", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-pressed", "true");
-        onChange(btn);
-      });
-    });
-  }
-
-  bindFilterGroup(".filter-btn[data-filter]", (btn) => {
-    const filter = btn.getAttribute("data-filter") || "all";
-    $$(".timeline-item").forEach((item) => {
-      const tags = (item.getAttribute("data-tags") || "").split(/\s+/);
-      const show = filter === "all" || tags.includes(filter);
-      item.classList.toggle("filtered-out", !show);
-      item.setAttribute("aria-hidden", show ? "false" : "true");
-    });
-  });
-
-  /* ---------- Impact company filter ---------- */
-  bindFilterGroup("[data-impact-filter]", (btn) => {
-    const filter = btn.getAttribute("data-impact-filter") || "all";
-    $$("[data-impact-company]").forEach((card) => {
-      const co = card.getAttribute("data-impact-company");
-      const show = filter === "all" || co === filter;
-      card.classList.toggle("filtered-out", !show);
-      card.setAttribute("aria-hidden", show ? "false" : "true");
-    });
-  });
-
-  /* ---------- Skills data + interaction ---------- */
-  const SKILLS = [
-    {
-      name: "React.js",
-      cat: "frontend",
-      level: 95,
-      desc:
-        "Primary UI stack for " +
-        yearsExp +
-        "+ years — architecture, design systems, and performance-sensitive banking & commerce interfaces.",
-      used: "Airtel Payments Bank · DotPe · Tyroo · Meddo",
-    },
-    {
-      name: "Next.js",
-      cat: "frontend",
-      level: 88,
-      desc: "Server-side rendering and App/Pages architecture for high-traffic product surfaces — currently powering dynamic Internet Banking UI.",
-      used: "Airtel Payments Bank (current)",
-    },
-    {
-      name: "Prismic CMS",
-      cat: "frontend",
-      level: 82,
-      desc: "Headless CMS integration with Next.js for dynamic, content-driven UI composition without hard-coding every layout.",
-      used: "Airtel Payments Bank (current)",
-    },
-    {
-      name: "Cloudflare",
-      cat: "devops",
-      level: 80,
-      desc: "Edge caching/CDN to improve page load and Cloudflare security controls to help prevent attacks on Internet Banking web properties.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "Google reCAPTCHA",
-      cat: "frontend",
-      level: 78,
-      desc: "Bot and abuse protection on sensitive banking forms and critical user actions.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "TypeScript",
-      cat: "frontend",
-      level: 92,
-      desc: "Typed large codebases across React/Next.js UIs and Node services — safer refactors and clearer API contracts.",
-      used: "Airtel · DotPe · Node backends",
-    },
-    {
-      name: "Redux Toolkit / RTK Query",
-      cat: "frontend",
-      level: 90,
-      desc: "State management and data fetching for dashboards, billing flows, and multi-product merchant tools.",
-      used: "DotPe",
-    },
-    {
-      name: "JavaScript (ES6+)",
-      cat: "frontend",
-      level: 95,
-      desc: "Language depth for architecture decisions, tooling, and mentoring across the team.",
-      used: "All roles",
-    },
-    {
-      name: "HTML5 / CSS3 / SCSS",
-      cat: "frontend",
-      level: 90,
-      desc: "Accessible, responsive interfaces and maintainable styling systems.",
-      used: "All roles",
-    },
-    {
-      name: "Tailwind CSS",
-      cat: "frontend",
-      level: 85,
-      desc: "Utility-first styling for consistent, fast product UI delivery.",
-      used: "DotPe · product UIs",
-    },
-    {
-      name: "Material UI",
-      cat: "frontend",
-      level: 88,
-      desc: "Enterprise dense UIs for admin portals and healthcare-style applications.",
-      used: "Meddo · product apps",
-    },
-    {
-      name: "Styled Components",
-      cat: "frontend",
-      level: 82,
-      desc: "Component-scoped styling for design-system-driven React apps.",
-      used: "DotPe",
-    },
-    {
-      name: "Webpack",
-      cat: "frontend",
-      level: 78,
-      desc: "Bundling, code-splitting, and production build optimization for SPA performance.",
-      used: "Product platforms",
-    },
-    {
-      name: "Jest / Testing",
-      cat: "frontend",
-      level: 80,
-      desc: "Unit and component tests protecting critical money and order flows.",
-      used: "DotPe · Airtel",
-    },
-    {
-      name: "Performance Optimization",
-      cat: "frontend",
-      level: 90,
-      desc: "Page speed via Next.js SSR, Cloudflare caching, and Core Web Vitals on high-traffic Internet Banking and commerce UIs.",
-      used: "Airtel · DotPe",
-    },
-    {
-      name: "Accessibility",
-      cat: "frontend",
-      level: 85,
-      desc: "Inclusive UX ownership for regulated banking customer journeys.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "React Native",
-      cat: "mobile",
-      level: 85,
-      desc: "Waiter app (offline-ready) at DotPe, plus patient and doctor apps at Meddo Health — with Firebase.",
-      used: "DotPe Waiter App · Meddo patient & doctor apps",
-    },
-    {
-      name: "Node.js",
-      cat: "backend",
-      level: 86,
-      desc: "Backend services with Express and NestJS — REST APIs, admin backends, rendering pipelines, and product integrations with TypeScript/JS.",
-      used: "Airtel · Tyroo · Meddo · DotPe · platform services",
-    },
-    {
-      name: "NestJS",
-      cat: "backend",
-      level: 84,
-      desc: "Own a NestJS Node.js service for Internet Banking — APIs behind Kong for load balancing, JWT, CORS, and rate limiting.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "Express",
-      cat: "backend",
-      level: 84,
-      desc: "HTTP APIs and middleware for admin portals, bulk ops, and service integrations.",
-      used: "Meddo · DotPe · internal services",
-    },
-    {
-      name: "MongoDB",
-      cat: "backend",
-      level: 80,
-      desc: "Document data modeling and queries for product features and service persistence.",
-      used: "Product backends · services",
-    },
-    {
-      name: "SQL",
-      cat: "backend",
-      level: 80,
-      desc: "Relational data design, queries, and integrations for transactional application workflows.",
-      used: "Product backends · reporting flows",
-    },
-    {
-      name: "API Design",
-      cat: "backend",
-      level: 86,
-      desc: "Collaborate with backend engineers to define requirements, contracts, and architecture for product features.",
-      used: "Airtel · DotPe",
-    },
-    {
-      name: "Kong",
-      cat: "backend",
-      level: 80,
-      desc: "Kong API Gateway in front of NestJS — load balancing plus plugins for CORS, JWT, and rate limiting.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "JWT",
-      cat: "backend",
-      level: 80,
-      desc: "Token-based authentication for secure access to backend APIs in banking workflows.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "CORS",
-      cat: "backend",
-      level: 78,
-      desc: "Cross-origin resource policies for browser clients calling protected banking APIs.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "Socket.io",
-      cat: "backend",
-      level: 80,
-      desc: "Real-time chat and live updates for merchant marketing and operations tools.",
-      used: "DotPe",
-    },
-    {
-      name: "Firebase",
-      cat: "backend",
-      level: 78,
-      desc: "Auth, realtime data, and offline-capable mobile flows for restaurant operations.",
-      used: "DotPe Waiter App",
-    },
-    {
-      name: "AWS",
-      cat: "devops",
-      level: 78,
-      desc: "Cloud infrastructure experience for deploying and operating application services and related resources.",
-      used: "Cloud deployments · platform work",
-    },
-    {
-      name: "Private Servers",
-      cat: "devops",
-      level: 76,
-      desc: "Own private server management — provisioning, maintenance, and keeping app services healthy.",
-      used: "Self-managed infrastructure",
-    },
-    {
-      name: "Kibana",
-      cat: "devops",
-      level: 84,
-      desc: "Production log analysis to diagnose issues on a high-traffic banking platform.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "Grafana",
-      cat: "devops",
-      level: 84,
-      desc: "Monitor server and service health for Internet Banking at ~1M users/day.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "Prometheus",
-      cat: "devops",
-      level: 72,
-      desc: "Metrics-backed observability alongside Grafana for production awareness.",
-      used: "Production systems",
-    },
-    {
-      name: "Docker / Nginx",
-      cat: "devops",
-      level: 72,
-      desc: "Containerized services and reverse-proxy setups for reliable delivery.",
-      used: "Platform deployments",
-    },
-    {
-      name: "Jira",
-      cat: "soft",
-      level: 92,
-      desc: "Day-to-day team management — backlog, sprint planning, prioritization, and delivery tracking.",
-      used: "Airtel Payments Bank",
-    },
-    {
-      name: "Team Leadership",
-      cat: "soft",
-      level: 90,
-      desc: "Led squads of 4 engineers — mentoring, architecture decisions, and cross-functional delivery.",
-      used: "Airtel · DotPe",
-    },
-    {
-      name: "Agile / Scrum",
-      cat: "soft",
-      level: 88,
-      desc: "Iterative delivery with Product, Design, Backend, and Compliance partners.",
-      used: "All product companies",
-    },
-  ];
-
-  const cloud = $("#skills-cloud");
-  const detailWrap = $(".skills-detail-body");
-  const hint = $(".skills-hint");
-  const skillName = $("#skill-name");
-  const skillDesc = $("#skill-desc");
-  const skillLevel = $("#skill-level");
-  const skillUsed = $("#skill-used");
-
-  function renderSkills(cat) {
-    if (!cloud) return;
-    cloud.innerHTML = "";
-    SKILLS.forEach((s) => {
-      if (cat !== "all" && s.cat !== cat) return;
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "skill-chip";
-      btn.textContent = s.name;
-      btn.setAttribute("data-skill", s.name);
-      btn.addEventListener("click", () => selectSkill(s, btn));
-      cloud.appendChild(btn);
-    });
-  }
-
-  function selectSkill(s, btn) {
-    $$(".skill-chip").forEach((c) => c.classList.remove("active"));
-    if (btn) btn.classList.add("active");
-    if (hint) hint.hidden = true;
-    if (detailWrap) detailWrap.hidden = false;
-    if (skillName) skillName.textContent = s.name;
-    if (skillDesc) skillDesc.textContent = s.desc;
-    if (skillUsed) skillUsed.textContent = "Used at: " + s.used;
-    if (skillLevel) {
-      skillLevel.style.width = "0%";
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          skillLevel.style.width = s.level + "%";
-        });
-      });
-    }
-  }
-
-  renderSkills("all");
-
-  $$(".skill-cat").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      $$(".skill-cat").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      renderSkills(btn.getAttribute("data-skill-cat") || "all");
-      if (hint) hint.hidden = false;
-      if (detailWrap) detailWrap.hidden = true;
-    });
-  });
 
   /* ---------- Cursor glow (desktop only) ---------- */
   const glow = $("#cursor-glow");
@@ -702,5 +336,15 @@
     var story = document.createElement("script");
     story.src = (window.__I18N_BASE || "") + "js/story-mode.js";
     document.body.appendChild(story);
+  }
+  }
+
+  var boot = function (resume) {
+    startAfterContent(resume || window.RESUME_CONTENT);
+  };
+  if (window.ResumeContent && window.ResumeContent.ready) {
+    window.ResumeContent.ready.then(boot).catch(function () { boot(null); });
+  } else {
+    boot(window.RESUME_CONTENT);
   }
 })();

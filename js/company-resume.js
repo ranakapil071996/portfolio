@@ -27,6 +27,114 @@
       .replace(/"/g, "&quot;");
   }
 
+  function parseRgb(str) {
+    str = String(str || "").trim();
+    if (!str) return null;
+    if (str.charAt(0) === "#") {
+      var hex = str.slice(1);
+      if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+      if (hex.length < 6) return null;
+      var n = parseInt(hex.slice(0, 6), 16);
+      if (isNaN(n)) return null;
+      return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+    }
+    var m = str.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i);
+    if (!m) return null;
+    return { r: Number(m[1]), g: Number(m[2]), b: Number(m[3]) };
+  }
+
+  function relLuma(rgb) {
+    if (!rgb) return 1;
+    function lin(c) {
+      c = c / 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+    return 0.2126 * lin(rgb.r) + 0.7152 * lin(rgb.g) + 0.0722 * lin(rgb.b);
+  }
+
+  function contrastRatio(a, b) {
+    var l1 = relLuma(a);
+    var l2 = relLuma(b);
+    var hi = Math.max(l1, l2);
+    var lo = Math.min(l1, l2);
+    return (hi + 0.05) / (lo + 0.05);
+  }
+
+  function readableOn(bgRgb) {
+    var white = { r: 245, g: 245, b: 247 };
+    var black = { r: 17, g: 17, b: 20 };
+    return contrastRatio(white, bgRgb) >= contrastRatio(black, bgRgb) ? "#f5f5f7" : "#111114";
+  }
+
+  function mutedOn(bgRgb, inkHex) {
+    var ink = parseRgb(inkHex) || { r: 17, g: 17, b: 20 };
+    var dark = relLuma(bgRgb) < 0.45;
+    if (dark) return contrastRatio(ink, bgRgb) >= 4.5 ? inkHex : "#d4d4d8";
+    return contrastRatio(ink, bgRgb) >= 4.5 ? inkHex : "#3f3f46";
+  }
+
+  function applyReadableTokens(target, c) {
+    var cs = getComputedStyle(document.body);
+    var surface =
+      parseRgb(cs.getPropertyValue("--c-surface")) ||
+      parseRgb(c.surface) ||
+      parseRgb("#ffffff");
+    var pageBg = parseRgb(cs.getPropertyValue("--c-bg")) || parseRgb(c.bg) || surface;
+    var inkWanted =
+      parseRgb(cs.getPropertyValue("--c-text")) || parseRgb(c.text) || { r: 17, g: 17, b: 20 };
+    var mutedWanted =
+      parseRgb(cs.getPropertyValue("--c-muted")) || parseRgb(c.muted) || inkWanted;
+    var accentWanted = parseRgb(cs.getPropertyValue("--c-accent")) || parseRgb(c.accent);
+    var primary = parseRgb(cs.getPropertyValue("--c-primary")) || parseRgb(c.primary);
+
+    var ink = contrastRatio(inkWanted, surface) >= 4.5 ? rgbToHex(inkWanted) : readableOn(surface);
+    var muted = contrastRatio(mutedWanted, surface) >= 3.5 ? rgbToHex(mutedWanted) : mutedOn(surface, ink);
+    var darkSurface = relLuma(surface) < 0.45;
+    var darkPage = relLuma(pageBg) < 0.45;
+    var accent = accentWanted;
+    if (!accent || contrastRatio(accent, primary || surface) < 3) {
+      accent = parseRgb(readableOn(primary || surface));
+    }
+    // Banner is a dark gradient of secondary — accent-as-text must read on it
+    var banner = parseRgb(c.secondary) || pageBg;
+    if (accent && contrastRatio(accent, banner) < 3.2) {
+      accent = parseRgb(readableOn(banner));
+    }
+
+    var glass = darkSurface ? "#1c1c1f" : rgbToHex(surface);
+    target.setProperty("--c-text", ink);
+    target.setProperty("--c-muted", muted);
+    if (accent) target.setProperty("--c-accent", rgbToHex(accent));
+    target.setProperty("--bg", rgbToHex(pageBg));
+    target.setProperty("--bg-elevated", glass);
+    target.setProperty("--bg-glass", glass);
+    target.setProperty("--text", ink);
+    target.setProperty("--text-muted", muted);
+    target.setProperty("--text-dim", muted);
+    target.setProperty("--stat-bg", glass);
+    target.setProperty("--toast-bg", glass);
+    target.setProperty("--border", darkSurface ? "rgba(255,255,255,0.16)" : "rgba(15,23,42,0.12)");
+    target.setProperty("--border-strong", c.primary);
+    target.setProperty("--tech-bg", darkSurface ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.06)");
+    target.setProperty("--tech-border", darkSurface ? "rgba(255,255,255,0.16)" : "rgba(15,23,42,0.12)");
+    target.setProperty("--employer-bg", darkSurface ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.04)");
+    target.setProperty("--employer-border", c.primary);
+    target.setProperty("--level-track", darkSurface ? "rgba(255,255,255,0.12)" : "rgba(15,23,42,0.1)");
+    target.setProperty("--primary-fg", readableOn(primary || surface));
+    target.setProperty("--accent", c.primary);
+    target.setProperty("--accent-2", c.primaryDark || c.primary);
+    document.documentElement.setAttribute("data-theme", darkPage ? "dark" : "light");
+    document.documentElement.style.colorScheme = darkPage ? "dark" : "light";
+  }
+
+  function rgbToHex(rgb) {
+    function h(v) {
+      var s = Math.max(0, Math.min(255, Math.round(v))).toString(16);
+      return s.length === 1 ? "0" + s : s;
+    }
+    return "#" + h(rgb.r) + h(rgb.g) + h(rgb.b);
+  }
+
   function applyTheme(c) {
     var r = document.documentElement.style;
     r.setProperty("--c-primary", c.primary);
@@ -42,6 +150,10 @@
     var meta = document.getElementById("theme-color-meta");
     if (meta) meta.setAttribute("content", c.primary);
     document.body.className = "layout-" + (c.layout || "classic");
+    // Layout CSS may force a dark surface (noir / terminal / neon).
+    // Re-read computed colors and fix any unreadable text pairs.
+    applyReadableTokens(document.body.style, c);
+    applyReadableTokens(r, c);
   }
 
   function monogram(name) {
@@ -53,90 +165,7 @@
       .toUpperCase();
   }
 
-  function skillsHtml(resume) {
-    return resume.skills
-      .map(function (s) {
-        return (
-          '<div class="skill-row"><dt>' +
-          esc(s.label) +
-          "</dt><dd>" +
-          esc(s.value) +
-          "</dd></div>"
-        );
-      })
-      .join("");
-  }
-
-  function expHtml(resume) {
-    return resume.experience
-      .map(function (job) {
-        var bullets = job.bullets
-          .map(function (b) {
-            return "<li>" + esc(b) + "</li>";
-          })
-          .join("");
-        return (
-          '<article class="job cr-reveal">' +
-          '<div class="job-head"><span class="job-company">' +
-          esc(job.company) +
-          " · " +
-          esc(job.location) +
-          '</span><span class="job-dates">' +
-          esc(job.dates) +
-          "</span></div>" +
-          '<div class="job-role">' +
-          esc(job.role) +
-          "</div><ul>" +
-          bullets +
-          "</ul></article>"
-        );
-      })
-      .join("");
-  }
-
-  function impactHtml(resume) {
-    return resume.impact
-      .map(function (imp) {
-        return (
-          '<article class="impact-card cr-reveal"><h3>' +
-          esc(imp.company) +
-          '</h3><p><span class="lbl">' + esc(ui('business','Business')) + '</span>' +
-          esc(imp.business) +
-          '</p><p><span class="lbl">' + esc(ui('tech','Tech')) + '</span>' +
-          esc(imp.tech) +
-          "</p></article>"
-        );
-      })
-      .join("");
-  }
-
-  function sectionsHtml(resume, summary) {
-    return (
-      '<section class="cr-section cr-reveal"><h2>' + esc(ui('summary','Professional Summary')) + '</h2><p>' +
-      esc(summary) +
-      "</p></section>" +
-      '<section class="cr-section cr-reveal"><h2>' + esc(ui('skills','Technical Skills')) + '</h2><dl>' +
-      skillsHtml(resume) +
-      "</dl></section>" +
-      '<section class="cr-section cr-reveal"><h2>' + esc(ui('experience','Professional Experience')) + '</h2>' +
-      expHtml(resume) +
-      "</section>" +
-      '<section class="cr-section cr-reveal"><h2>' + esc(ui('impact','Business & Tech Impact')) + '</h2>' +
-      impactHtml(resume) +
-      "</section>" +
-      '<section class="cr-section cr-reveal"><h2>' + esc(ui('education','Education')) + '</h2><div class="edu"><div><strong>' +
-      esc(resume.education.school) +
-      "</strong> · " +
-      esc(resume.education.location) +
-      "<br/>" +
-      esc(resume.education.degree) +
-      '</div><div class="job-dates">' +
-      esc(resume.education.dates) +
-      "</div></div></section>"
-    );
-  }
-
-  function topBar(c, base) {
+  function topBar(c, resume, base) {
     var logoUrl = "https://logo.clearbit.com/" + c.domain + "?size=128";
     return (
       '<header class="cr-top">' +
@@ -147,19 +176,12 @@
       '" alt="" width="36" height="36" onerror="this.style.display=\'none\';this.nextElementSibling.hidden=false" />' +
       '<span class="cr-mono" hidden>' +
       esc(monogram(c.name)) +
-      "</span><span>Resume · " +
-      esc(c.name) +
+      "</span><span>" +
+      esc(resume.name) +
       "</span></a>" +
       '<div class="cr-actions">' +
       '<div class="lang-switcher" id="lang-switcher"></div>' +
-      '<a class="cr-btn" href="' +
-      base +
-      "for/?lang=" +
-      (window.I18n ? window.I18n.getLang() : "en") +
-      '">' +
-      esc(ui("allCompanies", "All companies")) +
-      "</a>" +
-      '<a class="cr-btn" href="' +
+      '<a class="cr-btn cr-btn-primary" href="' +
       base +
       (window.I18n ? window.I18n.getLang() + "/" : "") +
       '">' +
@@ -205,9 +227,6 @@
         '<img class="cr-avatar" src="' +
         base +
         'assets/profile.png" width="96" height="96" alt="" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,0.35)" />' +
-        '<p class="cr-tagline" style="margin-top:1rem">' +
-        esc(c.tagline) +
-        "</p>" +
         "<h1>" +
         esc(resume.name) +
         "</h1>" +
@@ -215,11 +234,7 @@
         esc(resume.title) +
         "</p>" +
         contact +
-        '<p style="margin-top:1.25rem;font-size:0.85rem;opacity:0.85">' +
-        esc(c.industry) +
-        " · layout <code>" +
-        esc(layout) +
-        "</code></p></aside>"
+        "</aside>"
       );
     }
 
@@ -232,9 +247,6 @@
       esc(resume.name) +
       '" />' +
       "<div>" +
-      '<p class="cr-tagline">' +
-      esc(c.tagline) +
-      "</p>" +
       "<h1>" +
       esc(resume.name) +
       "</h1>" +
@@ -247,34 +259,9 @@
   }
 
   function bindReveal() {
-    var nodes = document.querySelectorAll(".cr-reveal");
-    if (!("IntersectionObserver" in window)) {
-      nodes.forEach(function (n) {
-        n.classList.add("in");
-      });
-      return;
-    }
-    var io = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -5% 0px" }
-    );
-    nodes.forEach(function (n, i) {
-      n.style.transitionDelay = Math.min(i * 40, 400) + "ms";
-      io.observe(n);
+    document.querySelectorAll(".reveal, .cr-reveal").forEach(function (n) {
+      n.classList.add("in");
     });
-    // hero visible immediately
-    setTimeout(function () {
-      document.querySelectorAll(".cr-banner .cr-reveal, .cr-side.cr-reveal, .cr-pitch .cr-reveal").forEach(function (n) {
-        n.classList.add("in");
-      });
-    }, 30);
   }
 
   function render(slug) {
@@ -294,22 +281,25 @@
       ? window.I18n.init({ base: "../", lang: window.__LANG })
       : Promise.resolve(null);
 
-    document.title = resume.name + " — Resume for " + c.name + " · " + (c.layout || "classic");
+    document.title = resume.name + " — Resume";
     var desc = document.getElementById("meta-desc");
     if (desc) {
       desc.setAttribute(
         "content",
-        resume.name + " resume for " + c.name + ". " + c.pitch
+        resume.name + " — SDE III. React, Next.js, TypeScript, Node.js."
       );
     }
 
-    var y = yearsExp();
-    var summary = resume.summary.replace(/\{years\}/g, String(y));
     var base = "../";
     var layout = c.layout || "classic";
 
     var root = document.getElementById("app");
     if (!root) return;
+
+    var bodyHtml =
+      window.ResumeRender && window.ResumeRender.sectionsHtml
+        ? window.ResumeRender.sectionsHtml(resume, { base: base })
+        : "";
 
     root.innerHTML =
       '<canvas id="cr-three" aria-hidden="true"></canvas>' +
@@ -317,47 +307,221 @@
       '<div class="cr-noise" aria-hidden="true"></div>' +
       '<div class="cr-shell">' +
       '<a class="skip" href="#resume-main">' + esc(ui("skip","Skip to resume")) + '</a>' +
-      topBar(c, base) +
+      topBar(c, resume, base) +
       banner(c, resume, base, layout) +
-      '<div class="cr-pitch"><div class="cr-pitch-card cr-reveal"><strong>' +
-      esc(ui("whyFor", "Why this version for {company}:").replace("{company}", c.name)) +
-      "</strong> " +
-      esc(c.pitch) +
-      ' <span style="opacity:0.7">· Theme: ' +
-      esc(layout) +
-      " / 3D: " +
-      esc(c.threeMode || "orbs") +
-      " / particles: " +
-      esc(c.particlesMode || "constellation") +
-      "</span></div></div>" +
-      '<main class="cr-main" id="resume-main">' +
-      sectionsHtml(resume, summary) +
+      '<main class="cr-main portfolio-resume" id="resume-main">' +
+      bodyHtml +
       "</main>" +
       '<footer class="cr-footer">' +
       "<p>© " +
       new Date().getFullYear() +
       " " +
       esc(resume.name) +
-      " · Themed for <strong>" +
-      esc(c.name) +
-      "</strong> (" +
-      esc(c.industry) +
-      ")</p>" +
+      "</p>" +
       '<p class="no-print"><a href="' +
       base +
-      'for/">All company themes</a> · Share <code>/' +
-      esc(c.slug) +
-      "/</code></p></footer></div>";
+      (window.I18n ? window.I18n.getLang() + "/" : "") +
+      '">' +
+      esc(ui("portfolio", "Portfolio")) +
+      "</a></p></footer></div>";
 
     var printBtn = document.getElementById("print-btn");
     if (printBtn) printBtn.addEventListener("click", function () { window.print(); });
 
+    if (window.ResumeRender && window.ResumeRender.bindAll) {
+      window.ResumeRender.bindAll(resume);
+    }
     bindReveal();
 
     // Heavy FX
     if (window.CompanyFX && window.CompanyFX.start) {
       window.CompanyFX.start(c);
     }
+    mountSwitchPrompt(c, base);
+  }
+
+  function portfolioHref(base) {
+    return base + (window.I18n ? window.I18n.getLang() + "/" : "");
+  }
+
+  function popAudioEl(base) {
+    if (window.__crPopAudio) return window.__crPopAudio;
+    var audio = new Audio(base + "assets/ui-pop.mp3");
+    audio.preload = "auto";
+    audio.volume = 0.7;
+    window.__crPopAudio = audio;
+    return audio;
+  }
+
+  function popCtx() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!window.__crPopCtx) window.__crPopCtx = new AC();
+    return window.__crPopCtx;
+  }
+
+  function primeSwitchAudio(base) {
+    var audio = popAudioEl(base);
+    var ctx = popCtx();
+    try {
+      if (ctx && ctx.state === "suspended") ctx.resume();
+    } catch (e1) {}
+    try {
+      if (ctx) {
+        var buf = ctx.createBuffer(1, 1, ctx.sampleRate || 22050);
+        var src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+      }
+    } catch (e2) {}
+    try {
+      audio.muted = true;
+      audio.volume = 0;
+      var p = audio.play();
+      if (p && p.then) {
+        p.then(function () {
+          audio.pause();
+          audio.currentTime = 0;
+          audio.muted = false;
+          audio.volume = 0.7;
+          window.__crPopReady = true;
+        }).catch(function () {
+          audio.muted = false;
+          audio.volume = 0.7;
+        });
+      }
+    } catch (e3) {
+      audio.muted = false;
+      audio.volume = 0.7;
+    }
+  }
+
+  function playSwitchPopSynth() {
+    try {
+      var ctx = popCtx();
+      if (!ctx) return Promise.reject();
+      return ctx.resume().then(function () {
+        function tone(freq, start, dur, gain) {
+          var o = ctx.createOscillator();
+          var g = ctx.createGain();
+          o.type = "triangle";
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.0001, ctx.currentTime + start);
+          g.gain.exponentialRampToValueAtTime(gain, ctx.currentTime + start + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + start + dur);
+          o.connect(g);
+          g.connect(ctx.destination);
+          o.start(ctx.currentTime + start);
+          o.stop(ctx.currentTime + start + dur + 0.02);
+        }
+        tone(880, 0, 0.1, 0.18);
+        tone(1320, 0.05, 0.13, 0.14);
+      });
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  function playSwitchPop(base) {
+    if (window.__crPopPlayed) return;
+    var audio = popAudioEl(base);
+    function mark() {
+      window.__crPopPlayed = true;
+      window.__crPopPending = false;
+    }
+    function failOver() {
+      playSwitchPopSynth().then(mark).catch(function () {});
+    }
+    try {
+      audio.muted = false;
+      audio.volume = 0.7;
+      audio.currentTime = 0;
+      var p = audio.play();
+      if (p && p.then) {
+        p.then(mark).catch(failOver);
+      } else {
+        mark();
+      }
+    } catch (e) {
+      failOver();
+    }
+  }
+
+  function bindAudioUnlock(base) {
+    if (window.__crPopUnlockBound) return;
+    window.__crPopUnlockBound = true;
+    var evts = ["pointerdown", "touchstart", "keydown", "wheel", "scroll"];
+    function onUse() {
+      primeSwitchAudio(base);
+      if (window.__crPopPending) {
+        window.__crPopPending = false;
+        playSwitchPop(base);
+      }
+    }
+    evts.forEach(function (evt) {
+      window.addEventListener(evt, onUse, { capture: true, passive: true });
+    });
+  }
+
+  function mountSwitchPrompt(c, base) {
+    if (document.getElementById("cr-switch")) return;
+    var href = portfolioHref(base);
+    popAudioEl(base);
+    bindAudioUnlock(base);
+    primeSwitchAudio(base);
+
+    var root = document.createElement("div");
+    root.id = "cr-switch";
+    root.className = "cr-switch no-print";
+    root.innerHTML =
+      '<div class="cr-switch-toast" role="status" aria-live="polite">' +
+      '<button type="button" class="cr-switch-x" id="cr-switch-close" aria-label="Dismiss">×</button>' +
+      "<p><strong>" +
+      esc(ui("switchTitle", "This resume is specially designed for you.")) +
+      "</strong></p>" +
+      "<p>" +
+      esc(
+        ui(
+          "switchBody",
+          "If you want, you can also check out my default version of this."
+        )
+      ) +
+      "</p>" +
+      '<a class="cr-btn cr-btn-primary" id="cr-switch-go" href="' +
+      esc(href) +
+      '">' +
+      esc(ui("switchCta", "Open default portfolio")) +
+      "</a>" +
+      "</div>" +
+      '<a class="cr-switch-fab" href="' +
+      esc(href) +
+      '" title="' +
+      esc(ui("portfolio", "Portfolio")) +
+      '" aria-label="' +
+      esc(ui("portfolio", "Portfolio")) +
+      '">' +
+      '<span class="cr-switch-fab-dot" aria-hidden="true"></span>' +
+      "<span>Portfolio</span>" +
+      "</a>";
+    document.body.appendChild(root);
+
+    var close = document.getElementById("cr-switch-close");
+    if (close) {
+      close.addEventListener("click", function () {
+        root.classList.remove("is-open");
+        root.classList.add("is-fab-only");
+      });
+    }
+
+    setTimeout(function () {
+      root.classList.add("is-on", "is-open");
+      window.__crPopPending = true;
+      playSwitchPop(base);
+      setTimeout(function () {
+        if (!window.__crPopPlayed) playSwitchPop(base);
+      }, 80);
+    }, 5000);
   }
 
   function resolveSlug() {
@@ -371,12 +535,17 @@
     var start = function () {
       render(slug);
     };
-    if (window.I18n) {
-      var q = new URLSearchParams(location.search).get("lang");
-      window.I18n.init({ base: "../", lang: window.__LANG || q || undefined }).then(start).catch(start);
-    } else {
-      start();
-    }
+    var i18nReady = window.I18n
+      ? window.I18n.init({
+          base: "../",
+          lang: window.__LANG || new URLSearchParams(location.search).get("lang") || undefined,
+        })
+      : Promise.resolve();
+    var dataReady =
+      window.ResumeContent && window.ResumeContent.ready
+        ? window.ResumeContent.ready
+        : Promise.resolve(window.RESUME_CONTENT);
+    Promise.all([i18nReady.catch(function () {}), dataReady.catch(function () {})]).then(start);
   }
 
   if (document.readyState === "loading") {

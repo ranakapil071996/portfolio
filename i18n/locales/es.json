@@ -3,7 +3,7 @@
     "lang": "es",
     "dir": "ltr",
     "title": "Kapil Rana | SDE III · Ingeniero de software · React, Next.js, Node.js",
-    "description": "Kapil Rana — SDE III y engineering manager. React, Next.js, TypeScript, Node.js. Internet Banking en Airtel Payments Bank para ~1M usuarios/día. Gurgaon, India.",
+    "description": "Kapil Rana — SDE III. React, Next.js, TypeScript, Node.js. Internet Banking en Airtel Payments Bank para ~1M usuarios/día. Gurgaon, India.",
     "ogTitle": "Kapil Rana | SDE III · Ingeniero de software",
     "ogDescription": "Ingeniero senior y líder de equipo. React, Next.js, TypeScript, Node.js. Internet Banking para ~1M usuarios/día.",
     "ogLocale": "es_ES",
@@ -14,7 +14,7 @@
   },
   "jsonLd": {
     "jobTitle": "Sr. Manager – SDE III",
-    "description": "Ingeniero de software y engineering manager especializado en React, Next.js, TypeScript y Node.js. Internet Banking para ~1M usuarios/día.",
+    "description": "Ingeniero de software especializado en React, Next.js, TypeScript y Node.js. Internet Banking para ~1M usuarios/día.",
     "worksFor": "Airtel Payments Bank",
     "knowsAbout": [
       "React",
@@ -52,7 +52,7 @@
     "eyebrow": "Abierto a oportunidades de alto impacto",
     "name": "Kapil Rana",
     "role": "Sr. Manager · SDE III · Airtel Payments Bank",
-    "tagline": "Ingeniero de software y people lead con <strong><span data-years-exp>7</span>+ años</strong> construyendo productos de escala con <strong>React, Next.js, TypeScript y Node.js</strong> para fintech y commerce — liderando equipos, ownership de performance UI y fiabilidad en producción para plataformas con <strong>~1M usuarios/día</strong>.",
+    "tagline": "Ingeniero de software y people lead con <strong><span data-years-exp>8</span>+ años</strong> construyendo productos de escala con <strong>React, Next.js, TypeScript y Node.js</strong> para fintech y commerce — liderando equipos, ownership de performance UI y fiabilidad en producción para plataformas con <strong>~1M usuarios/día</strong>.",
     "statYears": "Años exp.",
     "statUsers": "Usuarios / día",
     "statTeam": "Tamaño del equipo",
@@ -127,7 +127,7 @@
   "contact": {
     "num": "06",
     "title": "Trabajemos juntos",
-    "sub": "Abierto a conversaciones Senior Engineer / SDE III / Engineering Manager",
+    "sub": "Abierto a conversaciones Senior Engineer / SDE III",
     "email": "Email",
     "phone": "Teléfono",
     "linkedin": "LinkedIn",
@@ -136,12 +136,12 @@
     "location": "Con base en Gurgaon, India · Abierto a remote / híbrido"
   },
   "footer": {
-    "copy": "© {year} Kapil Rana. Portfolio performance-first · accesible · SEO-ready.",
+    "copy": "© {year} Kapil Rana.",
     "backTop": "Volver arriba",
     "backTopShort": "Arriba"
   },
   "companyUi": {
-    "loading": "Cargando CV temático…",
+    "loading": "Cargando CV…",
     "notFound": "CV no encontrado",
     "browse": "Ver CV por empresa",
     "allCompanies": "Todas las empresas",
@@ -160,8 +160,8 @@
     "themedFor": "Tema para",
     "allThemes": "Todos los temas de empresa",
     "skip": "Saltar al CV",
-    "hubTitle": "CV temáticos por empresa",
-    "hubSub": "Comparte una URL dedicada con cada equipo de hiring. Mismo contenido, marca de la empresa.",
+    "hubTitle": "CV por empresa",
+    "hubSub": "Comparte una URL dedicada con cada equipo de hiring.",
     "downloadPdf": "Descargar PDF"
   },
   "langNames": {

@@ -1147,6 +1147,11 @@ ul { list-style: none; }
   display: none;
 }
 
+#timeline.filter-instant .timeline-item,
+#timeline.filter-instant .timeline-body {
+  transition: none !important;
+}
+
 .timeline-dot {
   position: absolute;
   left: -1.25rem;
