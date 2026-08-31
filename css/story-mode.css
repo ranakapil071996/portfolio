@@ -57,6 +57,56 @@
   gap: 0.65rem;
 }
 
+/* Theme fill + contrast ink. Defaults follow the site gradient;
+   company pages set --story-btn-bg / --story-btn-fg to brand + readableOn. */
+.story-choice {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.925rem;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.story-choice-primary,
+.story-welcome-actions .btn-primary {
+  background: var(--story-btn-bg, var(--gradient));
+  color: var(--story-btn-fg, var(--primary-fg));
+  border: 0;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent, #60a5fa) 35%, transparent);
+}
+
+.story-choice-primary span,
+.story-choice-primary svg,
+.story-welcome-actions .btn-primary span,
+.story-welcome-actions .btn-primary svg {
+  color: inherit;
+  fill: currentColor;
+}
+
+.story-choice-primary:hover,
+.story-welcome-actions .btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.story-choice-outline {
+  background: transparent;
+  color: var(--text, #111827);
+  border: 1px solid color-mix(in srgb, var(--text, #111827) 28%, transparent);
+}
+
+[data-theme="dark"] .story-choice-outline {
+  color: #e2e8f0;
+  border-color: rgba(226, 232, 240, 0.28);
+}
+
 .story-welcome-hint {
   margin-top: 0.9rem;
   font-size: 0.75rem;
@@ -106,6 +156,12 @@
 
 .story-avatar-wrap.is-speaking .story-pulse {
   animation: story-ring 1.4s ease-out infinite;
+}
+
+.story-avatar-wrap.is-assist .story-avatar-img {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, #6366f1 70%, transparent),
+    0 12px 32px rgba(0, 0, 0, 0.28);
 }
 
 .story-avatar-wrap.is-speaking .story-avatar-img {

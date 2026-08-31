@@ -120,9 +120,17 @@
     target.setProperty("--employer-bg", darkSurface ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.04)");
     target.setProperty("--employer-border", c.primary);
     target.setProperty("--level-track", darkSurface ? "rgba(255,255,255,0.12)" : "rgba(15,23,42,0.1)");
-    target.setProperty("--primary-fg", readableOn(primary || surface));
+    // Pair gradient/primary-fg to the brand, and give the AI-assist
+    // chooser its own fill + contrast ink so the label stays readable.
+    var brand = c.primary || rgbToHex(primary || surface);
+    var brandDark = c.primaryDark || brand;
+    var brandInk = readableOn(primary || surface);
+    target.setProperty("--gradient", "linear-gradient(135deg, " + brand + " 0%, " + brandDark + " 100%)");
+    target.setProperty("--primary-fg", brandInk);
     target.setProperty("--accent", c.primary);
     target.setProperty("--accent-2", c.primaryDark || c.primary);
+    target.setProperty("--story-btn-bg", brand);
+    target.setProperty("--story-btn-fg", brandInk);
     document.documentElement.setAttribute("data-theme", darkPage ? "dark" : "light");
     document.documentElement.style.colorScheme = darkPage ? "dark" : "light";
   }
@@ -323,7 +331,8 @@
       (window.I18n ? window.I18n.getLang() + "/" : "") +
       '">' +
       esc(ui("portfolio", "Portfolio")) +
-      "</a></p></footer></div>";
+      "</a></p></footer></div>" +
+      '<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>';
 
     var printBtn = document.getElementById("print-btn");
     if (printBtn) printBtn.addEventListener("click", function () { window.print(); });
@@ -337,7 +346,30 @@
     if (window.CompanyFX && window.CompanyFX.start) {
       window.CompanyFX.start(c);
     }
-    mountSwitchPrompt(c, base);
+    loadStoryMode(base);
+    scheduleSwitchPrompt(c, base);
+  }
+
+  function loadStoryMode(base) {
+    window.__I18N_BASE = base;
+    if (window.__storyModeBooted || document.getElementById("story-mode-script")) return;
+    var s = document.createElement("script");
+    s.id = "story-mode-script";
+    s.src = base + "js/story-mode.js?v=choice4";
+    document.body.appendChild(s);
+  }
+
+  function scheduleSwitchPrompt(c, base) {
+    function tryMount() {
+      if (document.getElementById("cr-switch")) return;
+      var welcome = document.getElementById("story-welcome");
+      if (welcome && !welcome.hidden) return;
+      mountSwitchPrompt(c, base);
+    }
+    document.addEventListener("story:idle", tryMount);
+    document.addEventListener("story:ready", tryMount);
+    setTimeout(tryMount, 8000);
+    setTimeout(tryMount, 12000);
   }
 
   function portfolioHref(base) {

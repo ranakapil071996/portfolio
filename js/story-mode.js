@@ -7,7 +7,7 @@
 
   if (window.__storyModeBooted) return;
   window.__storyModeBooted = true;
-  if (!document.getElementById("hero")) return;
+  if (!document.getElementById("hero") && !document.getElementById("resume-main")) return;
 
   var STORAGE_SEEN = "portfolio-guide-seen";
   var reduced =
@@ -16,7 +16,23 @@
 
   function basePath() {
     if (window.__I18N_BASE != null) return window.__I18N_BASE;
+    var path = location.pathname.replace(/\\/g, "/");
+    if (/\/[a-z0-9-]+\/?(index\.html)?$/.test(path)) {
+      var seg = path.replace(/\/+$/, "").replace(/\/index\.html$/, "").split("/").pop();
+      if (seg && window.COMPANIES && window.COMPANIES[seg]) return "../";
+    }
     return "";
+  }
+
+  function companyContext() {
+    var slug = window.__COMPANY_SLUG;
+    if (!slug && window.COMPANIES) {
+      var path = location.pathname.replace(/\\/g, "/");
+      var seg = path.replace(/\/+$/, "").replace(/\/index\.html$/, "").split("/").pop();
+      if (seg && window.COMPANIES[seg]) slug = seg;
+    }
+    if (!slug || !window.COMPANIES || !window.COMPANIES[slug]) return null;
+    return window.COMPANIES[slug];
   }
 
   function t(key, fallback) {
@@ -226,12 +242,26 @@
     var link = document.createElement("link");
     link.id = "story-mode-css";
     link.rel = "stylesheet";
-    link.href = basePath() + "css/story-mode.css";
+    link.href = basePath() + "css/story-mode.css?v=choice3";
     document.head.appendChild(link);
   }
 
   function avatarUrl() {
     return basePath() + "assets/avatar-kapil.jpg";
+  }
+
+  function assistAvatarUrl() {
+    return basePath() + "assets/avatar-assist.jpg";
+  }
+
+  function setSpeakerAvatar(who) {
+    var src = who === "assist" ? assistAvatarUrl() : avatarUrl();
+    document.querySelectorAll("#story-root .story-avatar-img, #story-fab img").forEach(function (img) {
+      if (img.getAttribute("src") !== src) img.setAttribute("src", src);
+    });
+    document.querySelectorAll(".story-avatar-wrap").forEach(function (n) {
+      n.classList.toggle("is-assist", who === "assist");
+    });
   }
 
   function icon(name) {
@@ -268,10 +298,10 @@
       '    <h2 id="story-welcome-title">Hi — I\'m Kapil.</h2>' +
       '    <p class="story-welcome-lead" id="story-welcome-lead"></p>' +
       '    <div class="story-welcome-actions">' +
-      '      <button type="button" class="btn btn-primary" id="story-start">' +
+      '      <button type="button" class="story-choice story-choice-primary" id="story-start">' +
       icon("play") +
       " <span>AI assistance mode</span></button>" +
-      '      <button type="button" class="btn btn-outline" id="story-read">Normal mode</button>' +
+      '      <button type="button" class="story-choice story-choice-outline" id="story-read">Normal mode</button>' +
       "    </div>" +
       '    <p class="story-welcome-hint">About 3 minutes · covers the full resume · pause anytime</p>' +
       "  </div>" +
@@ -360,7 +390,7 @@
   }
 
   function insertNavButton() {
-    var actions = document.querySelector(".nav-actions");
+    var actions = document.querySelector(".nav-actions") || document.querySelector(".cr-actions");
     if (!actions || document.getElementById("story-nav-btn")) return;
     var btn = document.createElement("button");
     btn.type = "button";
@@ -384,8 +414,12 @@
     els.welcome.hidden = false;
     document.body.classList.add("story-welcome-open");
     if (els.lead) {
-      els.lead.textContent =
-        "Continue with AI assistance mode, or browse in Normal mode.";
+      var co = companyContext();
+      els.lead.textContent = co
+        ? "This version is styled for " +
+          co.name +
+          ". Continue with AI assistance mode, or browse in Normal mode."
+        : "Continue with AI assistance mode, or browse in Normal mode.";
     }
     setTimeout(function () {
       try {
@@ -400,6 +434,7 @@
     try {
       sessionStorage.setItem(STORAGE_SEEN, "1");
     } catch (e) {}
+    document.dispatchEvent(new CustomEvent("story:ready"));
   }
 
   function showFab() {
@@ -422,6 +457,7 @@
         toast.classList.remove("show");
       }, 2600);
     }
+    document.dispatchEvent(new CustomEvent("story:idle"));
   }
 
   function startTour(i) {
@@ -448,8 +484,10 @@
     els.dock.hidden = true;
     document.documentElement.classList.remove("story-playing");
     setSpeaking(false);
+    setSpeakerAvatar("kapil");
     setHeavyFx(true);
     showFab();
+    document.dispatchEvent(new CustomEvent("story:idle"));
   }
 
   function togglePlay() {
@@ -507,14 +545,48 @@
     exitTour();
   }
 
+  function companyHeroTarget() {
+    if (document.querySelector(".cr-banner") && document.querySelector(".cr-banner").offsetParent !== null) {
+      return ".cr-banner";
+    }
+    if (document.querySelector(".cr-side")) return ".cr-side";
+    return "#resume-main";
+  }
+
+  function companyHelloStep(co) {
+    return {
+      id: "hello-company",
+      title: "Assistance mode",
+      speaker: "assist",
+      target: companyHeroTarget(),
+      align: "start",
+      audio: "assets/story-voice/hello/" + co.slug + ".mp3?v=hello3",
+      text:
+        "Hello " +
+        co.name +
+        ". This is assistance mode. Kapil will now walk you through the resume in his own voice.",
+    };
+  }
+
+  function adaptCompanyTargets(step) {
+    if (!companyContext()) return step;
+    if (step.target === ".hero-content" || step.target === ".hero-stats") {
+      step.target = companyHeroTarget();
+    }
+    return step;
+  }
+
   function buildSteps() {
     var pack = state.wordsPack;
-    return defaultSteps().map(function (step) {
+    var steps = defaultSteps().map(function (step) {
       var next = Object.assign({}, step);
       if (pack && pack.texts && pack.texts[step.id]) next.text = pack.texts[step.id];
       if (pack && pack.words && pack.words[step.id]) next.words = pack.words[step.id];
-      return pickYearVariant(next);
+      return adaptCompanyTargets(pickYearVariant(next));
     });
+    var co = companyContext();
+    if (co) steps.unshift(companyHelloStep(co));
+    return steps;
   }
 
   function setHeavyFx(on) {
@@ -528,6 +600,10 @@
     if (particles) particles.style.visibility = on ? "visible" : "hidden";
     var glow = document.getElementById("cursor-glow");
     if (glow) glow.style.visibility = on ? "visible" : "hidden";
+    var crThree = document.getElementById("cr-three");
+    if (crThree) crThree.style.visibility = on ? "visible" : "hidden";
+    var crParticles = document.getElementById("cr-particles");
+    if (crParticles) crParticles.style.visibility = on ? "visible" : "hidden";
   }
 
   function playStep() {
@@ -540,6 +616,7 @@
 
     var n = state.list.length;
     els.title.textContent = step.title;
+    setSpeakerAvatar(step.speaker === "assist" ? "assist" : "kapil");
     els.count.textContent = state.index + 1 + " / " + n;
     els.bar.style.width = ((state.index + 1) / n) * 100 + "%";
     els.prev.disabled = state.index === 0;

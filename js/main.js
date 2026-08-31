@@ -334,7 +334,7 @@
   /* ---------- Story mode (interview walkthrough) ---------- */
   if (document.getElementById("hero")) {
     var story = document.createElement("script");
-    story.src = (window.__I18N_BASE || "") + "js/story-mode.js";
+    story.src = (window.__I18N_BASE || "") + "js/story-mode.js?v=choice4";
     document.body.appendChild(story);
   }
   }
