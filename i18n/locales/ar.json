@@ -76,7 +76,99 @@
     "filterAll": "الكل",
     "business": "أثر الأعمال",
     "tech": "الأثر التقني",
-    "current": "الحالي"
+    "current": "الحالي",
+    "cards": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III",
+        "dates": "يونيو 2025 – حتى الآن",
+        "metrics": [
+          "مستخدمون / يوم",
+          "مهندسون بقيادة"
+        ],
+        "business": [
+          "تقديم تجارب Internet Banking لمنصة بـ<strong>~مليون مستخدم/يوم</strong> ضمن قيود مصرفية منظّمة.",
+          "تحسين سرعة الصفحات عبر <strong>Next.js SSR</strong> و<strong>تخزين Cloudflare</strong> و<strong>Core Web Vitals</strong> — رحلات أسرع على التدفقات عالية الزيارات.",
+          "تقليل الإساءة ومخاطر الروبوتات باستخدام <strong>Cloudflare security</strong> و<strong>Google reCAPTCHA</strong> في التفاعلات المصرفية الحساسة.",
+          "تسريع تكرار المنتج عبر صفحات يقودها نظام إدارة المحتوى — يمكن لغير المهندسين تشكيل المحتوى دون دورات إصدار كاملة.",
+          "إبقاء التسليم قابلاً للتوقع للقيادة عبر تخطيط Jira واضح ومواءمة عابرة للوظائف (المنتج، الامتثال، الخلفية)."
+        ],
+        "tech": [
+          "قيادة <strong>Next.js SSR</strong> مع <strong>Prismic CMS</strong> لواجهة ديناميكية تُركَّب بالمحتوى على أسطح الخدمات المصرفية.",
+          "بناء وامتلاك <strong>خدمة Node.js لـ Prismic</strong> التي تقدّم محتوى CMS إلى Internet Banking — كامل المكدس وليس الواجهة فقط.",
+          "امتلاك خلفية <strong>NestJS</strong> (Node.js) لخدمات Internet Banking.",
+          "تشغيل <strong>Kong</strong> أمام تلك الخلفية لـ<strong>موازنة الحمل</strong> والإضافات: <strong>CORS</strong> و<strong>JWT</strong> و<strong>تحديد المعدل</strong>.",
+          "دمج <strong>Cloudflare</strong> للـ CDN/التخزين المؤقت والتخفيف من الهجمات على خصائص Airtel Payments على الويب.",
+          "تنفيذ <strong>Google reCAPTCHA</strong> لتشديد النماذج والإجراءات الحرجة ضد الإساءة الآلية.",
+          "امتلاك هندسة React/TypeScript وWeb Vitals وأداء الواجهة تحت ضغط الزيارات العالية.",
+          "عمليات الإنتاج: <strong>Kibana</strong> و<strong>Grafana</strong> للسجلات وصحة الخدمة."
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II",
+        "dates": "أكتوبر 2021 – مايو 2025",
+        "metrics": [
+          "DAU",
+          "إيراد يومي"
+        ],
+        "business": [
+          "إطلاق منتج <strong>الفوترة</strong> للتجار (فواتير، مخزون، GST، تحليلات) استخدمه <strong>آلاف التجار</strong>.",
+          "المساهمة في ميزات طلبات الأغذية والمشروبات التي تشغّل <strong>أكثر من 50 ألف مستخدم يومي</strong> و<strong>إيراد يومي يتجاوز ₹1 كرور</strong>.",
+          "توسيع وصول تسويق التجار عبر WhatsApp Marketing (Meta) وعمل SEO/تحليلات يركز على التحويل.",
+          "تحسين عمليات المطاعم بتطبيق النادل — التقاط طلبات أسرع ومسارات صالة جاهزة دون اتصال."
+        ],
+        "tech": [
+          "قيادة فريق من <strong>4 مهندسين</strong> عبر أسطح منتج React مع Redux Toolkit / RTK Query.",
+          "بناء دردشة فورية وميزات مباشرة مع <strong>Socket.io</strong> وتكاملات <strong>Node.js</strong>.",
+          "إطلاق تطبيق النادل بـ<strong>React Native</strong> مع Firebase وإدارة طلبات تعمل أولاً دون اتصال.",
+          "امتلاك <strong>خلفية Node.js</strong> لتطبيق النادل — واجهات برمجية ومزامنة طلبات وتدفقات خدمة جاهزة دون اتصال."
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "يوليو 2020 – أكتوبر 2021",
+        "metrics": [
+          "عمليات إبداعية"
+        ],
+        "business": [
+          "تمكين فرق التسويق من إدارة وشحن قوالب الفيديو بشكل أسرع عبر Hubvid Tech.",
+          "تقليل زمن التسليم الإبداعي عبر أتمتة توليد فيديوهات تسويقية ديناميكية على نطاق واسع."
+        ],
+        "tech": [
+          "بناء واجهة إدارة القوالب بـ<strong>React وRedux وAnt Design</strong>.",
+          "امتلاك <strong>خلفية توليد الفيديو</strong> — خدمة <strong>Node.js</strong> + Lottie Web عالية الأداء ترسم إبداعات ديناميكية على نطاق واسع."
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "يونيو 2019 – يوليو 2020",
+        "metrics": [
+          "تطبيقات المرضى"
+        ],
+        "business": [
+          "إطلاق تطبيقات صحة رقمية لـ<strong>المريض والطبيب</strong>: استشارات فيديو، دردشة، سجل طبي، حجز مختبر.",
+          "تحسين كفاءة الشركاء/التشغيل ببوابة إدارة للعمليات المجمّعة وتدفقات الوسائط."
+        ],
+        "tech": [
+          "بناء <strong>تطبيق المريض وتطبيق الطبيب بـ React Native</strong>، بالإضافة إلى الويب بـ React وMaterial UI.",
+          "تنفيذ <strong>واجهات Node.js</strong> مع Google Auth والرفع المجمّع وتحسين الوسائط وإشعارات فورية."
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "سبتمبر 2018 – يونيو 2019",
+        "metrics": [
+          "منصة"
+        ],
+        "business": [
+          "إطلاق تجربة يانصيب عبر الإنترنت لبيع التذاكر رقمياً وتفاعل العملاء.",
+          "دعم عمليات اليانصيب الفعلية بأدوات خلفية لفرق المبيعات والتشغيل."
+        ],
+        "tech": [
+          "بناء منصة الويب وتدفقات الإدارة باستخدام <strong>JavaScript وjQuery وPHP وBootstrap</strong>.",
+          "وضع أساس تسليم المنتج كامل المكدس في بداية المسيرة."
+        ]
+      }
+    }
   },
   "about": {
     "num": "02",
@@ -101,7 +193,72 @@
     "filterFintech": "تقنية مالية",
     "filterMobile": "جوال",
     "filterFullstack": "فل ستاك",
-    "why": "لماذا يهمك هذا:"
+    "why": "لماذا يهمك هذا:",
+    "jobs": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III · Internet Banking",
+        "dates": "يونيو 2025 – حتى الآن",
+        "location": "جورجاون",
+        "blurb": "Internet Banking · ~1 مليون مستخدم/يوم · Next.js SSR · NestJS + Kong · Web Vitals · فريق من 4",
+        "note": "ملكية كاملة المكدس لسطح بمقياس مصرفي — واجهة Next.js وخدمات NestJS وKong — مع قيادة فريق ووعي بالإنتاج.",
+        "bullets": [
+          "قيادة فريق من <strong>4 مهندسين</strong> يقدّمون واجهة ورحلات Internet Banking لـ<strong>~مليون مستخدم يومياً</strong>.",
+          "بناء تجارب ديناميكية يقودها المحتوى بـ<strong>Next.js SSR</strong> و<strong>Prismic CMS</strong> لتركيب واجهة مرن.",
+          "بناء وامتلاك <strong>خدمة Node.js لـ Prismic</strong> التي توصل محتوى CMS إلى واجهة البنك — ملكية كاملة لمسار المحتوى.",
+          "امتلاك خلفية <strong>NestJS</strong> (Node.js)، مع بوابة <strong>Kong</strong> أمامها لموازنة الحمل والإضافات (CORS وJWT وتحديد المعدل).",
+          "تحسين سرعة الصفحات بـ<strong>Next.js SSR</strong> وتخزين <strong>Cloudflare</strong> و<strong>Core Web Vitals</strong>؛ وإضافة <strong>Google reCAPTCHA</strong> على التدفقات الحرجة.",
+          "امتلاك هندسة <strong>React/TypeScript</strong> وأداء الواجهة وإمكانية الوصول وواجهة قابلة للتوسع لتدفقات مالية عالية الزيارات.",
+          "قيادة التسليم اليومي في <strong>Jira</strong> — التخطيط وتحديد الأولويات والإرشاد ومواءمة أصحاب المصلحة.",
+          "الشراكة مع مهندسي الخلفية على <strong>عقود API وهندسة النظام</strong> لشحن ميزات مصرفية من الطرف إلى الطرف.",
+          "دعم موثوقية الإنتاج باستخدام <strong>Kibana</strong> لتحليل السجلات و<strong>Grafana</strong> لصحة الخدمة.",
+          "ضمان تدفقات <strong>متوافقة مع RBI</strong> وتجربة عميل جاهزة للإنتاج."
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II · Web & Platform",
+        "dates": "أكتوبر 2021 – مايو 2025",
+        "location": "جورجاون",
+        "blurb": "فوترة التجار · أغذية ومشروبات 50 ألف+ DAU · تطبيق نادل React Native + خلفية Node.js",
+        "note": "كامل المكدس + جوّال — منتجات React وتطبيق نادل React Native وخدمة Node.js خلفه، مع مقاييس مرتبطة بالإيراد.",
+        "bullets": [
+          "قيادة <strong>4 مهندسين</strong> في شحن واجهة فوترة التجار (فواتير، مخزون، GST، تحليلات، عمليات مجمّعة) لآلاف التجار.",
+          "بناء ميزات طلبات الأغذية والمشروبات لـ<strong>أكثر من 50 ألف مستخدم يومي</strong>، مساهمة في <strong>إيراد يومي يتجاوز ₹1 كرور</strong>.",
+          "تنفيذ لوحات تحليلات وWhatsApp Marketing (Meta) بـ React وRedux Toolkit وRTK Query.",
+          "تقديم دردشة فورية بـ<strong>Socket.io</strong> والمساهمة في تكاملات Node.js لأدوات التجار.",
+          "إطلاق تطبيق النادل <strong>React Native</strong> مع Firebase وتدفقات طلبات جاهزة دون اتصال.",
+          "امتلاك <strong>خلفية Node.js</strong> لتطبيق النادل — واجهات برمجية ومزامنة طلبات وتكامل خدمات."
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "يوليو 2020 – أكتوبر 2021",
+        "location": "جورجاون",
+        "blurb": "واجهة قوالب فيديو · خلفية توليد فيديو Node.js · Lottie",
+        "bullets": [
+          "بناء إدارة قوالب فيديو Hubvid Tech بـ React وRedux وAnt Design.",
+          "امتلاك <strong>خلفية توليد الفيديو</strong> — خدمة Node.js + Lottie Web ترسم إبداعات ديناميكية على نطاق واسع."
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "يونيو 2019 – يوليو 2020",
+        "location": "جورجاون",
+        "blurb": "تطبيقات مريض وطبيب React Native · استشارة فيديو · سجل طبي · واجهات Node",
+        "bullets": [
+          "بناء <strong>تطبيق المريض وتطبيق الطبيب بـ React Native</strong> إضافة إلى الويب (React وMaterial UI) — استشارات فيديو، دردشة، سجل طبي، حجز مختبر.",
+          "بوابة إدارة وواجهات Node.js: Google Auth، رفع مجمّع، تحسين وسائط، إشعارات فورية."
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "سبتمبر 2018 – يونيو 2019",
+        "location": "جورجاون",
+        "blurb": "منصة يانصيب عبر الإنترنت · أدوات تشغيل خلفية",
+        "bullets": [
+          "منصة يانصيب عبر الإنترنت ومكتب خلفي لمبيعات اليانصيب الفعلية باستخدام JavaScript وjQuery وPHP وBootstrap."
+        ]
+      }
+    }
   },
   "skills": {
     "num": "04",
@@ -162,7 +319,10 @@
     "skip": "تخطّي إلى السيرة",
     "hubTitle": "سير ذاتية للشركات",
     "hubSub": "شارك رابطًا مخصصًا لكل فريق توظيف.",
-    "downloadPdf": "تنزيل PDF"
+    "downloadPdf": "تنزيل PDF",
+    "switchTitle": "هذه السيرة مصممة خصيصاً لك.",
+    "switchBody": "إذا رغبت، يمكنك أيضاً الاطلاع على النسخة الافتراضية.",
+    "switchCta": "فتح المعرض الافتراضي"
   },
   "langNames": {
     "en": "English",
@@ -172,5 +332,22 @@
     "ja": "日本語",
     "ar": "العربية",
     "hi": "हिन्दी"
+  },
+  "story": {
+    "askKapil": "اسأل Kapil",
+    "tip": "يمكنك أيضاً استخدام وضع المساعدة بالذكاء الاصطناعي لهذه السيرة.",
+    "nav": "مساعد ذكي",
+    "navAria": "بدء وضع المساعدة بالذكاء الاصطناعي",
+    "dockAria": "وضع المساعدة بالذكاء الاصطناعي",
+    "prev": "السابق",
+    "pause": "إيقاف",
+    "play": "تشغيل",
+    "next": "التالي",
+    "mute": "كتم الصوت",
+    "unmute": "إلغاء الكتم",
+    "exit": "إنهاء وضع المساعدة بالذكاء الاصطناعي"
+  },
+  "ui": {
+    "emailCopied": "تم نسخ البريد إلى الحافظة"
   }
 }

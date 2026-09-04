@@ -342,13 +342,19 @@
       global.__I18N_DICT = dict;
       global.__LANG = lang;
       updateHead(dict, lang);
-      applyDom(dict);
-      renderLangSwitcher(dict, lang);
+      applyAll();
       document.dispatchEvent(
         new CustomEvent("i18n:changed", { detail: { lang: lang, dict: dict } })
       );
       return dict;
     });
+  }
+
+  function applyAll() {
+    var dict = global.__I18N_DICT;
+    if (!dict) return;
+    applyDom(dict);
+    renderLangSwitcher(dict, current);
   }
 
   function init(options) {
@@ -363,6 +369,7 @@
     SUPPORTED: SUPPORTED,
     init: init,
     setLanguage: setLanguage,
+    apply: applyAll,
     t: function (key) {
       return t(global.__I18N_DICT, key);
     },

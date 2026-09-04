@@ -7,11 +7,6 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  /* ---------- i18n (single component tree; no page duplicates) ---------- */
-  if (window.I18n) {
-    window.I18n.init({ base: window.__I18N_BASE || "" }).catch(function () {});
-  }
-
   function startAfterContent(resume) {
     if (window.ResumeRender && resume) {
       window.ResumeRender.fillPage(resume, { base: window.__I18N_BASE || "" });
@@ -66,11 +61,12 @@
       metaTheme.setAttribute("content", next === "light" ? "#eef2f7" : "#050816");
     }
     if (themeToggle) {
-      themeToggle.setAttribute(
-        "aria-label",
-        next === "light" ? "Switch to dark mode" : "Switch to light mode"
-      );
-      themeToggle.title = next === "light" ? "Dark mode" : "Light mode";
+      var themeAria =
+        next === "light"
+          ? (window.I18n && window.I18n.getDict() ? window.I18n.t("nav.themeDark") : "Switch to dark mode")
+          : (window.I18n && window.I18n.getDict() ? window.I18n.t("nav.themeLight") : "Switch to light mode");
+      themeToggle.setAttribute("aria-label", themeAria);
+      themeToggle.title = themeAria;
     }
     // Notify Three scene / particles if present
     window.dispatchEvent(new CustomEvent("themechange", { detail: { theme: next } }));
@@ -101,7 +97,10 @@
     function setMenuOpen(open) {
       navLinks.classList.toggle("open", open);
       navToggle.setAttribute("aria-expanded", open ? "true" : "false");
-      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      var menuAria = open
+        ? (window.I18n && window.I18n.getDict() ? window.I18n.t("nav.menuClose") : "Close menu")
+        : (window.I18n && window.I18n.getDict() ? window.I18n.t("nav.menuOpen") : "Open menu");
+      navToggle.setAttribute("aria-label", menuAria);
       document.body.classList.toggle("nav-open", open);
       if (open) {
         const first = navLinks.querySelector("a");
@@ -306,7 +305,14 @@
       e.preventDefault();
       const email = "rana.kapil071996@gmail.com";
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(email).then(() => showToast("Email copied to clipboard"));
+        navigator.clipboard.writeText(email).then(() => {
+          var msg = "Email copied to clipboard";
+          if (window.I18n && window.I18n.getDict()) {
+            var v = window.I18n.t("ui.emailCopied");
+            if (v && v !== "ui.emailCopied") msg = v;
+          }
+          showToast(msg);
+        });
       }
     });
   }
@@ -334,7 +340,7 @@
   /* ---------- Story mode (interview walkthrough) ---------- */
   if (document.getElementById("hero")) {
     var story = document.createElement("script");
-    story.src = (window.__I18N_BASE || "") + "js/story-mode.js?v=choice4";
+    story.src = (window.__I18N_BASE || "") + "js/story-mode.js?v=i18n1";
     document.body.appendChild(story);
   }
   }
@@ -342,9 +348,14 @@
   var boot = function (resume) {
     startAfterContent(resume || window.RESUME_CONTENT);
   };
-  if (window.ResumeContent && window.ResumeContent.ready) {
-    window.ResumeContent.ready.then(boot).catch(function () { boot(null); });
-  } else {
-    boot(window.RESUME_CONTENT);
-  }
+  var i18nReady = window.I18n
+    ? window.I18n.init({ base: window.__I18N_BASE || "" }).catch(function () {})
+    : Promise.resolve();
+  var dataReady =
+    window.ResumeContent && window.ResumeContent.ready
+      ? window.ResumeContent.ready.catch(function () { return null; })
+      : Promise.resolve(window.RESUME_CONTENT);
+  Promise.all([i18nReady, dataReady]).then(function (pair) {
+    boot(pair[1] || window.RESUME_CONTENT);
+  });
 })();

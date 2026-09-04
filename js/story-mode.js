@@ -1,6 +1,6 @@
 /**
  * Story mode — Kapil walks an interviewer through the portfolio.
- * Welcome chooser on load; optional voice via SpeechSynthesis.
+ * Ask Kapil FAB on load; optional voice via SpeechSynthesis.
  */
 (function () {
   "use strict";
@@ -9,7 +9,8 @@
   window.__storyModeBooted = true;
   if (!document.getElementById("hero") && !document.getElementById("resume-main")) return;
 
-  var STORAGE_SEEN = "portfolio-guide-seen";
+  var TIP_SHOW_MS = 4000;
+  var TIP_HOLD_MS = 10000;
   var reduced =
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -233,6 +234,16 @@
     list: [],
     wordsPack: null,
     words: [],
+    tipShowTimer: 0,
+    tipHideTimer: 0,
+    tipPopAudio: null,
+    tipPopCtx: null,
+    tipPopBuffer: null,
+    tipPopBufferReady: null,
+    tipPopUnlockBound: false,
+    tipPopPrimed: false,
+    tipPopPlayed: false,
+    tipPopKeep: null,
   };
 
   var els = {};
@@ -242,7 +253,7 @@
     var link = document.createElement("link");
     link.id = "story-mode-css";
     link.rel = "stylesheet";
-    link.href = basePath() + "css/story-mode.css?v=choice3";
+    link.href = basePath() + "css/story-mode.css?v=tip1";
     document.head.appendChild(link);
   }
 
@@ -286,27 +297,9 @@
     var root = document.createElement("div");
     root.id = "story-root";
     root.innerHTML =
-      '<div class="story-welcome" id="story-welcome" hidden role="dialog" aria-modal="true" aria-labelledby="story-welcome-title">' +
-      '  <div class="story-welcome-card">' +
-      '    <div class="story-avatar-wrap story-avatar-lg">' +
-      '      <img class="story-avatar-img" src="' +
-      avatarUrl() +
-      '" width="160" height="160" alt="Kapil Rana" />' +
-      '      <span class="story-pulse" aria-hidden="true"></span>' +
-      "    </div>" +
-      '    <p class="story-kicker" data-story-i18n="story.kicker">Choose how to view</p>' +
-      '    <h2 id="story-welcome-title">Hi — I\'m Kapil.</h2>' +
-      '    <p class="story-welcome-lead" id="story-welcome-lead"></p>' +
-      '    <div class="story-welcome-actions">' +
-      '      <button type="button" class="story-choice story-choice-primary" id="story-start">' +
-      icon("play") +
-      " <span>AI assistance mode</span></button>" +
-      '      <button type="button" class="story-choice story-choice-outline" id="story-read">Normal mode</button>' +
-      "    </div>" +
-      '    <p class="story-welcome-hint">About 3 minutes · covers the full resume · pause anytime</p>' +
-      "  </div>" +
-      "</div>" +
-      '<aside class="story-dock" id="story-dock" hidden aria-label="AI assistance mode">' +
+      '<aside class="story-dock" id="story-dock" hidden aria-label="' +
+      t("story.dockAria", "AI assistance mode") +
+      '">' +
       '  <div class="story-avatar-wrap story-avatar-sm" id="story-dock-avatar">' +
       '    <img class="story-avatar-img" src="' +
       avatarUrl() +
@@ -321,37 +314,50 @@
       '    <p class="story-caption" id="story-caption" aria-live="polite"></p>' +
       '    <div class="story-progress" aria-hidden="true"><i id="story-progress-bar"></i></div>' +
       '    <div class="story-controls">' +
-      '      <button type="button" class="story-ctrl" id="story-prev" aria-label="Previous">' +
+      '      <button type="button" class="story-ctrl" id="story-prev" aria-label="' +
+      t("story.prev", "Previous") +
+      '">' +
       icon("prev") +
       "</button>" +
-      '      <button type="button" class="story-ctrl story-ctrl-main" id="story-toggle" aria-label="Pause">' +
+      '      <button type="button" class="story-ctrl story-ctrl-main" id="story-toggle" aria-label="' +
+      t("story.pause", "Pause") +
+      '">' +
       icon("pause") +
       "</button>" +
-      '      <button type="button" class="story-ctrl" id="story-next" aria-label="Next">' +
+      '      <button type="button" class="story-ctrl" id="story-next" aria-label="' +
+      t("story.next", "Next") +
+      '">' +
       icon("next") +
       "</button>" +
-      '      <button type="button" class="story-ctrl" id="story-mute" aria-label="Mute voice">' +
+      '      <button type="button" class="story-ctrl" id="story-mute" aria-label="' +
+      t("story.mute", "Mute voice") +
+      '">' +
       icon("mute") +
       "</button>" +
-      '      <button type="button" class="story-ctrl" id="story-exit" aria-label="Exit AI assistance mode">' +
+      '      <button type="button" class="story-ctrl" id="story-exit" aria-label="' +
+      t("story.exit", "Exit AI assistance mode") +
+      '">' +
       icon("close") +
       "</button>" +
       "    </div>" +
       "  </div>" +
       "</aside>" +
-      '<button type="button" class="story-fab" id="story-fab" hidden>' +
-      '  <img src="' +
+      '<div class="story-fab-wrap" id="story-fab-wrap" hidden>' +
+      '  <button type="button" class="story-fab-tip" id="story-fab-tip" hidden>' +
+      t("story.tip", "You can also use AI assistance mode for this resume.") +
+      "  </button>" +
+      '  <button type="button" class="story-fab" id="story-fab">' +
+      '    <img src="' +
       avatarUrl() +
       '" width="48" height="48" alt="" />' +
-      '  <span>Ask Kapil</span>' +
-      "</button>";
+      "    <span>" +
+      t("story.askKapil", "Ask Kapil") +
+      "</span>" +
+      "  </button>" +
+      "</div>";
 
     document.body.appendChild(root);
 
-    els.welcome = document.getElementById("story-welcome");
-    els.lead = document.getElementById("story-welcome-lead");
-    els.start = document.getElementById("story-start");
-    els.read = document.getElementById("story-read");
     els.dock = document.getElementById("story-dock");
     els.caption = document.getElementById("story-caption");
     els.title = document.getElementById("story-step-title");
@@ -362,18 +368,13 @@
     els.next = document.getElementById("story-next");
     els.mute = document.getElementById("story-mute");
     els.exit = document.getElementById("story-exit");
+    els.wrap = document.getElementById("story-fab-wrap");
     els.fab = document.getElementById("story-fab");
+    els.tip = document.getElementById("story-fab-tip");
     els.dockAvatar = document.getElementById("story-dock-avatar");
 
-    els.start.addEventListener("click", function () {
-      hideWelcome();
-      startTour(0);
-    });
-    els.read.addEventListener("click", chooseRead);
-    els.fab.addEventListener("click", function () {
-      hideFab();
-      startTour(0);
-    });
+    els.fab.addEventListener("click", openFromFab);
+    els.tip.addEventListener("click", openFromFab);
     els.prev.addEventListener("click", function () {
       go(state.index - 1);
     });
@@ -396,12 +397,13 @@
     btn.type = "button";
     btn.id = "story-nav-btn";
     btn.className = "story-nav-btn";
-    btn.title = "AI assistance mode";
-    btn.setAttribute("aria-label", "Start AI assistance mode");
+    btn.title = t("story.navAria", "Start AI assistance mode");
+    btn.setAttribute("aria-label", t("story.navAria", "Start AI assistance mode"));
     btn.innerHTML =
-      '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>AI assist</span>';
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>' +
+      t("story.nav", "AI assist") +
+      "</span>";
     btn.addEventListener("click", function () {
-      hideWelcome();
       hideFab();
       startTour(0);
     });
@@ -410,54 +412,190 @@
     else actions.insertBefore(btn, actions.firstChild);
   }
 
-  function showWelcome() {
-    els.welcome.hidden = false;
-    document.body.classList.add("story-welcome-open");
-    if (els.lead) {
-      var co = companyContext();
-      els.lead.textContent = co
-        ? "This version is styled for " +
-          co.name +
-          ". Continue with AI assistance mode, or browse in Normal mode."
-        : "Continue with AI assistance mode, or browse in Normal mode.";
-    }
-    setTimeout(function () {
-      try {
-        els.start.focus({ preventScroll: true });
-      } catch (e) {}
-    }, 40);
-  }
-
-  function hideWelcome() {
-    els.welcome.hidden = true;
-    document.body.classList.remove("story-welcome-open");
-    try {
-      sessionStorage.setItem(STORAGE_SEEN, "1");
-    } catch (e) {}
-    document.dispatchEvent(new CustomEvent("story:ready"));
-  }
-
   function showFab() {
-    els.fab.hidden = false;
+    if (els.wrap) els.wrap.hidden = false;
   }
 
   function hideFab() {
-    els.fab.hidden = true;
+    hideAskTip();
+    if (els.wrap) els.wrap.hidden = true;
   }
 
-  function chooseRead() {
-    hideWelcome();
-    stopSpeech();
-    showFab();
-    var toast = document.getElementById("toast");
-    if (toast) {
-      toast.textContent = "AI assist is in the corner if you want the walkthrough.";
-      toast.classList.add("show");
-      setTimeout(function () {
-        toast.classList.remove("show");
-      }, 2600);
+  function openFromFab() {
+    hideFab();
+    startTour(0);
+  }
+
+  function showAskTip() {
+    if (!els.tip || state.playing || !els.wrap || els.wrap.hidden) return;
+    els.tip.hidden = false;
+    if (els.fab) els.fab.setAttribute("aria-describedby", "story-fab-tip");
+    playTipPop();
+  }
+
+  function hideAskTip() {
+    clearTimeout(state.tipShowTimer);
+    clearTimeout(state.tipHideTimer);
+    state.tipShowTimer = 0;
+    state.tipHideTimer = 0;
+    if (els.tip) els.tip.hidden = true;
+    if (els.fab) els.fab.removeAttribute("aria-describedby");
+  }
+
+  function scheduleAskTip() {
+    hideAskTip();
+    bindTipPopUnlock();
+    loadTipPopBuffer();
+    state.tipShowTimer = setTimeout(function () {
+      showAskTip();
+      if (els.tip && !els.tip.hidden) {
+        state.tipHideTimer = setTimeout(hideAskTip, TIP_HOLD_MS);
+      }
+    }, TIP_SHOW_MS);
+  }
+
+  function tipPopEl() {
+    if (state.tipPopAudio) return state.tipPopAudio;
+    var audio = new Audio(basePath() + "assets/ui-pop.mp3");
+    audio.preload = "auto";
+    audio.volume = 0.75;
+    state.tipPopAudio = audio;
+    return audio;
+  }
+
+  function tipPopCtx() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!state.tipPopCtx) state.tipPopCtx = new AC();
+    return state.tipPopCtx;
+  }
+
+  function loadTipPopBuffer() {
+    if (state.tipPopBufferReady) return state.tipPopBufferReady;
+    var ctx = tipPopCtx();
+    if (!ctx) {
+      state.tipPopBufferReady = Promise.resolve(null);
+      return state.tipPopBufferReady;
     }
-    document.dispatchEvent(new CustomEvent("story:idle"));
+    state.tipPopBufferReady = fetch(basePath() + "assets/ui-pop.mp3")
+      .then(function (r) {
+        if (!r.ok) throw new Error("pop");
+        return r.arrayBuffer();
+      })
+      .then(function (raw) {
+        return new Promise(function (resolve, reject) {
+          var ret = ctx.decodeAudioData(raw, resolve, reject);
+          if (ret && ret.then) ret.then(resolve, reject);
+        });
+      })
+      .then(function (decoded) {
+        state.tipPopBuffer = decoded;
+        return decoded;
+      })
+      .catch(function () {
+        state.tipPopBuffer = null;
+        return null;
+      });
+    return state.tipPopBufferReady;
+  }
+
+  function keepCtxAlive(ctx) {
+    if (state.tipPopKeep || !ctx || ctx.state !== "running") return;
+    try {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.frequency.value = 20;
+      gain.gain.value = 0.0001;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      state.tipPopKeep = osc;
+    } catch (e) {}
+  }
+
+  function bindTipPopUnlock() {
+    if (state.tipPopUnlockBound) return;
+    state.tipPopUnlockBound = true;
+    ["pointerdown", "touchstart", "keydown"].forEach(function (evt) {
+      window.addEventListener(evt, primeTipPop, { capture: true, passive: true });
+    });
+  }
+
+  function primeTipPop() {
+    var ctx = tipPopCtx();
+    if (!ctx) return;
+    loadTipPopBuffer();
+    function ready() {
+      if (ctx.state === "running") {
+        state.tipPopPrimed = true;
+        keepCtxAlive(ctx);
+      }
+    }
+    try {
+      if (ctx.state === "suspended") {
+        var p = ctx.resume();
+        if (p && p.then) p.then(ready).catch(function () {});
+        else ready();
+      } else {
+        ready();
+      }
+    } catch (e) {}
+  }
+
+  function playTipPopBuffer() {
+    var ctx = state.tipPopCtx;
+    var buf = state.tipPopBuffer;
+    if (!ctx || !buf || ctx.state !== "running") return false;
+    try {
+      var src = ctx.createBufferSource();
+      var gain = ctx.createGain();
+      gain.gain.value = 0.75;
+      src.buffer = buf;
+      src.connect(gain);
+      gain.connect(ctx.destination);
+      src.start(0);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function playTipPop() {
+    if (!els.tip || els.tip.hidden || document.hidden || state.tipPopPlayed) return;
+    if (playTipPopBuffer()) {
+      state.tipPopPlayed = true;
+      return;
+    }
+    if (state.tipPopBuffer) {
+      tryHtmlPop();
+      return;
+    }
+    loadTipPopBuffer().then(function () {
+      if (!els.tip || els.tip.hidden || document.hidden || state.tipPopPlayed) return;
+      if (playTipPopBuffer()) {
+        state.tipPopPlayed = true;
+        return;
+      }
+      tryHtmlPop();
+    });
+  }
+
+  function tryHtmlPop() {
+    if (!els.tip || els.tip.hidden || document.hidden || state.tipPopPlayed) return;
+    try {
+      var audio = tipPopEl();
+      audio.muted = false;
+      audio.volume = 0.75;
+      audio.currentTime = 0;
+      var p = audio.play();
+      if (p && p.then) {
+        p.then(function () {
+          state.tipPopPlayed = true;
+        }).catch(function () {});
+      } else {
+        state.tipPopPlayed = true;
+      }
+    } catch (e) {}
   }
 
   function startTour(i) {
@@ -469,7 +607,6 @@
       document.documentElement.classList.add("story-playing");
       setHeavyFx(false);
       hideFab();
-      hideWelcome();
       playStep();
     };
     if (state.wordsReady) state.wordsReady.then(begin).catch(begin);
@@ -522,13 +659,13 @@
     state.muted = !state.muted;
     if (state.muted) stopSpeech();
     els.mute.innerHTML = icon(state.muted ? "unmute" : "mute");
-    els.mute.setAttribute("aria-label", state.muted ? "Unmute voice" : "Mute voice");
+    els.mute.setAttribute("aria-label", state.muted ? t("story.unmute", "Unmute voice") : t("story.mute", "Mute voice"));
     if (state.playing && !state.muted) speakCurrent();
   }
 
   function renderToggle() {
     els.toggle.innerHTML = icon(state.playing ? "pause" : "play");
-    els.toggle.setAttribute("aria-label", state.playing ? "Pause" : "Play");
+    els.toggle.setAttribute("aria-label", state.playing ? t("story.pause", "Pause") : t("story.play", "Play"));
   }
 
   function go(i) {
@@ -893,8 +1030,8 @@
 
   function onKey(e) {
     if (e.key === "Escape") {
-      if (!els.welcome.hidden) {
-        chooseRead();
+      if (els.tip && !els.tip.hidden) {
+        hideAskTip();
         e.preventDefault();
         return;
       }
@@ -948,6 +1085,8 @@
     injectCss();
     resetToTop();
     build();
+    bindTipPopUnlock();
+    loadTipPopBuffer();
     loadVoices();
     loadWordTimings();
 
@@ -955,10 +1094,10 @@
     var storyQ = params.get("story");
     if (storyQ === "1") {
       startTour(0);
-    } else if (storyQ === "0") {
-      showFab();
     } else {
-      showWelcome();
+      showFab();
+      if (storyQ !== "0") scheduleAskTip();
+      document.dispatchEvent(new CustomEvent("story:idle"));
     }
     requestAnimationFrame(function () {
       window.scrollTo(0, 0);

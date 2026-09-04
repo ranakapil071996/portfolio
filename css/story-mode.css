@@ -1,30 +1,9 @@
 /* AI assistance mode — interview walkthrough with Kapil's avatar */
 
-.story-welcome {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  display: grid;
-  place-items: center;
-  padding: 1.25rem;
-  background: rgba(5, 8, 22, 0.72);
-}
-
-.story-welcome[hidden],
 .story-dock[hidden],
-.story-fab[hidden] {
+.story-fab-wrap[hidden],
+.story-fab-tip[hidden] {
   display: none !important;
-}
-
-.story-welcome-card {
-  width: min(440px, 100%);
-  background: var(--bg-elevated);
-  color: var(--text);
-  border: 1px solid var(--border-strong);
-  border-radius: 24px;
-  padding: 1.75rem 1.5rem 1.35rem;
-  box-shadow: var(--shadow);
-  text-align: center;
 }
 
 .story-kicker {
@@ -34,83 +13,6 @@
   text-transform: uppercase;
   color: var(--accent);
   margin: 0.85rem 0 0.35rem;
-}
-
-.story-welcome-card h2 {
-  font-size: 1.65rem;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.55rem;
-}
-
-.story-welcome-lead {
-  color: var(--text-muted);
-  font-size: 0.98rem;
-  line-height: 1.55;
-  min-height: 2.6em;
-  margin-bottom: 1.15rem;
-}
-
-.story-welcome-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.65rem;
-}
-
-/* Theme fill + contrast ink. Defaults follow the site gradient;
-   company pages set --story-btn-bg / --story-btn-fg to brand + readableOn. */
-.story-choice {
-  appearance: none;
-  -webkit-appearance: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: 999px;
-  font: inherit;
-  font-weight: 600;
-  font-size: 0.925rem;
-  line-height: 1.2;
-  cursor: pointer;
-}
-
-.story-choice-primary,
-.story-welcome-actions .btn-primary {
-  background: var(--story-btn-bg, var(--gradient));
-  color: var(--story-btn-fg, var(--primary-fg));
-  border: 0;
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent, #60a5fa) 35%, transparent);
-}
-
-.story-choice-primary span,
-.story-choice-primary svg,
-.story-welcome-actions .btn-primary span,
-.story-welcome-actions .btn-primary svg {
-  color: inherit;
-  fill: currentColor;
-}
-
-.story-choice-primary:hover,
-.story-welcome-actions .btn-primary:hover {
-  filter: brightness(1.08);
-}
-
-.story-choice-outline {
-  background: transparent;
-  color: var(--text, #111827);
-  border: 1px solid color-mix(in srgb, var(--text, #111827) 28%, transparent);
-}
-
-[data-theme="dark"] .story-choice-outline {
-  color: #e2e8f0;
-  border-color: rgba(226, 232, 240, 0.28);
-}
-
-.story-welcome-hint {
-  margin-top: 0.9rem;
-  font-size: 0.75rem;
-  color: var(--text-dim);
 }
 
 .story-avatar-wrap {
@@ -281,11 +183,70 @@
   background: var(--accent-2);
 }
 
-.story-fab {
+.story-fab-wrap {
   position: fixed;
   right: 1.1rem;
   bottom: 1.1rem;
   z-index: 280;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.story-fab-tip {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  max-width: min(250px, calc(100vw - 2.4rem));
+  padding: 0.7rem 0.85rem;
+  border-radius: 14px;
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+  animation: story-tip-in 0.32s ease;
+}
+
+.story-fab-tip:hover {
+  border-color: var(--accent);
+}
+
+.story-fab-tip::after {
+  content: "";
+  position: absolute;
+  left: 1.2rem;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  background: inherit;
+  border-right: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  transform: rotate(45deg);
+}
+
+.story-fab-tip:hover::after {
+  border-color: var(--accent);
+}
+
+@keyframes story-tip-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.story-fab {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
@@ -369,18 +330,13 @@ html.story-playing #hero.story-spot {
   border-radius: 24px;
 }
 
-[data-theme="light"] .story-welcome {
-  background: rgba(15, 23, 42, 0.35);
-}
-
-[data-theme="light"] .story-welcome-card,
 [data-theme="light"] .story-dock,
-[data-theme="light"] .story-fab {
+[data-theme="light"] .story-fab,
+[data-theme="light"] .story-fab-tip {
   background: #ffffff;
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
 }
 
-[data-theme="light"] .story-welcome-lead,
 [data-theme="light"] .story-caption {
   color: #1e293b;
 }
@@ -393,9 +349,14 @@ html[dir="rtl"] .story-dock {
   flex-direction: row-reverse;
 }
 
-html[dir="rtl"] .story-fab {
+html[dir="rtl"] .story-fab-wrap {
   right: auto;
   left: 1.1rem;
+  align-items: flex-start;
+}
+
+html[dir="rtl"] .story-fab-tip {
+  text-align: right;
 }
 
 @media (max-width: 640px) {
@@ -438,8 +399,7 @@ html[dir="rtl"] .story-fab {
   .story-fab:hover {
     transform: none;
   }
-}
-
-body.story-welcome-open {
-  overflow: hidden;
+  .story-fab-tip {
+    animation: none;
+  }
 }

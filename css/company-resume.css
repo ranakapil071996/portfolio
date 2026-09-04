@@ -498,9 +498,6 @@ a:hover { text-decoration: underline; }
     transform: none;
   }
 }
-body.story-welcome-open .cr-switch {
-  display: none !important;
-}
 html.story-playing .cr-switch {
   bottom: 8.75rem;
   z-index: 330;
@@ -519,7 +516,7 @@ html.story-playing .cr-switch {
     align-self: flex-end;
   }
 }
-body:has(#cr-switch.is-on) .story-fab {
+body:has(#cr-switch.is-on) .story-fab-wrap {
   bottom: 5.6rem;
 }
 .cr-actions .story-nav-btn {

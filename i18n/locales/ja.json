@@ -76,7 +76,99 @@
     "filterAll": "すべて",
     "business": "ビジネスインパクト",
     "tech": "テックインパクト",
-    "current": "現職"
+    "current": "現職",
+    "cards": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III",
+        "dates": "2025年6月 – 現在",
+        "metrics": [
+          "ユーザー / 日",
+          "リードしたエンジニア"
+        ],
+        "business": [
+          "規制下の銀行制約のなかで、<strong>約100万ユーザー/日</strong>のプラットフォーム向け Internet Banking 体験を提供。",
+          "<strong>Next.js SSR</strong>、<strong>Cloudflare キャッシュ</strong>、<strong>Core Web Vitals</strong> でページ速度を改善 — 高トラフィック導線をより速く。",
+          "機微な銀行操作に <strong>Cloudflare security</strong> と <strong>Google reCAPTCHA</strong> を使い、不正とボットリスクを低減。",
+          "CMS 駆動のページでプロダクト反復を加速 — 非エンジニアもフルリリースなしでコンテンツを形にできる。",
+          "明確な Jira 計画と部門横断の連携（Product、Compliance、Backend）で、リーダーシップ向けに予測可能なデリバリーを維持。"
+        ],
+        "tech": [
+          "銀行サーフェス上の動的・コンテンツ構成 UI のため、<strong>Prismic CMS</strong> 付きの <strong>Next.js SSR</strong> を推進。",
+          "Internet Banking に CMS コンテンツを届ける <strong>Node.js Prismic サービス</strong>を構築・所有 — UI だけでなくフルスタック。",
+          "Internet Banking サービス向けの <strong>NestJS</strong>（Node.js）バックエンドを所有。",
+          "そのバックエンドの前段で <strong>Kong</strong> を運用し、<strong>ロードバランシング</strong>とプラグイン（<strong>CORS</strong>、<strong>JWT</strong>、<strong>レート制限</strong>）を担当。",
+          "Airtel Payments の Web プロパティに <strong>Cloudflare</strong> を統合し、CDN/キャッシュと攻撃緩和を実施。",
+          "<strong>Google reCAPTCHA</strong> を実装し、フォームと重要操作を自動不正から強化。",
+          "React/TypeScript アーキテクチャ、Web Vitals、高トラフィックフロントエンド性能を所有。",
+          "本番運用: ログとサービス健全性に <strong>Kibana</strong> と <strong>Grafana</strong>。"
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II",
+        "dates": "2021年10月 – 2025年5月",
+        "metrics": [
+          "DAU",
+          "日次売上"
+        ],
+        "business": [
+          "<strong>数千の加盟店</strong>が使う加盟店 <strong>Billing</strong> プロダクト（請求、在庫、GST、分析）を出荷。",
+          "<strong>5万+ DAU</strong> と <strong>₹1 Cr+ の日次売上</strong>を支える F&amp;B 注文機能に貢献。",
+          "WhatsApp Marketing（Meta）とコンバージョン重視の SEO/分析で加盟店マーケティングのリーチを拡大。",
+          "Waiter App で店舗オペレーションを改善 — より速い注文取得とオフライン対応のフロアワークフロー。"
+        ],
+        "tech": [
+          "Redux Toolkit / RTK Query を使った React プロダクト面で <strong>4名のエンジニア</strong>をリード。",
+          "<strong>Socket.io</strong> と <strong>Node.js</strong> 連携でリアルタイムチャットとライブ機能を構築。",
+          "Firebase とオフラインファーストの注文管理で <strong>React Native</strong> Waiter App を出荷。",
+          "Waiter App の <strong>Node.js バックエンド</strong>を所有 — API、注文同期、オフライン対応のサービスフロー。"
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "2020年7月 – 2021年10月",
+        "metrics": [
+          "クリエイティブ運用"
+        ],
+        "business": [
+          "Hubvid Tech 経由で、マーケティングチームが動画テンプレートをより速く管理・出荷できるようにした。",
+          "動的なマーケティング動画生成を大規模に自動化し、制作リードタイムを短縮。"
+        ],
+        "tech": [
+          "<strong>React、Redux、Ant Design</strong> でテンプレート管理 UI を構築。",
+          "<strong>動画生成バックエンド</strong>を所有 — 動的クリエイティブを大規模レンダリングする高性能 <strong>Node.js</strong> + Lottie Web サービス。"
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "2019年6月 – 2020年7月",
+        "metrics": [
+          "患者向けアプリ"
+        ],
+        "business": [
+          "<strong>患者向け・医師向け</strong>デジタルヘルスアプリを立ち上げ: ビデオ診療、チャット、EMR、検査予約。",
+          "一括操作とメディアワークフロー向け Admin Portal でパートナー/運用効率を改善。"
+        ],
+        "tech": [
+          "<strong>React Native の患者アプリと医師アプリ</strong>、加えて React と Material UI の Web を構築。",
+          "Google Auth、一括アップロード、メディア最適化、リアルタイム通知付きの <strong>Node.js API</strong> を実装。"
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "2018年9月 – 2019年6月",
+        "metrics": [
+          "プラットフォーム"
+        ],
+        "business": [
+          "デジタルチケット販売と顧客エンゲージメント向けのオンライン宝くじ体験を立ち上げ。",
+          "販売・運用チーム向けバックオフィスツールで実店舗宝くじ運営を支援。"
+        ],
+        "tech": [
+          "<strong>JavaScript、jQuery、PHP、Bootstrap</strong> で Web プラットフォームと管理フローを構築。",
+          "キャリア初期にフルスタックなプロダクト提供の土台を築いた。"
+        ]
+      }
+    }
   },
   "about": {
     "num": "02",
@@ -101,7 +193,72 @@
     "filterFintech": "フィンテック",
     "filterMobile": "モバイル",
     "filterFullstack": "フルスタック",
-    "why": "採用担当者にとっての意味："
+    "why": "採用担当者にとっての意味：",
+    "jobs": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III · Internet Banking",
+        "dates": "2025年6月 – 現在",
+        "location": "グルガオン",
+        "blurb": "Internet Banking · 約100万ユーザー/日 · Next.js SSR · NestJS + Kong · Web Vitals · 4名チーム",
+        "note": "銀行規模サーフェスのフルスタック所有 — Next.js UI、NestJS サービス、Kong — チームリードと本番意識付き。",
+        "bullets": [
+          "<strong>4名のエンジニア</strong>を率い、<strong>1日あたり約100万ユーザー</strong>向けの Internet Banking UI と導線を届ける。",
+          "<strong>Next.js サーバーサイドレンダリング</strong>と <strong>Prismic CMS</strong> で、柔軟な UI 構成の動的・コンテンツ駆動体験を構築。",
+          "バンキング UI に CMS コンテンツを届ける <strong>Node.js Prismic サービス</strong>を構築・所有 — コンテンツ経路のフルスタック所有。",
+          "<strong>NestJS</strong>（Node.js）バックエンドを所有し、前段に <strong>Kong</strong> ゲートウェイを置いてロードバランシングとプラグイン（CORS、JWT、レート制限）を担当。",
+          "<strong>Next.js SSR</strong>、<strong>Cloudflare</strong> キャッシュ、<strong>Core Web Vitals</strong> でページ速度を改善。重要フローに <strong>Google reCAPTCHA</strong> を追加。",
+          "<strong>React/TypeScript</strong> アーキテクチャ、フロントエンド性能、アクセシビリティ、高トラフィック金融フロー向けのスケーラブル UI を所有。",
+          "<strong>Jira</strong> で日々のデリバリーを推進 — 計画、優先順位、メンタリング、ステークホルダー調整。",
+          "バックエンドエンジニアと <strong>API 契約とシステムアーキテクチャ</strong>で協業し、銀行機能をエンドツーエンドで出荷。",
+          "ログ分析に <strong>Kibana</strong>、サービス健全性に <strong>Grafana</strong> を使い本番信頼性を支える。",
+          "<strong>RBI 準拠</strong>のワークフローと本番品質の顧客体験を確保。"
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II · Web & Platform",
+        "dates": "2021年10月 – 2025年5月",
+        "location": "グルガオン",
+        "blurb": "加盟店請求 · F&B 5万+ DAU · React Native ウェイターアプリ + Node.js バックエンド",
+        "note": "フルスタック + モバイル — React プロダクト、React Native ウェイターアプリ、その背後の Node.js サービス。売上連動指標あり。",
+        "bullets": [
+          "<strong>4名のエンジニア</strong>を率い、数千加盟店向け Billing UI（請求、在庫、GST、分析、一括操作）を出荷。",
+          "<strong>5万+ DAU</strong> の F&amp;B 注文機能を構築し、<strong>₹1 Cr+ の日次売上</strong>に貢献。",
+          "React、Redux Toolkit、RTK Query で分析ダッシュボードと WhatsApp Marketing（Meta）を実装。",
+          "<strong>Socket.io</strong> でリアルタイムチャットを届け、加盟店ツール向け Node.js 連携に貢献。",
+          "Firebase とオフライン対応の注文フローで <strong>React Native</strong> Waiter App を出荷。",
+          "Waiter App の <strong>Node.js バックエンド</strong>を所有 — API、注文同期、サービス連携。"
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "2020年7月 – 2021年10月",
+        "location": "グルガオン",
+        "blurb": "動画テンプレート UI · Node.js 動画生成バックエンド · Lottie",
+        "bullets": [
+          "React、Redux、Ant Design で Hubvid Tech の動画テンプレート管理を構築。",
+          "<strong>動画生成バックエンド</strong>を所有 — 動的クリエイティブを大規模レンダリングする Node.js + Lottie Web サービス。"
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "2019年6月 – 2020年7月",
+        "location": "グルガオン",
+        "blurb": "React Native 患者・医師アプリ · ビデオ診療 · EMR · Node API",
+        "bullets": [
+          "<strong>React Native の患者アプリと医師アプリ</strong>に加え Web（React、Material UI）を構築 — ビデオ診療、チャット、EMR、検査予約。",
+          "Admin Portal と Node.js API: Google Auth、一括アップロード、メディア最適化、リアルタイム通知。"
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "2018年9月 – 2019年6月",
+        "location": "グルガオン",
+        "blurb": "オンライン宝くじプラットフォーム · バックオフィス運用ツール",
+        "bullets": [
+          "JavaScript、jQuery、PHP、Bootstrap でオンライン宝くじプラットフォームと実店舗販売向けバックオフィスを構築。"
+        ]
+      }
+    }
   },
   "skills": {
     "num": "04",
@@ -162,7 +319,10 @@
     "skip": "履歴書へスキップ",
     "hubTitle": "企業向け履歴書",
     "hubSub": "採用チームごとに専用 URL を共有。",
-    "downloadPdf": "PDF をダウンロード"
+    "downloadPdf": "PDF をダウンロード",
+    "switchTitle": "この履歴書はあなた向けにデザインされています。",
+    "switchBody": "ご希望なら、標準版もご覧いただけます。",
+    "switchCta": "標準ポートフォリオを開く"
   },
   "langNames": {
     "en": "English",
@@ -172,5 +332,22 @@
     "ja": "日本語",
     "ar": "العربية",
     "hi": "हिन्दी"
+  },
+  "story": {
+    "askKapil": "Kapilに聞く",
+    "tip": "この履歴書はAIアシストモードでもご覧いただけます。",
+    "nav": "AIアシスト",
+    "navAria": "AIアシストモードを開始",
+    "dockAria": "AIアシストモード",
+    "prev": "前へ",
+    "pause": "一時停止",
+    "play": "再生",
+    "next": "次へ",
+    "mute": "音声をミュート",
+    "unmute": "ミュート解除",
+    "exit": "AIアシストモードを終了"
+  },
+  "ui": {
+    "emailCopied": "メールアドレスをコピーしました"
   }
 }

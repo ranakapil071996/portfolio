@@ -76,7 +76,99 @@
     "filterAll": "Alle",
     "business": "Business-Impact",
     "tech": "Tech-Impact",
-    "current": "Aktuell"
+    "current": "Aktuell",
+    "cards": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III",
+        "dates": "Juni 2025 – heute",
+        "metrics": [
+          "Nutzer / Tag",
+          "Geführte Engineers"
+        ],
+        "business": [
+          "Internet-Banking-Erlebnisse für eine Plattform mit <strong>~1 Million Nutzern/Tag</strong> unter regulierten Banking-Vorgaben liefern.",
+          "Seitenladezeit verbessern mit <strong>Next.js SSR</strong>, <strong>Cloudflare-Caching</strong> und <strong>Core Web Vitals</strong> — schnellere Journeys auf High-Traffic-Flows.",
+          "Missbrauch und Bot-Risiko senken mit <strong>Cloudflare Security</strong> und <strong>Google reCAPTCHA</strong> bei sensiblen Banking-Interaktionen.",
+          "Schnellere Produktiteration durch CMS-getriebene Seiten — Fachbereiche können Inhalte ohne volle Release-Zyklen gestalten.",
+          "Planbare Delivery für Leadership durch klares Jira-Planning und abteilungsübergreifende Abstimmung (Product, Compliance, Backend)."
+        ],
+        "tech": [
+          "<strong>Next.js SSR</strong> mit <strong>Prismic CMS</strong> für dynamische, content-composierte UI auf Banking-Oberflächen.",
+          "Den <strong>Node.js-Prismic-Service</strong> gebaut und verantwortet, der CMS-Inhalte für Internet Banking ausliefert — Full-Stack, nicht nur UI.",
+          "Ein <strong>NestJS</strong>-Backend (Node.js) für Internet-Banking-Services besitzen.",
+          "<strong>Kong</strong> vor diesem Backend für <strong>Load Balancing</strong> und Plugins: <strong>CORS</strong>, <strong>JWT</strong> und <strong>Rate Limiting</strong>.",
+          "<strong>Cloudflare</strong> für CDN/Caching und Angriffsschutz auf Airtel-Payments-Web-Properties integriert.",
+          "<strong>Google reCAPTCHA</strong> umgesetzt, um Formulare und kritische Aktionen gegen automatisierten Missbrauch zu härten.",
+          "React/TypeScript-Architektur, Web Vitals und Frontend-Performance bei hohem Traffic verantwortet.",
+          "Production-Ops: <strong>Kibana</strong> und <strong>Grafana</strong> für Logs und Service-Health."
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II",
+        "dates": "Okt. 2021 – Mai 2025",
+        "metrics": [
+          "DAU",
+          "Tagesumsatz"
+        ],
+        "business": [
+          "Merchant-<strong>Billing</strong>-Produkt ausgeliefert (Rechnungen, Inventar, GST, Analytics) — genutzt von <strong>tausenden Händlern</strong>.",
+          "An F&amp;B-Bestellfunktionen mitgewirkt, die <strong>50k+ DAU</strong> und <strong>₹1 Cr+ Tagesumsatz</strong> tragen.",
+          "Merchant-Marketing-Reichweite mit WhatsApp Marketing (Meta) und conversion-fokussiertem SEO/Analytics ausgebaut.",
+          "Restaurantbetrieb mit einer Waiter App verbessert — schnellere Auftragserfassung und offline-fähige Floor-Workflows."
+        ],
+        "tech": [
+          "Team von <strong>4 Engineers</strong> über React-Produktoberflächen mit Redux Toolkit / RTK Query geführt.",
+          "Echtzeit-Chat und Live-Features mit <strong>Socket.io</strong> und <strong>Node.js</strong>-Integrationen gebaut.",
+          "Die <strong>React-Native</strong>-Waiter-App mit Firebase und Offline-First-Order-Management ausgeliefert.",
+          "Das <strong>Node.js-Backend</strong> der Waiter App verantwortet — APIs, Order-Sync und offline-fähige Service-Flows."
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "Juli 2020 – Okt. 2021",
+        "metrics": [
+          "Creative Ops"
+        ],
+        "business": [
+          "Marketing-Teams ermöglicht, Video-Templates über Hubvid Tech schneller zu verwalten und auszuliefern.",
+          "Creative-Turnaround verkürzt durch automatisierte dynamische Marketing-Videogenerierung in der Fläche."
+        ],
+        "tech": [
+          "Template-Management-UI mit <strong>React, Redux und Ant Design</strong> gebaut.",
+          "Das <strong>Video-Generation-Backend</strong> verantwortet — ein performanter <strong>Node.js</strong>- + Lottie-Web-Service, der dynamische Creatives skaliert gerendert hat."
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "Juni 2019 – Juli 2020",
+        "metrics": [
+          "Patienten-Apps"
+        ],
+        "business": [
+          "<strong>Patienten- und Arzt</strong>-Digital-Health-Apps gestartet: Videosprechstunde, Chat, EMR, Laborbuchung.",
+          "Partner-/Ops-Effizienz mit einem Admin-Portal für Bulk-Operationen und Media-Workflows verbessert."
+        ],
+        "tech": [
+          "Die <strong>React-Native-Patienten-App und Arzt-App</strong> gebaut, plus Web mit React und Material UI.",
+          "<strong>Node.js-APIs</strong> mit Google Auth, Bulk-Upload, Media-Optimierung und Echtzeit-Benachrichtigungen umgesetzt."
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "Sept. 2018 – Juni 2019",
+        "metrics": [
+          "Plattform"
+        ],
+        "business": [
+          "Ein Online-Lotterie-Erlebnis für digitalen Ticketverkauf und Kundenbindung gestartet.",
+          "Physische Lotterie-Operationen mit Back-Office-Tools für Sales- und Ops-Teams unterstützt."
+        ],
+        "tech": [
+          "Web-Plattform und Admin-Flows mit <strong>JavaScript, jQuery, PHP und Bootstrap</strong> gebaut.",
+          "Früh im Werdegang die Grundlage für Full-Stack-Produktlieferung gelegt."
+        ]
+      }
+    }
   },
   "about": {
     "num": "02",
@@ -101,7 +193,72 @@
     "filterFintech": "Fintech",
     "filterMobile": "Mobile",
     "filterFullstack": "Full-stack",
-    "why": "Warum das für Sie zählt:"
+    "why": "Warum das für Sie zählt:",
+    "jobs": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III · Internet Banking",
+        "dates": "Juni 2025 – heute",
+        "location": "Gurgaon",
+        "blurb": "Internet Banking · ~1M Nutzer/Tag · Next.js SSR · NestJS + Kong · Web Vitals · Team von 4",
+        "note": "Full-Stack-Ownership einer bankskaligen Fläche — Next.js-UI, NestJS-Services und Kong — mit Teamführung und Production-Bewusstsein.",
+        "bullets": [
+          "Führe ein Team von <strong>4 Engineers</strong>, das Internet-Banking-UI und Journeys für <strong>~1 Million Nutzer pro Tag</strong> liefert.",
+          "Baue dynamische, content-getriebene Erlebnisse mit <strong>Next.js Server-Side Rendering</strong> und <strong>Prismic CMS</strong> für flexible UI-Komposition.",
+          "Den <strong>Node.js-Prismic-Service</strong> gebaut und verantwortet, der CMS-Inhalte an die Banking-UI liefert — Full-Stack-Ownership des Content-Pfads.",
+          "Besitze ein <strong>NestJS</strong>-Backend (Node.js), davor ein <strong>Kong</strong>-Gateway für Load Balancing und Plugins (CORS, JWT, Rate Limiting).",
+          "Seitenladezeit verbessert mit <strong>Next.js SSR</strong>, <strong>Cloudflare</strong>-Caching und <strong>Core Web Vitals</strong>; <strong>Google reCAPTCHA</strong> auf kritischen Flows ergänzt.",
+          "Verantworte <strong>React/TypeScript</strong>-Architektur, Frontend-Performance, Accessibility und skalierbare UI für High-Traffic-Finanzflows.",
+          "Treibe die tägliche Delivery in <strong>Jira</strong> — Planung, Priorisierung, Mentoring und Stakeholder-Alignment.",
+          "Arbeite mit Backend-Engineers an <strong>API-Verträgen und Systemarchitektur</strong>, um Banking-Features End-to-End zu liefern.",
+          "Stütze Produktionszuverlässigkeit mit <strong>Kibana</strong> für Log-Analyse und <strong>Grafana</strong> für Service-Health.",
+          "Stelle <strong>RBI-konforme</strong> Workflows und produktionsreife Kundenerlebnisse sicher."
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II · Web & Platform",
+        "dates": "Okt. 2021 – Mai 2025",
+        "location": "Gurgaon",
+        "blurb": "Merchant Billing · F&B 50k+ DAU · React-Native-Waiter-App + Node.js-Backend",
+        "note": "Full-Stack + Mobile — React-Produkte, eine React-Native-Waiter-App und der Node.js-Service dahinter, mit umsatzgebundenen Kennzahlen.",
+        "bullets": [
+          "Führte <strong>4 Engineers</strong> beim Shipping der Merchant-Billing-UI (Rechnungen, Inventar, GST, Analytics, Bulk-Ops) für tausende Händler.",
+          "Baute F&amp;B-Bestellfunktionen für <strong>50k+ DAU</strong> und trug zu <strong>₹1 Cr+ Tagesumsatz</strong> bei.",
+          "Analytics-Dashboards und WhatsApp Marketing (Meta) mit React, Redux Toolkit und RTK Query umgesetzt.",
+          "Echtzeit-Chat mit <strong>Socket.io</strong> geliefert und Node.js-Integrationen für Merchant-Tools beigetragen.",
+          "Die <strong>React-Native</strong>-Waiter-App mit Firebase und offline-fähigen Order-Flows ausgeliefert.",
+          "Das <strong>Node.js-Backend</strong> der Waiter App verantwortet — APIs, Order-Sync und Service-Integration."
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "Juli 2020 – Okt. 2021",
+        "location": "Gurgaon",
+        "blurb": "Video-Template-UI · Node.js-Video-Generation-Backend · Lottie",
+        "bullets": [
+          "Hubvid-Tech-Video-Template-Management mit React, Redux und Ant Design gebaut.",
+          "Das <strong>Video-Generation-Backend</strong> verantwortet — Node.js- + Lottie-Web-Service, der dynamische Creatives skaliert rendert."
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "Juni 2019 – Juli 2020",
+        "location": "Gurgaon",
+        "blurb": "React-Native-Patienten- & Arzt-Apps · Videosprechstunde · EMR · Node-APIs",
+        "bullets": [
+          "<strong>React-Native-Patienten- und Arzt-Apps</strong> plus Web (React, Material UI) gebaut — Videosprechstunden, Chat, EMR, Laborbuchung.",
+          "Admin-Portal &amp; Node.js-APIs: Google Auth, Bulk-Upload, Media-Optimierung, Echtzeit-Benachrichtigungen."
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "Sept. 2018 – Juni 2019",
+        "location": "Gurgaon",
+        "blurb": "Online-Lotterie-Plattform · Back-Office-Ops-Tooling",
+        "bullets": [
+          "Online-Lotterie-Plattform und Back-Office für physischen Lotterievertrieb mit JavaScript, jQuery, PHP, Bootstrap."
+        ]
+      }
+    }
   },
   "skills": {
     "num": "04",
@@ -162,7 +319,10 @@
     "skip": "Zum Resume springen",
     "hubTitle": "Unternehmens-Resumes",
     "hubSub": "Teile eine eigene URL pro Hiring-Team.",
-    "downloadPdf": "PDF herunterladen"
+    "downloadPdf": "PDF herunterladen",
+    "switchTitle": "Dieser Lebenslauf ist speziell für Sie gestaltet.",
+    "switchBody": "Wenn Sie möchten, können Sie auch die Standardversion ansehen.",
+    "switchCta": "Standard-Portfolio öffnen"
   },
   "langNames": {
     "en": "English",
@@ -172,5 +332,22 @@
     "ja": "日本語",
     "ar": "العربية",
     "hi": "हिन्दी"
+  },
+  "story": {
+    "askKapil": "Kapil fragen",
+    "tip": "Sie können diesen Lebenslauf auch im KI-Assistenzmodus ansehen.",
+    "nav": "KI-Assist",
+    "navAria": "KI-Assistenzmodus starten",
+    "dockAria": "KI-Assistenzmodus",
+    "prev": "Zurück",
+    "pause": "Pause",
+    "play": "Abspielen",
+    "next": "Weiter",
+    "mute": "Stimme stummschalten",
+    "unmute": "Stummschaltung aufheben",
+    "exit": "KI-Assistenzmodus beenden"
+  },
+  "ui": {
+    "emailCopied": "E-Mail in die Zwischenablage kopiert"
   }
 }

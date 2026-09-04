@@ -19,6 +19,14 @@
     return fallback;
   }
 
+  function label(key, fallback) {
+    if (window.I18n && window.I18n.getDict()) {
+      var v = window.I18n.t(key);
+      if (v && v !== key) return v;
+    }
+    return fallback;
+  }
+
   function esc(s) {
     return String(s)
       .replace(/&/g, "&amp;")
@@ -238,8 +246,8 @@
         "<h1>" +
         esc(resume.name) +
         "</h1>" +
-        '<p class="cr-role">' +
-        esc(resume.title) +
+        '<p class="cr-role" data-i18n="hero.role">' +
+        esc(label("hero.role", resume.title)) +
         "</p>" +
         contact +
         "</aside>"
@@ -258,8 +266,8 @@
       "<h1>" +
       esc(resume.name) +
       "</h1>" +
-      '<p class="cr-role">' +
-      esc(resume.title) +
+      '<p class="cr-role" data-i18n="hero.role">' +
+      esc(label("hero.role", resume.title)) +
       "</p>" +
       contact +
       "</div></div></section>"
@@ -278,16 +286,15 @@
     var c = companies[slug];
     if (!c || !resume) {
       document.body.innerHTML =
-        '<main style="padding:2rem;font-family:system-ui"><h1>Resume not found</h1><p><a href="../for/">Browse company resumes</a></p></main>';
+        '<main style="padding:2rem;font-family:system-ui"><h1>' +
+        esc(ui("notFound", "Resume not found")) +
+        '</h1><p><a href="../for/">' +
+        esc(ui("browse", "Browse available company resumes")) +
+        "</a></p></main>";
       return;
     }
 
     applyTheme(c);
-
-    // i18n: shared locales, no duplicated resume components
-    var langPromise = window.I18n
-      ? window.I18n.init({ base: "../", lang: window.__LANG })
-      : Promise.resolve(null);
 
     document.title = resume.name + " — Resume";
     var desc = document.getElementById("meta-desc");
@@ -337,6 +344,7 @@
     var printBtn = document.getElementById("print-btn");
     if (printBtn) printBtn.addEventListener("click", function () { window.print(); });
 
+    if (window.I18n && window.I18n.apply) window.I18n.apply();
     if (window.ResumeRender && window.ResumeRender.bindAll) {
       window.ResumeRender.bindAll(resume);
     }
@@ -355,15 +363,13 @@
     if (window.__storyModeBooted || document.getElementById("story-mode-script")) return;
     var s = document.createElement("script");
     s.id = "story-mode-script";
-    s.src = base + "js/story-mode.js?v=choice4";
+    s.src = base + "js/story-mode.js?v=i18n1";
     document.body.appendChild(s);
   }
 
   function scheduleSwitchPrompt(c, base) {
     function tryMount() {
       if (document.getElementById("cr-switch")) return;
-      var welcome = document.getElementById("story-welcome");
-      if (welcome && !welcome.hidden) return;
       mountSwitchPrompt(c, base);
     }
     document.addEventListener("story:idle", tryMount);

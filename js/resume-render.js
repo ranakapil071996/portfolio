@@ -5,6 +5,14 @@
 (function (global) {
   "use strict";
 
+  function tx(key, fallback) {
+    if (global.I18n && global.I18n.getDict()) {
+      var v = global.I18n.t(key);
+      if (v && v !== key) return v;
+    }
+    return fallback == null ? key : fallback;
+  }
+
   function esc(s) {
     return String(s == null ? "" : s)
       .replace(/&/g, "&amp;")
@@ -17,6 +25,21 @@
     return (items || [])
       .map(function (item) {
         return "<li>" + item + "</li>";
+      })
+      .join("");
+  }
+
+  function htmlListI18n(items, keyPrefix) {
+    return (items || [])
+      .map(function (item, i) {
+        var key = keyPrefix + "." + i;
+        return (
+          '<li data-i18n="' +
+          key +
+          '" data-i18n-mode="html">' +
+          tx(key, item) +
+          "</li>"
+        );
       })
       .join("");
   }
@@ -36,7 +59,9 @@
 
   function impactFilters(resume) {
     var btns =
-      '<button class="filter-btn active" type="button" data-impact-filter="all" data-i18n="impact.filterAll">All</button>';
+      '<button class="filter-btn active" type="button" data-impact-filter="all" data-i18n="impact.filterAll">' +
+      esc(tx("impact.filterAll", "All")) +
+      "</button>";
     (resume.impact || []).forEach(function (imp) {
       btns +=
         '<button class="filter-btn" type="button" data-impact-filter="' +
@@ -53,15 +78,21 @@
       .map(function (imp, i) {
         var delay = i ? ' data-delay="' + i * 40 + '"' : "";
         var badge = imp.current
-          ? '<span class="badge badge-current" data-i18n="impact.current">Current</span>'
+          ? '<span class="badge badge-current" data-i18n="impact.current">' +
+            esc(tx("impact.current", "Current")) +
+            "</span>"
           : "";
+        var cardKey = "impact.cards." + imp.id;
         var metrics = (imp.metrics || [])
-          .map(function (m) {
+          .map(function (m, mi) {
+            var labelKey = cardKey + ".metrics." + mi;
             return (
               '<div class="metric"><span class="metric-value">' +
               esc(m.value) +
-              '</span><span class="metric-label">' +
-              esc(m.label) +
+              '</span><span class="metric-label" data-i18n="' +
+              labelKey +
+              '">' +
+              esc(tx(labelKey, m.label)) +
               "</span></div>"
             );
           })
@@ -76,21 +107,29 @@
           badge +
           "<h3>" +
           esc(imp.company) +
-          '</h3><p class="company-impact-role">' +
-          esc(imp.role) +
-          " · " +
-          esc(imp.dates) +
-          "</p></div>" +
+          '</h3><p class="company-impact-role"><span data-i18n="' +
+          cardKey +
+          '.role">' +
+          esc(tx(cardKey + ".role", imp.role)) +
+          '</span> · <span data-i18n="' +
+          cardKey +
+          '.dates">' +
+          esc(tx(cardKey + ".dates", imp.dates)) +
+          "</span></p></div>" +
           (metrics
             ? '<div class="company-impact-metrics">' + metrics + "</div>"
             : "") +
           "</header>" +
           '<div class="impact-columns">' +
-          '<div class="impact-col"><h4 class="impact-col-title business" data-i18n="impact.business">Business impact</h4><ul>' +
-          htmlList(imp.business) +
+          '<div class="impact-col"><h4 class="impact-col-title business" data-i18n="impact.business">' +
+          esc(tx("impact.business", "Business impact")) +
+          "</h4><ul>" +
+          htmlListI18n(imp.business, cardKey + ".business") +
           "</ul></div>" +
-          '<div class="impact-col"><h4 class="impact-col-title tech" data-i18n="impact.tech">Tech impact</h4><ul>' +
-          htmlList(imp.tech) +
+          '<div class="impact-col"><h4 class="impact-col-title tech" data-i18n="impact.tech">' +
+          esc(tx("impact.tech", "Tech impact")) +
+          "</h4><ul>" +
+          htmlListI18n(imp.tech, cardKey + ".tech") +
           "</ul></div></div>" +
           techRow(imp.techRow) +
           "</article>"
@@ -101,21 +140,28 @@
 
   function aboutCards(resume) {
     var a = resume.about || {};
+    var how = a.how || [];
+    var howHtml = how
+      .map(function (item, i) {
+        var key = "about.how" + (i + 1);
+        return "<li data-i18n=\"" + key + "\">" + esc(tx(key, item)) + "</li>";
+      })
+      .join("");
     return (
-      '<div class="about-card glass reveal"><h3>' +
-      esc(a.builderTitle || "Builder & Leader") +
-      "</h3><p>" +
-      (a.builderBodyHtml || "") +
+      '<div class="about-card glass reveal"><h3 data-i18n="about.builderTitle">' +
+      esc(tx("about.builderTitle", a.builderTitle || "Builder & Leader")) +
+      '</h3><p data-i18n="about.builderBody" data-i18n-mode="html">' +
+      tx("about.builderBody", a.builderBodyHtml || "") +
       "</p></div>" +
-      '<div class="about-card glass reveal" data-delay="80"><h3>' +
-      esc(a.howTitle || "How I work") +
+      '<div class="about-card glass reveal" data-delay="80"><h3 data-i18n="about.howTitle">' +
+      esc(tx("about.howTitle", a.howTitle || "How I work")) +
       '</h3><ul class="check-list">' +
-      htmlList(a.how) +
+      howHtml +
       "</ul></div>" +
-      '<div class="about-card glass reveal" data-delay="160"><h3>' +
-      esc(a.shipTitle || "What I ship") +
-      "</h3><p>" +
-      (a.shipBodyHtml || "") +
+      '<div class="about-card glass reveal" data-delay="160"><h3 data-i18n="about.shipTitle">' +
+      esc(tx("about.shipTitle", a.shipTitle || "What I ship")) +
+      '</h3><p data-i18n="about.shipBody" data-i18n-mode="html">' +
+      tx("about.shipBody", a.shipBodyHtml || "") +
       "</p></div>"
     );
   }
@@ -123,14 +169,21 @@
   function timeline(resume) {
     return (resume.experience || [])
       .map(function (job, i) {
+        var jobKey = "experience.jobs." + job.id;
         var delay = i ? ' data-delay="' + i * 60 + '"' : "";
         var badge = job.current
-          ? '<span class="badge badge-current">Current</span>'
+          ? '<span class="badge badge-current" data-i18n="impact.current">' +
+            esc(tx("impact.current", "Current")) +
+            "</span>"
           : "";
         var note = job.note
-          ? '<div class="employer-note"><strong><span data-i18n="experience.why">Why this matters to you:</span></strong> ' +
-            job.note +
-            "</div>"
+          ? '<div class="employer-note"><strong><span data-i18n="experience.why">' +
+            esc(tx("experience.why", "Why this matters to you:")) +
+            '</span></strong> <span data-i18n="' +
+            jobKey +
+            '.note">' +
+            tx(jobKey + ".note", job.note) +
+            "</span></div>"
           : "";
         return (
           '<article class="timeline-item glass reveal" data-tags="' +
@@ -146,19 +199,27 @@
           esc(job.company) +
           "</span>" +
           badge +
-          '<span class="dates">' +
-          esc(job.dates) +
-          " · " +
-          esc(job.location) +
-          "</span></div>" +
-          '<div class="timeline-title-row"><h3>' +
-          esc(job.role) +
+          '<span class="dates"><span data-i18n="' +
+          jobKey +
+          '.dates">' +
+          esc(tx(jobKey + ".dates", job.dates)) +
+          '</span> · <span data-i18n="' +
+          jobKey +
+          '.location">' +
+          esc(tx(jobKey + ".location", job.location)) +
+          "</span></span></div>" +
+          '<div class="timeline-title-row"><h3 data-i18n="' +
+          jobKey +
+          '.role">' +
+          esc(tx(jobKey + ".role", job.role)) +
           '</h3><span class="chevron" aria-hidden="true"></span></div>' +
-          '<p class="timeline-blurb">' +
-          esc(job.blurb || "") +
+          '<p class="timeline-blurb" data-i18n="' +
+          jobKey +
+          '.blurb">' +
+          esc(tx(jobKey + ".blurb", job.blurb || "")) +
           "</p></button>" +
           '<div class="timeline-body"><div class="timeline-body-inner"><ul>' +
-          htmlList(job.bullets) +
+          htmlListI18n(job.bullets, jobKey + ".bullets") +
           "</ul>" +
           techRow(job.techRow) +
           note +
@@ -170,15 +231,14 @@
 
   function educationCard(resume) {
     var e = resume.education || {};
+    var schoolLine = [e.school, e.location].filter(Boolean).join(" · ");
     return (
-      '<div class="edu-left"><h3>' +
-      esc(e.degree) +
-      '</h3><p class="edu-school">' +
-      esc(e.school) +
-      " · " +
-      esc(e.location) +
-      '</p></div><div class="edu-right"><span class="edu-year">' +
-      esc(e.dates) +
+      '<div class="edu-left"><h3 data-i18n="education.degree">' +
+      esc(tx("education.degree", e.degree)) +
+      '</h3><p class="edu-school" data-i18n="education.school">' +
+      esc(tx("education.school", schoolLine)) +
+      '</p></div><div class="edu-right"><span class="edu-year" data-i18n="education.years">' +
+      esc(tx("education.years", e.dates)) +
       "</span></div>"
     );
   }
@@ -188,32 +248,49 @@
     return (
       '<a class="contact-card glass reveal" href="mailto:' +
       esc(resume.email) +
-      '"><span class="contact-label" data-i18n="contact.email">Email</span><span class="contact-value">' +
+      '"><span class="contact-label" data-i18n="contact.email">' +
+      esc(tx("contact.email", "Email")) +
+      '</span><span class="contact-value">' +
       esc(resume.email) +
       "</span></a>" +
       '<a class="contact-card glass reveal" data-delay="60" href="tel:+' +
       esc(String(resume.phoneHref || resume.phone).replace(/[^\d]/g, "")) +
-      '"><span class="contact-label" data-i18n="contact.phone">Phone</span><span class="contact-value">' +
+      '"><span class="contact-label" data-i18n="contact.phone">' +
+      esc(tx("contact.phone", "Phone")) +
+      '</span><span class="contact-value">' +
       esc(resume.phone) +
       "</span></a>" +
       '<a class="contact-card glass reveal" data-delay="120" href="' +
       esc(resume.linkedin) +
-      '" target="_blank" rel="noopener"><span class="contact-label" data-i18n="contact.linkedin">LinkedIn</span><span class="contact-value">' +
+      '" target="_blank" rel="noopener"><span class="contact-label" data-i18n="contact.linkedin">' +
+      esc(tx("contact.linkedin", "LinkedIn")) +
+      '</span><span class="contact-value">' +
       esc(resume.linkedinLabel) +
       "</span></a>" +
       '<a class="contact-card glass reveal" data-delay="180" href="' +
       esc(base + (resume.pdf || "assets/Kapil_Rana_Resume.pdf")) +
-      '" download><span class="contact-label" data-i18n="contact.download">Download</span><span class="contact-value" data-i18n="contact.resumePdf">Resume PDF</span></a>'
+      '" download><span class="contact-label" data-i18n="contact.download">' +
+      esc(tx("contact.download", "Download")) +
+      '</span><span class="contact-value" data-i18n="contact.resumePdf">' +
+      esc(tx("contact.resumePdf", "Resume PDF")) +
+      "</span></a>"
     );
   }
 
   function fillHero(resume) {
     var name = document.querySelector(".hero h1 .gradient-text");
     if (name) name.textContent = resume.name;
-    var role = document.querySelector(".hero-role [data-i18n='hero.role']") || document.querySelector(".hero-role span");
-    if (role) role.textContent = resume.heroRole || resume.title;
-    var tag = document.querySelector(".hero-tagline [data-i18n='hero.tagline']") || document.querySelector(".hero-tagline span");
-    if (tag) tag.innerHTML = resume.heroTaglineHtml || resume.summary;
+    var role = document.querySelector(".hero-role [data-i18n='hero.role']");
+    if (role) {
+      role.textContent = tx("hero.role", resume.heroRole || resume.title);
+    } else {
+      var roleFb = document.querySelector(".hero-role span");
+      if (roleFb) roleFb.textContent = tx("hero.role", resume.heroRole || resume.title);
+    }
+    var tag = document.querySelector(".hero-tagline [data-i18n='hero.tagline']");
+    if (tag) {
+      tag.innerHTML = tx("hero.tagline", resume.heroTaglineHtml || resume.summary);
+    }
     var pills = document.querySelector(".hero-pills");
     if (pills && resume.pills) {
       pills.innerHTML = resume.pills
@@ -250,15 +327,21 @@
     if (edu) edu.innerHTML = educationCard(resume);
     setHtml("contact-grid", contactGrid(resume, opts.base || ""));
     var loc = document.getElementById("contact-location");
-    if (loc) loc.textContent = resume.locationLine || resume.location;
+    if (loc) {
+      loc.textContent = tx("contact.location", resume.locationLine || resume.location);
+    }
+    if (global.I18n && global.I18n.apply) global.I18n.apply();
   }
 
   function sectionsHtml(resume, opts) {
     opts = opts || {};
     return (
       '<section class="section" id="impact" aria-labelledby="impact-heading"><div class="container">' +
-      '<div class="section-head reveal"><span class="section-num">01</span><h2 id="impact-heading">My Impact in Companies</h2>' +
-      '<p class="section-sub">Business outcomes first, then the tech that enabled them — what I delivered at each company</p></div>' +
+      '<div class="section-head reveal"><span class="section-num">01</span><h2 id="impact-heading" data-i18n="impact.title">' +
+      esc(tx("impact.title", "My Impact in Companies")) +
+      '</h2><p class="section-sub"><span data-i18n="impact.sub">' +
+      esc(tx("impact.sub", "Business outcomes first, then the tech that enabled them — what I delivered at each company")) +
+      "</span></p></div>" +
       '<div class="impact-filter reveal" id="impact-filters" role="group" aria-label="Filter impact by company">' +
       impactFilters(resume) +
       "</div>" +
@@ -266,53 +349,81 @@
       impactCards(resume) +
       "</div></div></section>" +
       '<section class="section" id="about" aria-labelledby="about-heading"><div class="container">' +
-      '<div class="section-head reveal"><span class="section-num">02</span><h2 id="about-heading">About</h2>' +
-      '<p class="section-sub">How I work and what I bring to an engineering org</p></div>' +
+      '<div class="section-head reveal"><span class="section-num">02</span><h2 id="about-heading" data-i18n="about.title">' +
+      esc(tx("about.title", "About")) +
+      '</h2><p class="section-sub"><span data-i18n="about.sub">' +
+      esc(tx("about.sub", "How I work and what I bring to an engineering org")) +
+      "</span></p></div>" +
       '<div class="about-grid" id="about-grid">' +
       aboutCards(resume) +
       "</div></div></section>" +
       '<section class="section" id="experience" aria-labelledby="experience-heading"><div class="container">' +
-      '<div class="section-head reveal"><span class="section-num">03</span><h2 id="experience-heading">Experience</h2>' +
-      '<p class="section-sub">Expand any role for delivery detail — proof is above; this is the full story</p></div>' +
+      '<div class="section-head reveal"><span class="section-num">03</span><h2 id="experience-heading" data-i18n="experience.title">' +
+      esc(tx("experience.title", "Experience")) +
+      '</h2><p class="section-sub"><span data-i18n="experience.sub">' +
+      esc(tx("experience.sub", "Expand any role for delivery detail — proof is above; this is the full story")) +
+      "</span></p></div>" +
       '<div class="exp-toolbar reveal"><div class="filter-group" role="group" aria-label="Filter experience">' +
-      '<button class="filter-btn active" data-filter="all">All</button>' +
-      '<button class="filter-btn" data-filter="leadership">Leadership</button>' +
-      '<button class="filter-btn" data-filter="fintech">Fintech</button>' +
-      '<button class="filter-btn" data-filter="mobile">Mobile</button>' +
-      '<button class="filter-btn" data-filter="fullstack">Full-stack</button>' +
-      "</div></div>" +
+      '<button class="filter-btn active" data-filter="all" data-i18n="experience.filterAll">' +
+      esc(tx("experience.filterAll", "All")) +
+      '</button><button class="filter-btn" data-filter="leadership" data-i18n="experience.filterLeadership">' +
+      esc(tx("experience.filterLeadership", "Leadership")) +
+      '</button><button class="filter-btn" data-filter="fintech" data-i18n="experience.filterFintech">' +
+      esc(tx("experience.filterFintech", "Fintech")) +
+      '</button><button class="filter-btn" data-filter="mobile" data-i18n="experience.filterMobile">' +
+      esc(tx("experience.filterMobile", "Mobile")) +
+      '</button><button class="filter-btn" data-filter="fullstack" data-i18n="experience.filterFullstack">' +
+      esc(tx("experience.filterFullstack", "Full-stack")) +
+      "</button></div></div>" +
       '<div class="timeline" id="timeline">' +
       timeline(resume) +
       "</div></div></section>" +
       '<section class="section" id="skills" aria-labelledby="skills-heading"><div class="container">' +
-      '<div class="section-head reveal"><span class="section-num">04</span><h2 id="skills-heading">Skills</h2>' +
-      '<p class="section-sub">Interactive map — hover or tap chips; filter by category</p></div>' +
+      '<div class="section-head reveal"><span class="section-num">04</span><h2 id="skills-heading" data-i18n="skills.title">' +
+      esc(tx("skills.title", "Skills")) +
+      '</h2><p class="section-sub"><span data-i18n="skills.sub">' +
+      esc(tx("skills.sub", "Interactive map — hover or tap chips; filter by category")) +
+      "</span></p></div>" +
       '<div class="skills-layout">' +
       '<div class="skills-cats reveal">' +
-      '<button class="skill-cat active" data-skill-cat="all">All</button>' +
-      '<button class="skill-cat" data-skill-cat="frontend">Frontend</button>' +
-      '<button class="skill-cat" data-skill-cat="backend">Backend</button>' +
-      '<button class="skill-cat" data-skill-cat="mobile">Mobile</button>' +
-      '<button class="skill-cat" data-skill-cat="devops">DevOps</button>' +
-      '<button class="skill-cat" data-skill-cat="soft">Leadership</button>' +
-      "</div>" +
+      '<button class="skill-cat active" data-skill-cat="all" data-i18n="skills.all">' +
+      esc(tx("skills.all", "All")) +
+      '</button><button class="skill-cat" data-skill-cat="frontend" data-i18n="skills.frontend">' +
+      esc(tx("skills.frontend", "Frontend")) +
+      '</button><button class="skill-cat" data-skill-cat="backend" data-i18n="skills.backend">' +
+      esc(tx("skills.backend", "Backend")) +
+      '</button><button class="skill-cat" data-skill-cat="mobile" data-i18n="skills.mobile">' +
+      esc(tx("skills.mobile", "Mobile")) +
+      '</button><button class="skill-cat" data-skill-cat="devops" data-i18n="skills.devops">' +
+      esc(tx("skills.devops", "DevOps")) +
+      '</button><button class="skill-cat" data-skill-cat="soft" data-i18n="skills.soft">' +
+      esc(tx("skills.soft", "Leadership")) +
+      "</button></div>" +
       '<div class="skills-cloud glass reveal" id="skills-cloud"></div>' +
-      '<div class="skills-detail glass reveal" id="skills-detail"><p class="skills-hint">Select a skill to see how I’ve used it in production.</p>' +
-      '<div class="skills-detail-body" hidden><h3 id="skill-name"></h3><p id="skill-desc"></p>' +
-      '<div class="skill-level"><span>Proficiency</span><div class="level-bar"><div class="level-fill" id="skill-level"></div></div></div>' +
+      '<div class="skills-detail glass reveal" id="skills-detail"><p class="skills-hint"><span data-i18n="skills.hint">' +
+      esc(tx("skills.hint", "Select a skill to see how I’ve used it in production.")) +
+      '</span></p><div class="skills-detail-body" hidden><h3 id="skill-name"></h3><p id="skill-desc"></p>' +
+      '<div class="skill-level"><span data-i18n="skills.proficiency">' +
+      esc(tx("skills.proficiency", "Proficiency")) +
+      '</span><div class="level-bar"><div class="level-fill" id="skill-level"></div></div></div>' +
       '<p class="skill-used" id="skill-used"></p></div></div></div></div></section>' +
       '<section class="section" id="education" aria-labelledby="education-heading"><div class="container">' +
-      '<div class="section-head reveal"><span class="section-num">05</span><h2 id="education-heading">Education</h2></div>' +
+      '<div class="section-head reveal"><span class="section-num">05</span><h2 id="education-heading" data-i18n="education.title">' +
+      esc(tx("education.title", "Education")) +
+      "</h2></div>" +
       '<div class="edu-card glass reveal" id="edu-card">' +
       educationCard(resume) +
       "</div></div></section>" +
       '<section class="section contact-section" id="contact" aria-labelledby="contact-heading"><div class="container">' +
-      '<div class="section-head reveal"><span class="section-num">06</span><h2 id="contact-heading">Let’s work together</h2>' +
-      '<p class="section-sub">Open to senior engineer / SDE III conversations</p></div>' +
+      '<div class="section-head reveal"><span class="section-num">06</span><h2 id="contact-heading" data-i18n="contact.title">' +
+      esc(tx("contact.title", "Let’s work together")) +
+      '</h2><p class="section-sub"><span data-i18n="contact.sub">' +
+      esc(tx("contact.sub", "Open to senior engineer / SDE III conversations")) +
+      '</span></p></div>' +
       '<div class="contact-grid" id="contact-grid">' +
       contactGrid(resume, opts.base || "") +
-      '</div><p class="location reveal">📍 <span id="contact-location">' +
-      esc(resume.locationLine || resume.location) +
+      '</div><p class="location reveal">📍 <span id="contact-location" data-i18n="contact.location">' +
+      esc(tx("contact.location", resume.locationLine || resume.location)) +
       "</span></p></div></section>"
     );
   }
@@ -407,6 +518,22 @@
     });
   }
 
+  function skillSlug(name) {
+    return String(name || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function skillCopy(s, field) {
+    var key = "skills.chips." + skillSlug(s.name) + "." + field;
+    var val = tx(key, s[field] || "");
+    if (global.__YEARS_EXP != null) {
+      val = String(val).replace(/\{years\}/g, String(global.__YEARS_EXP));
+    }
+    return val;
+  }
+
   function bindSkills(resume) {
     var SKILLS = (resume && resume.skillChips) || [];
     var cloud = document.getElementById("skills-cloud");
@@ -435,8 +562,10 @@
           if (hint) hint.hidden = true;
           if (detailWrap) detailWrap.hidden = false;
           if (skillName) skillName.textContent = s.name;
-          if (skillDesc) skillDesc.textContent = s.desc;
-          if (skillUsed) skillUsed.textContent = "Used at: " + s.used;
+          if (skillDesc) skillDesc.textContent = skillCopy(s, "desc");
+          if (skillUsed) {
+            skillUsed.textContent = tx("skills.usedAt", "Used at:") + " " + skillCopy(s, "used");
+          }
           if (skillLevel) {
             skillLevel.style.width = "0%";
             requestAnimationFrame(function () {

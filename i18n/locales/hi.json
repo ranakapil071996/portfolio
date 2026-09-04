@@ -76,7 +76,99 @@
     "filterAll": "सभी",
     "business": "बिज़नेस प्रभाव",
     "tech": "टेक प्रभाव",
-    "current": "वर्तमान"
+    "current": "वर्तमान",
+    "cards": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III",
+        "dates": "जून 2025 – वर्तमान",
+        "metrics": [
+          "उपयोगकर्ता / दिन",
+          "इंजीनियर लीड"
+        ],
+        "business": [
+          "नियमित बैंकिंग सीमाओं में <strong>~10 लाख उपयोगकर्ता/दिन</strong> वाले प्लेटफ़ॉर्म के लिए Internet Banking अनुभव देना।",
+          "<strong>Next.js SSR</strong>, <strong>Cloudflare कैशिंग</strong> और <strong>Core Web Vitals</strong> से पेज स्पीड बेहतर करना — हाई-ट्रैफ़िक फ़्लो पर तेज़ जर्नी।",
+          "संवेदनशील बैंकिंग इंटरैक्शन पर <strong>Cloudflare security</strong> और <strong>Google reCAPTCHA</strong> से दुरुपयोग और बॉट जोखिम घटाना।",
+          "CMS-संचालित पेजों से तेज़ प्रोडक्ट इटरेशन — नॉन-इंजीनियर भी पूरे रिलीज़ चक्र के बिना कंटेंट बना सकते हैं।",
+          "स्पष्ट Jira प्लानिंग और क्रॉस-फ़ंक्शनल अलाइनमेंट (Product, Compliance, Backend) से लीडरशिप के लिए डिलीवरी अनुमान योग्य रखना।"
+        ],
+        "tech": [
+          "बैंकिंग सरफेस पर डायनामिक, कंटेंट-कंपोज़्ड UI के लिए <strong>Prismic CMS</strong> के साथ <strong>Next.js SSR</strong> चलाना।",
+          "Internet Banking को CMS कंटेंट देने वाला <strong>Node.js Prismic सर्विस</strong> बनाना और उसका मालिकाना हक — सिर्फ़ UI नहीं, फुल-स्टैक।",
+          "Internet Banking सेवाओं के लिए <strong>NestJS</strong> (Node.js) बैकएंड का मालिकाना हक।",
+          "उस बैकएंड के सामने <strong>Kong</strong> चलाना — <strong>लोड बैलेंसिंग</strong> और प्लगइन: <strong>CORS</strong>, <strong>JWT</strong>, और <strong>रेट लिमिटिंग</strong>।",
+          "Airtel Payments वेब प्रॉपर्टीज़ पर CDN/कैशिंग और हमला रोकने के लिए <strong>Cloudflare</strong> जोड़ा।",
+          "फ़ॉर्म और महत्वपूर्ण यूज़र ऐक्शन को ऑटोमेटेड दुरुपयोग से बचाने के लिए <strong>Google reCAPTCHA</strong> लागू किया।",
+          "React/TypeScript आर्किटेक्चर, Web Vitals, और हाई-ट्रैफ़िक फ्रंटएंड परफ़ॉर्मेंस का मालिकाना हक।",
+          "प्रोडक्शन ऑप्स: लॉग और सर्विस हेल्थ के लिए <strong>Kibana</strong> और <strong>Grafana</strong>।"
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II",
+        "dates": "अक्टूबर 2021 – मई 2025",
+        "metrics": [
+          "DAU",
+          "दैनिक राजस्व"
+        ],
+        "business": [
+          "मर्चेंट <strong>Billing</strong> प्रोडक्ट (इनवॉइस, इन्वेंटरी, GST, एनालिटिक्स) शिप किया — <strong>हज़ारों मर्चेंट</strong> इस्तेमाल करते हैं।",
+          "F&amp;B ऑर्डर फ़ीचर में योगदान जो <strong>50k+ DAU</strong> और <strong>₹1 करोड़+ दैनिक राजस्व</strong> चलाते हैं।",
+          "WhatsApp Marketing (Meta) और कन्वर्ज़न-केंद्रित SEO/एनालिटिक्स से मर्चेंट मार्केटिंग पहुँच बढ़ाई।",
+          "Waiter App से रेस्टोरेंट ऑपरेशन बेहतर किए — तेज़ ऑर्डर कैप्चर और ऑफ़लाइन-रेडी फ़्लोर वर्कफ़्लो।"
+        ],
+        "tech": [
+          "Redux Toolkit / RTK Query वाले React प्रोडक्ट सरफेस पर <strong>4 इंजीनियरों</strong> की टीम लीड की।",
+          "<strong>Socket.io</strong> और <strong>Node.js</strong> इंटीग्रेशन से रियल-टाइम चैट और लाइव फ़ीचर बनाए।",
+          "Firebase और ऑफ़लाइन-फ़र्स्ट ऑर्डर मैनेजमेंट के साथ <strong>React Native</strong> Waiter App शिप किया।",
+          "Waiter App का <strong>Node.js बैकएंड</strong> — API, ऑर्डर सिंक, और ऑफ़लाइन-रेडी सर्विस फ़्लो।"
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "जुलाई 2020 – अक्टूबर 2021",
+        "metrics": [
+          "क्रिएटिव ऑप्स"
+        ],
+        "business": [
+          "Hubvid Tech के ज़रिए मार्केटिंग टीमों को वीडियो टेम्प्लेट तेज़ी से मैनेज और शिप करने दिया।",
+          "डायनामिक मार्केटिंग वीडियो जनरेशन को स्केल पर ऑटोमेट कर क्रिएटिव टर्नअराउंड घटाया।"
+        ],
+        "tech": [
+          "<strong>React, Redux और Ant Design</strong> से टेम्प्लेट मैनेजमेंट UI बनाया।",
+          "<strong>वीडियो जनरेशन बैकएंड</strong> का मालिकाना हक — हाई-परफ़ॉर्मेंस <strong>Node.js</strong> + Lottie Web सर्विस जो डायनामिक क्रिएटिव स्केल पर रेंडर करती थी।"
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "जून 2019 – जुलाई 2020",
+        "metrics": [
+          "पेशेंट ऐप्स"
+        ],
+        "business": [
+          "<strong>पेशेंट और डॉक्टर</strong> डिजिटल हेल्थ ऐप लॉन्च किए: वीडियो कंसल्ट, चैट, EMR, लैब बुकिंग।",
+          "बल्क ऑपरेशन और मीडिया वर्कफ़्लो के Admin Portal से पार्टनर/ऑप्स दक्षता बेहतर की।"
+        ],
+        "tech": [
+          "<strong>React Native पेशेंट ऐप और डॉक्टर ऐप</strong> बनाए, साथ में React और Material UI वाला वेब।",
+          "Google Auth, बल्क अपलोड, मीडिया ऑप्टिमाइज़ेशन और रियल-टाइम नोटिफ़िकेशन वाले <strong>Node.js API</strong> लागू किए।"
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "सितंबर 2018 – जून 2019",
+        "metrics": [
+          "प्लेटफ़ॉर्म"
+        ],
+        "business": [
+          "डिजिटल टिकट बिक्री और ग्राहक जुड़ाव के लिए ऑनलाइन लॉटरी अनुभव लॉन्च किया।",
+          "सेल्स और ऑप्स टीमों के लिए बैक-ऑफ़िस टूल से फ़िज़िकल लॉटरी ऑपरेशन सहारा दिया।"
+        ],
+        "tech": [
+          "<strong>JavaScript, jQuery, PHP और Bootstrap</strong> से वेब प्लेटफ़ॉर्म और एडमिन फ़्लो बनाए।",
+          "करियर की शुरुआत में फुल-स्टैक प्रोडक्ट डिलीवरी की नींव रखी।"
+        ]
+      }
+    }
   },
   "about": {
     "num": "02",
@@ -101,7 +193,72 @@
     "filterFintech": "फिनटेक",
     "filterMobile": "मोबाइल",
     "filterFullstack": "फुल-स्टैक",
-    "why": "आपके लिए यह क्यों मायने रखता है:"
+    "why": "आपके लिए यह क्यों मायने रखता है:",
+    "jobs": {
+      "airtel": {
+        "role": "Sr. Manager – SDE III · Internet Banking",
+        "dates": "जून 2025 – वर्तमान",
+        "location": "गुरुग्राम",
+        "blurb": "Internet Banking · ~10 लाख उपयोगकर्ता/दिन · Next.js SSR · NestJS + Kong · Web Vitals · 4 की टीम",
+        "note": "बैंक-स्केल सरफेस का फुल-स्टैक मालिकाना हक — Next.js UI, NestJS सेवाएँ और Kong — टीम लीडरशिप और प्रोडक्शन जागरूकता के साथ।",
+        "bullets": [
+          "<strong>4 इंजीनियरों</strong> की टीम लीड करना जो <strong>~10 लाख उपयोगकर्ता प्रति दिन</strong> के लिए Internet Banking UI और जर्नी डिलीवर करती है।",
+          "<strong>Next.js सर्वर-साइड रेंडरिंग</strong> और <strong>Prismic CMS</strong> से लचीली UI कंपोज़िशन वाले डायनामिक, कंटेंट-ड्रिवन अनुभव बनाना।",
+          "बैंकिंग UI को CMS कंटेंट देने वाला <strong>Node.js Prismic सर्विस</strong> बनाना और उसका मालिकाना हक — कंटेंट पथ का फुल-स्टैक ओनरशिप।",
+          "<strong>NestJS</strong> (Node.js) बैकएंड का मालिकाना हक, सामने <strong>Kong</strong> गेटवे — लोड बैलेंसिंग और प्लगइन (CORS, JWT, रेट लिमिटिंग)।",
+          "<strong>Next.js SSR</strong>, <strong>Cloudflare</strong> कैशिंग और <strong>Core Web Vitals</strong> से पेज स्पीड बेहतर की; क्रिटिकल फ़्लो पर <strong>Google reCAPTCHA</strong> जोड़ा।",
+          "<strong>React/TypeScript</strong> आर्किटेक्चर, फ्रंटएंड परफ़ॉर्मेंस, एक्सेसिबिलिटी, और हाई-ट्रैफ़िक वित्तीय फ़्लो के लिए स्केलेबल UI का मालिकाना हक।",
+          "<strong>Jira</strong> में रोज़ की डिलीवरी चलाना — प्लानिंग, प्राथमिकता, मेंटरिंग और स्टेकहोल्डर अलाइनमेंट।",
+          "बैंक फ़ीचर एंड-टू-एंड शिप करने के लिए बैकएंड इंजीनियरों के साथ <strong>API कॉन्ट्रैक्ट और सिस्टम आर्किटेक्चर</strong> पर साझेदारी।",
+          "लॉग विश्लेषण के लिए <strong>Kibana</strong> और सर्विस हेल्थ के लिए <strong>Grafana</strong> से प्रोडक्शन विश्वसनीयता सहारा देना।",
+          "<strong>RBI-अनुपालन</strong> वर्कफ़्लो और प्रोडक्शन-रेडी ग्राहक अनुभव सुनिश्चित करना।"
+        ]
+      },
+      "dotpe": {
+        "role": "Software Engineer II · Web & Platform",
+        "dates": "अक्टूबर 2021 – मई 2025",
+        "location": "गुरुग्राम",
+        "blurb": "मर्चेंट बिलिंग · F&B 50k+ DAU · React Native वेटर ऐप + Node.js बैकएंड",
+        "note": "फुलस्टैक + मोबाइल — React प्रोडक्ट, React Native वेटर ऐप, और उसके पीछे की Node.js सेवा, राजस्व से जुड़े मेट्रिक्स के साथ।",
+        "bullets": [
+          "<strong>4 इंजीनियरों</strong> को लीड कर हज़ारों मर्चेंट के लिए Billing UI (इनवॉइस, इन्वेंटरी, GST, एनालिटिक्स, बल्क ऑप्स) शिप किया।",
+          "<strong>50k+ DAU</strong> के लिए F&amp;B ऑर्डर फ़ीचर बनाए, <strong>₹1 करोड़+ दैनिक राजस्व</strong> में योगदान।",
+          "React, Redux Toolkit और RTK Query से एनालिटिक्स डैशबोर्ड और WhatsApp Marketing (Meta) लागू किए।",
+          "<strong>Socket.io</strong> से रियल-टाइम चैट दिया और मर्चेंट टूल के लिए Node.js इंटीग्रेशन में योगदान किया।",
+          "Firebase और ऑफ़लाइन-रेडी ऑर्डर फ़्लो के साथ <strong>React Native</strong> Waiter App शिप किया।",
+          "Waiter App का <strong>Node.js बैकएंड</strong> — API, ऑर्डर सिंक और सर्विस इंटीग्रेशन।"
+        ]
+      },
+      "tyroo": {
+        "role": "Software Engineer",
+        "dates": "जुलाई 2020 – अक्टूबर 2021",
+        "location": "गुरुग्राम",
+        "blurb": "वीडियो टेम्प्लेट UI · Node.js वीडियो जनरेशन बैकएंड · Lottie",
+        "bullets": [
+          "React, Redux और Ant Design से Hubvid Tech वीडियो टेम्प्लेट मैनेजमेंट बनाया।",
+          "<strong>वीडियो जनरेशन बैकएंड</strong> का मालिकाना हक — स्केल पर डायनामिक क्रिएटिव रेंडर करने वाली Node.js + Lottie Web सेवा।"
+        ]
+      },
+      "meddo": {
+        "role": "Software Engineer",
+        "dates": "जून 2019 – जुलाई 2020",
+        "location": "गुरुग्राम",
+        "blurb": "React Native पेशेंट व डॉक्टर ऐप · वीडियो कंसल्ट · EMR · Node API",
+        "bullets": [
+          "<strong>React Native पेशेंट और डॉक्टर ऐप</strong> प्लस वेब (React, Material UI) बनाए — वीडियो कंसल्ट, चैट, EMR, लैब बुकिंग।",
+          "Admin Portal और Node.js API: Google Auth, बल्क अपलोड, मीडिया ऑप्टिमाइज़ेशन, रियल-टाइम नोटिफ़िकेशन।"
+        ]
+      },
+      "lotto": {
+        "role": "Software Engineer",
+        "dates": "सितंबर 2018 – जून 2019",
+        "location": "गुरुग्राम",
+        "blurb": "ऑनलाइन लॉटरी प्लेटफ़ॉर्म · बैक-ऑफ़िस ऑपरेशन टूलिंग",
+        "bullets": [
+          "JavaScript, jQuery, PHP, Bootstrap से ऑनलाइन लॉटरी प्लेटफ़ॉर्म और फ़िज़िकल लॉटरी सेल्स का बैक-ऑफ़िस।"
+        ]
+      }
+    }
   },
   "skills": {
     "num": "04",
@@ -162,7 +319,10 @@
     "skip": "रिज़्यूमे पर जाएँ",
     "hubTitle": "कंपनी रिज़्यूमे",
     "hubSub": "हर हायरिंग टीम के साथ अलग URL साझा करें।",
-    "downloadPdf": "PDF डाउनलोड"
+    "downloadPdf": "PDF डाउनलोड",
+    "switchTitle": "यह रिज़्यूमे खास आपके लिए डिज़ाइन किया गया है।",
+    "switchBody": "चाहें तो आप इसकी डिफ़ॉल्ट वर्शन भी देख सकते हैं।",
+    "switchCta": "डिफ़ॉल्ट पोर्टफोलियो खोलें"
   },
   "langNames": {
     "en": "English",
@@ -172,5 +332,22 @@
     "ja": "日本語",
     "ar": "العربية",
     "hi": "हिन्दी"
+  },
+  "story": {
+    "askKapil": "Kapil से पूछें",
+    "tip": "इस रिज़्यूमे के लिए आप AI सहायता मोड भी इस्तेमाल कर सकते हैं।",
+    "nav": "AI मदद",
+    "navAria": "AI सहायता मोड शुरू करें",
+    "dockAria": "AI सहायता मोड",
+    "prev": "पिछला",
+    "pause": "रोकें",
+    "play": "चलाएँ",
+    "next": "अगला",
+    "mute": "आवाज़ बंद करें",
+    "unmute": "आवाज़ चालू करें",
+    "exit": "AI सहायता मोड बंद करें"
+  },
+  "ui": {
+    "emailCopied": "ईमेल क्लिपबोर्ड पर कॉपी हो गया"
   }
 }
