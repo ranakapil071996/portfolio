@@ -1,0 +1,5363 @@
+{
+  "lang": "de",
+  "years": 8,
+  "careerStart": "2018-09-01",
+  "yearFrom": 8,
+  "yearTo": 16,
+  "voice": "de-DE-ConradNeural",
+  "source": "edge-tts",
+  "texts": {
+    "welcome": "Hi, ich bin Kapil Rana, Senior Manager und SDE III bei Airtel Payments Bank. Ich führe Sie durch dieses Portfolio wie in einem Interview: zuerst die Wirkung, dann die Technik.",
+    "positioning": "Ich habe {years} Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+    "impact": "Ich ordne jede Rolle nach Business-Impact und Tech-Impact. Zuerst, was sich für Nutzer und Umsatz geändert hat, dann der Stack, der das möglich gemacht hat. Wir starten mit Airtel, meiner aktuellen Rolle.",
+    "airtel": "Bei Airtel verantworte ich das Internet-Banking unter RBI-Vorgaben. Wir haben die Seitengeschwindigkeit mit Next.js Server-Side Rendering, Cloudflare Caching und Core Web Vitals verbessert. Bot-Missbrauch haben wir mit Cloudflare Security und Google reCAPTCHA reduziert. Ich besitze auch ein NestJS Backend auf Node.js. Davor läuft ein Kong Gateway für Load Balancing, mit Plugins für CORS, JWT und Rate Limiting. Content läuft über Next.js und Prismic auf einem Node.js Prismic Service, den ich gebaut habe. In Produktion nutze ich Kibana und Grafana für Logs und Monitoring.",
+    "dotpe": "Vor Airtel war ich Software Engineer II bei DotPe. Von 2020 bis 2025 habe ich 4 Engineers bei Merchant Billing geführt: Rechnungen, Inventar, GST und Analytics. Food Ordering kam auf 50.000 Nutzer am Tag und über eine Crore am Tag. Ich habe die React Native Waiter App gebaut und das Node.js Backend dahinter besessen. APIs, Order Sync, Offline-Flows. Dazu kam Echtzeit-Chat mit Socket.io und Firebase.",
+    "tyroo": "Bei Tyroo habe ich das Video-Template UI in React, Redux und Ant Design gebaut. Ich habe auch das Video-Generation Backend besessen: ein Node.js Service und ein Lottie Service, der Marketing-Videos in Scale gerendert hat.",
+    "meddo": "Bei Meddo Health habe ich die React Native Patienten-App, die Arzt-App und das Web-Produkt gebaut. Video-Consults, Chats, EMR, Laborbuchungen. Dazu Node.js APIs für Google Auth, Bulk Upload und Media.",
+    "lotto": "Meine erste Rolle war bei Skill and Lotto. Ich habe eine Online-Plattform und Back-Office Tools mit JavaScript, jQuery, PHP und Bootstrap gebaut.",
+    "about": "Im Alltag führe ich das Team in Jira: Planung, Prioritäten, Delivery. Ich halte die Latte hoch bei React, TypeScript, Qualität. Ich besitze Node.js und NestJS Services und arbeite mit anderen Engineers an API Contracts und Backend-Design. Nach dem Ship bleibe ich in Logs und Dashboards: Kibana, Grafana und Kong.",
+    "exp-airtel": "Das ist die volle Airtel-Rolle. Ich führe vier Engineers, wir shippen Next.js mit Prismic und ein NestJS Backend und Kong für Load Balancing, JWT, CORS und Rate Limiting. Seitengeschwindigkeit kommt von Server-Side Rendering, Cloudflare Caching und Web Vitals. Ich besitze diese Fläche end-to-end, nicht nur Tickets.",
+    "exp-dotpe": "DotPe ist ein Multi-Produkt-Kapitel: Billing, WhatsApp Marketing, Live Chat, die React Native Waiter App, das Node.js dahinter. Das war umsatznahes Arbeiten, über Web, Mobile und Backend.",
+    "skills": "Skills sind gruppiert in Frontend, Backend, Mobile, DevOps und Leadership. React und TypeScript und Node sind der Kern. Im Backend besitze ich NestJS und den Node Service für Prismic. Die Waiter App ist React Native, das Video-Generation Tool läuft auf einem Node.js Backend. Mobile: Waiter App, Patienten-App, Arzt-App auf React Native. Dann Express, MongoDB, SQL, AWS, Docker, Kong, Kibana und Grafana.",
+    "education": "Ich habe B.Tech in Computer Science Engineering an der K.R. Mangalam University von 2014 bis 2018 gemacht. Seitdem arbeite ich bei Produktunternehmen in Gurgaon.",
+    "close": "Das war der Walkthrough. Wenn Sie sprechen möchten, sind E-Mail oder LinkedIn am einfachsten, oder Sie erreichen mich auf meiner Nummer. Sie können auch das PDF laden und das hier jederzeit über den Avatar neu starten. Danke."
+  },
+  "words": {
+    "welcome": [
+      {
+        "t": 0.098,
+        "w": "Hi"
+      },
+      {
+        "t": 0.543,
+        "w": "ich"
+      },
+      {
+        "t": 0.699,
+        "w": "bin"
+      },
+      {
+        "t": 0.843,
+        "w": "Kapil"
+      },
+      {
+        "t": 1.192,
+        "w": "Rana"
+      },
+      {
+        "t": 1.733,
+        "w": "Senior"
+      },
+      {
+        "t": 2.069,
+        "w": "Manager"
+      },
+      {
+        "t": 2.586,
+        "w": "und"
+      },
+      {
+        "t": 2.766,
+        "w": "SDE"
+      },
+      {
+        "t": 3.331,
+        "w": "III"
+      },
+      {
+        "t": 3.62,
+        "w": "bei"
+      },
+      {
+        "t": 3.812,
+        "w": "Airtel"
+      },
+      {
+        "t": 4.209,
+        "w": "Payments"
+      },
+      {
+        "t": 4.617,
+        "w": "Bank"
+      },
+      {
+        "t": 5.745,
+        "w": "Ich"
+      },
+      {
+        "t": 5.926,
+        "w": "führe"
+      },
+      {
+        "t": 6.226,
+        "w": "Sie"
+      },
+      {
+        "t": 6.382,
+        "w": "durch"
+      },
+      {
+        "t": 6.574,
+        "w": "dieses"
+      },
+      {
+        "t": 6.899,
+        "w": "Portfolio"
+      },
+      {
+        "t": 7.464,
+        "w": "wie"
+      },
+      {
+        "t": 7.68,
+        "w": "in"
+      },
+      {
+        "t": 7.837,
+        "w": "einem"
+      },
+      {
+        "t": 8.089,
+        "w": "Interview"
+      },
+      {
+        "t": 8.762,
+        "w": "zuerst"
+      },
+      {
+        "t": 9.231,
+        "w": "die"
+      },
+      {
+        "t": 9.327,
+        "w": "Wirkung"
+      },
+      {
+        "t": 9.94,
+        "w": "dann"
+      },
+      {
+        "t": 10.12,
+        "w": "die"
+      },
+      {
+        "t": 10.24,
+        "w": "Technik"
+      }
+    ],
+    "positioning": [
+      {
+        "t": 0.098,
+        "w": "Ich"
+      },
+      {
+        "t": 0.29,
+        "w": "habe"
+      },
+      {
+        "t": 0.507,
+        "w": "8 Jahre"
+      },
+      {
+        "t": 1.012,
+        "w": "Full-Stack-Erfahrung"
+      },
+      {
+        "t": 2.021,
+        "w": "in"
+      },
+      {
+        "t": 2.201,
+        "w": "React"
+      },
+      {
+        "t": 2.802,
+        "w": "Next"
+      },
+      {
+        "t": 3.139,
+        "w": "."
+      },
+      {
+        "t": 3.343,
+        "w": "js"
+      },
+      {
+        "t": 4.052,
+        "w": "TypeScript"
+      },
+      {
+        "t": 4.834,
+        "w": "Node"
+      },
+      {
+        "t": 5.29,
+        "w": "js"
+      },
+      {
+        "t": 5.807,
+        "w": "und"
+      },
+      {
+        "t": 5.976,
+        "w": "React"
+      },
+      {
+        "t": 6.312,
+        "w": "Native"
+      },
+      {
+        "t": 7.548,
+        "w": "Ich"
+      },
+      {
+        "t": 7.728,
+        "w": "habe"
+      },
+      {
+        "t": 7.945,
+        "w": "Internet"
+      },
+      {
+        "t": 8.341,
+        "w": "Banking"
+      },
+      {
+        "t": 8.678,
+        "w": "für"
+      },
+      {
+        "t": 8.87,
+        "w": "etwa"
+      },
+      {
+        "t": 9.171,
+        "w": "eine"
+      },
+      {
+        "t": 9.363,
+        "w": "Million"
+      },
+      {
+        "t": 9.712,
+        "w": "Nutzer"
+      },
+      {
+        "t": 10.084,
+        "w": "am"
+      },
+      {
+        "t": 10.216,
+        "w": "Tag"
+      },
+      {
+        "t": 10.445,
+        "w": "geleitet"
+      },
+      {
+        "t": 10.998,
+        "w": "und"
+      },
+      {
+        "t": 11.166,
+        "w": "führe"
+      },
+      {
+        "t": 11.514,
+        "w": "ein"
+      },
+      {
+        "t": 11.695,
+        "w": "Team"
+      },
+      {
+        "t": 11.923,
+        "w": "von 4."
+      },
+      {
+        "t": 13.498,
+        "w": "Ich"
+      },
+      {
+        "t": 13.702,
+        "w": "habe"
+      },
+      {
+        "t": 13.894,
+        "w": "Produkte"
+      },
+      {
+        "t": 14.351,
+        "w": "in 5 Unternehmen"
+      },
+      {
+        "t": 15.3,
+        "w": "ausgeliefert"
+      },
+      {
+        "t": 16.166,
+        "w": "vor"
+      },
+      {
+        "t": 16.43,
+        "w": "allem"
+      },
+      {
+        "t": 16.695,
+        "w": "in"
+      },
+      {
+        "t": 16.839,
+        "w": "Fintech"
+      },
+      {
+        "t": 17.596,
+        "w": "Commerce"
+      },
+      {
+        "t": 18.257,
+        "w": "Advertising"
+      },
+      {
+        "t": 19.135,
+        "w": "Marketing"
+      }
+    ],
+    "impact": [
+      {
+        "t": 0.098,
+        "w": "Ich"
+      },
+      {
+        "t": 0.362,
+        "w": "ordne"
+      },
+      {
+        "t": 0.627,
+        "w": "jede"
+      },
+      {
+        "t": 0.891,
+        "w": "Rolle"
+      },
+      {
+        "t": 1.18,
+        "w": "nach"
+      },
+      {
+        "t": 1.42,
+        "w": "Business-Impact"
+      },
+      {
+        "t": 2.225,
+        "w": "und"
+      },
+      {
+        "t": 2.43,
+        "w": "Tech-Impact"
+      },
+      {
+        "t": 3.894,
+        "w": "Zuerst"
+      },
+      {
+        "t": 4.591,
+        "w": "was"
+      },
+      {
+        "t": 4.784,
+        "w": "sich"
+      },
+      {
+        "t": 4.94,
+        "w": "für"
+      },
+      {
+        "t": 5.096,
+        "w": "Nutzer"
+      },
+      {
+        "t": 5.469,
+        "w": "und"
+      },
+      {
+        "t": 5.673,
+        "w": "Umsatz"
+      },
+      {
+        "t": 6.094,
+        "w": "geändert"
+      },
+      {
+        "t": 6.514,
+        "w": "hat"
+      },
+      {
+        "t": 7.043,
+        "w": "dann"
+      },
+      {
+        "t": 7.236,
+        "w": "der"
+      },
+      {
+        "t": 7.404,
+        "w": "Stack"
+      },
+      {
+        "t": 7.981,
+        "w": "der"
+      },
+      {
+        "t": 8.125,
+        "w": "das"
+      },
+      {
+        "t": 8.353,
+        "w": "möglich"
+      },
+      {
+        "t": 8.714,
+        "w": "gemacht"
+      },
+      {
+        "t": 9.038,
+        "w": "hat"
+      },
+      {
+        "t": 10.18,
+        "w": "Wir"
+      },
+      {
+        "t": 10.457,
+        "w": "starten"
+      },
+      {
+        "t": 10.853,
+        "w": "mit"
+      },
+      {
+        "t": 11.01,
+        "w": "Airtel"
+      },
+      {
+        "t": 11.526,
+        "w": "meiner"
+      },
+      {
+        "t": 11.863,
+        "w": "aktuellen"
+      },
+      {
+        "t": 12.332,
+        "w": "Rolle"
+      }
+    ],
+    "airtel": [
+      {
+        "t": 0.098,
+        "w": "Bei"
+      },
+      {
+        "t": 0.338,
+        "w": "Airtel"
+      },
+      {
+        "t": 0.591,
+        "w": "verantworte"
+      },
+      {
+        "t": 1.18,
+        "w": "ich"
+      },
+      {
+        "t": 1.312,
+        "w": "das"
+      },
+      {
+        "t": 1.54,
+        "w": "Internet-Banking"
+      },
+      {
+        "t": 2.382,
+        "w": "unter"
+      },
+      {
+        "t": 2.634,
+        "w": "RBI-Vorgaben"
+      },
+      {
+        "t": 4.447,
+        "w": "Wir"
+      },
+      {
+        "t": 4.712,
+        "w": "haben"
+      },
+      {
+        "t": 4.988,
+        "w": "die"
+      },
+      {
+        "t": 5.084,
+        "w": "Seitengeschwindigkeit"
+      },
+      {
+        "t": 6.166,
+        "w": "mit"
+      },
+      {
+        "t": 6.322,
+        "w": "Next"
+      },
+      {
+        "t": 6.647,
+        "w": "."
+      },
+      {
+        "t": 6.851,
+        "w": "js"
+      },
+      {
+        "t": 7.248,
+        "w": "Server-Side"
+      },
+      {
+        "t": 7.764,
+        "w": "Rendering"
+      },
+      {
+        "t": 8.353,
+        "w": "Cloudflare"
+      },
+      {
+        "t": 8.858,
+        "w": "Caching"
+      },
+      {
+        "t": 9.303,
+        "w": "und"
+      },
+      {
+        "t": 9.483,
+        "w": "Core"
+      },
+      {
+        "t": 9.748,
+        "w": "Web"
+      },
+      {
+        "t": 9.928,
+        "w": "Vitals"
+      },
+      {
+        "t": 10.349,
+        "w": "verbessert"
+      },
+      {
+        "t": 11.743,
+        "w": "Bot-Missbrauch"
+      },
+      {
+        "t": 12.464,
+        "w": "haben"
+      },
+      {
+        "t": 12.704,
+        "w": "wir"
+      },
+      {
+        "t": 12.837,
+        "w": "mit"
+      },
+      {
+        "t": 13.005,
+        "w": "Cloudflare"
+      },
+      {
+        "t": 13.51,
+        "w": "Security"
+      },
+      {
+        "t": 14.062,
+        "w": "und"
+      },
+      {
+        "t": 14.303,
+        "w": "Google"
+      },
+      {
+        "t": 14.627,
+        "w": "reCAPTCHA"
+      },
+      {
+        "t": 15.108,
+        "w": "reduziert"
+      },
+      {
+        "t": 16.587,
+        "w": "Ich"
+      },
+      {
+        "t": 16.827,
+        "w": "besitze"
+      },
+      {
+        "t": 17.248,
+        "w": "auch"
+      },
+      {
+        "t": 17.488,
+        "w": "ein"
+      },
+      {
+        "t": 17.608,
+        "w": "NestJS"
+      },
+      {
+        "t": 18.197,
+        "w": "Backend"
+      },
+      {
+        "t": 18.546,
+        "w": "auf"
+      },
+      {
+        "t": 18.738,
+        "w": "Node"
+      },
+      {
+        "t": 19.111,
+        "w": "js"
+      },
+      {
+        "t": 20.457,
+        "w": "Davor"
+      },
+      {
+        "t": 20.853,
+        "w": "läuft"
+      },
+      {
+        "t": 21.19,
+        "w": "ein"
+      },
+      {
+        "t": 21.358,
+        "w": "Kong"
+      },
+      {
+        "t": 21.623,
+        "w": "Gateway"
+      },
+      {
+        "t": 22.007,
+        "w": "für"
+      },
+      {
+        "t": 22.2,
+        "w": "Load"
+      },
+      {
+        "t": 22.452,
+        "w": "Balancing"
+      },
+      {
+        "t": 23.149,
+        "w": "mit"
+      },
+      {
+        "t": 23.401,
+        "w": "Plugins"
+      },
+      {
+        "t": 23.798,
+        "w": "für"
+      },
+      {
+        "t": 23.978,
+        "w": "CORS"
+      },
+      {
+        "t": 24.459,
+        "w": "JWT"
+      },
+      {
+        "t": 25.132,
+        "w": "und"
+      },
+      {
+        "t": 25.337,
+        "w": "Rate"
+      },
+      {
+        "t": 25.553,
+        "w": "Limiting"
+      },
+      {
+        "t": 26.815,
+        "w": "Content"
+      },
+      {
+        "t": 27.224,
+        "w": "läuft"
+      },
+      {
+        "t": 27.548,
+        "w": "über"
+      },
+      {
+        "t": 27.728,
+        "w": "Next"
+      },
+      {
+        "t": 28.029,
+        "w": "."
+      },
+      {
+        "t": 28.221,
+        "w": "js"
+      },
+      {
+        "t": 28.762,
+        "w": "und"
+      },
+      {
+        "t": 28.966,
+        "w": "Prismic"
+      },
+      {
+        "t": 29.423,
+        "w": "auf"
+      },
+      {
+        "t": 29.615,
+        "w": "einem"
+      },
+      {
+        "t": 29.82,
+        "w": "Node"
+      },
+      {
+        "t": 30.228,
+        "w": "js"
+      },
+      {
+        "t": 30.685,
+        "w": "Prismic"
+      },
+      {
+        "t": 31.046,
+        "w": "Service"
+      },
+      {
+        "t": 31.719,
+        "w": "den"
+      },
+      {
+        "t": 31.887,
+        "w": "ich"
+      },
+      {
+        "t": 32.043,
+        "w": "gebaut"
+      },
+      {
+        "t": 32.368,
+        "w": "habe"
+      },
+      {
+        "t": 33.63,
+        "w": "In"
+      },
+      {
+        "t": 33.822,
+        "w": "Produktion"
+      },
+      {
+        "t": 34.399,
+        "w": "nutze"
+      },
+      {
+        "t": 34.712,
+        "w": "ich"
+      },
+      {
+        "t": 34.88,
+        "w": "Kibana"
+      },
+      {
+        "t": 35.385,
+        "w": "und"
+      },
+      {
+        "t": 35.577,
+        "w": "Grafana"
+      },
+      {
+        "t": 36.106,
+        "w": "für"
+      },
+      {
+        "t": 36.286,
+        "w": "Logs"
+      },
+      {
+        "t": 36.623,
+        "w": "und"
+      },
+      {
+        "t": 36.815,
+        "w": "Monitoring"
+      }
+    ],
+    "dotpe": [
+      {
+        "t": 0.098,
+        "w": "Vor"
+      },
+      {
+        "t": 0.374,
+        "w": "Airtel"
+      },
+      {
+        "t": 0.699,
+        "w": "war"
+      },
+      {
+        "t": 0.891,
+        "w": "ich"
+      },
+      {
+        "t": 1.048,
+        "w": "Software"
+      },
+      {
+        "t": 1.48,
+        "w": "Engineer"
+      },
+      {
+        "t": 1.973,
+        "w": "II"
+      },
+      {
+        "t": 2.262,
+        "w": "bei"
+      },
+      {
+        "t": 2.418,
+        "w": "DotPe"
+      },
+      {
+        "t": 3.846,
+        "w": "Von"
+      },
+      {
+        "t": 4.171,
+        "w": "2020 bis 2025"
+      },
+      {
+        "t": 7.007,
+        "w": "habe"
+      },
+      {
+        "t": 7.212,
+        "w": "ich"
+      },
+      {
+        "t": 7.332,
+        "w": "4"
+      },
+      {
+        "t": 7.596,
+        "w": "Engineers"
+      },
+      {
+        "t": 8.113,
+        "w": "bei"
+      },
+      {
+        "t": 8.281,
+        "w": "Merchant"
+      },
+      {
+        "t": 8.69,
+        "w": "Billing"
+      },
+      {
+        "t": 8.93,
+        "w": "geführt"
+      },
+      {
+        "t": 9.495,
+        "w": "Rechnungen"
+      },
+      {
+        "t": 10.252,
+        "w": "Inventar"
+      },
+      {
+        "t": 11.058,
+        "w": "GST"
+      },
+      {
+        "t": 11.562,
+        "w": "und"
+      },
+      {
+        "t": 11.743,
+        "w": "Analytics"
+      },
+      {
+        "t": 13.221,
+        "w": "Food"
+      },
+      {
+        "t": 13.606,
+        "w": "Ordering"
+      },
+      {
+        "t": 13.99,
+        "w": "kam"
+      },
+      {
+        "t": 14.231,
+        "w": "auf 50.000 Nutzer"
+      },
+      {
+        "t": 15.613,
+        "w": "am"
+      },
+      {
+        "t": 15.733,
+        "w": "Tag"
+      },
+      {
+        "t": 16.082,
+        "w": "und"
+      },
+      {
+        "t": 16.31,
+        "w": "über"
+      },
+      {
+        "t": 16.526,
+        "w": "eine"
+      },
+      {
+        "t": 16.755,
+        "w": "Crore"
+      },
+      {
+        "t": 17.103,
+        "w": "am"
+      },
+      {
+        "t": 17.236,
+        "w": "Tag"
+      },
+      {
+        "t": 18.438,
+        "w": "Ich"
+      },
+      {
+        "t": 18.63,
+        "w": "habe"
+      },
+      {
+        "t": 18.822,
+        "w": "die"
+      },
+      {
+        "t": 18.942,
+        "w": "React"
+      },
+      {
+        "t": 19.291,
+        "w": "Native"
+      },
+      {
+        "t": 19.603,
+        "w": "Waiter"
+      },
+      {
+        "t": 19.892,
+        "w": "App"
+      },
+      {
+        "t": 20.036,
+        "w": "gebaut"
+      },
+      {
+        "t": 20.493,
+        "w": "und"
+      },
+      {
+        "t": 20.637,
+        "w": "das"
+      },
+      {
+        "t": 20.841,
+        "w": "Node"
+      },
+      {
+        "t": 21.226,
+        "w": "js"
+      },
+      {
+        "t": 21.647,
+        "w": "Backend"
+      },
+      {
+        "t": 21.935,
+        "w": "dahinter"
+      },
+      {
+        "t": 22.308,
+        "w": "besessen"
+      },
+      {
+        "t": 23.678,
+        "w": "APIs"
+      },
+      {
+        "t": 24.495,
+        "w": "Order"
+      },
+      {
+        "t": 24.856,
+        "w": "Sync"
+      },
+      {
+        "t": 25.24,
+        "w": "Offline-Flows"
+      },
+      {
+        "t": 26.947,
+        "w": "Dazu"
+      },
+      {
+        "t": 27.356,
+        "w": "kam"
+      },
+      {
+        "t": 27.56,
+        "w": "Echtzeit-Chat"
+      },
+      {
+        "t": 28.209,
+        "w": "mit"
+      },
+      {
+        "t": 28.377,
+        "w": "Socket"
+      },
+      {
+        "t": 28.834,
+        "w": "io"
+      },
+      {
+        "t": 29.231,
+        "w": "und"
+      },
+      {
+        "t": 29.375,
+        "w": "Firebase"
+      }
+    ],
+    "tyroo": [
+      {
+        "t": 0.098,
+        "w": "Bei"
+      },
+      {
+        "t": 0.362,
+        "w": "Tyroo"
+      },
+      {
+        "t": 0.675,
+        "w": "habe"
+      },
+      {
+        "t": 0.939,
+        "w": "ich"
+      },
+      {
+        "t": 1.06,
+        "w": "das"
+      },
+      {
+        "t": 1.252,
+        "w": "Video-Template"
+      },
+      {
+        "t": 2.117,
+        "w": "UI"
+      },
+      {
+        "t": 2.274,
+        "w": "in"
+      },
+      {
+        "t": 2.43,
+        "w": "React"
+      },
+      {
+        "t": 2.995,
+        "w": "Redux"
+      },
+      {
+        "t": 3.499,
+        "w": "und"
+      },
+      {
+        "t": 3.74,
+        "w": "Ant"
+      },
+      {
+        "t": 3.896,
+        "w": "Design"
+      },
+      {
+        "t": 4.209,
+        "w": "gebaut"
+      },
+      {
+        "t": 5.469,
+        "w": "Ich"
+      },
+      {
+        "t": 5.661,
+        "w": "habe"
+      },
+      {
+        "t": 5.865,
+        "w": "auch"
+      },
+      {
+        "t": 6.07,
+        "w": "das"
+      },
+      {
+        "t": 6.262,
+        "w": "Video-Generation"
+      },
+      {
+        "t": 7.248,
+        "w": "Backend"
+      },
+      {
+        "t": 7.56,
+        "w": "besessen"
+      },
+      {
+        "t": 8.209,
+        "w": "ein"
+      },
+      {
+        "t": 8.377,
+        "w": "Node"
+      },
+      {
+        "t": 8.834,
+        "w": "js"
+      },
+      {
+        "t": 9.231,
+        "w": "Service"
+      },
+      {
+        "t": 9.736,
+        "w": "und"
+      },
+      {
+        "t": 10.012,
+        "w": "ein"
+      },
+      {
+        "t": 10.204,
+        "w": "Lottie"
+      },
+      {
+        "t": 10.493,
+        "w": "Service"
+      },
+      {
+        "t": 11.214,
+        "w": "der"
+      },
+      {
+        "t": 11.334,
+        "w": "Marketing-Videos"
+      },
+      {
+        "t": 12.296,
+        "w": "in"
+      },
+      {
+        "t": 12.44,
+        "w": "Scale"
+      },
+      {
+        "t": 12.752,
+        "w": "gerendert"
+      },
+      {
+        "t": 13.149,
+        "w": "hat"
+      }
+    ],
+    "meddo": [
+      {
+        "t": 0.098,
+        "w": "Bei"
+      },
+      {
+        "t": 0.326,
+        "w": "Meddo"
+      },
+      {
+        "t": 0.603,
+        "w": "Health"
+      },
+      {
+        "t": 0.915,
+        "w": "habe"
+      },
+      {
+        "t": 1.144,
+        "w": "ich"
+      },
+      {
+        "t": 1.288,
+        "w": "die"
+      },
+      {
+        "t": 1.408,
+        "w": "React"
+      },
+      {
+        "t": 1.757,
+        "w": "Native"
+      },
+      {
+        "t": 2.033,
+        "w": "Patienten-App"
+      },
+      {
+        "t": 3.019,
+        "w": "die"
+      },
+      {
+        "t": 3.163,
+        "w": "Arzt-App"
+      },
+      {
+        "t": 3.716,
+        "w": "und"
+      },
+      {
+        "t": 3.872,
+        "w": "das"
+      },
+      {
+        "t": 4.088,
+        "w": "Web-Produkt"
+      },
+      {
+        "t": 4.617,
+        "w": "gebaut"
+      },
+      {
+        "t": 5.889,
+        "w": "Video-Consults"
+      },
+      {
+        "t": 7.007,
+        "w": "Chats"
+      },
+      {
+        "t": 7.548,
+        "w": "EMR"
+      },
+      {
+        "t": 8.401,
+        "w": "Laborbuchungen"
+      },
+      {
+        "t": 10.216,
+        "w": "Dazu"
+      },
+      {
+        "t": 10.601,
+        "w": "Node"
+      },
+      {
+        "t": 10.805,
+        "w": "."
+      },
+      {
+        "t": 10.998,
+        "w": "js"
+      },
+      {
+        "t": 11.418,
+        "w": "APIs"
+      },
+      {
+        "t": 11.887,
+        "w": "für"
+      },
+      {
+        "t": 12.067,
+        "w": "Google"
+      },
+      {
+        "t": 12.368,
+        "w": "Auth"
+      },
+      {
+        "t": 12.837,
+        "w": "Bulk"
+      },
+      {
+        "t": 13.137,
+        "w": "Upload"
+      },
+      {
+        "t": 13.534,
+        "w": "und"
+      },
+      {
+        "t": 13.702,
+        "w": "Media"
+      }
+    ],
+    "lotto": [
+      {
+        "t": 0.098,
+        "w": "Meine"
+      },
+      {
+        "t": 0.435,
+        "w": "erste"
+      },
+      {
+        "t": 0.759,
+        "w": "Rolle"
+      },
+      {
+        "t": 1.036,
+        "w": "war"
+      },
+      {
+        "t": 1.216,
+        "w": "bei"
+      },
+      {
+        "t": 1.396,
+        "w": "Skill"
+      },
+      {
+        "t": 1.649,
+        "w": "and"
+      },
+      {
+        "t": 1.805,
+        "w": "Lotto"
+      },
+      {
+        "t": 3.137,
+        "w": "Ich"
+      },
+      {
+        "t": 3.329,
+        "w": "habe"
+      },
+      {
+        "t": 3.546,
+        "w": "eine"
+      },
+      {
+        "t": 3.774,
+        "w": "Online-Plattform"
+      },
+      {
+        "t": 4.651,
+        "w": "und"
+      },
+      {
+        "t": 4.856,
+        "w": "Back-Office"
+      },
+      {
+        "t": 5.397,
+        "w": "Tools"
+      },
+      {
+        "t": 5.685,
+        "w": "mit"
+      },
+      {
+        "t": 5.841,
+        "w": "JavaScript"
+      },
+      {
+        "t": 6.659,
+        "w": "jQuery"
+      },
+      {
+        "t": 7.572,
+        "w": "PHP"
+      },
+      {
+        "t": 8.125,
+        "w": "und"
+      },
+      {
+        "t": 8.341,
+        "w": "Bootstrap"
+      },
+      {
+        "t": 8.822,
+        "w": "gebaut"
+      }
+    ],
+    "about": [
+      {
+        "t": 0.098,
+        "w": "Im"
+      },
+      {
+        "t": 0.29,
+        "w": "Alltag"
+      },
+      {
+        "t": 0.663,
+        "w": "führe"
+      },
+      {
+        "t": 0.976,
+        "w": "ich"
+      },
+      {
+        "t": 1.108,
+        "w": "das"
+      },
+      {
+        "t": 1.312,
+        "w": "Team"
+      },
+      {
+        "t": 1.54,
+        "w": "in"
+      },
+      {
+        "t": 1.673,
+        "w": "Jira"
+      },
+      {
+        "t": 2.237,
+        "w": "Planung"
+      },
+      {
+        "t": 2.85,
+        "w": "Prioritäten"
+      },
+      {
+        "t": 3.776,
+        "w": "Delivery"
+      },
+      {
+        "t": 5.192,
+        "w": "Ich"
+      },
+      {
+        "t": 5.385,
+        "w": "halte"
+      },
+      {
+        "t": 5.649,
+        "w": "die"
+      },
+      {
+        "t": 5.745,
+        "w": "Latte"
+      },
+      {
+        "t": 6.022,
+        "w": "hoch"
+      },
+      {
+        "t": 6.274,
+        "w": "bei"
+      },
+      {
+        "t": 6.466,
+        "w": "React"
+      },
+      {
+        "t": 7.079,
+        "w": "TypeScript"
+      },
+      {
+        "t": 7.909,
+        "w": "Qualität"
+      },
+      {
+        "t": 9.399,
+        "w": "Ich"
+      },
+      {
+        "t": 9.639,
+        "w": "besitze"
+      },
+      {
+        "t": 10.036,
+        "w": "Node"
+      },
+      {
+        "t": 10.409,
+        "w": "js"
+      },
+      {
+        "t": 10.913,
+        "w": "und"
+      },
+      {
+        "t": 11.094,
+        "w": "NestJS"
+      },
+      {
+        "t": 11.743,
+        "w": "Services"
+      },
+      {
+        "t": 12.308,
+        "w": "und"
+      },
+      {
+        "t": 12.56,
+        "w": "arbeite"
+      },
+      {
+        "t": 13.005,
+        "w": "mit"
+      },
+      {
+        "t": 13.245,
+        "w": "anderen"
+      },
+      {
+        "t": 13.654,
+        "w": "Engineers"
+      },
+      {
+        "t": 14.231,
+        "w": "an"
+      },
+      {
+        "t": 14.399,
+        "w": "API"
+      },
+      {
+        "t": 14.832,
+        "w": "Contracts"
+      },
+      {
+        "t": 15.481,
+        "w": "und"
+      },
+      {
+        "t": 15.685,
+        "w": "Backend-Design"
+      },
+      {
+        "t": 17.284,
+        "w": "Nach"
+      },
+      {
+        "t": 17.596,
+        "w": "dem"
+      },
+      {
+        "t": 17.764,
+        "w": "Ship"
+      },
+      {
+        "t": 17.993,
+        "w": "bleibe"
+      },
+      {
+        "t": 18.293,
+        "w": "ich"
+      },
+      {
+        "t": 18.462,
+        "w": "in"
+      },
+      {
+        "t": 18.57,
+        "w": "Logs"
+      },
+      {
+        "t": 18.882,
+        "w": "und"
+      },
+      {
+        "t": 19.014,
+        "w": "Dashboards"
+      },
+      {
+        "t": 19.76,
+        "w": "Kibana"
+      },
+      {
+        "t": 20.433,
+        "w": "Grafana"
+      },
+      {
+        "t": 20.986,
+        "w": "und"
+      },
+      {
+        "t": 21.154,
+        "w": "Kong"
+      }
+    ],
+    "exp-airtel": [
+      {
+        "t": 0.098,
+        "w": "Das"
+      },
+      {
+        "t": 0.314,
+        "w": "ist"
+      },
+      {
+        "t": 0.459,
+        "w": "die"
+      },
+      {
+        "t": 0.555,
+        "w": "volle"
+      },
+      {
+        "t": 0.855,
+        "w": "Airtel-Rolle"
+      },
+      {
+        "t": 2.404,
+        "w": "Ich"
+      },
+      {
+        "t": 2.584,
+        "w": "führe"
+      },
+      {
+        "t": 2.897,
+        "w": "vier"
+      },
+      {
+        "t": 3.161,
+        "w": "Engineers"
+      },
+      {
+        "t": 3.846,
+        "w": "wir"
+      },
+      {
+        "t": 4.051,
+        "w": "shippen"
+      },
+      {
+        "t": 4.351,
+        "w": "Next"
+      },
+      {
+        "t": 4.639,
+        "w": "."
+      },
+      {
+        "t": 4.832,
+        "w": "js"
+      },
+      {
+        "t": 5.252,
+        "w": "mit"
+      },
+      {
+        "t": 5.433,
+        "w": "Prismic"
+      },
+      {
+        "t": 5.974,
+        "w": "und"
+      },
+      {
+        "t": 6.238,
+        "w": "ein"
+      },
+      {
+        "t": 6.43,
+        "w": "NestJS"
+      },
+      {
+        "t": 7.127,
+        "w": "Backend"
+      },
+      {
+        "t": 7.536,
+        "w": "und"
+      },
+      {
+        "t": 7.752,
+        "w": "Kong"
+      },
+      {
+        "t": 7.957,
+        "w": "für"
+      },
+      {
+        "t": 8.149,
+        "w": "Load"
+      },
+      {
+        "t": 8.389,
+        "w": "Balancing"
+      },
+      {
+        "t": 9.099,
+        "w": "JWT"
+      },
+      {
+        "t": 9.964,
+        "w": "CORS"
+      },
+      {
+        "t": 10.288,
+        "w": "und"
+      },
+      {
+        "t": 10.469,
+        "w": "Rate"
+      },
+      {
+        "t": 10.661,
+        "w": "Limiting"
+      },
+      {
+        "t": 11.947,
+        "w": "Seitengeschwindigkeit"
+      },
+      {
+        "t": 13.185,
+        "w": "kommt"
+      },
+      {
+        "t": 13.389,
+        "w": "von"
+      },
+      {
+        "t": 13.642,
+        "w": "Server-Side"
+      },
+      {
+        "t": 14.147,
+        "w": "Rendering"
+      },
+      {
+        "t": 14.724,
+        "w": "Cloudflare"
+      },
+      {
+        "t": 15.228,
+        "w": "Caching"
+      },
+      {
+        "t": 15.685,
+        "w": "und"
+      },
+      {
+        "t": 15.865,
+        "w": "Web"
+      },
+      {
+        "t": 16.058,
+        "w": "Vitals"
+      },
+      {
+        "t": 17.368,
+        "w": "Ich"
+      },
+      {
+        "t": 17.596,
+        "w": "besitze"
+      },
+      {
+        "t": 17.993,
+        "w": "diese"
+      },
+      {
+        "t": 18.233,
+        "w": "Fläche"
+      },
+      {
+        "t": 18.618,
+        "w": "end-to-end"
+      },
+      {
+        "t": 19.303,
+        "w": "nicht"
+      },
+      {
+        "t": 19.555,
+        "w": "nur"
+      },
+      {
+        "t": 19.736,
+        "w": "Tickets"
+      }
+    ],
+    "exp-dotpe": [
+      {
+        "t": 0.098,
+        "w": "DotPe"
+      },
+      {
+        "t": 0.699,
+        "w": "ist"
+      },
+      {
+        "t": 0.891,
+        "w": "ein"
+      },
+      {
+        "t": 1.024,
+        "w": "Multi-Produkt-Kapitel"
+      },
+      {
+        "t": 2.334,
+        "w": "Billing"
+      },
+      {
+        "t": 2.814,
+        "w": "WhatsApp"
+      },
+      {
+        "t": 3.187,
+        "w": "Marketing"
+      },
+      {
+        "t": 3.896,
+        "w": "Live"
+      },
+      {
+        "t": 4.197,
+        "w": "Chat"
+      },
+      {
+        "t": 4.762,
+        "w": "die"
+      },
+      {
+        "t": 4.942,
+        "w": "React"
+      },
+      {
+        "t": 5.326,
+        "w": "Native"
+      },
+      {
+        "t": 5.651,
+        "w": "Waiter"
+      },
+      {
+        "t": 5.951,
+        "w": "App"
+      },
+      {
+        "t": 6.372,
+        "w": "das"
+      },
+      {
+        "t": 6.576,
+        "w": "Node"
+      },
+      {
+        "t": 7.009,
+        "w": "js"
+      },
+      {
+        "t": 7.43,
+        "w": "dahinter"
+      },
+      {
+        "t": 8.81,
+        "w": "Das"
+      },
+      {
+        "t": 9.05,
+        "w": "war"
+      },
+      {
+        "t": 9.243,
+        "w": "umsatznahes"
+      },
+      {
+        "t": 9.916,
+        "w": "Arbeiten"
+      },
+      {
+        "t": 10.625,
+        "w": "über"
+      },
+      {
+        "t": 10.901,
+        "w": "Web"
+      },
+      {
+        "t": 11.286,
+        "w": "Mobile"
+      },
+      {
+        "t": 11.755,
+        "w": "und"
+      },
+      {
+        "t": 11.959,
+        "w": "Backend"
+      }
+    ],
+    "skills": [
+      {
+        "t": 0.098,
+        "w": "Skills"
+      },
+      {
+        "t": 0.483,
+        "w": "sind"
+      },
+      {
+        "t": 0.699,
+        "w": "gruppiert"
+      },
+      {
+        "t": 1.12,
+        "w": "in"
+      },
+      {
+        "t": 1.216,
+        "w": "Frontend"
+      },
+      {
+        "t": 1.997,
+        "w": "Backend"
+      },
+      {
+        "t": 2.538,
+        "w": "Mobile"
+      },
+      {
+        "t": 3.223,
+        "w": "DevOps"
+      },
+      {
+        "t": 3.86,
+        "w": "und"
+      },
+      {
+        "t": 4.04,
+        "w": "Leadership"
+      },
+      {
+        "t": 5.397,
+        "w": "React"
+      },
+      {
+        "t": 5.865,
+        "w": "und"
+      },
+      {
+        "t": 5.998,
+        "w": "TypeScript"
+      },
+      {
+        "t": 6.635,
+        "w": "und"
+      },
+      {
+        "t": 6.815,
+        "w": "Node"
+      },
+      {
+        "t": 7.115,
+        "w": "sind"
+      },
+      {
+        "t": 7.32,
+        "w": "der"
+      },
+      {
+        "t": 7.464,
+        "w": "Kern"
+      },
+      {
+        "t": 8.678,
+        "w": "Im"
+      },
+      {
+        "t": 8.846,
+        "w": "Backend"
+      },
+      {
+        "t": 9.183,
+        "w": "besitze"
+      },
+      {
+        "t": 9.591,
+        "w": "ich"
+      },
+      {
+        "t": 9.736,
+        "w": "NestJS"
+      },
+      {
+        "t": 10.385,
+        "w": "und"
+      },
+      {
+        "t": 10.553,
+        "w": "den"
+      },
+      {
+        "t": 10.733,
+        "w": "Node"
+      },
+      {
+        "t": 10.95,
+        "w": "Service"
+      },
+      {
+        "t": 11.346,
+        "w": "für"
+      },
+      {
+        "t": 11.49,
+        "w": "Prismic"
+      },
+      {
+        "t": 12.825,
+        "w": "Die"
+      },
+      {
+        "t": 13.017,
+        "w": "Waiter"
+      },
+      {
+        "t": 13.317,
+        "w": "App"
+      },
+      {
+        "t": 13.498,
+        "w": "ist"
+      },
+      {
+        "t": 13.69,
+        "w": "React"
+      },
+      {
+        "t": 14.026,
+        "w": "Native"
+      },
+      {
+        "t": 14.603,
+        "w": "das"
+      },
+      {
+        "t": 14.784,
+        "w": "Video-Generation"
+      },
+      {
+        "t": 15.745,
+        "w": "Tool"
+      },
+      {
+        "t": 15.962,
+        "w": "läuft"
+      },
+      {
+        "t": 16.334,
+        "w": "auf"
+      },
+      {
+        "t": 16.538,
+        "w": "einem"
+      },
+      {
+        "t": 16.755,
+        "w": "Node"
+      },
+      {
+        "t": 17.2,
+        "w": "js"
+      },
+      {
+        "t": 17.608,
+        "w": "Backend"
+      },
+      {
+        "t": 18.858,
+        "w": "Mobile"
+      },
+      {
+        "t": 19.519,
+        "w": "Waiter"
+      },
+      {
+        "t": 19.856,
+        "w": "App"
+      },
+      {
+        "t": 20.192,
+        "w": "Patienten-App"
+      },
+      {
+        "t": 21.106,
+        "w": "Arzt-App"
+      },
+      {
+        "t": 21.587,
+        "w": "auf"
+      },
+      {
+        "t": 21.767,
+        "w": "React"
+      },
+      {
+        "t": 22.091,
+        "w": "Native"
+      },
+      {
+        "t": 23.317,
+        "w": "Dann"
+      },
+      {
+        "t": 23.582,
+        "w": "Express"
+      },
+      {
+        "t": 24.207,
+        "w": "MongoDB"
+      },
+      {
+        "t": 25.084,
+        "w": "SQL"
+      },
+      {
+        "t": 25.901,
+        "w": "AWS"
+      },
+      {
+        "t": 26.719,
+        "w": "Docker"
+      },
+      {
+        "t": 27.344,
+        "w": "Kong"
+      },
+      {
+        "t": 27.812,
+        "w": "Kibana"
+      },
+      {
+        "t": 28.317,
+        "w": "und"
+      },
+      {
+        "t": 28.498,
+        "w": "Grafana"
+      }
+    ],
+    "education": [
+      {
+        "t": 0.098,
+        "w": "Ich"
+      },
+      {
+        "t": 0.29,
+        "w": "habe"
+      },
+      {
+        "t": 0.495,
+        "w": "B"
+      },
+      {
+        "t": 0.615,
+        "w": "."
+      },
+      {
+        "t": 0.819,
+        "w": "Tech"
+      },
+      {
+        "t": 1.072,
+        "w": "in"
+      },
+      {
+        "t": 1.204,
+        "w": "Computer"
+      },
+      {
+        "t": 1.697,
+        "w": "Science"
+      },
+      {
+        "t": 2.105,
+        "w": "Engineering"
+      },
+      {
+        "t": 2.694,
+        "w": "an"
+      },
+      {
+        "t": 2.826,
+        "w": "der"
+      },
+      {
+        "t": 2.959,
+        "w": "K.R."
+      },
+      {
+        "t": 3.319,
+        "w": "Mangalam"
+      },
+      {
+        "t": 3.776,
+        "w": "University"
+      },
+      {
+        "t": 4.377,
+        "w": "von 2014"
+      },
+      {
+        "t": 5.759,
+        "w": "bis"
+      },
+      {
+        "t": 5.987,
+        "w": "2018"
+      },
+      {
+        "t": 6.937,
+        "w": "gemacht"
+      },
+      {
+        "t": 8.197,
+        "w": "Seitdem"
+      },
+      {
+        "t": 8.702,
+        "w": "arbeite"
+      },
+      {
+        "t": 9.135,
+        "w": "ich"
+      },
+      {
+        "t": 9.291,
+        "w": "bei"
+      },
+      {
+        "t": 9.459,
+        "w": "Produktunternehmen"
+      },
+      {
+        "t": 10.385,
+        "w": "in"
+      },
+      {
+        "t": 10.565,
+        "w": "Gurgaon"
+      }
+    ],
+    "close": [
+      {
+        "t": 0.098,
+        "w": "Das"
+      },
+      {
+        "t": 0.35,
+        "w": "war"
+      },
+      {
+        "t": 0.519,
+        "w": "der"
+      },
+      {
+        "t": 0.615,
+        "w": "Walkthrough"
+      },
+      {
+        "t": 2.055,
+        "w": "Wenn"
+      },
+      {
+        "t": 2.32,
+        "w": "Sie"
+      },
+      {
+        "t": 2.452,
+        "w": "sprechen"
+      },
+      {
+        "t": 2.873,
+        "w": "möchten"
+      },
+      {
+        "t": 3.389,
+        "w": "sind"
+      },
+      {
+        "t": 3.702,
+        "w": "E-Mail"
+      },
+      {
+        "t": 3.978,
+        "w": "oder"
+      },
+      {
+        "t": 4.195,
+        "w": "LinkedIn"
+      },
+      {
+        "t": 4.651,
+        "w": "am"
+      },
+      {
+        "t": 4.796,
+        "w": "einfachsten"
+      },
+      {
+        "t": 5.565,
+        "w": "oder"
+      },
+      {
+        "t": 5.841,
+        "w": "Sie"
+      },
+      {
+        "t": 6.046,
+        "w": "erreichen"
+      },
+      {
+        "t": 6.478,
+        "w": "mich"
+      },
+      {
+        "t": 6.683,
+        "w": "auf"
+      },
+      {
+        "t": 6.863,
+        "w": "meiner"
+      },
+      {
+        "t": 7.139,
+        "w": "Nummer"
+      },
+      {
+        "t": 8.365,
+        "w": "Sie"
+      },
+      {
+        "t": 8.666,
+        "w": "können"
+      },
+      {
+        "t": 8.954,
+        "w": "auch"
+      },
+      {
+        "t": 9.159,
+        "w": "das"
+      },
+      {
+        "t": 9.375,
+        "w": "PDF"
+      },
+      {
+        "t": 9.808,
+        "w": "laden"
+      },
+      {
+        "t": 10.252,
+        "w": "und"
+      },
+      {
+        "t": 10.397,
+        "w": "das"
+      },
+      {
+        "t": 10.601,
+        "w": "hier"
+      },
+      {
+        "t": 10.745,
+        "w": "jederzeit"
+      },
+      {
+        "t": 11.382,
+        "w": "über"
+      },
+      {
+        "t": 11.562,
+        "w": "den"
+      },
+      {
+        "t": 11.743,
+        "w": "Avatar"
+      },
+      {
+        "t": 12.163,
+        "w": "neu"
+      },
+      {
+        "t": 12.308,
+        "w": "starten"
+      },
+      {
+        "t": 13.738,
+        "w": "Danke"
+      }
+    ]
+  },
+  "hellos": {
+    "wolt": {
+      "audio": "hello/wolt.mp3?v=i18n1",
+      "text": "Hallo Wolt. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.471,
+          "w": "Wolt"
+        },
+        {
+          "t": 1.695,
+          "w": "Das"
+        },
+        {
+          "t": 1.923,
+          "w": "ist"
+        },
+        {
+          "t": 2.055,
+          "w": "der"
+        },
+        {
+          "t": 2.175,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.026,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.435,
+          "w": "führt"
+        },
+        {
+          "t": 4.663,
+          "w": "Sie"
+        },
+        {
+          "t": 4.784,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.084,
+          "w": "mit"
+        },
+        {
+          "t": 5.24,
+          "w": "seiner"
+        },
+        {
+          "t": 5.493,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.853,
+          "w": "durch"
+        },
+        {
+          "t": 6.058,
+          "w": "den"
+        },
+        {
+          "t": 6.226,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "bolt": {
+      "audio": "hello/bolt.mp3?v=i18n1",
+      "text": "Hallo Bolt. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.495,
+          "w": "Bolt"
+        },
+        {
+          "t": 1.659,
+          "w": "Das"
+        },
+        {
+          "t": 1.887,
+          "w": "ist"
+        },
+        {
+          "t": 2.019,
+          "w": "der"
+        },
+        {
+          "t": 2.139,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 3.99,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.399,
+          "w": "führt"
+        },
+        {
+          "t": 4.627,
+          "w": "Sie"
+        },
+        {
+          "t": 4.748,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.048,
+          "w": "mit"
+        },
+        {
+          "t": 5.204,
+          "w": "seiner"
+        },
+        {
+          "t": 5.457,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.817,
+          "w": "durch"
+        },
+        {
+          "t": 6.022,
+          "w": "den"
+        },
+        {
+          "t": 6.19,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "zalando": {
+      "audio": "hello/zalando.mp3?v=i18n1",
+      "text": "Hallo Zalando. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.447,
+          "w": "Zalando"
+        },
+        {
+          "t": 1.863,
+          "w": "Das"
+        },
+        {
+          "t": 2.091,
+          "w": "ist"
+        },
+        {
+          "t": 2.224,
+          "w": "der"
+        },
+        {
+          "t": 2.344,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.195,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.603,
+          "w": "führt"
+        },
+        {
+          "t": 4.832,
+          "w": "Sie"
+        },
+        {
+          "t": 4.952,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.252,
+          "w": "mit"
+        },
+        {
+          "t": 5.409,
+          "w": "seiner"
+        },
+        {
+          "t": 5.661,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.022,
+          "w": "durch"
+        },
+        {
+          "t": 6.226,
+          "w": "den"
+        },
+        {
+          "t": 6.394,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "delivery-hero": {
+      "audio": "hello/delivery-hero.mp3?v=i18n1",
+      "text": "Hallo Delivery Hero. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.471,
+          "w": "Delivery"
+        },
+        {
+          "t": 0.903,
+          "w": "Hero"
+        },
+        {
+          "t": 2.175,
+          "w": "Das"
+        },
+        {
+          "t": 2.404,
+          "w": "ist"
+        },
+        {
+          "t": 2.536,
+          "w": "der"
+        },
+        {
+          "t": 2.656,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.507,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.916,
+          "w": "führt"
+        },
+        {
+          "t": 5.144,
+          "w": "Sie"
+        },
+        {
+          "t": 5.264,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.565,
+          "w": "mit"
+        },
+        {
+          "t": 5.721,
+          "w": "seiner"
+        },
+        {
+          "t": 5.974,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.334,
+          "w": "durch"
+        },
+        {
+          "t": 6.538,
+          "w": "den"
+        },
+        {
+          "t": 6.707,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "aviv": {
+      "audio": "hello/aviv.mp3?v=i18n1",
+      "text": "Hallo Aviv. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.495,
+          "w": "Aviv"
+        },
+        {
+          "t": 1.779,
+          "w": "Das"
+        },
+        {
+          "t": 2.007,
+          "w": "ist"
+        },
+        {
+          "t": 2.139,
+          "w": "der"
+        },
+        {
+          "t": 2.26,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.111,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.519,
+          "w": "führt"
+        },
+        {
+          "t": 4.748,
+          "w": "Sie"
+        },
+        {
+          "t": 4.868,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.168,
+          "w": "mit"
+        },
+        {
+          "t": 5.324,
+          "w": "seiner"
+        },
+        {
+          "t": 5.577,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.938,
+          "w": "durch"
+        },
+        {
+          "t": 6.142,
+          "w": "den"
+        },
+        {
+          "t": 6.31,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "flink": {
+      "audio": "hello/flink.mp3?v=i18n1",
+      "text": "Hallo Flink. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.447,
+          "w": "Flink"
+        },
+        {
+          "t": 1.659,
+          "w": "Das"
+        },
+        {
+          "t": 1.887,
+          "w": "ist"
+        },
+        {
+          "t": 2.019,
+          "w": "der"
+        },
+        {
+          "t": 2.139,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 3.99,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.399,
+          "w": "führt"
+        },
+        {
+          "t": 4.627,
+          "w": "Sie"
+        },
+        {
+          "t": 4.748,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.048,
+          "w": "mit"
+        },
+        {
+          "t": 5.204,
+          "w": "seiner"
+        },
+        {
+          "t": 5.457,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.817,
+          "w": "durch"
+        },
+        {
+          "t": 6.022,
+          "w": "den"
+        },
+        {
+          "t": 6.19,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "home24": {
+      "audio": "hello/home24.mp3?v=i18n1",
+      "text": "Hallo Home 24. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.471,
+          "w": "Home"
+        },
+        {
+          "t": 0.711,
+          "w": "24."
+        },
+        {
+          "t": 2.536,
+          "w": "Das"
+        },
+        {
+          "t": 2.764,
+          "w": "ist"
+        },
+        {
+          "t": 2.897,
+          "w": "der"
+        },
+        {
+          "t": 3.017,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.868,
+          "w": "Kapil"
+        },
+        {
+          "t": 5.276,
+          "w": "führt"
+        },
+        {
+          "t": 5.505,
+          "w": "Sie"
+        },
+        {
+          "t": 5.625,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.926,
+          "w": "mit"
+        },
+        {
+          "t": 6.082,
+          "w": "seiner"
+        },
+        {
+          "t": 6.334,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.695,
+          "w": "durch"
+        },
+        {
+          "t": 6.899,
+          "w": "den"
+        },
+        {
+          "t": 7.067,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "otto": {
+      "audio": "hello/otto.mp3?v=i18n1",
+      "text": "Hallo Otto. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.483,
+          "w": "Otto"
+        },
+        {
+          "t": 1.791,
+          "w": "Das"
+        },
+        {
+          "t": 2.019,
+          "w": "ist"
+        },
+        {
+          "t": 2.151,
+          "w": "der"
+        },
+        {
+          "t": 2.272,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.123,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.531,
+          "w": "führt"
+        },
+        {
+          "t": 4.76,
+          "w": "Sie"
+        },
+        {
+          "t": 4.88,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.18,
+          "w": "mit"
+        },
+        {
+          "t": 5.337,
+          "w": "seiner"
+        },
+        {
+          "t": 5.589,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.949,
+          "w": "durch"
+        },
+        {
+          "t": 6.154,
+          "w": "den"
+        },
+        {
+          "t": 6.322,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "xxxlutz": {
+      "audio": "hello/xxxlutz.mp3?v=i18n1",
+      "text": "Hallo XXX Lutz. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.471,
+          "w": "XXX"
+        },
+        {
+          "t": 1.048,
+          "w": "Lutz"
+        },
+        {
+          "t": 2.272,
+          "w": "Das"
+        },
+        {
+          "t": 2.5,
+          "w": "ist"
+        },
+        {
+          "t": 2.632,
+          "w": "der"
+        },
+        {
+          "t": 2.752,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.603,
+          "w": "Kapil"
+        },
+        {
+          "t": 5.012,
+          "w": "führt"
+        },
+        {
+          "t": 5.24,
+          "w": "Sie"
+        },
+        {
+          "t": 5.361,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.661,
+          "w": "mit"
+        },
+        {
+          "t": 5.817,
+          "w": "seiner"
+        },
+        {
+          "t": 6.07,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.43,
+          "w": "durch"
+        },
+        {
+          "t": 6.635,
+          "w": "den"
+        },
+        {
+          "t": 6.803,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "amazon": {
+      "audio": "hello/amazon.mp3?v=i18n1",
+      "text": "Hallo Amazon. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.447,
+          "w": "Amazon"
+        },
+        {
+          "t": 1.803,
+          "w": "Das"
+        },
+        {
+          "t": 2.031,
+          "w": "ist"
+        },
+        {
+          "t": 2.163,
+          "w": "der"
+        },
+        {
+          "t": 2.284,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.135,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.543,
+          "w": "führt"
+        },
+        {
+          "t": 4.772,
+          "w": "Sie"
+        },
+        {
+          "t": 4.892,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.192,
+          "w": "mit"
+        },
+        {
+          "t": 5.349,
+          "w": "seiner"
+        },
+        {
+          "t": 5.601,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.962,
+          "w": "durch"
+        },
+        {
+          "t": 6.166,
+          "w": "den"
+        },
+        {
+          "t": 6.334,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "langdock": {
+      "audio": "hello/langdock.mp3?v=i18n1",
+      "text": "Hallo Langdock. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.483,
+          "w": "Langdock"
+        },
+        {
+          "t": 1.851,
+          "w": "Das"
+        },
+        {
+          "t": 2.079,
+          "w": "ist"
+        },
+        {
+          "t": 2.212,
+          "w": "der"
+        },
+        {
+          "t": 2.332,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.183,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.591,
+          "w": "führt"
+        },
+        {
+          "t": 4.82,
+          "w": "Sie"
+        },
+        {
+          "t": 4.94,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.24,
+          "w": "mit"
+        },
+        {
+          "t": 5.397,
+          "w": "seiner"
+        },
+        {
+          "t": 5.649,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.01,
+          "w": "durch"
+        },
+        {
+          "t": 6.214,
+          "w": "den"
+        },
+        {
+          "t": 6.382,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "hometogo": {
+      "audio": "hello/hometogo.mp3?v=i18n1",
+      "text": "Hallo Home To Go. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.459,
+          "w": "Home"
+        },
+        {
+          "t": 0.675,
+          "w": "To"
+        },
+        {
+          "t": 0.807,
+          "w": "Go"
+        },
+        {
+          "t": 1.959,
+          "w": "Das"
+        },
+        {
+          "t": 2.188,
+          "w": "ist"
+        },
+        {
+          "t": 2.32,
+          "w": "der"
+        },
+        {
+          "t": 2.44,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.291,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.699,
+          "w": "führt"
+        },
+        {
+          "t": 4.928,
+          "w": "Sie"
+        },
+        {
+          "t": 5.048,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.349,
+          "w": "mit"
+        },
+        {
+          "t": 5.505,
+          "w": "seiner"
+        },
+        {
+          "t": 5.757,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.118,
+          "w": "durch"
+        },
+        {
+          "t": 6.322,
+          "w": "den"
+        },
+        {
+          "t": 6.49,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "trade-republic": {
+      "audio": "hello/trade-republic.mp3?v=i18n1",
+      "text": "Hallo Trade Republic. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.483,
+          "w": "Trade"
+        },
+        {
+          "t": 0.771,
+          "w": "Republic"
+        },
+        {
+          "t": 2.127,
+          "w": "Das"
+        },
+        {
+          "t": 2.356,
+          "w": "ist"
+        },
+        {
+          "t": 2.488,
+          "w": "der"
+        },
+        {
+          "t": 2.608,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.459,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.868,
+          "w": "führt"
+        },
+        {
+          "t": 5.096,
+          "w": "Sie"
+        },
+        {
+          "t": 5.216,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.517,
+          "w": "mit"
+        },
+        {
+          "t": 5.673,
+          "w": "seiner"
+        },
+        {
+          "t": 5.926,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.286,
+          "w": "durch"
+        },
+        {
+          "t": 6.49,
+          "w": "den"
+        },
+        {
+          "t": 6.659,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "contentful": {
+      "audio": "hello/contentful.mp3?v=i18n1",
+      "text": "Hallo Contentful. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.459,
+          "w": "Contentful"
+        },
+        {
+          "t": 1.983,
+          "w": "Das"
+        },
+        {
+          "t": 2.212,
+          "w": "ist"
+        },
+        {
+          "t": 2.344,
+          "w": "der"
+        },
+        {
+          "t": 2.464,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.315,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.724,
+          "w": "führt"
+        },
+        {
+          "t": 4.952,
+          "w": "Sie"
+        },
+        {
+          "t": 5.072,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.373,
+          "w": "mit"
+        },
+        {
+          "t": 5.529,
+          "w": "seiner"
+        },
+        {
+          "t": 5.781,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.142,
+          "w": "durch"
+        },
+        {
+          "t": 6.346,
+          "w": "den"
+        },
+        {
+          "t": 6.514,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "revolut": {
+      "audio": "hello/revolut.mp3?v=i18n1",
+      "text": "Hallo Revolut. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.483,
+          "w": "Revolut"
+        },
+        {
+          "t": 1.779,
+          "w": "Das"
+        },
+        {
+          "t": 2.007,
+          "w": "ist"
+        },
+        {
+          "t": 2.139,
+          "w": "der"
+        },
+        {
+          "t": 2.26,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.111,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.519,
+          "w": "führt"
+        },
+        {
+          "t": 4.748,
+          "w": "Sie"
+        },
+        {
+          "t": 4.868,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.168,
+          "w": "mit"
+        },
+        {
+          "t": 5.324,
+          "w": "seiner"
+        },
+        {
+          "t": 5.577,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.938,
+          "w": "durch"
+        },
+        {
+          "t": 6.142,
+          "w": "den"
+        },
+        {
+          "t": 6.31,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "taxfix": {
+      "audio": "hello/taxfix.mp3?v=i18n1",
+      "text": "Hallo Taxfix. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.471,
+          "w": "Taxfix"
+        },
+        {
+          "t": 1.947,
+          "w": "Das"
+        },
+        {
+          "t": 2.175,
+          "w": "ist"
+        },
+        {
+          "t": 2.308,
+          "w": "der"
+        },
+        {
+          "t": 2.428,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.279,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.688,
+          "w": "führt"
+        },
+        {
+          "t": 4.916,
+          "w": "Sie"
+        },
+        {
+          "t": 5.036,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.337,
+          "w": "mit"
+        },
+        {
+          "t": 5.493,
+          "w": "seiner"
+        },
+        {
+          "t": 5.745,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.106,
+          "w": "durch"
+        },
+        {
+          "t": 6.31,
+          "w": "den"
+        },
+        {
+          "t": 6.478,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "wise": {
+      "audio": "hello/wise.mp3?v=i18n1",
+      "text": "Hallo Wise. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.459,
+          "w": "Wise"
+        },
+        {
+          "t": 1.683,
+          "w": "Das"
+        },
+        {
+          "t": 1.911,
+          "w": "ist"
+        },
+        {
+          "t": 2.043,
+          "w": "der"
+        },
+        {
+          "t": 2.163,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.014,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.423,
+          "w": "führt"
+        },
+        {
+          "t": 4.651,
+          "w": "Sie"
+        },
+        {
+          "t": 4.772,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.072,
+          "w": "mit"
+        },
+        {
+          "t": 5.228,
+          "w": "seiner"
+        },
+        {
+          "t": 5.481,
+          "w": "Stimme"
+        },
+        {
+          "t": 5.841,
+          "w": "durch"
+        },
+        {
+          "t": 6.046,
+          "w": "den"
+        },
+        {
+          "t": 6.214,
+          "w": "Lebenslauf"
+        }
+      ]
+    },
+    "n8n": {
+      "audio": "hello/n8n.mp3?v=i18n1",
+      "text": "Hallo n8n. Das ist der Assistenzmodus. Kapil führt Sie jetzt mit seiner Stimme durch den Lebenslauf.",
+      "words": [
+        {
+          "t": 0.098,
+          "w": "Hallo"
+        },
+        {
+          "t": 0.483,
+          "w": "n8n"
+        },
+        {
+          "t": 2.031,
+          "w": "Das"
+        },
+        {
+          "t": 2.26,
+          "w": "ist"
+        },
+        {
+          "t": 2.392,
+          "w": "der"
+        },
+        {
+          "t": 2.512,
+          "w": "Assistenzmodus"
+        },
+        {
+          "t": 4.363,
+          "w": "Kapil"
+        },
+        {
+          "t": 4.772,
+          "w": "führt"
+        },
+        {
+          "t": 5.0,
+          "w": "Sie"
+        },
+        {
+          "t": 5.12,
+          "w": "jetzt"
+        },
+        {
+          "t": 5.421,
+          "w": "mit"
+        },
+        {
+          "t": 5.577,
+          "w": "seiner"
+        },
+        {
+          "t": 5.829,
+          "w": "Stimme"
+        },
+        {
+          "t": 6.19,
+          "w": "durch"
+        },
+        {
+          "t": 6.394,
+          "w": "den"
+        },
+        {
+          "t": 6.562,
+          "w": "Lebenslauf"
+        }
+      ]
+    }
+  },
+  "yearVariants": {
+    "positioning": {
+      "8": {
+        "audio": "years/positioning-8.mp3?v=i18n1",
+        "text": "Ich habe 8 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.507,
+            "w": "8 Jahre"
+          },
+          {
+            "t": 1.012,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.021,
+            "w": "in"
+          },
+          {
+            "t": 2.201,
+            "w": "React"
+          },
+          {
+            "t": 2.802,
+            "w": "Next"
+          },
+          {
+            "t": 3.139,
+            "w": "."
+          },
+          {
+            "t": 3.343,
+            "w": "js"
+          },
+          {
+            "t": 4.052,
+            "w": "TypeScript"
+          },
+          {
+            "t": 4.834,
+            "w": "Node"
+          },
+          {
+            "t": 5.29,
+            "w": "js"
+          },
+          {
+            "t": 5.807,
+            "w": "und"
+          },
+          {
+            "t": 5.976,
+            "w": "React"
+          },
+          {
+            "t": 6.312,
+            "w": "Native"
+          },
+          {
+            "t": 7.548,
+            "w": "Ich"
+          },
+          {
+            "t": 7.728,
+            "w": "habe"
+          },
+          {
+            "t": 7.945,
+            "w": "Internet"
+          },
+          {
+            "t": 8.341,
+            "w": "Banking"
+          },
+          {
+            "t": 8.678,
+            "w": "für"
+          },
+          {
+            "t": 8.87,
+            "w": "etwa"
+          },
+          {
+            "t": 9.171,
+            "w": "eine"
+          },
+          {
+            "t": 9.363,
+            "w": "Million"
+          },
+          {
+            "t": 9.712,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.084,
+            "w": "am"
+          },
+          {
+            "t": 10.216,
+            "w": "Tag"
+          },
+          {
+            "t": 10.445,
+            "w": "geleitet"
+          },
+          {
+            "t": 10.998,
+            "w": "und"
+          },
+          {
+            "t": 11.166,
+            "w": "führe"
+          },
+          {
+            "t": 11.514,
+            "w": "ein"
+          },
+          {
+            "t": 11.695,
+            "w": "Team"
+          },
+          {
+            "t": 11.923,
+            "w": "von 4."
+          },
+          {
+            "t": 13.498,
+            "w": "Ich"
+          },
+          {
+            "t": 13.702,
+            "w": "habe"
+          },
+          {
+            "t": 13.894,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.351,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.3,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.166,
+            "w": "vor"
+          },
+          {
+            "t": 16.43,
+            "w": "allem"
+          },
+          {
+            "t": 16.695,
+            "w": "in"
+          },
+          {
+            "t": 16.839,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.596,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.257,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.135,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "9": {
+        "audio": "years/positioning-9.mp3?v=i18n1",
+        "text": "Ich habe 9 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.483,
+            "w": "9 Jahre"
+          },
+          {
+            "t": 1.024,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.033,
+            "w": "in"
+          },
+          {
+            "t": 2.213,
+            "w": "React"
+          },
+          {
+            "t": 2.814,
+            "w": "Next"
+          },
+          {
+            "t": 3.151,
+            "w": "."
+          },
+          {
+            "t": 3.343,
+            "w": "js"
+          },
+          {
+            "t": 4.04,
+            "w": "TypeScript"
+          },
+          {
+            "t": 4.822,
+            "w": "Node"
+          },
+          {
+            "t": 5.278,
+            "w": "js"
+          },
+          {
+            "t": 5.795,
+            "w": "und"
+          },
+          {
+            "t": 5.951,
+            "w": "React"
+          },
+          {
+            "t": 6.288,
+            "w": "Native"
+          },
+          {
+            "t": 7.524,
+            "w": "Ich"
+          },
+          {
+            "t": 7.704,
+            "w": "habe"
+          },
+          {
+            "t": 7.921,
+            "w": "Internet"
+          },
+          {
+            "t": 8.317,
+            "w": "Banking"
+          },
+          {
+            "t": 8.654,
+            "w": "für"
+          },
+          {
+            "t": 8.846,
+            "w": "etwa"
+          },
+          {
+            "t": 9.147,
+            "w": "eine"
+          },
+          {
+            "t": 9.339,
+            "w": "Million"
+          },
+          {
+            "t": 9.688,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.06,
+            "w": "am"
+          },
+          {
+            "t": 10.192,
+            "w": "Tag"
+          },
+          {
+            "t": 10.421,
+            "w": "geleitet"
+          },
+          {
+            "t": 10.974,
+            "w": "und"
+          },
+          {
+            "t": 11.142,
+            "w": "führe"
+          },
+          {
+            "t": 11.49,
+            "w": "ein"
+          },
+          {
+            "t": 11.671,
+            "w": "Team"
+          },
+          {
+            "t": 11.899,
+            "w": "von 4."
+          },
+          {
+            "t": 13.474,
+            "w": "Ich"
+          },
+          {
+            "t": 13.678,
+            "w": "habe"
+          },
+          {
+            "t": 13.87,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.327,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.276,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.142,
+            "w": "vor"
+          },
+          {
+            "t": 16.406,
+            "w": "allem"
+          },
+          {
+            "t": 16.671,
+            "w": "in"
+          },
+          {
+            "t": 16.815,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.572,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.233,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.111,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "10": {
+        "audio": "years/positioning-10.mp3?v=i18n1",
+        "text": "Ich habe 10 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.507,
+            "w": "10 Jahre"
+          },
+          {
+            "t": 1.048,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.057,
+            "w": "in"
+          },
+          {
+            "t": 2.237,
+            "w": "React"
+          },
+          {
+            "t": 2.838,
+            "w": "Next"
+          },
+          {
+            "t": 3.175,
+            "w": "."
+          },
+          {
+            "t": 3.367,
+            "w": "js"
+          },
+          {
+            "t": 4.064,
+            "w": "TypeScript"
+          },
+          {
+            "t": 4.846,
+            "w": "Node"
+          },
+          {
+            "t": 5.302,
+            "w": "js"
+          },
+          {
+            "t": 5.819,
+            "w": "und"
+          },
+          {
+            "t": 5.987,
+            "w": "React"
+          },
+          {
+            "t": 6.324,
+            "w": "Native"
+          },
+          {
+            "t": 7.56,
+            "w": "Ich"
+          },
+          {
+            "t": 7.74,
+            "w": "habe"
+          },
+          {
+            "t": 7.957,
+            "w": "Internet"
+          },
+          {
+            "t": 8.353,
+            "w": "Banking"
+          },
+          {
+            "t": 8.69,
+            "w": "für"
+          },
+          {
+            "t": 8.882,
+            "w": "etwa"
+          },
+          {
+            "t": 9.183,
+            "w": "eine"
+          },
+          {
+            "t": 9.375,
+            "w": "Million"
+          },
+          {
+            "t": 9.724,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.096,
+            "w": "am"
+          },
+          {
+            "t": 10.228,
+            "w": "Tag"
+          },
+          {
+            "t": 10.457,
+            "w": "geleitet"
+          },
+          {
+            "t": 11.01,
+            "w": "und"
+          },
+          {
+            "t": 11.178,
+            "w": "führe"
+          },
+          {
+            "t": 11.526,
+            "w": "ein"
+          },
+          {
+            "t": 11.707,
+            "w": "Team"
+          },
+          {
+            "t": 11.935,
+            "w": "von 4."
+          },
+          {
+            "t": 13.51,
+            "w": "Ich"
+          },
+          {
+            "t": 13.714,
+            "w": "habe"
+          },
+          {
+            "t": 13.906,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.363,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.312,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.178,
+            "w": "vor"
+          },
+          {
+            "t": 16.442,
+            "w": "allem"
+          },
+          {
+            "t": 16.707,
+            "w": "in"
+          },
+          {
+            "t": 16.851,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.608,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.269,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.147,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "11": {
+        "audio": "years/positioning-11.mp3?v=i18n1",
+        "text": "Ich habe 11 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.483,
+            "w": "11 Jahre"
+          },
+          {
+            "t": 1.012,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.009,
+            "w": "in"
+          },
+          {
+            "t": 2.189,
+            "w": "React"
+          },
+          {
+            "t": 2.79,
+            "w": "Next"
+          },
+          {
+            "t": 3.127,
+            "w": "."
+          },
+          {
+            "t": 3.331,
+            "w": "js"
+          },
+          {
+            "t": 4.028,
+            "w": "TypeScript"
+          },
+          {
+            "t": 4.81,
+            "w": "Node"
+          },
+          {
+            "t": 5.266,
+            "w": "js"
+          },
+          {
+            "t": 5.783,
+            "w": "und"
+          },
+          {
+            "t": 5.951,
+            "w": "React"
+          },
+          {
+            "t": 6.288,
+            "w": "Native"
+          },
+          {
+            "t": 7.524,
+            "w": "Ich"
+          },
+          {
+            "t": 7.704,
+            "w": "habe"
+          },
+          {
+            "t": 7.921,
+            "w": "Internet"
+          },
+          {
+            "t": 8.317,
+            "w": "Banking"
+          },
+          {
+            "t": 8.654,
+            "w": "für"
+          },
+          {
+            "t": 8.846,
+            "w": "etwa"
+          },
+          {
+            "t": 9.147,
+            "w": "eine"
+          },
+          {
+            "t": 9.339,
+            "w": "Million"
+          },
+          {
+            "t": 9.688,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.06,
+            "w": "am"
+          },
+          {
+            "t": 10.192,
+            "w": "Tag"
+          },
+          {
+            "t": 10.421,
+            "w": "geleitet"
+          },
+          {
+            "t": 10.974,
+            "w": "und"
+          },
+          {
+            "t": 11.142,
+            "w": "führe"
+          },
+          {
+            "t": 11.49,
+            "w": "ein"
+          },
+          {
+            "t": 11.671,
+            "w": "Team"
+          },
+          {
+            "t": 11.899,
+            "w": "von 4."
+          },
+          {
+            "t": 13.474,
+            "w": "Ich"
+          },
+          {
+            "t": 13.678,
+            "w": "habe"
+          },
+          {
+            "t": 13.87,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.327,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.276,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.142,
+            "w": "vor"
+          },
+          {
+            "t": 16.406,
+            "w": "allem"
+          },
+          {
+            "t": 16.671,
+            "w": "in"
+          },
+          {
+            "t": 16.815,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.572,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.233,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.111,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "12": {
+        "audio": "years/positioning-12.mp3?v=i18n1",
+        "text": "Ich habe 12 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.495,
+            "w": "12 Jahre"
+          },
+          {
+            "t": 1.12,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.117,
+            "w": "in"
+          },
+          {
+            "t": 2.298,
+            "w": "React"
+          },
+          {
+            "t": 2.887,
+            "w": "Next"
+          },
+          {
+            "t": 3.223,
+            "w": "."
+          },
+          {
+            "t": 3.415,
+            "w": "js"
+          },
+          {
+            "t": 4.088,
+            "w": "TypeScript"
+          },
+          {
+            "t": 4.87,
+            "w": "Node"
+          },
+          {
+            "t": 5.326,
+            "w": "js"
+          },
+          {
+            "t": 5.843,
+            "w": "und"
+          },
+          {
+            "t": 6.012,
+            "w": "React"
+          },
+          {
+            "t": 6.348,
+            "w": "Native"
+          },
+          {
+            "t": 7.584,
+            "w": "Ich"
+          },
+          {
+            "t": 7.764,
+            "w": "habe"
+          },
+          {
+            "t": 7.981,
+            "w": "Internet"
+          },
+          {
+            "t": 8.377,
+            "w": "Banking"
+          },
+          {
+            "t": 8.714,
+            "w": "für"
+          },
+          {
+            "t": 8.906,
+            "w": "etwa"
+          },
+          {
+            "t": 9.207,
+            "w": "eine"
+          },
+          {
+            "t": 9.399,
+            "w": "Million"
+          },
+          {
+            "t": 9.748,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.12,
+            "w": "am"
+          },
+          {
+            "t": 10.252,
+            "w": "Tag"
+          },
+          {
+            "t": 10.481,
+            "w": "geleitet"
+          },
+          {
+            "t": 11.034,
+            "w": "und"
+          },
+          {
+            "t": 11.202,
+            "w": "führe"
+          },
+          {
+            "t": 11.55,
+            "w": "ein"
+          },
+          {
+            "t": 11.731,
+            "w": "Team"
+          },
+          {
+            "t": 11.959,
+            "w": "von 4."
+          },
+          {
+            "t": 13.534,
+            "w": "Ich"
+          },
+          {
+            "t": 13.738,
+            "w": "habe"
+          },
+          {
+            "t": 13.93,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.387,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.337,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.202,
+            "w": "vor"
+          },
+          {
+            "t": 16.466,
+            "w": "allem"
+          },
+          {
+            "t": 16.731,
+            "w": "in"
+          },
+          {
+            "t": 16.875,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.632,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.293,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.171,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "13": {
+        "audio": "years/positioning-13.mp3?v=i18n1",
+        "text": "Ich habe 13 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.495,
+            "w": "13 Jahre"
+          },
+          {
+            "t": 1.228,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.237,
+            "w": "in"
+          },
+          {
+            "t": 2.418,
+            "w": "React"
+          },
+          {
+            "t": 3.007,
+            "w": "Next"
+          },
+          {
+            "t": 3.343,
+            "w": "."
+          },
+          {
+            "t": 3.548,
+            "w": "js"
+          },
+          {
+            "t": 4.233,
+            "w": "TypeScript"
+          },
+          {
+            "t": 5.038,
+            "w": "Node"
+          },
+          {
+            "t": 5.495,
+            "w": "js"
+          },
+          {
+            "t": 6.012,
+            "w": "und"
+          },
+          {
+            "t": 6.18,
+            "w": "React"
+          },
+          {
+            "t": 6.516,
+            "w": "Native"
+          },
+          {
+            "t": 7.752,
+            "w": "Ich"
+          },
+          {
+            "t": 7.933,
+            "w": "habe"
+          },
+          {
+            "t": 8.149,
+            "w": "Internet"
+          },
+          {
+            "t": 8.546,
+            "w": "Banking"
+          },
+          {
+            "t": 8.882,
+            "w": "für"
+          },
+          {
+            "t": 9.075,
+            "w": "etwa"
+          },
+          {
+            "t": 9.375,
+            "w": "eine"
+          },
+          {
+            "t": 9.567,
+            "w": "Million"
+          },
+          {
+            "t": 9.916,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.288,
+            "w": "am"
+          },
+          {
+            "t": 10.421,
+            "w": "Tag"
+          },
+          {
+            "t": 10.649,
+            "w": "geleitet"
+          },
+          {
+            "t": 11.202,
+            "w": "und"
+          },
+          {
+            "t": 11.37,
+            "w": "führe"
+          },
+          {
+            "t": 11.719,
+            "w": "ein"
+          },
+          {
+            "t": 11.899,
+            "w": "Team"
+          },
+          {
+            "t": 12.127,
+            "w": "von 4."
+          },
+          {
+            "t": 13.702,
+            "w": "Ich"
+          },
+          {
+            "t": 13.906,
+            "w": "habe"
+          },
+          {
+            "t": 14.099,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.555,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.505,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.37,
+            "w": "vor"
+          },
+          {
+            "t": 16.635,
+            "w": "allem"
+          },
+          {
+            "t": 16.899,
+            "w": "in"
+          },
+          {
+            "t": 17.043,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.8,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.462,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.339,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "14": {
+        "audio": "years/positioning-14.mp3?v=i18n1",
+        "text": "Ich habe 14 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.459,
+            "w": "14 Jahre"
+          },
+          {
+            "t": 1.192,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.201,
+            "w": "in"
+          },
+          {
+            "t": 2.382,
+            "w": "React"
+          },
+          {
+            "t": 2.971,
+            "w": "Next"
+          },
+          {
+            "t": 3.307,
+            "w": "."
+          },
+          {
+            "t": 3.512,
+            "w": "js"
+          },
+          {
+            "t": 4.209,
+            "w": "TypeScript"
+          },
+          {
+            "t": 5.002,
+            "w": "Node"
+          },
+          {
+            "t": 5.471,
+            "w": "js"
+          },
+          {
+            "t": 5.987,
+            "w": "und"
+          },
+          {
+            "t": 6.156,
+            "w": "React"
+          },
+          {
+            "t": 6.492,
+            "w": "Native"
+          },
+          {
+            "t": 7.728,
+            "w": "Ich"
+          },
+          {
+            "t": 7.909,
+            "w": "habe"
+          },
+          {
+            "t": 8.125,
+            "w": "Internet"
+          },
+          {
+            "t": 8.522,
+            "w": "Banking"
+          },
+          {
+            "t": 8.858,
+            "w": "für"
+          },
+          {
+            "t": 9.05,
+            "w": "etwa"
+          },
+          {
+            "t": 9.351,
+            "w": "eine"
+          },
+          {
+            "t": 9.543,
+            "w": "Million"
+          },
+          {
+            "t": 9.892,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.264,
+            "w": "am"
+          },
+          {
+            "t": 10.397,
+            "w": "Tag"
+          },
+          {
+            "t": 10.625,
+            "w": "geleitet"
+          },
+          {
+            "t": 11.178,
+            "w": "und"
+          },
+          {
+            "t": 11.346,
+            "w": "führe"
+          },
+          {
+            "t": 11.695,
+            "w": "ein"
+          },
+          {
+            "t": 11.875,
+            "w": "Team"
+          },
+          {
+            "t": 12.103,
+            "w": "von 4."
+          },
+          {
+            "t": 13.678,
+            "w": "Ich"
+          },
+          {
+            "t": 13.882,
+            "w": "habe"
+          },
+          {
+            "t": 14.075,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.531,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.481,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.346,
+            "w": "vor"
+          },
+          {
+            "t": 16.611,
+            "w": "allem"
+          },
+          {
+            "t": 16.875,
+            "w": "in"
+          },
+          {
+            "t": 17.019,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.776,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.438,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.315,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "15": {
+        "audio": "years/positioning-15.mp3?v=i18n1",
+        "text": "Ich habe 15 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.483,
+            "w": "15 Jahre"
+          },
+          {
+            "t": 1.264,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.274,
+            "w": "in"
+          },
+          {
+            "t": 2.454,
+            "w": "React"
+          },
+          {
+            "t": 3.055,
+            "w": "Next"
+          },
+          {
+            "t": 3.391,
+            "w": "."
+          },
+          {
+            "t": 3.596,
+            "w": "js"
+          },
+          {
+            "t": 4.281,
+            "w": "TypeScript"
+          },
+          {
+            "t": 5.074,
+            "w": "Node"
+          },
+          {
+            "t": 5.531,
+            "w": "js"
+          },
+          {
+            "t": 6.048,
+            "w": "und"
+          },
+          {
+            "t": 6.216,
+            "w": "React"
+          },
+          {
+            "t": 6.552,
+            "w": "Native"
+          },
+          {
+            "t": 7.788,
+            "w": "Ich"
+          },
+          {
+            "t": 7.969,
+            "w": "habe"
+          },
+          {
+            "t": 8.185,
+            "w": "Internet"
+          },
+          {
+            "t": 8.582,
+            "w": "Banking"
+          },
+          {
+            "t": 8.918,
+            "w": "für"
+          },
+          {
+            "t": 9.111,
+            "w": "etwa"
+          },
+          {
+            "t": 9.411,
+            "w": "eine"
+          },
+          {
+            "t": 9.603,
+            "w": "Million"
+          },
+          {
+            "t": 9.952,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.325,
+            "w": "am"
+          },
+          {
+            "t": 10.457,
+            "w": "Tag"
+          },
+          {
+            "t": 10.685,
+            "w": "geleitet"
+          },
+          {
+            "t": 11.238,
+            "w": "und"
+          },
+          {
+            "t": 11.406,
+            "w": "führe"
+          },
+          {
+            "t": 11.755,
+            "w": "ein"
+          },
+          {
+            "t": 11.935,
+            "w": "Team"
+          },
+          {
+            "t": 12.163,
+            "w": "von 4."
+          },
+          {
+            "t": 13.738,
+            "w": "Ich"
+          },
+          {
+            "t": 13.942,
+            "w": "habe"
+          },
+          {
+            "t": 14.135,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.591,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.541,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.406,
+            "w": "vor"
+          },
+          {
+            "t": 16.671,
+            "w": "allem"
+          },
+          {
+            "t": 16.935,
+            "w": "in"
+          },
+          {
+            "t": 17.079,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.837,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.498,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.375,
+            "w": "Marketing"
+          }
+        ]
+      },
+      "16": {
+        "audio": "years/positioning-16.mp3?v=i18n1",
+        "text": "Ich habe 16 Jahre Full-Stack-Erfahrung in React, Next.js, TypeScript, Node.js und React Native. Ich habe Internet Banking für etwa eine Million Nutzer am Tag geleitet und führe ein Team von 4. Ich habe Produkte in 5 Unternehmen ausgeliefert, vor allem in Fintech, Commerce, Advertising, Marketing.",
+        "words": [
+          {
+            "t": 0.098,
+            "w": "Ich"
+          },
+          {
+            "t": 0.29,
+            "w": "habe"
+          },
+          {
+            "t": 0.459,
+            "w": "16 Jahre"
+          },
+          {
+            "t": 1.204,
+            "w": "Full-Stack-Erfahrung"
+          },
+          {
+            "t": 2.213,
+            "w": "in"
+          },
+          {
+            "t": 2.394,
+            "w": "React"
+          },
+          {
+            "t": 2.971,
+            "w": "Next"
+          },
+          {
+            "t": 3.307,
+            "w": "."
+          },
+          {
+            "t": 3.512,
+            "w": "js"
+          },
+          {
+            "t": 4.197,
+            "w": "TypeScript"
+          },
+          {
+            "t": 4.99,
+            "w": "Node"
+          },
+          {
+            "t": 5.447,
+            "w": "js"
+          },
+          {
+            "t": 5.963,
+            "w": "und"
+          },
+          {
+            "t": 6.132,
+            "w": "React"
+          },
+          {
+            "t": 6.468,
+            "w": "Native"
+          },
+          {
+            "t": 7.704,
+            "w": "Ich"
+          },
+          {
+            "t": 7.885,
+            "w": "habe"
+          },
+          {
+            "t": 8.101,
+            "w": "Internet"
+          },
+          {
+            "t": 8.498,
+            "w": "Banking"
+          },
+          {
+            "t": 8.834,
+            "w": "für"
+          },
+          {
+            "t": 9.026,
+            "w": "etwa"
+          },
+          {
+            "t": 9.327,
+            "w": "eine"
+          },
+          {
+            "t": 9.519,
+            "w": "Million"
+          },
+          {
+            "t": 9.868,
+            "w": "Nutzer"
+          },
+          {
+            "t": 10.24,
+            "w": "am"
+          },
+          {
+            "t": 10.373,
+            "w": "Tag"
+          },
+          {
+            "t": 10.601,
+            "w": "geleitet"
+          },
+          {
+            "t": 11.154,
+            "w": "und"
+          },
+          {
+            "t": 11.322,
+            "w": "führe"
+          },
+          {
+            "t": 11.671,
+            "w": "ein"
+          },
+          {
+            "t": 11.851,
+            "w": "Team"
+          },
+          {
+            "t": 12.079,
+            "w": "von 4."
+          },
+          {
+            "t": 13.654,
+            "w": "Ich"
+          },
+          {
+            "t": 13.858,
+            "w": "habe"
+          },
+          {
+            "t": 14.05,
+            "w": "Produkte"
+          },
+          {
+            "t": 14.507,
+            "w": "in 5 Unternehmen"
+          },
+          {
+            "t": 15.457,
+            "w": "ausgeliefert"
+          },
+          {
+            "t": 16.322,
+            "w": "vor"
+          },
+          {
+            "t": 16.587,
+            "w": "allem"
+          },
+          {
+            "t": 16.851,
+            "w": "in"
+          },
+          {
+            "t": 16.995,
+            "w": "Fintech"
+          },
+          {
+            "t": 17.752,
+            "w": "Commerce"
+          },
+          {
+            "t": 18.413,
+            "w": "Advertising"
+          },
+          {
+            "t": 19.291,
+            "w": "Marketing"
+          }
+        ]
+      }
+    }
+  }
+}

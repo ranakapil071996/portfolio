@@ -345,7 +345,67 @@
     "next": "次へ",
     "mute": "音声をミュート",
     "unmute": "ミュート解除",
-    "exit": "AIアシストモードを終了"
+    "exit": "AIアシストモードを終了",
+    "hello": "こんにちは、{name}。こちらはアシスタンスモードです。これからカピルが、自分の声で履歴書をご案内します。",
+    "helloTitle": "アシスタンスモード",
+    "steps": {
+      "welcome": {
+        "title": "はじめに",
+        "text": "こんにちは、カピル・ラナです。Airtel Payments Bank のシニアマネージャー兼 SDE III です。面接と同じように、このポートフォリオをご案内します。まず成果、それから技術です。"
+      },
+      "positioning": {
+        "title": "やっていること",
+        "text": "React、Next.js、TypeScript、Node.js、React Native で {years} 年のフルスタック経験があります。1日およそ100万人の Internet Banking を率い、4人のチームをマネジメントしています。これまでに5社で、主にフィンテック、コマース、広告、マーケティングのプロダクトを出荷してきました。"
+      },
+      "impact": {
+        "title": "インパクト",
+        "text": "各ロールをビジネスインパクトとテックインパクトで整理しています。まずユーザーと売上に何が変わったか、次にそれを可能にしたスタックです。現職の Airtel から始めます。"
+      },
+      "airtel": {
+        "title": "Airtel Payments Bank",
+        "text": "Airtel では、RBI コンプライアンスの下でインターネットバンキング体験をオーナーしています。Next.js のサーバーサイドレンダリング、Cloudflare のキャッシュ、Core Web Vitals でページ速度を上げました。ボット悪用は Cloudflare security と Google reCAPTCHA で減らしました。Node.js 上の NestJS バックエンドも持っています。その前段で Kong ゲートウェイを回し、ロードバランシングと CORS、JWT、レート制限のプラグインを入れています。コンテンツ側は Next.js と Prismic が、私が作った Node.js の Prismic サービスに乗っています。本番では Kibana と Grafana でログとモニタリングを見ています。"
+      },
+      "dotpe": {
+        "title": "DotPe",
+        "text": "Airtel の前は DotPe のソフトウェアエンジニア II でした。2020年から2025年まで、マーチャントの請求、請求書、在庫、GST、アナリティクスで4人のエンジニアをリードしました。フードオーダーは1日5万ユーザー、売上げは1日1クローレ超です。React Native のウェイターアプリを作り、その裏の Node.js バックエンドも持っていました。API、注文同期、オフラインフロー。Socket.io と Firebase でリアルタイムチャットも出荷しました。"
+      },
+      "tyroo": {
+        "title": "Tyroo",
+        "text": "Tyroo では、React、Redux、Ant Design で動画テンプレート UI を作りました。動画生成バックエンドも持っていて、Node.js サービスと Lottie サービスでマーケティング動画をスケールレンダリングしていました。"
+      },
+      "meddo": {
+        "title": "Meddo Health",
+        "text": "Meddo Health では、React Native の患者アプリ、医師アプリ、それにウェブ製品を作りました。ビデオ診察、チャット、EMR、検査予約です。Google Auth、一括アップロード、メディア向けの Node.js API も書きました。"
+      },
+      "lotto": {
+        "title": "Skill and Lotto",
+        "text": "最初のロールは Skill and Lotto です。JavaScript、jQuery、PHP、Bootstrap でオンライン基盤とバックオフィスツールを作りました。"
+      },
+      "about": {
+        "title": "働き方",
+        "text": "日常は Jira でチームを回しています。計画、優先度、デリバリー。React、TypeScript、品質のバーは高く保ちます。Node.js と NestJS のサービスを持ち、他のエンジニアと API 契約とバックエンド設計を進めます。出荷したあとも Kibana、Grafana、Kong のログとダッシュボードに残ります。"
+      },
+      "exp-airtel": {
+        "title": "Airtel — 全体像",
+        "text": "これが Airtel の全体です。4人のエンジニアを率い、Next.js と Prismic、NestJS バックエンド、Kong でロードバランシング、JWT、CORS、レート制限を出荷しています。ページ速度はサーバーサイドレンダリング、Cloudflare キャッシュ、Web Vitals です。チケットだけでなく、この面を端から端まで持っています。"
+      },
+      "exp-dotpe": {
+        "title": "DotPe — 全体像",
+        "text": "DotPe はマルチプロダクトの章です。請求、WhatsApp マーケティング、ライブチャット、React Native のウェイターアプリ、その裏の Node.js。売上に直結した仕事で、ウェブ、モバイル、バックエンドにまたがっています。"
+      },
+      "skills": {
+        "title": "スキル",
+        "text": "スキルはフロントエンド、バックエンド、モバイル、DevOps、リーダーシップに分けています。核は React と TypeScript と Node です。バックエンドでは NestJS と Prismic 向けの Node サービスを持っています。ウェイターアプリは React Native、動画生成ツールは Node.js バックエンドです。モバイルはウェイター、患者、医師アプリが React Native。そのあと Express、MongoDB、SQL、AWS、Docker、Kong、Kibana、Grafana です。"
+      },
+      "education": {
+        "title": "学歴",
+        "text": "2014年から2018年まで、K.R. Mangalam University でコンピュータサイエンス工学の B.Tech を修了しました。それ以来、グルガオンのプロダクト企業で働いています。"
+      },
+      "close": {
+        "title": "次の一歩",
+        "text": "ウォークスルーは以上です。話したいときは、メールか LinkedIn が一番簡単です。番号でも連絡できます。PDF もダウンロードできます。アバターからいつでも再開できます。ありがとうございました。"
+      }
+    }
   },
   "ui": {
     "emailCopied": "メールアドレスをコピーしました"

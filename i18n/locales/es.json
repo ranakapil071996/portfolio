@@ -345,7 +345,67 @@
     "next": "Siguiente",
     "mute": "Silenciar voz",
     "unmute": "Activar voz",
-    "exit": "Salir del modo de asistencia IA"
+    "exit": "Salir del modo de asistencia IA",
+    "hello": "Hola {name}. Esto es el modo asistencia. Kapil te va a explicar el currículum con su voz.",
+    "helloTitle": "Modo asistencia",
+    "steps": {
+      "welcome": {
+        "title": "Introducción",
+        "text": "Hola, soy Kapil Rana, Senior Manager y SDE III en Airtel Payments Bank. Te recorro este portfolio como en una entrevista: primero el impacto, luego la tecnología."
+      },
+      "positioning": {
+        "title": "Lo que hago",
+        "text": "Tengo {years} años de experiencia full-stack en React, Next.js, TypeScript, Node.js y React Native. Lideré Internet Banking para cerca de un millón de usuarios al día y gestiono un equipo de 4. He lanzado productos en 5 empresas, sobre todo fintech, commerce, publicidad, marketing."
+      },
+      "impact": {
+        "title": "Impacto",
+        "text": "Organizo cada rol por impacto de negocio e impacto técnico. Primero, qué cambió para usuarios e ingresos, luego el stack que lo hizo posible. Empecemos por Airtel, mi rol actual."
+      },
+      "airtel": {
+        "title": "Airtel Payments Bank",
+        "text": "En Airtel, soy dueño de la experiencia de internet banking bajo cumplimiento RBI. Mejoramos la velocidad de página con Next.js server-side rendering, Cloudflare caching y Core Web Vitals. Redujimos abuso de bots con Cloudflare security y Google reCAPTCHA. También soy dueño de un backend NestJS en Node.js. Delante de ese servicio corro un Kong gateway para load balancing, con plugins de CORS, JWT y rate limiting. En contenido, Next.js y Prismic se apoyan en un servicio Node.js de Prismic que yo construí. En producción uso Kibana y Grafana para logs y monitoring."
+      },
+      "dotpe": {
+        "title": "DotPe",
+        "text": "Antes de Airtel fui software engineer II en DotPe. De 2020 a 2025 lideré a 4 engineers en billing para merchants: facturación, inventario, GST y analytics. El food ordering llegó a 50.000 usuarios al día y más de un crore al día. Construí la waiter app en React Native y fui dueño del backend Node.js detrás. APIs, sync de pedidos, flujos offline. También lanzamos chat en tiempo real con Socket.io y Firebase."
+      },
+      "tyroo": {
+        "title": "Tyroo",
+        "text": "En Tyroo construí la UI de plantillas de vídeo en React, Redux y Ant Design. También fui dueño del backend de generación de vídeo: un servicio Node.js y un servicio Lottie que renderizaba vídeos de marketing a escala."
+      },
+      "meddo": {
+        "title": "Meddo Health",
+        "text": "En Meddo Health construí la app de pacientes en React Native, la app de médicos y el producto web. Consultas de vídeo, chats, EMR, reservas de laboratorio. También escribí APIs Node.js para Google Auth, bulk upload y media."
+      },
+      "lotto": {
+        "title": "Skill and Lotto",
+        "text": "Mi primer rol fue en Skill and Lotto. Construí una plataforma online y herramientas de back-office con JavaScript, jQuery, PHP y Bootstrap."
+      },
+      "about": {
+        "title": "Cómo trabajo",
+        "text": "En el día a día llevo al equipo en Jira: planning, prioridades y delivery. Mantengo el listón alto en React, TypeScript, calidad. Soy dueño de servicios Node.js y NestJS y trabajo con otros engineers en contratos de API y diseño de backend. Después de shipear, me quedo en logs y dashboards: Kibana, Grafana y Kong."
+      },
+      "exp-airtel": {
+        "title": "Airtel — la historia completa",
+        "text": "Este es el rol completo de Airtel. Lidero a cuatro engineers, shipeamos Next.js con Prismic y un backend NestJS y Kong para load balancing, JWT, CORS y rate limiting. La velocidad viene de server-side rendering, Cloudflare caching y Web Vitals. Soy dueño de esta superficie de punta a punta, no solo de tickets."
+      },
+      "exp-dotpe": {
+        "title": "DotPe — la historia completa",
+        "text": "DotPe es un capítulo multi-producto: billing, WhatsApp marketing, live chat, la waiter app en React Native, el Node.js detrás. Era trabajo ligado a ingresos, en web, mobile y backend."
+      },
+      "skills": {
+        "title": "Skills",
+        "text": "Los skills se agrupan en frontend, backend, mobile, DevOps y liderazgo. React y TypeScript y Node son el núcleo. En backend soy dueño de NestJS y el servicio Node para Prismic. La waiter app está en React Native y la herramienta de vídeo corre en un backend Node.js. En mobile: waiter app, app de pacientes, app de médicos en React Native. Luego Express, MongoDB, SQL, AWS, Docker, Kong, Kibana y Grafana."
+      },
+      "education": {
+        "title": "Formación",
+        "text": "Hice B.Tech en Computer Science engineering en K.R. Mangalam University, de 2014 a 2018. Desde entonces trabajo en product companies en Gurgaon."
+      },
+      "close": {
+        "title": "Siguiente paso",
+        "text": "Ese es el walkthrough. Si quieres hablar, email o LinkedIn es lo más fácil, o puedes contactarme en mi número. También puedes bajar el PDF y reiniciar esto cuando quieras desde el avatar. Gracias."
+      }
+    }
   },
   "ui": {
     "emailCopied": "Correo copiado al portapapeles"

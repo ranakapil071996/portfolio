@@ -363,7 +363,7 @@
     if (window.__storyModeBooted || document.getElementById("story-mode-script")) return;
     var s = document.createElement("script");
     s.id = "story-mode-script";
-    s.src = base + "js/story-mode.js?v=i18n1";
+    s.src = base + "js/story-mode.js?v=i18n2";
     document.body.appendChild(s);
   }
 
