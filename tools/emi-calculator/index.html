@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <script>window.__LANG=window.__LANG||undefined;window.__I18N_BASE="../../";window.__I18N_KEEP_HEAD=true;window.__TOOL_ID="emi";</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMI Calculator — Monthly Loan EMI, Interest & Amortization | Kapil Rana</title>
+  <meta name="description" content="Free EMI calculator for home, car, and personal loans in India. Get monthly EMI, total interest, total payment, and a year-wise amortization schedule." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <link rel="canonical" href="https://kapilrana.dev/tools/emi-calculator/" id="canonical-link" />
+  <link rel="icon" href="../../favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="../../icons/apple-touch-icon.png" />
+  <link rel="manifest" href="../../site.webmanifest" />
+  <meta name="theme-color" content="#050816" id="meta-theme-color" />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="EMI Calculator — Monthly Loan EMI, Interest & Amortization | Kapil Rana" id="og-title" />
+  <meta property="og:description" content="Free EMI calculator for home, car, and personal loans in India. Get monthly EMI, total interest, total payment, and a year-wise amortization schedule." id="og-description" />
+  <meta property="og:url" content="https://kapilrana.dev/tools/emi-calculator/" id="og-url" />
+  <meta property="og:image" content="https://kapilrana.dev/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EMI Calculator — Monthly Loan EMI, Interest & Amortization | Kapil Rana" id="twitter-title" />
+  <meta name="twitter:description" content="Free EMI calculator for home, car, and personal loans in India. Get monthly EMI, total interest, total payment, and a year-wise amortization schedule." id="twitter-description" />
+  <meta name="twitter:image" content="https://kapilrana.dev/assets/og-image.jpg" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="stylesheet" href="../../css/tools.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t !== "light" && t !== "dark") t = "dark";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+    <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "EMI Calculator",
+      "url": "https://kapilrana.dev/tools/emi-calculator/",
+      "description": "Calculate monthly EMI, total interest, and amortization for Indian loans.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Kapil Rana",
+        "url": "https://kapilrana.dev/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://kapilrana.dev/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://kapilrana.dev/tools/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "EMI Calculator",
+          "item": "https://kapilrana.dev/tools/emi-calculator/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is EMI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EMI (Equated Monthly Instalment) is the fixed amount you pay every month toward a loan. It includes both principal and interest."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is EMI calculated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EMI = P × r × (1+r)^n / ((1+r)^n − 1), where P is the loan amount, r is the monthly interest rate, and n is the number of months."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does a shorter tenure reduce interest?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. A shorter tenure raises the monthly EMI but usually cuts total interest because the principal is repaid faster."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this EMI calculator free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. This online EMI calculator is free, runs in your browser, and does not store the numbers you enter."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body class="tools-page">
+  <a class="skip-link" href="#main-content" data-i18n="nav.skip">Skip to main content</a>
+  <div class="tool-ambient" aria-hidden="true">
+    <span class="tool-orb tool-orb-a"></span>
+    <span class="tool-orb tool-orb-b"></span>
+    <span class="tool-orb tool-orb-c"></span>
+  </div>
+  <header class="nav" id="nav" role="banner">
+    <a class="nav-logo" href="../../" aria-label="Kapil Rana — home" data-i18n-aria="nav.home">
+      <span class="logo-mark" aria-hidden="true">KR</span>
+      <span class="logo-text">Kapil Rana</span>
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
+      <div class="nav-item has-menu" id="nav-tools">
+        <button type="button" class="nav-menu-btn" id="nav-tools-btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-tools-panel" data-i18n="nav.tools">Tools</button>
+        <div class="nav-menu" id="nav-tools-panel" hidden>
+          <p class="nav-menu-cat" data-i18n="tools.categories.finance.title">Finance</p>
+          <a href="./" data-tool="emi" data-i18n="tools.emi.nav">EMI Calculator</a>
+          <a href="../sip-calculator/" data-tool="sip" data-i18n="tools.sip.nav">SIP Calculator</a>
+          <a href="../gst-calculator/" data-tool="gst" data-i18n="tools.gst.nav">GST Calculator</a>
+          <a href="../" class="nav-menu-all" data-tool="hub" data-i18n="nav.allTools">All tools</a>
+        </div>
+      </div>
+      <a href="../../" data-i18n="companyUi.portfolio">Portfolio</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang-switcher" id="lang-switcher"></div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle theme">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 14.5A8.5 8.5 0 1110.5 3a7 7 0 0010.5 11.5z"/>
+        </svg>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+  <main class="tool-main" id="main-content" tabindex="-1">
+    <nav class="tool-crumb" aria-label="Breadcrumb">
+      <a href="../../" data-i18n="tools.common.home">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="../" data-i18n="nav.tools">Tools</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page" data-i18n="tools.emi.nav">EMI Calculator</span>
+    </nav>
+    <header class="tool-hero">
+      <span class="tool-hero-icon hub-icon-emi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1z"/></svg></span>
+      <p class="tool-kicker" data-i18n="tools.categories.finance.title">Finance</p>
+      <h1 data-i18n="tools.emi.title">EMI Calculator</h1>
+      <p class="tool-lead" data-i18n="tools.emi.lead">Work out the equated monthly instalment for a home loan, car loan, or personal loan. Change principal, interest rate, and tenure to see EMI, total interest, and a year-wise payoff schedule.</p>
+    </header>
+    <div class="tool-grid">
+      <form class="tool-card glass tool-card-in" id="emi-form" onsubmit="return false;">
+        <h2 data-i18n="tools.common.inputs">Inputs</h2>
+        <div class="tool-field">
+          <label for="emi-amount" data-i18n="tools.emi.amount">Loan amount (₹)</label>
+          <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 6h10M7 10h10M7 6c4.5 0 7 2 7 5.5S13 17 7 17M11 21 7 17"/></svg><input id="emi-amount" name="amount" type="number" inputmode="decimal" min="0" step="1000" value="1000000" /></div>
+          <input class="tool-range" id="emi-amount-range" type="range" min="10000" max="20000000" step="10000" value="1000000" aria-label="Loan amount slider" />
+        </div>
+        <div class="tool-field">
+          <label for="emi-rate" data-i18n="tools.emi.rate">Interest rate (% p.a.)</label>
+          <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="m18 6-12 12"/></svg><input id="emi-rate" name="rate" type="number" inputmode="decimal" min="0" max="100" step="0.05" value="8.5" /></div>
+          <input class="tool-range" id="emi-rate-range" type="range" min="0" max="24" step="0.05" value="8.5" aria-label="Interest rate slider" />
+        </div>
+        <div class="tool-inline">
+          <div class="tool-field">
+            <label for="emi-years" data-i18n="tools.emi.years">Tenure (years)</label>
+            <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3.5V7M16 3.5V7M3.5 10h17"/></svg><input id="emi-years" name="years" type="number" inputmode="numeric" min="0" max="40" step="1" value="20" /></div>
+            <input class="tool-range" id="emi-years-range" type="range" min="1" max="40" step="1" value="20" aria-label="Tenure slider" />
+          </div>
+          <div class="tool-field">
+            <label for="emi-months" data-i18n="tools.emi.months">Extra months</label>
+            <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3.5V7M16 3.5V7M3.5 10h17"/></svg><input id="emi-months" name="months" type="number" inputmode="numeric" min="0" max="11" step="1" value="0" /></div>
+          </div>
+        </div>
+        <div class="tool-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="emi-reset" data-i18n="tools.common.reset">Reset</button>
+        </div>
+        <p class="tool-note" data-i18n="tools.common.disclaimer">Estimates only. Not financial advice. Actual bank EMIs may include fees, insurance, or a different compounding convention.</p>
+      </form>
+      <section class="tool-card glass tool-card-out" aria-live="polite">
+        <div class="tool-result-head">
+          <span class="tool-badge hub-icon-emi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1z"/></svg></span>
+          <h2 data-i18n="tools.emi.resultLabel">Monthly EMI</h2>
+        </div>
+        <p class="tool-result-value" id="emi-result">₹0</p>
+        <p class="tool-result-sub" id="emi-result-sub"></p>
+        <div class="tool-viz">
+          <div class="tool-donut-wrap">
+            <svg class="tool-donut" id="emi-donut" viewBox="0 0 120 120" role="img" aria-label="Principal versus interest"></svg>
+            <div class="tool-donut-center">
+              <span data-i18n="tools.common.breakdown">Split</span>
+              <strong id="emi-donut-label">—</strong>
+            </div>
+          </div>
+          <div class="tool-metrics tool-metrics-stack">
+            <div class="tool-metric"><span data-i18n="tools.emi.principal">Principal</span><strong id="emi-principal-out">₹0</strong></div>
+            <div class="tool-metric"><span data-i18n="tools.emi.interest">Total interest</span><strong id="emi-interest">₹0</strong></div>
+            <div class="tool-metric"><span data-i18n="tools.emi.total">Total payment</span><strong id="emi-total">₹0</strong></div>
+          </div>
+        </div>
+        <div class="tool-legend" id="emi-legend"></div>
+        <div class="tool-chart-panel">
+          <h3 data-i18n="tools.emi.chartBalance">Balance over time</h3>
+          <div class="tool-chart-wrap">
+            <svg class="tool-chart" id="emi-chart" viewBox="0 0 360 180" role="img" aria-label="Outstanding balance by year"></svg>
+            <div class="tool-tip" id="emi-tip" hidden></div>
+          </div>
+        </div>
+        <div class="tool-table-wrap">
+          <table class="tool-table" id="emi-schedule">
+            <caption class="nav-menu-cat" data-i18n="tools.emi.schedule">Year-wise amortization</caption>
+            <thead>
+              <tr>
+                <th data-i18n="tools.common.year">Year</th>
+                <th data-i18n="tools.emi.principalPaid">Principal paid</th>
+                <th data-i18n="tools.emi.interestPaid">Interest paid</th>
+                <th data-i18n="tools.emi.balance">Balance</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <section class="tool-prose">
+      <h2 data-i18n="tools.common.how">How this EMI calculator works</h2>
+      <p data-i18n="tools.emi.how1">The reducing-balance formula used by most Indian lenders is <code>EMI = P × r × (1+r)^n / ((1+r)^n − 1)</code>. <code>P</code> is the loan amount, <code>r</code> is the monthly rate (annual rate ÷ 12 ÷ 100), and <code>n</code> is the tenure in months. If the rate is 0%, EMI is simply principal ÷ months.</p>
+      <p data-i18n="tools.emi.how2">Each month, interest is charged on the outstanding principal. The rest of the EMI reduces the balance. That is why early years are interest-heavy and later years are principal-heavy — the table below the result shows that year by year.</p>
+    </section>
+    <section class="tool-faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" data-i18n="tools.common.faq">Frequently asked questions</h2>
+      <details>
+        <summary data-i18n="tools.emi.faq.0.q">What is EMI?</summary>
+        <p data-i18n="tools.emi.faq.0.a">EMI (Equated Monthly Instalment) is the fixed amount you pay every month toward a loan. It includes both principal and interest.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.emi.faq.1.q">How is EMI calculated?</summary>
+        <p data-i18n="tools.emi.faq.1.a">EMI = P × r × (1+r)^n / ((1+r)^n − 1), where P is the loan amount, r is the monthly interest rate, and n is the number of months.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.emi.faq.2.q">Does a shorter tenure reduce interest?</summary>
+        <p data-i18n="tools.emi.faq.2.a">Yes. A shorter tenure raises the monthly EMI but usually cuts total interest because the principal is repaid faster.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.emi.faq.3.q">Is this EMI calculator free?</summary>
+        <p data-i18n="tools.emi.faq.3.a">Yes. This online EMI calculator is free, runs in your browser, and does not store the numbers you enter.</p>
+      </details>
+    </section>
+    <section class="tool-related" aria-labelledby="related-heading">
+      <h2 id="related-heading" data-i18n="tools.common.related">More finance tools</h2>
+      <div class="hub-cards">
+        <a class="hub-card glass hub-card-mini" href="../sip-calculator/"><span class="hub-icon hub-icon-sip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16M6 16l4.2-5.2 3.2 2.6L18 8"/><path d="M15 8h3v3"/></svg></span><strong data-i18n="tools.sip.title">SIP Calculator</strong><span class="hub-go" data-i18n="tools.common.open">Open calculator →</span></a>
+        <a class="hub-card glass hub-card-mini" href="../gst-calculator/"><span class="hub-icon hub-icon-gst" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9.2 13.2h2.2a1.4 1.4 0 0 0 0-2.8H9.8A1.4 1.4 0 0 0 9.8 17h2.2"/><path d="m15.4 11.2-3.6 6.4"/></svg></span><strong data-i18n="tools.gst.title">GST Calculator</strong><span class="hub-go" data-i18n="tools.common.open">Open calculator →</span></a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p><span data-i18n="footer.copy">© {year} Kapil Rana.</span></p>
+      <a href="../../" data-i18n="companyUi.portfolio">Portfolio</a>
+    </div>
+  </footer>
+  <script src="../../js/i18n.js" defer></script>
+  <script src="../../js/tools-data.js" defer></script>
+  <script src="../../js/tools-nav.js" defer></script>
+  <script src="../../js/tools.js" defer></script>
+</body>
+</html>

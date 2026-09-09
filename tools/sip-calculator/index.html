@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <script>window.__LANG=window.__LANG||undefined;window.__I18N_BASE="../../";window.__I18N_KEEP_HEAD=true;window.__TOOL_ID="sip";</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIP Calculator — Mutual Fund SIP Returns & Maturity Value | Kapil Rana</title>
+  <meta name="description" content="Free SIP calculator for India. Estimate invested amount, expected returns, and maturity value of a monthly systematic investment plan." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <link rel="canonical" href="https://kapilrana.dev/tools/sip-calculator/" id="canonical-link" />
+  <link rel="icon" href="../../favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="../../icons/apple-touch-icon.png" />
+  <link rel="manifest" href="../../site.webmanifest" />
+  <meta name="theme-color" content="#050816" id="meta-theme-color" />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SIP Calculator — Mutual Fund SIP Returns & Maturity Value | Kapil Rana" id="og-title" />
+  <meta property="og:description" content="Free SIP calculator for India. Estimate invested amount, expected returns, and maturity value of a monthly systematic investment plan." id="og-description" />
+  <meta property="og:url" content="https://kapilrana.dev/tools/sip-calculator/" id="og-url" />
+  <meta property="og:image" content="https://kapilrana.dev/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SIP Calculator — Mutual Fund SIP Returns & Maturity Value | Kapil Rana" id="twitter-title" />
+  <meta name="twitter:description" content="Free SIP calculator for India. Estimate invested amount, expected returns, and maturity value of a monthly systematic investment plan." id="twitter-description" />
+  <meta name="twitter:image" content="https://kapilrana.dev/assets/og-image.jpg" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="stylesheet" href="../../css/tools.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t !== "light" && t !== "dark") t = "dark";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+    <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "SIP Calculator",
+      "url": "https://kapilrana.dev/tools/sip-calculator/",
+      "description": "Estimate future value of a monthly SIP using expected annual returns.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Kapil Rana",
+        "url": "https://kapilrana.dev/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://kapilrana.dev/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://kapilrana.dev/tools/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "SIP Calculator",
+          "item": "https://kapilrana.dev/tools/sip-calculator/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a SIP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Systematic Investment Plan (SIP) invests a fixed amount at regular intervals — usually monthly — into a mutual fund."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is SIP maturity calculated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Future value = M × [((1+i)^n − 1) / i] × (1+i), where M is the monthly investment, i is the monthly expected return, and n is the number of months."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are SIP returns guaranteed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The expected return is an assumption. Actual mutual-fund returns vary with markets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "SIP vs lump sum — which is better?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SIP spreads purchases over time and can reduce timing risk. A lump sum may earn more if invested just before a long uptrend. This calculator models a monthly SIP only."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body class="tools-page">
+  <a class="skip-link" href="#main-content" data-i18n="nav.skip">Skip to main content</a>
+  <div class="tool-ambient" aria-hidden="true">
+    <span class="tool-orb tool-orb-a"></span>
+    <span class="tool-orb tool-orb-b"></span>
+    <span class="tool-orb tool-orb-c"></span>
+  </div>
+  <header class="nav" id="nav" role="banner">
+    <a class="nav-logo" href="../../" aria-label="Kapil Rana — home" data-i18n-aria="nav.home">
+      <span class="logo-mark" aria-hidden="true">KR</span>
+      <span class="logo-text">Kapil Rana</span>
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
+      <div class="nav-item has-menu" id="nav-tools">
+        <button type="button" class="nav-menu-btn" id="nav-tools-btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-tools-panel" data-i18n="nav.tools">Tools</button>
+        <div class="nav-menu" id="nav-tools-panel" hidden>
+          <p class="nav-menu-cat" data-i18n="tools.categories.finance.title">Finance</p>
+          <a href="../emi-calculator/" data-tool="emi" data-i18n="tools.emi.nav">EMI Calculator</a>
+          <a href="./" data-tool="sip" data-i18n="tools.sip.nav">SIP Calculator</a>
+          <a href="../gst-calculator/" data-tool="gst" data-i18n="tools.gst.nav">GST Calculator</a>
+          <a href="../" class="nav-menu-all" data-tool="hub" data-i18n="nav.allTools">All tools</a>
+        </div>
+      </div>
+      <a href="../../" data-i18n="companyUi.portfolio">Portfolio</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang-switcher" id="lang-switcher"></div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle theme">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 14.5A8.5 8.5 0 1110.5 3a7 7 0 0010.5 11.5z"/>
+        </svg>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+  <main class="tool-main" id="main-content" tabindex="-1">
+    <nav class="tool-crumb" aria-label="Breadcrumb">
+      <a href="../../" data-i18n="tools.common.home">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="../" data-i18n="nav.tools">Tools</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page" data-i18n="tools.sip.nav">SIP Calculator</span>
+    </nav>
+    <header class="tool-hero">
+      <span class="tool-hero-icon hub-icon-sip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16M6 16l4.2-5.2 3.2 2.6L18 8"/><path d="M15 8h3v3"/></svg></span>
+      <p class="tool-kicker" data-i18n="tools.categories.finance.title">Finance</p>
+      <h1 data-i18n="tools.sip.title">SIP Calculator</h1>
+      <p class="tool-lead" data-i18n="tools.sip.lead">Project the maturity value of a monthly systematic investment plan. Enter the instalment, expected annual return, and duration to see invested capital versus estimated gains.</p>
+    </header>
+    <div class="tool-grid">
+      <form class="tool-card glass tool-card-in" id="sip-form" onsubmit="return false;">
+        <h2 data-i18n="tools.common.inputs">Inputs</h2>
+        <div class="tool-field">
+          <label for="sip-amount" data-i18n="tools.sip.amount">Monthly investment (₹)</label>
+          <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 6h10M7 10h10M7 6c4.5 0 7 2 7 5.5S13 17 7 17M11 21 7 17"/></svg><input id="sip-amount" name="amount" type="number" inputmode="decimal" min="0" step="500" value="10000" /></div>
+          <input class="tool-range" id="sip-amount-range" type="range" min="500" max="200000" step="500" value="10000" aria-label="Monthly investment slider" />
+        </div>
+        <div class="tool-field">
+          <label for="sip-rate" data-i18n="tools.sip.rate">Expected return (% p.a.)</label>
+          <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="m18 6-12 12"/></svg><input id="sip-rate" name="rate" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="12" /></div>
+          <input class="tool-range" id="sip-rate-range" type="range" min="1" max="30" step="0.1" value="12" aria-label="Expected return slider" />
+        </div>
+        <div class="tool-field">
+          <label for="sip-years" data-i18n="tools.sip.years">Duration (years)</label>
+          <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3.5V7M16 3.5V7M3.5 10h17"/></svg><input id="sip-years" name="years" type="number" inputmode="numeric" min="1" max="50" step="1" value="15" /></div>
+          <input class="tool-range" id="sip-years-range" type="range" min="1" max="40" step="1" value="15" aria-label="Duration slider" />
+        </div>
+        <div class="tool-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="sip-reset" data-i18n="tools.common.reset">Reset</button>
+        </div>
+        <p class="tool-note" data-i18n="tools.common.disclaimer">Estimates only. Not financial advice. Mutual-fund returns are not guaranteed and ignore expense ratios, exit loads, and taxes.</p>
+      </form>
+      <section class="tool-card glass tool-card-out" aria-live="polite">
+        <div class="tool-result-head">
+          <span class="tool-badge hub-icon-sip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16M6 16l4.2-5.2 3.2 2.6L18 8"/><path d="M15 8h3v3"/></svg></span>
+          <h2 data-i18n="tools.sip.resultLabel">Estimated value</h2>
+        </div>
+        <p class="tool-result-value" id="sip-value">₹0</p>
+        <p class="tool-result-sub" id="sip-result-sub"></p>
+        <div class="tool-viz">
+          <div class="tool-donut-wrap">
+            <svg class="tool-donut" id="sip-donut" viewBox="0 0 120 120" role="img" aria-label="Invested versus returns"></svg>
+            <div class="tool-donut-center">
+              <span data-i18n="tools.common.breakdown">Split</span>
+              <strong id="sip-donut-label">—</strong>
+            </div>
+          </div>
+          <div class="tool-metrics tool-metrics-stack">
+            <div class="tool-metric"><span data-i18n="tools.sip.invested">Amount invested</span><strong id="sip-invested">₹0</strong></div>
+            <div class="tool-metric"><span data-i18n="tools.sip.gain">Est. returns</span><strong id="sip-gain">₹0</strong></div>
+          </div>
+        </div>
+        <div class="tool-legend" id="sip-legend"></div>
+        <div class="tool-chart-panel">
+          <h3 data-i18n="tools.sip.chartGrowth">Wealth growth</h3>
+          <div class="tool-chart-wrap">
+            <svg class="tool-chart" id="sip-chart" viewBox="0 0 360 180" role="img" aria-label="Invested and value by year"></svg>
+            <div class="tool-tip" id="sip-tip" hidden></div>
+          </div>
+        </div>
+        <div class="tool-table-wrap">
+          <table class="tool-table" id="sip-schedule">
+            <caption class="nav-menu-cat" data-i18n="tools.sip.schedule">Year-wise projection</caption>
+            <thead>
+              <tr>
+                <th data-i18n="tools.common.year">Year</th>
+                <th data-i18n="tools.sip.invested">Invested</th>
+                <th data-i18n="tools.sip.gain">Returns</th>
+                <th data-i18n="tools.sip.resultLabel">Value</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <section class="tool-prose">
+      <h2 data-i18n="tools.common.how">How this SIP calculator works</h2>
+      <p data-i18n="tools.sip.how1">This uses the standard beginning-of-period SIP formula: <code>FV = M × [((1+i)^n − 1) / i] × (1+i)</code>. <code>M</code> is the monthly instalment, <code>i</code> is the monthly expected return, and <code>n</code> is the number of months. A 12% annual assumption becomes 1% per month.</p>
+      <p data-i18n="tools.sip.how2">The invested amount is simply instalment × months. Estimated returns are future value minus invested amount. Markets do not compound in a straight line — treat the chart as a planning range, not a promise.</p>
+    </section>
+    <section class="tool-faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" data-i18n="tools.common.faq">Frequently asked questions</h2>
+      <details>
+        <summary data-i18n="tools.sip.faq.0.q">What is a SIP?</summary>
+        <p data-i18n="tools.sip.faq.0.a">A Systematic Investment Plan (SIP) invests a fixed amount at regular intervals — usually monthly — into a mutual fund.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.sip.faq.1.q">How is SIP maturity calculated?</summary>
+        <p data-i18n="tools.sip.faq.1.a">Future value = M × [((1+i)^n − 1) / i] × (1+i), where M is the monthly investment, i is the monthly expected return, and n is the number of months.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.sip.faq.2.q">Are SIP returns guaranteed?</summary>
+        <p data-i18n="tools.sip.faq.2.a">No. The expected return is an assumption. Actual mutual-fund returns vary with markets.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.sip.faq.3.q">SIP vs lump sum — which is better?</summary>
+        <p data-i18n="tools.sip.faq.3.a">SIP spreads purchases over time and can reduce timing risk. A lump sum may earn more if invested just before a long uptrend. This calculator models a monthly SIP only.</p>
+      </details>
+    </section>
+    <section class="tool-related" aria-labelledby="related-heading">
+      <h2 id="related-heading" data-i18n="tools.common.related">More finance tools</h2>
+      <div class="hub-cards">
+        <a class="hub-card glass hub-card-mini" href="../emi-calculator/"><span class="hub-icon hub-icon-emi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1z"/></svg></span><strong data-i18n="tools.emi.title">EMI Calculator</strong><span class="hub-go" data-i18n="tools.common.open">Open calculator →</span></a>
+        <a class="hub-card glass hub-card-mini" href="../gst-calculator/"><span class="hub-icon hub-icon-gst" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9.2 13.2h2.2a1.4 1.4 0 0 0 0-2.8H9.8A1.4 1.4 0 0 0 9.8 17h2.2"/><path d="m15.4 11.2-3.6 6.4"/></svg></span><strong data-i18n="tools.gst.title">GST Calculator</strong><span class="hub-go" data-i18n="tools.common.open">Open calculator →</span></a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p><span data-i18n="footer.copy">© {year} Kapil Rana.</span></p>
+      <a href="../../" data-i18n="companyUi.portfolio">Portfolio</a>
+    </div>
+  </footer>
+  <script src="../../js/i18n.js" defer></script>
+  <script src="../../js/tools-data.js" defer></script>
+  <script src="../../js/tools-nav.js" defer></script>
+  <script src="../../js/tools.js" defer></script>
+</body>
+</html>

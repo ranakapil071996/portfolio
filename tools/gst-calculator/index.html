@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <script>window.__LANG=window.__LANG||undefined;window.__I18N_BASE="../../";window.__I18N_KEEP_HEAD=true;window.__TOOL_ID="gst";</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GST Calculator — Add or Remove GST (CGST, SGST, IGST) | Kapil Rana</title>
+  <meta name="description" content="Free India GST calculator. Add or remove 5%, 12%, 18%, or 28% GST. Split CGST/SGST for intra-state supply or apply IGST for inter-state." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <link rel="canonical" href="https://kapilrana.dev/tools/gst-calculator/" id="canonical-link" />
+  <link rel="icon" href="../../favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="../../icons/apple-touch-icon.png" />
+  <link rel="manifest" href="../../site.webmanifest" />
+  <meta name="theme-color" content="#050816" id="meta-theme-color" />
+  <meta name="color-scheme" content="dark light" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="GST Calculator — Add or Remove GST (CGST, SGST, IGST) | Kapil Rana" id="og-title" />
+  <meta property="og:description" content="Free India GST calculator. Add or remove 5%, 12%, 18%, or 28% GST. Split CGST/SGST for intra-state supply or apply IGST for inter-state." id="og-description" />
+  <meta property="og:url" content="https://kapilrana.dev/tools/gst-calculator/" id="og-url" />
+  <meta property="og:image" content="https://kapilrana.dev/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GST Calculator — Add or Remove GST (CGST, SGST, IGST) | Kapil Rana" id="twitter-title" />
+  <meta name="twitter:description" content="Free India GST calculator. Add or remove 5%, 12%, 18%, or 28% GST. Split CGST/SGST for intra-state supply or apply IGST for inter-state." id="twitter-description" />
+  <meta name="twitter:image" content="https://kapilrana.dev/assets/og-image.jpg" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="stylesheet" href="../../css/tools.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t !== "light" && t !== "dark") t = "dark";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+    <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "GST Calculator",
+      "url": "https://kapilrana.dev/tools/gst-calculator/",
+      "description": "Add or remove Indian GST and split CGST/SGST or IGST.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Kapil Rana",
+        "url": "https://kapilrana.dev/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://kapilrana.dev/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tools",
+          "item": "https://kapilrana.dev/tools/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "GST Calculator",
+          "item": "https://kapilrana.dev/tools/gst-calculator/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is GST?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Goods and Services Tax is India’s destination-based indirect tax. Most goods and services fall under 0%, 5%, 12%, 18%, or 28%."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between exclusive and inclusive GST?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Exclusive adds GST on top of a base price. Inclusive extracts GST from a price that already contains tax: base = amount / (1 + rate/100)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "CGST + SGST vs IGST?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Intra-state supply splits GST equally into CGST and SGST. Inter-state supply uses a single IGST amount equal to the full GST."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this GST calculator file returns?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It only estimates tax on a given amount. Use it to check invoices — it is not a substitute for GST filing software or a tax advisor."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body class="tools-page">
+  <a class="skip-link" href="#main-content" data-i18n="nav.skip">Skip to main content</a>
+  <div class="tool-ambient" aria-hidden="true">
+    <span class="tool-orb tool-orb-a"></span>
+    <span class="tool-orb tool-orb-b"></span>
+    <span class="tool-orb tool-orb-c"></span>
+  </div>
+  <header class="nav" id="nav" role="banner">
+    <a class="nav-logo" href="../../" aria-label="Kapil Rana — home" data-i18n-aria="nav.home">
+      <span class="logo-mark" aria-hidden="true">KR</span>
+      <span class="logo-text">Kapil Rana</span>
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
+      <div class="nav-item has-menu" id="nav-tools">
+        <button type="button" class="nav-menu-btn" id="nav-tools-btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-tools-panel" data-i18n="nav.tools">Tools</button>
+        <div class="nav-menu" id="nav-tools-panel" hidden>
+          <p class="nav-menu-cat" data-i18n="tools.categories.finance.title">Finance</p>
+          <a href="../emi-calculator/" data-tool="emi" data-i18n="tools.emi.nav">EMI Calculator</a>
+          <a href="../sip-calculator/" data-tool="sip" data-i18n="tools.sip.nav">SIP Calculator</a>
+          <a href="./" data-tool="gst" data-i18n="tools.gst.nav">GST Calculator</a>
+          <a href="../" class="nav-menu-all" data-tool="hub" data-i18n="nav.allTools">All tools</a>
+        </div>
+      </div>
+      <a href="../../" data-i18n="companyUi.portfolio">Portfolio</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="lang-switcher" id="lang-switcher"></div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle theme">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 14.5A8.5 8.5 0 1110.5 3a7 7 0 0010.5 11.5z"/>
+        </svg>
+      </button>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+  <main class="tool-main" id="main-content" tabindex="-1">
+    <nav class="tool-crumb" aria-label="Breadcrumb">
+      <a href="../../" data-i18n="tools.common.home">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="../" data-i18n="nav.tools">Tools</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page" data-i18n="tools.gst.nav">GST Calculator</span>
+    </nav>
+    <header class="tool-hero">
+      <span class="tool-hero-icon hub-icon-gst" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9.2 13.2h2.2a1.4 1.4 0 0 0 0-2.8H9.8A1.4 1.4 0 0 0 9.8 17h2.2"/><path d="m15.4 11.2-3.6 6.4"/></svg></span>
+      <p class="tool-kicker" data-i18n="tools.categories.finance.title">Finance</p>
+      <h1 data-i18n="tools.gst.title">GST Calculator</h1>
+      <p class="tool-lead" data-i18n="tools.gst.lead">Add GST to a base price or extract tax from an inclusive amount. Use official slabs (0, 5, 12, 18, 28%) and split the tax as CGST + SGST or a single IGST line.</p>
+    </header>
+    <div class="tool-grid">
+      <form class="tool-card glass tool-card-in" id="gst-form" onsubmit="return false;">
+        <h2 data-i18n="tools.common.inputs">Inputs</h2>
+        <div class="tool-field">
+          <label for="gst-amount" data-i18n="tools.gst.amount">Amount (₹)</label>
+          <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 6h10M7 10h10M7 6c4.5 0 7 2 7 5.5S13 17 7 17M11 21 7 17"/></svg><input id="gst-amount" name="amount" type="number" inputmode="decimal" min="0" step="1" value="10000" /></div>
+        </div>
+        <div class="tool-field">
+          <span data-i18n="tools.gst.mode">Price type</span>
+          <div class="tool-toggle" role="group" aria-label="Price type">
+            <button type="button" class="tool-chip" data-gst-mode="exc" aria-pressed="true" data-i18n="tools.gst.exclusive">Exclusive (add GST)</button>
+            <button type="button" class="tool-chip" data-gst-mode="inc" aria-pressed="false" data-i18n="tools.gst.inclusive">Inclusive (remove GST)</button>
+          </div>
+        </div>
+        <div class="tool-field">
+          <label for="gst-rate" data-i18n="tools.gst.rate">GST rate (%)</label>
+          <div class="tool-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="m18 6-12 12"/></svg><input id="gst-rate" name="rate" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="18" /></div>
+          <div class="tool-chips" role="group" aria-label="GST slabs">
+            <button type="button" class="tool-chip" data-gst-rate="0">0%</button>
+            <button type="button" class="tool-chip" data-gst-rate="5">5%</button>
+            <button type="button" class="tool-chip" data-gst-rate="12">12%</button>
+            <button type="button" class="tool-chip" data-gst-rate="18">18%</button>
+            <button type="button" class="tool-chip" data-gst-rate="28">28%</button>
+          </div>
+        </div>
+        <div class="tool-field">
+          <span data-i18n="tools.gst.split">Supply type</span>
+          <div class="tool-toggle" role="group" aria-label="Supply type">
+            <button type="button" class="tool-chip" data-gst-split="intra" aria-pressed="true" data-i18n="tools.gst.intra">Intra-state (CGST + SGST)</button>
+            <button type="button" class="tool-chip" data-gst-split="igst" aria-pressed="false" data-i18n="tools.gst.inter">Inter-state (IGST)</button>
+          </div>
+        </div>
+        <div class="tool-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="gst-reset" data-i18n="tools.common.reset">Reset</button>
+        </div>
+        <p class="tool-note" data-i18n="tools.common.disclaimer">Estimates only. Not tax advice. Cess, exemptions, and place-of-supply rules can change the tax on a real invoice.</p>
+      </form>
+      <section class="tool-card glass tool-card-out" aria-live="polite">
+        <div class="tool-result-head">
+          <span class="tool-badge hub-icon-gst" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9.2 13.2h2.2a1.4 1.4 0 0 0 0-2.8H9.8A1.4 1.4 0 0 0 9.8 17h2.2"/><path d="m15.4 11.2-3.6 6.4"/></svg></span>
+          <h2 data-i18n="tools.gst.resultLabel">Tax breakdown</h2>
+        </div>
+        <p class="tool-result-value" id="gst-total">₹0</p>
+        <p class="tool-result-sub" id="gst-result-sub"></p>
+        <div class="tool-viz">
+          <div class="tool-donut-wrap">
+            <svg class="tool-donut" id="gst-donut" viewBox="0 0 120 120" role="img" aria-label="Tax versus taxable value"></svg>
+            <div class="tool-donut-center">
+              <span data-i18n="tools.common.breakdown">Split</span>
+              <strong id="gst-donut-label">—</strong>
+            </div>
+          </div>
+          <div class="tool-metrics tool-metrics-stack">
+            <div class="tool-metric"><span data-i18n="tools.gst.base">Taxable value</span><strong id="gst-base">₹0</strong></div>
+            <div class="tool-metric"><span data-i18n="tools.gst.tax">GST amount</span><strong id="gst-tax">₹0</strong></div>
+          </div>
+        </div>
+        <div class="tool-legend" id="gst-legend"></div>
+        <div id="gst-split-intra" class="tool-metrics">
+          <div class="tool-metric"><span>CGST</span><strong id="gst-cgst">₹0</strong></div>
+          <div class="tool-metric"><span>SGST / UTGST</span><strong id="gst-sgst">₹0</strong></div>
+        </div>
+        <div id="gst-split-inter" class="tool-metrics" hidden>
+          <div class="tool-metric"><span>IGST</span><strong id="gst-igst">₹0</strong></div>
+        </div>
+        <div class="tool-chart-panel">
+          <h3 data-i18n="tools.gst.chartSplit">Invoice stack</h3>
+          <div class="tool-chart-wrap">
+            <svg class="tool-chart" id="gst-chart" viewBox="0 0 360 120" role="img" aria-label="Invoice amount stack"></svg>
+          </div>
+        </div>
+      </section>
+    </div>
+    <section class="tool-prose">
+      <h2 data-i18n="tools.common.how">How this GST calculator works</h2>
+      <p data-i18n="tools.gst.how1">Exclusive GST: <code>tax = amount × rate / 100</code>, <code>total = amount + tax</code>. Inclusive GST: <code>base = amount / (1 + rate/100)</code>, <code>tax = amount − base</code>. Intra-state supply splits tax 50/50 into CGST and SGST. Inter-state supply shows the same tax as IGST.</p>
+      <p data-i18n="tools.gst.how2">Common slabs in India are 0%, 5%, 12%, 18%, and 28%. Some goods also attract compensation cess — this calculator does not add cess. Confirm the HSN/SAC rate before you issue or pay an invoice.</p>
+    </section>
+    <section class="tool-faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" data-i18n="tools.common.faq">Frequently asked questions</h2>
+      <details>
+        <summary data-i18n="tools.gst.faq.0.q">What is GST?</summary>
+        <p data-i18n="tools.gst.faq.0.a">Goods and Services Tax is India’s destination-based indirect tax. Most goods and services fall under 0%, 5%, 12%, 18%, or 28%.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.gst.faq.1.q">What is the difference between exclusive and inclusive GST?</summary>
+        <p data-i18n="tools.gst.faq.1.a">Exclusive adds GST on top of a base price. Inclusive extracts GST from a price that already contains tax: base = amount / (1 + rate/100).</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.gst.faq.2.q">CGST + SGST vs IGST?</summary>
+        <p data-i18n="tools.gst.faq.2.a">Intra-state supply splits GST equally into CGST and SGST. Inter-state supply uses a single IGST amount equal to the full GST.</p>
+      </details>
+      <details>
+        <summary data-i18n="tools.gst.faq.3.q">Does this GST calculator file returns?</summary>
+        <p data-i18n="tools.gst.faq.3.a">No. It only estimates tax on a given amount. Use it to check invoices — it is not a substitute for GST filing software or a tax advisor.</p>
+      </details>
+    </section>
+    <section class="tool-related" aria-labelledby="related-heading">
+      <h2 id="related-heading" data-i18n="tools.common.related">More finance tools</h2>
+      <div class="hub-cards">
+        <a class="hub-card glass hub-card-mini" href="../emi-calculator/"><span class="hub-icon hub-icon-emi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1z"/></svg></span><strong data-i18n="tools.emi.title">EMI Calculator</strong><span class="hub-go" data-i18n="tools.common.open">Open calculator →</span></a>
+        <a class="hub-card glass hub-card-mini" href="../sip-calculator/"><span class="hub-icon hub-icon-sip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16M6 16l4.2-5.2 3.2 2.6L18 8"/><path d="M15 8h3v3"/></svg></span><strong data-i18n="tools.sip.title">SIP Calculator</strong><span class="hub-go" data-i18n="tools.common.open">Open calculator →</span></a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p><span data-i18n="footer.copy">© {year} Kapil Rana.</span></p>
+      <a href="../../" data-i18n="companyUi.portfolio">Portfolio</a>
+    </div>
+  </footer>
+  <script src="../../js/i18n.js" defer></script>
+  <script src="../../js/tools-data.js" defer></script>
+  <script src="../../js/tools-nav.js" defer></script>
+  <script src="../../js/tools.js" defer></script>
+</body>
+</html>

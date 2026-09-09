@@ -191,6 +191,16 @@
       <a href="#about" data-i18n="nav.about">About</a>
       <a href="#experience" data-i18n="nav.experience">Experience</a>
       <a href="#skills" data-i18n="nav.skills">Skills</a>
+      <div class="nav-item has-menu" id="nav-tools">
+        <button type="button" class="nav-menu-btn" id="nav-tools-btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-tools-panel" data-i18n="nav.tools">Tools</button>
+        <div class="nav-menu" id="nav-tools-panel" hidden>
+          <p class="nav-menu-cat" data-i18n="tools.categories.finance.title">Finance</p>
+          <a href="tools/emi-calculator/" data-tool="emi" data-i18n="tools.emi.nav">EMI Calculator</a>
+          <a href="tools/sip-calculator/" data-tool="sip" data-i18n="tools.sip.nav">SIP Calculator</a>
+          <a href="tools/gst-calculator/" data-tool="gst" data-i18n="tools.gst.nav">GST Calculator</a>
+          <a href="tools/" class="nav-menu-all" data-tool="hub" data-i18n="nav.allTools">All tools</a>
+        </div>
+      </div>
       <a href="for/" data-i18n="nav.forCompanies">For companies</a>
       <a href="#education" data-i18n="nav.education">Education</a>
       <a href="#contact" data-i18n="nav.contact">Contact</a>
@@ -438,6 +448,7 @@
   <script src="js/resume-content.js" defer></script>
   <script src="js/resume-render.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/tools-nav.js" defer></script>
   <script src="js/perf-loader.js" defer></script>
 </body>
 </html>

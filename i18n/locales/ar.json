@@ -46,7 +46,9 @@
     "themeLight": "الوضع الفاتح",
     "themeDark": "الوضع الداكن",
     "skip": "تخطّي إلى المحتوى",
-    "lang": "اللغة"
+    "lang": "اللغة",
+    "tools": "أدوات",
+    "allTools": "كل الأدوات"
   },
   "hero": {
     "eyebrow": "منفتح على فرص ذات أثر",
@@ -409,5 +411,155 @@
   },
   "ui": {
     "emailCopied": "تم نسخ البريد إلى الحافظة"
+  },
+  "tools": {
+    "hub": {
+      "kicker": "حاسبات مجانية",
+      "title": "أدوات مالية",
+      "lead": "حاسبات سريعة للقروض والاستثمار وضريبة GST. كل شيء يعمل في المتصفح.",
+      "whyTitle": "لماذا هذه الحاسبات",
+      "why": "نستخدم الصيغ القياسية نفسها التي تنشرها البنوك ومنصات الصناديق. تبقى المدخلات على جهازك.",
+      "metaTitle": "أدوات مالية مجانية — حاسبات EMI وSIP وGST | Kapil Rana",
+      "metaDescription": "حاسبات مجانية: قسط القرض EMI، خطة SIP، وضريبة GST في الهند. بدون تسجيل.",
+      "ogTitle": "أدوات مالية — EMI وSIP وGST",
+      "ogDescription": "احسب قسط القرض وقيمة SIP وضريبة GST في المتصفح."
+    },
+    "categories": {
+      "finance": {
+        "title": "المالية",
+        "blurb": "قسط القرض وSIP وضريبة GST الهندية."
+      }
+    },
+    "common": {
+      "home": "الرئيسية",
+      "open": "افتح الحاسبة →",
+      "inputs": "المدخلات",
+      "reset": "إعادة تعيين",
+      "faq": "أسئلة شائعة",
+      "how": "كيف تعمل هذه الحاسبة",
+      "disclaimer": "تقديرات فقط. ليست نصيحة مالية.",
+      "related": "المزيد من الأدوات المالية",
+      "year": "السنة"
+    },
+    "emi": {
+      "nav": "حاسبة EMI",
+      "title": "حاسبة EMI",
+      "card": "القسط الشهري وإجمالي الفائدة وجدول السداد السنوي.",
+      "lead": "احسب القسط الشهري المتساوي لقرض سكني أو سيارة أو شخصي.",
+      "amount": "مبلغ القرض (₹)",
+      "rate": "سعر الفائدة (% سنويًا)",
+      "years": "المدة (سنوات)",
+      "months": "أشهر إضافية",
+      "resultLabel": "قسط EMI الشهري",
+      "principal": "أصل القرض",
+      "interest": "إجمالي الفائدة",
+      "total": "إجمالي السداد",
+      "schedule": "جدول السداد السنوي",
+      "principalPaid": "الأصل المسدد",
+      "interestPaid": "الفائدة المسددة",
+      "balance": "الرصيد",
+      "how1": "The reducing-balance formula used by most Indian lenders is EMI = P × r × (1+r)^n / ((1+r)^n − 1). P is the loan amount, r is the monthly rate (annual rate ÷ 12 ÷ 100), and n is the tenure in months. If the rate is 0%, EMI is simply principal ÷ months.",
+      "how2": "Each month, interest is charged on the outstanding principal. The rest of the EMI reduces the balance. That is why early years are interest-heavy and later years are principal-heavy — the table below the result shows that year by year.",
+      "metaTitle": "حاسبة EMI — القسط الشهري والفائدة وجدول السداد | Kapil Rana",
+      "metaDescription": "حاسبة EMI مجانية لقروض الهند. القسط الشهري وإجمالي الفائدة وجدول سنوي.",
+      "ogTitle": "حاسبة EMI — القسط الشهري",
+      "ogDescription": "احسب EMI والفائدة وجدول السداد.",
+      "faq": {
+        "0": {
+          "q": "ما هو EMI؟",
+          "a": "EMI هو المبلغ الثابت الذي تدفعه كل شهر للقرض، ويشمل الأصل والفائدة."
+        },
+        "1": {
+          "q": "كيف يُحسب EMI؟",
+          "a": "EMI = P × r × (1+r)^n / ((1+r)^n − 1)."
+        },
+        "2": {
+          "q": "هل المدة الأقصر تقلل الفائدة؟",
+          "a": "نعم. يرتفع القسط الشهري لكن الأصل يُسدَّد أسرع فتنخفض الفائدة الإجمالية عادة."
+        },
+        "3": {
+          "q": "هل الحاسبة مجانية؟",
+          "a": "نعم. تعمل في المتصفح ولا تخزن أرقامك."
+        }
+      }
+    },
+    "sip": {
+      "nav": "حاسبة SIP",
+      "title": "حاسبة SIP",
+      "card": "قدّر القيمة المستقبلية لخطة استثمار شهرية.",
+      "lead": "اسقط قيمة استحقاق خطة الاستثمار المنتظم الشهرية.",
+      "amount": "الاستثمار الشهري (₹)",
+      "rate": "العائد المتوقع (% سنويًا)",
+      "years": "المدة (سنوات)",
+      "resultLabel": "القيمة التقديرية",
+      "invested": "المبلغ المستثمر",
+      "gain": "العائد التقديري",
+      "schedule": "الإسقاط السنوي",
+      "how1": "This uses the standard beginning-of-period SIP formula: FV = M × [((1+i)^n − 1) / i] × (1+i). M is the monthly instalment, i is the monthly expected return, and n is the number of months. A 12% annual assumption becomes 1% per month.",
+      "how2": "The invested amount is simply instalment × months. Estimated returns are future value minus invested amount. Markets do not compound in a straight line — treat the chart as a planning range, not a promise.",
+      "metaTitle": "حاسبة SIP — عوائد الصناديق وقيمة الاستحقاق | Kapil Rana",
+      "metaDescription": "حاسبة SIP مجانية. المبلغ المستثمر والعائد المتوقع وقيمة الاستحقاق.",
+      "ogTitle": "حاسبة SIP — قيمة الاستحقاق",
+      "ogDescription": "قدّر رأس المال والعائد والقيمة المستقبلية لـ SIP.",
+      "faq": {
+        "0": {
+          "q": "ما هو SIP؟",
+          "a": "خطة الاستثمار المنتظم تستثمر مبلغًا ثابتًا على فترات منتظمة، غالبًا شهريًا، في صندوق."
+        },
+        "1": {
+          "q": "كيف تُحسب قيمة الاستحقاق؟",
+          "a": "القيمة المستقبلية = M × [((1+i)^n − 1) / i] × (1+i)."
+        },
+        "2": {
+          "q": "هل عوائد SIP مضمونة؟",
+          "a": "لا. العائد المتوقع افتراض. عوائد الصناديق تتغير مع الأسواق."
+        },
+        "3": {
+          "q": "SIP أم دفعة واحدة؟",
+          "a": "SIP يوزّع الشراء عبر الزمن. هذه الحاسبة تمثّل SIP شهريًا فقط."
+        }
+      }
+    },
+    "gst": {
+      "nav": "حاسبة GST",
+      "title": "حاسبة GST",
+      "card": "أضف أو أزل GST بنسبة 5% أو 12% أو 18% أو 28%.",
+      "lead": "أضف GST إلى سعر أساسي أو استخرجه من مبلغ شامل للضريبة.",
+      "amount": "المبلغ (₹)",
+      "mode": "نوع السعر",
+      "exclusive": "غير شامل (إضافة GST)",
+      "inclusive": "شامل (إزالة GST)",
+      "rate": "نسبة GST (%)",
+      "split": "نوع التوريد",
+      "intra": "داخل الولاية (CGST + SGST)",
+      "inter": "بين الولايات (IGST)",
+      "resultLabel": "تفصيل الضريبة",
+      "base": "القيمة الخاضعة",
+      "tax": "مبلغ GST",
+      "how1": "Exclusive GST: tax = amount × rate / 100, total = amount + tax. Inclusive GST: base = amount / (1 + rate/100), tax = amount − base. Intra-state supply splits tax 50/50 into CGST and SGST. Inter-state supply shows the same tax as IGST.",
+      "how2": "Common slabs in India are 0%, 5%, 12%, 18%, and 28%. Some goods also attract compensation cess — this calculator does not add cess. Confirm the HSN/SAC rate before you issue or pay an invoice.",
+      "metaTitle": "حاسبة GST — إضافة أو إزالة الضريبة | Kapil Rana",
+      "metaDescription": "حاسبة GST للهند. أضف أو أزل 5–28%. CGST/SGST أو IGST.",
+      "ogTitle": "حاسبة GST — CGST وSGST وIGST",
+      "ogDescription": "أضف أو أزل ضريبة GST الهندية.",
+      "faq": {
+        "0": {
+          "q": "ما هي GST؟",
+          "a": "ضريبة السلع والخدمات هي الضريبة غير المباشرة في الهند. الشرائح الشائعة 0 و5 و12 و18 و28%."
+        },
+        "1": {
+          "q": "غير شامل مقابل شامل؟",
+          "a": "غير الشامل يضيف الضريبة. الشامل يستخرجها: الأساس = المبلغ / (1 + النسبة/100)."
+        },
+        "2": {
+          "q": "CGST + SGST مقابل IGST؟",
+          "a": "داخل الولاية تُقسم الضريبة مناصفة. بين الولايات تُعرض كاملة كـ IGST."
+        },
+        "3": {
+          "q": "هل تقدّم الإقرارات؟",
+          "a": "لا. تقدّر الضريبة فقط وليست بديلاً عن برامج التقديم."
+        }
+      }
+    }
   }
 }

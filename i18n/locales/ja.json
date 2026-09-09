@@ -46,7 +46,9 @@
     "themeLight": "ライトモード",
     "themeDark": "ダークモード",
     "skip": "メインコンテンツへ",
-    "lang": "言語"
+    "lang": "言語",
+    "tools": "ツール",
+    "allTools": "すべてのツール"
   },
   "hero": {
     "eyebrow": "インパクトのある機会を歓迎",
@@ -409,5 +411,155 @@
   },
   "ui": {
     "emailCopied": "メールアドレスをコピーしました"
+  },
+  "tools": {
+    "hub": {
+      "kicker": "無料電卓",
+      "title": "ファイナンスツール",
+      "lead": "ローン、投資、GST向けの高速電卓。すべてブラウザ内で動作します。",
+      "whyTitle": "これらの電卓について",
+      "why": "銀行や投信プラットフォームと同じ標準式を使います。入力は端末内に留まります。",
+      "metaTitle": "無料ファイナンスツール — EMI・SIP・GST電卓 | Kapil Rana",
+      "metaDescription": "無料のオンライン電卓。住宅ローンEMI、投信SIP、インドGST。登録不要。",
+      "ogTitle": "ファイナンスツール — EMI、SIP、GST",
+      "ogDescription": "ブラウザでEMI、SIP満期、GSTを計算。"
+    },
+    "categories": {
+      "finance": {
+        "title": "ファイナンス",
+        "blurb": "ローンEMI、SIP試算、インドGST。"
+      }
+    },
+    "common": {
+      "home": "ホーム",
+      "open": "電卓を開く →",
+      "inputs": "入力",
+      "reset": "リセット",
+      "faq": "よくある質問",
+      "how": "この電卓の仕組み",
+      "disclaimer": "概算です。投資助言ではありません。",
+      "related": "その他のファイナンスツール",
+      "year": "年"
+    },
+    "emi": {
+      "nav": "EMI電卓",
+      "title": "EMI電卓",
+      "card": "住宅・自動車・フリーローンの月額、総利息、年次返済表。",
+      "lead": "住宅ローン、自動車ローン、フリーローンの毎月返済額を計算します。",
+      "amount": "借入額（₹）",
+      "rate": "金利（年率%）",
+      "years": "期間（年）",
+      "months": "追加月数",
+      "resultLabel": "月々のEMI",
+      "principal": "元本",
+      "interest": "総利息",
+      "total": "総支払額",
+      "schedule": "年次返済表",
+      "principalPaid": "返済元本",
+      "interestPaid": "支払利息",
+      "balance": "残高",
+      "how1": "The reducing-balance formula used by most Indian lenders is EMI = P × r × (1+r)^n / ((1+r)^n − 1). P is the loan amount, r is the monthly rate (annual rate ÷ 12 ÷ 100), and n is the tenure in months. If the rate is 0%, EMI is simply principal ÷ months.",
+      "how2": "Each month, interest is charged on the outstanding principal. The rest of the EMI reduces the balance. That is why early years are interest-heavy and later years are principal-heavy — the table below the result shows that year by year.",
+      "metaTitle": "EMI電卓 — 月々返済・利息・返済表 | Kapil Rana",
+      "metaDescription": "インドのローン向け無料EMI電卓。月額、総利息、年次表。",
+      "ogTitle": "EMI電卓 — 月々の返済",
+      "ogDescription": "ブラウザでEMIと利息を計算。",
+      "faq": {
+        "0": {
+          "q": "EMIとは？",
+          "a": "EMIはローンの毎月定額返済で、元本と利息の両方を含みます。"
+        },
+        "1": {
+          "q": "EMIの計算式は？",
+          "a": "EMI = P × r × (1+r)^n / ((1+r)^n − 1)。"
+        },
+        "2": {
+          "q": "期間を短くすると利息は減る？",
+          "a": "はい。月額は上がりますが、元本の返済が早く総利息は減ることが多いです。"
+        },
+        "3": {
+          "q": "無料ですか？",
+          "a": "はい。ブラウザで動き、入力は保存しません。"
+        }
+      }
+    },
+    "sip": {
+      "nav": "SIP電卓",
+      "title": "SIP電卓",
+      "card": "毎月の積立投資の将来価値を試算します。",
+      "lead": "毎月のシステマティック投資プランの満期額を試算します。",
+      "amount": "毎月の投資額（₹）",
+      "rate": "期待リターン（年率%）",
+      "years": "期間（年）",
+      "resultLabel": "推定評価額",
+      "invested": "投資元本",
+      "gain": "推定リターン",
+      "schedule": "年次推移",
+      "how1": "This uses the standard beginning-of-period SIP formula: FV = M × [((1+i)^n − 1) / i] × (1+i). M is the monthly instalment, i is the monthly expected return, and n is the number of months. A 12% annual assumption becomes 1% per month.",
+      "how2": "The invested amount is simply instalment × months. Estimated returns are future value minus invested amount. Markets do not compound in a straight line — treat the chart as a planning range, not a promise.",
+      "metaTitle": "SIP電卓 — 投信積立のリターンと満期 | Kapil Rana",
+      "metaDescription": "無料SIP電卓。投資元本、期待リターン、満期額の試算。",
+      "ogTitle": "SIP電卓 — 満期額",
+      "ogDescription": "SIPの元本・リターン・将来価値を試算。",
+      "faq": {
+        "0": {
+          "q": "SIPとは？",
+          "a": "Systematic Investment Planは、毎月など定期的に一定額を投信へ積み立てる方法です。"
+        },
+        "1": {
+          "q": "満期額の計算は？",
+          "a": "FV = M × [((1+i)^n − 1) / i] × (1+i)。"
+        },
+        "2": {
+          "q": "リターンは保証されますか？",
+          "a": "いいえ。期待リターンは仮定です。実際の投信は市場で変動します。"
+        },
+        "3": {
+          "q": "SIPと一括、どちらが良い？",
+          "a": "SIPは購入時期を分散できます。この電卓は毎月SIPのみをモデル化します。"
+        }
+      }
+    },
+    "gst": {
+      "nav": "GST電卓",
+      "title": "GST電卓",
+      "card": "5・12・18・28%のGSTを加算または控除。",
+      "lead": "税抜価格にGSTを足す、または税込価格から税額を取り出します。",
+      "amount": "金額（₹）",
+      "mode": "価格の種類",
+      "exclusive": "税抜（GSTを加算）",
+      "inclusive": "税込（GSTを除去）",
+      "rate": "GST税率（%）",
+      "split": "取引の種類",
+      "intra": "州内（CGST + SGST）",
+      "inter": "州間（IGST）",
+      "resultLabel": "税額内訳",
+      "base": "課税標準",
+      "tax": "GST額",
+      "how1": "Exclusive GST: tax = amount × rate / 100, total = amount + tax. Inclusive GST: base = amount / (1 + rate/100), tax = amount − base. Intra-state supply splits tax 50/50 into CGST and SGST. Inter-state supply shows the same tax as IGST.",
+      "how2": "Common slabs in India are 0%, 5%, 12%, 18%, and 28%. Some goods also attract compensation cess — this calculator does not add cess. Confirm the HSN/SAC rate before you issue or pay an invoice.",
+      "metaTitle": "GST電卓 — GSTの加算・控除 | Kapil Rana",
+      "metaDescription": "インドGSTの無料電卓。5–28%の加算/控除。CGST/SGSTまたはIGST。",
+      "ogTitle": "GST電卓 — CGST、SGST、IGST",
+      "ogDescription": "インドGSTを加算または控除。",
+      "faq": {
+        "0": {
+          "q": "GSTとは？",
+          "a": "Goods and Services Taxはインドの間接税です。主な税率は0・5・12・18・28%。"
+        },
+        "1": {
+          "q": "税抜と税込の違いは？",
+          "a": "税抜は税を足します。税込は base = 金額 / (1 + 税率/100) で税を取り出します。"
+        },
+        "2": {
+          "q": "CGST+SGSTとIGSTは？",
+          "a": "州内はGSTを半分ずつCGST/SGST。州間は全額をIGSTとします。"
+        },
+        "3": {
+          "q": "申告もできますか？",
+          "a": "いいえ。税額の概算のみで、申告ソフトの代わりにはなりません。"
+        }
+      }
+    }
   }
 }

@@ -46,7 +46,9 @@
     "themeLight": "Switch to light mode",
     "themeDark": "Switch to dark mode",
     "skip": "Skip to main content",
-    "lang": "Language"
+    "lang": "Language",
+    "tools": "Tools",
+    "allTools": "All tools"
   },
   "hero": {
     "eyebrow": "Open to impactful opportunities",
@@ -409,5 +411,160 @@
   },
   "ui": {
     "emailCopied": "Email copied to clipboard"
+  },
+  "tools": {
+    "hub": {
+      "kicker": "Free calculators",
+      "title": "Finance tools",
+      "lead": "Fast, private calculators for loans, investments, and GST. Everything runs in your browser — useful if you are comparing a home loan, planning a SIP, or checking an invoice.",
+      "whyTitle": "Why these calculators",
+      "why": "These tools use the same standard formulas banks and mutual-fund platforms publish. Inputs stay on your device. Use them to sanity-check a loan offer, a SIP goal, or a GST-inclusive quote before you commit.",
+      "metaTitle": "Free Finance Tools — EMI, SIP & GST Calculators | Kapil Rana",
+      "metaDescription": "Free online finance calculators: EMI calculator for home and personal loans, SIP calculator for mutual funds, and GST calculator for India. No signup.",
+      "ogTitle": "Free finance tools — EMI, SIP, GST",
+      "ogDescription": "Calculate loan EMI, SIP maturity, and GST in your browser."
+    },
+    "categories": {
+      "finance": {
+        "title": "Finance",
+        "blurb": "Loan EMI, SIP wealth projection, and India GST — built for everyday money decisions."
+      }
+    },
+    "common": {
+      "home": "Home",
+      "open": "Open calculator →",
+      "inputs": "Inputs",
+      "reset": "Reset",
+      "faq": "Frequently asked questions",
+      "how": "How this calculator works",
+      "disclaimer": "Estimates only. Not financial advice. Actual figures may include fees, taxes, or a different compounding convention.",
+      "related": "More finance tools",
+      "year": "Year",
+      "breakdown": "Split",
+      "perMonth": "every month"
+    },
+    "emi": {
+      "nav": "EMI Calculator",
+      "title": "EMI Calculator",
+      "card": "Monthly instalment, total interest, and a year-wise amortization schedule for home, car, and personal loans.",
+      "lead": "Work out the equated monthly instalment for a home loan, car loan, or personal loan. Change principal, interest rate, and tenure to see EMI, total interest, and a year-wise payoff schedule.",
+      "amount": "Loan amount (₹)",
+      "rate": "Interest rate (% p.a.)",
+      "years": "Tenure (years)",
+      "months": "Extra months",
+      "resultLabel": "Monthly EMI",
+      "principal": "Principal",
+      "interest": "Total interest",
+      "total": "Total payment",
+      "schedule": "Year-wise amortization",
+      "chartBalance": "Balance over time",
+      "principalPaid": "Principal paid",
+      "interestPaid": "Interest paid",
+      "balance": "Balance",
+      "how1": "The reducing-balance formula used by most Indian lenders is EMI = P × r × (1+r)^n / ((1+r)^n − 1). P is the loan amount, r is the monthly rate (annual rate ÷ 12 ÷ 100), and n is the tenure in months. If the rate is 0%, EMI is simply principal ÷ months.",
+      "how2": "Each month, interest is charged on the outstanding principal. The rest of the EMI reduces the balance. That is why early years are interest-heavy and later years are principal-heavy — the table below the result shows that year by year.",
+      "metaTitle": "EMI Calculator — Monthly Loan EMI, Interest & Amortization | Kapil Rana",
+      "metaDescription": "Free EMI calculator for home, car, and personal loans in India. Get monthly EMI, total interest, total payment, and a year-wise amortization schedule.",
+      "ogTitle": "EMI Calculator — monthly loan instalment",
+      "ogDescription": "Calculate EMI, total interest, and amortization in your browser.",
+      "faq": {
+        "0": {
+          "q": "What is EMI?",
+          "a": "EMI (Equated Monthly Instalment) is the fixed amount you pay every month toward a loan. It includes both principal and interest."
+        },
+        "1": {
+          "q": "How is EMI calculated?",
+          "a": "EMI = P × r × (1+r)^n / ((1+r)^n − 1), where P is the loan amount, r is the monthly interest rate, and n is the number of months."
+        },
+        "2": {
+          "q": "Does a shorter tenure reduce interest?",
+          "a": "Yes. A shorter tenure raises the monthly EMI but usually cuts total interest because the principal is repaid faster."
+        },
+        "3": {
+          "q": "Is this EMI calculator free?",
+          "a": "Yes. This online EMI calculator is free, runs in your browser, and does not store the numbers you enter."
+        }
+      }
+    },
+    "sip": {
+      "nav": "SIP Calculator",
+      "title": "SIP Calculator",
+      "card": "Estimate the future value of a monthly systematic investment plan with expected returns.",
+      "lead": "Project the maturity value of a monthly systematic investment plan. Enter the instalment, expected annual return, and duration to see invested capital versus estimated gains.",
+      "amount": "Monthly investment (₹)",
+      "rate": "Expected return (% p.a.)",
+      "years": "Duration (years)",
+      "resultLabel": "Estimated value",
+      "invested": "Amount invested",
+      "gain": "Est. returns",
+      "schedule": "Year-wise projection",
+      "chartGrowth": "Wealth growth",
+      "how1": "This uses the standard beginning-of-period SIP formula: FV = M × [((1+i)^n − 1) / i] × (1+i). M is the monthly instalment, i is the monthly expected return, and n is the number of months. A 12% annual assumption becomes 1% per month.",
+      "how2": "The invested amount is simply instalment × months. Estimated returns are future value minus invested amount. Markets do not compound in a straight line — treat the chart as a planning range, not a promise.",
+      "metaTitle": "SIP Calculator — Mutual Fund SIP Returns & Maturity Value | Kapil Rana",
+      "metaDescription": "Free SIP calculator for India. Estimate invested amount, expected returns, and maturity value of a monthly systematic investment plan.",
+      "ogTitle": "SIP Calculator — mutual fund maturity",
+      "ogDescription": "Estimate SIP invested amount, returns, and future value.",
+      "faq": {
+        "0": {
+          "q": "What is a SIP?",
+          "a": "A Systematic Investment Plan (SIP) invests a fixed amount at regular intervals — usually monthly — into a mutual fund."
+        },
+        "1": {
+          "q": "How is SIP maturity calculated?",
+          "a": "Future value = M × [((1+i)^n − 1) / i] × (1+i), where M is the monthly investment, i is the monthly expected return, and n is the number of months."
+        },
+        "2": {
+          "q": "Are SIP returns guaranteed?",
+          "a": "No. The expected return is an assumption. Actual mutual-fund returns vary with markets."
+        },
+        "3": {
+          "q": "SIP vs lump sum — which is better?",
+          "a": "SIP spreads purchases over time and can reduce timing risk. A lump sum may earn more if invested just before a long uptrend. This calculator models a monthly SIP only."
+        }
+      }
+    },
+    "gst": {
+      "nav": "GST Calculator",
+      "title": "GST Calculator",
+      "card": "Add or remove GST at 5%, 12%, 18%, or 28%. Split CGST/SGST or apply IGST.",
+      "lead": "Add GST to a base price or extract tax from an inclusive amount. Use official slabs (0, 5, 12, 18, 28%) and split the tax as CGST + SGST or a single IGST line.",
+      "amount": "Amount (₹)",
+      "mode": "Price type",
+      "exclusive": "Exclusive (add GST)",
+      "inclusive": "Inclusive (remove GST)",
+      "rate": "GST rate (%)",
+      "split": "Supply type",
+      "intra": "Intra-state (CGST + SGST)",
+      "inter": "Inter-state (IGST)",
+      "resultLabel": "Tax breakdown",
+      "base": "Taxable value",
+      "tax": "GST amount",
+      "chartSplit": "Invoice stack",
+      "how1": "Exclusive GST: tax = amount × rate / 100, total = amount + tax. Inclusive GST: base = amount / (1 + rate/100), tax = amount − base. Intra-state supply splits tax 50/50 into CGST and SGST. Inter-state supply shows the same tax as IGST.",
+      "how2": "Common slabs in India are 0%, 5%, 12%, 18%, and 28%. Some goods also attract compensation cess — this calculator does not add cess. Confirm the HSN/SAC rate before you issue or pay an invoice.",
+      "metaTitle": "GST Calculator — Add or Remove GST (CGST, SGST, IGST) | Kapil Rana",
+      "metaDescription": "Free India GST calculator. Add or remove 5%, 12%, 18%, or 28% GST. Split CGST/SGST for intra-state supply or apply IGST for inter-state.",
+      "ogTitle": "GST Calculator — CGST, SGST, IGST",
+      "ogDescription": "Add or remove Indian GST and split CGST/SGST or IGST.",
+      "faq": {
+        "0": {
+          "q": "What is GST?",
+          "a": "Goods and Services Tax is India’s destination-based indirect tax. Most goods and services fall under 0%, 5%, 12%, 18%, or 28%."
+        },
+        "1": {
+          "q": "What is the difference between exclusive and inclusive GST?",
+          "a": "Exclusive adds GST on top of a base price. Inclusive extracts GST from a price that already contains tax: base = amount / (1 + rate/100)."
+        },
+        "2": {
+          "q": "CGST + SGST vs IGST?",
+          "a": "Intra-state supply splits GST equally into CGST and SGST. Inter-state supply uses a single IGST amount equal to the full GST."
+        },
+        "3": {
+          "q": "Does this GST calculator file returns?",
+          "a": "No. It only estimates tax on a given amount. Use it to check invoices — it is not a substitute for GST filing software or a tax advisor."
+        }
+      }
+    }
   }
 }

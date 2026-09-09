@@ -22,6 +22,13 @@
     // lang pages under /de/ → ../i18n/
     // root → i18n/
     var path = location.pathname.replace(/\\/g, "/");
+    if (path.indexOf("/tools/") !== -1 || /\/tools\/?$/.test(path)) {
+      var after = "";
+      var idx = path.indexOf("/tools/");
+      if (idx !== -1) after = path.slice(idx + "/tools/".length);
+      after = after.replace(/index\.html$/, "").replace(/\/+$/, "");
+      return after ? "../../" : "../";
+    }
     if (/\/(en|de|fr|es|ja|ar|hi)\/?$/.test(path) || /\/(en|de|fr|es|ja|ar|hi)\/index\.html$/.test(path)) {
       return "../";
     }
@@ -132,6 +139,7 @@
     } else {
       document.documentElement.classList.remove("rtl");
     }
+    if (global.__I18N_KEEP_HEAD) return;
 
     if (meta.title) document.title = meta.title;
     setMetaName('meta[name="description"]', meta.description);
@@ -309,6 +317,13 @@
     try {
       localStorage.setItem(STORAGE_KEY, lang);
     } catch (e) {}
+
+    if (path.indexOf("/tools/") !== -1 || /\/tools\/?$/.test(path) || /\/tools\/index\.html$/.test(path)) {
+      var toolUrl = new URL(location.href);
+      toolUrl.searchParams.set("lang", lang);
+      location.href = toolUrl.toString();
+      return;
+    }
 
     if (isLangPage) {
       location.href = base + lang + "/";

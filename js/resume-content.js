@@ -8,6 +8,13 @@
   function getBase() {
     if (global.__I18N_BASE != null) return global.__I18N_BASE;
     var path = location.pathname.replace(/\\/g, "/");
+    if (path.indexOf("/tools/") !== -1 || /\/tools\/?$/.test(path)) {
+      var after = "";
+      var idx = path.indexOf("/tools/");
+      if (idx !== -1) after = path.slice(idx + "/tools/".length);
+      after = after.replace(/index\.html$/, "").replace(/\/+$/, "");
+      return after ? "../../" : "../";
+    }
     if (
       /\/(en|de|fr|es|ja|ar|hi)\/?$/.test(path) ||
       /\/(en|de|fr|es|ja|ar|hi)\/index\.html$/.test(path)

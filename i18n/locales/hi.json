@@ -46,7 +46,9 @@
     "themeLight": "लाइट मोड",
     "themeDark": "डार्क मोड",
     "skip": "मुख्य सामग्री पर जाएँ",
-    "lang": "भाषा"
+    "lang": "भाषा",
+    "tools": "टूल्स",
+    "allTools": "सभी टूल्स"
   },
   "hero": {
     "eyebrow": "प्रभावशाली अवसरों के लिए खुला",
@@ -409,5 +411,155 @@
   },
   "ui": {
     "emailCopied": "ईमेल क्लिपबोर्ड पर कॉपी हो गया"
+  },
+  "tools": {
+    "hub": {
+      "kicker": "मुफ़्त कैलकुलेटर",
+      "title": "फाइनेंस टूल्स",
+      "lead": "लोन, निवेश और GST के लिए तेज़ कैलकुलेटर। सब कुछ आपके ब्राउज़र में चलता है — होम लोन की तुलना, SIP प्लान या इनवॉइस जाँच के लिए।",
+      "whyTitle": "ये कैलकुलेटर क्यों",
+      "why": "ये टूल्स बैंकों और म्यूचुअल फंड प्लेटफ़ॉर्म वाले मानक फ़ॉर्मूले इस्तेमाल करते हैं। आपके नंबर डिवाइस पर ही रहते हैं।",
+      "metaTitle": "मुफ़्त फाइनेंस टूल्स — EMI, SIP और GST कैलकुलेटर | कपिल राना",
+      "metaDescription": "मुफ़्त ऑनलाइन फाइनेंस कैलकुलेटर: होम/पर्सनल लोन EMI, म्यूचुअल फंड SIP और भारत GST। साइनअप नहीं।",
+      "ogTitle": "मुफ़्त फाइनेंस टूल्स — EMI, SIP, GST",
+      "ogDescription": "ब्राउज़र में लोन EMI, SIP मैच्योरिटी और GST निकालें।"
+    },
+    "categories": {
+      "finance": {
+        "title": "फाइनेंस",
+        "blurb": "लोन EMI, SIP अनुमान, और भारत GST — रोज़मर्रा के पैसे के फ़ैसलों के लिए।"
+      }
+    },
+    "common": {
+      "home": "होम",
+      "open": "कैलकुलेटर खोलें →",
+      "inputs": "इनपुट",
+      "reset": "रीसेट",
+      "faq": "अक्सर पूछे जाने वाले सवाल",
+      "how": "यह कैलकुलेटर कैसे काम करता है",
+      "disclaimer": "केवल अनुमान। वित्तीय सलाह नहीं। वास्तविक आँकड़ों में शुल्क, कर या अलग चक्रवृद्धि हो सकती है।",
+      "related": "और फाइनेंस टूल्स",
+      "year": "वर्ष"
+    },
+    "emi": {
+      "nav": "EMI कैलकुलेटर",
+      "title": "EMI कैलकुलेटर",
+      "card": "होम, कार और पर्सनल लोन की मासिक किस्त, कुल ब्याज और वर्षवार अमोर्टाइज़ेशन।",
+      "lead": "होम लोन, कार लोन या पर्सनल लोन की समान मासिक किस्त निकालें। मूलधन, ब्याज दर और अवधि बदलकर EMI, कुल ब्याज और चुकौती तालिका देखें।",
+      "amount": "लोन राशि (₹)",
+      "rate": "ब्याज दर (% वार्षिक)",
+      "years": "अवधि (वर्ष)",
+      "months": "अतिरिक्त महीने",
+      "resultLabel": "मासिक EMI",
+      "principal": "मूलधन",
+      "interest": "कुल ब्याज",
+      "total": "कुल भुगतान",
+      "schedule": "वर्षवार अमोर्टाइज़ेशन",
+      "principalPaid": "चुकाया मूलधन",
+      "interestPaid": "चुकाया ब्याज",
+      "balance": "शेष",
+      "how1": "The reducing-balance formula used by most Indian lenders is EMI = P × r × (1+r)^n / ((1+r)^n − 1). P is the loan amount, r is the monthly rate (annual rate ÷ 12 ÷ 100), and n is the tenure in months. If the rate is 0%, EMI is simply principal ÷ months.",
+      "how2": "Each month, interest is charged on the outstanding principal. The rest of the EMI reduces the balance. That is why early years are interest-heavy and later years are principal-heavy — the table below the result shows that year by year.",
+      "metaTitle": "EMI कैलकुलेटर — मासिक किस्त, ब्याज और अमोर्टाइज़ेशन | कपिल राना",
+      "metaDescription": "भारत में होम, कार और पर्सनल लोन के लिए मुफ़्त EMI कैलकुलेटर। मासिक EMI, कुल ब्याज और वर्षवार तालिका।",
+      "ogTitle": "EMI कैलकुलेटर — मासिक किस्त",
+      "ogDescription": "ब्राउज़र में EMI, कुल ब्याज और अमोर्टाइज़ेशन निकालें।",
+      "faq": {
+        "0": {
+          "q": "EMI क्या है?",
+          "a": "EMI (Equated Monthly Instalment) वह निश्चित राशि है जो आप हर महीने लोन पर चुकाते हैं। इसमें मूलधन और ब्याज दोनों होते हैं।"
+        },
+        "1": {
+          "q": "EMI कैसे निकाली जाती है?",
+          "a": "EMI = P × r × (1+r)^n / ((1+r)^n − 1), जहाँ P लोन राशि, r मासिक ब्याज दर, और n महीनों की संख्या है।"
+        },
+        "2": {
+          "q": "कम अवधि से ब्याज घटता है?",
+          "a": "हाँ। छोटी अवधि मासिक EMI बढ़ाती है, लेकिन मूलधन जल्दी चुकने से कुल ब्याज आमतौर पर कम होता है।"
+        },
+        "3": {
+          "q": "क्या यह EMI कैलकुलेटर मुफ़्त है?",
+          "a": "हाँ। यह ऑनलाइन EMI कैलकुलेटर मुफ़्त है, आपके ब्राउज़र में चलता है, और आपके नंबर सेव नहीं करता।"
+        }
+      }
+    },
+    "sip": {
+      "nav": "SIP कैलकुलेटर",
+      "title": "SIP कैलकुलेटर",
+      "card": "मासिक SIP की अनुमानित भविष्य मूल्य और रिटर्न देखें।",
+      "lead": "मासिक सिस्टमैटिक इन्वेस्टमेंट प्लान की मैच्योरिटी वैल्यू अनुमानित करें। किस्त, अपेक्षित वार्षिक रिटर्न और अवधि डालें।",
+      "amount": "मासिक निवेश (₹)",
+      "rate": "अपेक्षित रिटर्न (% वार्षिक)",
+      "years": "अवधि (वर्ष)",
+      "resultLabel": "अनुमानित मूल्य",
+      "invested": "निवेशित राशि",
+      "gain": "अनुमानित रिटर्न",
+      "schedule": "वर्षवार अनुमान",
+      "how1": "This uses the standard beginning-of-period SIP formula: FV = M × [((1+i)^n − 1) / i] × (1+i). M is the monthly instalment, i is the monthly expected return, and n is the number of months. A 12% annual assumption becomes 1% per month.",
+      "how2": "The invested amount is simply instalment × months. Estimated returns are future value minus invested amount. Markets do not compound in a straight line — treat the chart as a planning range, not a promise.",
+      "metaTitle": "SIP कैलकुलेटर — म्यूचुअल फंड रिटर्न और मैच्योरिटी | कपिल राना",
+      "metaDescription": "भारत के लिए मुफ़्त SIP कैलकुलेटर। निवेशित राशि, अपेक्षित रिटर्न और मैच्योरिटी वैल्यू का अनुमान।",
+      "ogTitle": "SIP कैलकुलेटर — मैच्योरिटी वैल्यू",
+      "ogDescription": "SIP निवेश, रिटर्न और भविष्य मूल्य का अनुमान लगाएँ।",
+      "faq": {
+        "0": {
+          "q": "SIP क्या है?",
+          "a": "सिस्टमैटिक इन्वेस्टमेंट प्लान (SIP) में आप नियमित अंतराल — आमतौर पर हर महीने — म्यूचुअल फंड में एक निश्चित राशि निवेश करते हैं।"
+        },
+        "1": {
+          "q": "SIP मैच्योरिटी कैसे निकलती है?",
+          "a": "भविष्य मूल्य = M × [((1+i)^n − 1) / i] × (1+i), जहाँ M मासिक निवेश, i मासिक अपेक्षित रिटर्न, और n महीने हैं।"
+        },
+        "2": {
+          "q": "क्या SIP रिटर्न गारंटीड हैं?",
+          "a": "नहीं। अपेक्षित रिटर्न एक धारणा है। वास्तविक म्यूचुअल फंड रिटर्न बाज़ार के साथ बदलते हैं।"
+        },
+        "3": {
+          "q": "SIP या एकमुश्त — क्या बेहतर है?",
+          "a": "SIP खरीदारी को समय में बाँटता है और टाइमिंग जोखिम घटा सकता है। यह कैलकुलेटर केवल मासिक SIP मॉडल करता है।"
+        }
+      }
+    },
+    "gst": {
+      "nav": "GST कैलकुलेटर",
+      "title": "GST कैलकुलेटर",
+      "card": "5%, 12%, 18% या 28% GST जोड़ें या हटाएँ। CGST/SGST या IGST।",
+      "lead": "बेस कीमत पर GST जोड़ें या इंक्लूसिव राशि से टैक्स निकालें। आधिकारिक स्लैब और CGST+SGST या IGST।",
+      "amount": "राशि (₹)",
+      "mode": "कीमत का प्रकार",
+      "exclusive": "एक्सक्लूसिव (GST जोड़ें)",
+      "inclusive": "इंक्लूसिव (GST हटाएँ)",
+      "rate": "GST दर (%)",
+      "split": "सप्लाई प्रकार",
+      "intra": "राज्य के भीतर (CGST + SGST)",
+      "inter": "अंतर-राज्य (IGST)",
+      "resultLabel": "टैक्स विवरण",
+      "base": "करयोग्य मूल्य",
+      "tax": "GST राशि",
+      "how1": "Exclusive GST: tax = amount × rate / 100, total = amount + tax. Inclusive GST: base = amount / (1 + rate/100), tax = amount − base. Intra-state supply splits tax 50/50 into CGST and SGST. Inter-state supply shows the same tax as IGST.",
+      "how2": "Common slabs in India are 0%, 5%, 12%, 18%, and 28%. Some goods also attract compensation cess — this calculator does not add cess. Confirm the HSN/SAC rate before you issue or pay an invoice.",
+      "metaTitle": "GST कैलकुलेटर — GST जोड़ें या हटाएँ (CGST, SGST, IGST) | कपिल राना",
+      "metaDescription": "मुफ़्त भारत GST कैलकुलेटर। 5%, 12%, 18% या 28% GST जोड़ें/हटाएँ। राज्य के भीतर CGST/SGST या अंतर-राज्य IGST।",
+      "ogTitle": "GST कैलकुलेटर — CGST, SGST, IGST",
+      "ogDescription": "भारतीय GST जोड़ें या हटाएँ और CGST/SGST या IGST देखें।",
+      "faq": {
+        "0": {
+          "q": "GST क्या है?",
+          "a": "गुड्स एंड सर्विसेज टैक्स भारत का गंतव्य-आधारित अप्रत्यक्ष कर है। अधिकतर वस्तुएँ और सेवाएँ 0%, 5%, 12%, 18% या 28% में आती हैं।"
+        },
+        "1": {
+          "q": "एक्सक्लूसिव और इंक्लूसिव GST में क्या फ़र्क है?",
+          "a": "एक्सक्लूसिव बेस कीमत पर GST जोड़ता है। इंक्लूसिव उस कीमत से टैक्स निकालता है जिसमें टैक्स पहले से है: base = राशि / (1 + दर/100)।"
+        },
+        "2": {
+          "q": "CGST + SGST बनाम IGST?",
+          "a": "राज्य के भीतर सप्लाई GST को बराबर CGST और SGST में बाँटती है। अंतर-राज्य सप्लाई पूरी GST को IGST के रूप में लेती है।"
+        },
+        "3": {
+          "q": "क्या यह GST रिटर्न दाखिल करता है?",
+          "a": "नहीं। यह केवल दी गई राशि पर टैक्स का अनुमान है — GST फाइलिंग सॉफ़्टवेयर या कर सलाहकार का विकल्प नहीं।"
+        }
+      }
+    }
   }
 }

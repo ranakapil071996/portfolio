@@ -46,7 +46,9 @@
     "themeLight": "Mode clair",
     "themeDark": "Mode sombre",
     "skip": "Aller au contenu",
-    "lang": "Langue"
+    "lang": "Langue",
+    "tools": "Outils",
+    "allTools": "Tous les outils"
   },
   "hero": {
     "eyebrow": "Ouvert aux opportunités à fort impact",
@@ -409,5 +411,155 @@
   },
   "ui": {
     "emailCopied": "E-mail copié dans le presse-papiers"
+  },
+  "tools": {
+    "hub": {
+      "kicker": "Calculateurs gratuits",
+      "title": "Outils finance",
+      "lead": "Calculateurs rapides pour crédits, placements et GST. Tout s’exécute dans le navigateur.",
+      "whyTitle": "Pourquoi ces calculateurs",
+      "why": "Les formules sont celles publiées par les banques et les plateformes de fonds. Vos saisies restent sur l’appareil.",
+      "metaTitle": "Outils finance gratuits — EMI, SIP et GST | Kapil Rana",
+      "metaDescription": "Calculateurs gratuits : EMI de crédit, SIP de fonds, GST Inde. Sans inscription.",
+      "ogTitle": "Outils finance — EMI, SIP, GST",
+      "ogDescription": "Calculez EMI, maturité SIP et GST dans le navigateur."
+    },
+    "categories": {
+      "finance": {
+        "title": "Finance",
+        "blurb": "EMI de prêt, projection SIP et GST indienne."
+      }
+    },
+    "common": {
+      "home": "Accueil",
+      "open": "Ouvrir le calculateur →",
+      "inputs": "Saisies",
+      "reset": "Réinitialiser",
+      "faq": "Questions fréquentes",
+      "how": "Comment fonctionne ce calculateur",
+      "disclaimer": "Estimations uniquement. Pas un conseil financier.",
+      "related": "Autres outils finance",
+      "year": "Année"
+    },
+    "emi": {
+      "nav": "Calculateur EMI",
+      "title": "Calculateur EMI",
+      "card": "Mensualité, intérêts totaux et tableau d’amortissement annuel.",
+      "lead": "Calculez la mensualité d’un prêt immobilier, auto ou personnel.",
+      "amount": "Montant du prêt (₹)",
+      "rate": "Taux d’intérêt (% / an)",
+      "years": "Durée (années)",
+      "months": "Mois supplémentaires",
+      "resultLabel": "EMI mensuelle",
+      "principal": "Capital",
+      "interest": "Intérêts totaux",
+      "total": "Paiement total",
+      "schedule": "Amortissement annuel",
+      "principalPaid": "Capital remboursé",
+      "interestPaid": "Intérêts payés",
+      "balance": "Solde",
+      "how1": "The reducing-balance formula used by most Indian lenders is EMI = P × r × (1+r)^n / ((1+r)^n − 1). P is the loan amount, r is the monthly rate (annual rate ÷ 12 ÷ 100), and n is the tenure in months. If the rate is 0%, EMI is simply principal ÷ months.",
+      "how2": "Each month, interest is charged on the outstanding principal. The rest of the EMI reduces the balance. That is why early years are interest-heavy and later years are principal-heavy — the table below the result shows that year by year.",
+      "metaTitle": "Calculateur EMI — mensualité, intérêts et amortissement | Kapil Rana",
+      "metaDescription": "Calculateur EMI gratuit pour prêts en Inde. Mensualité, intérêts et tableau annuel.",
+      "ogTitle": "Calculateur EMI — mensualité",
+      "ogDescription": "Calculez EMI, intérêts et amortissement.",
+      "faq": {
+        "0": {
+          "q": "Qu’est-ce que l’EMI ?",
+          "a": "L’EMI est la mensualité fixe d’un prêt, capital et intérêts compris."
+        },
+        "1": {
+          "q": "Comment calcule-t-on l’EMI ?",
+          "a": "EMI = P × r × (1+r)^n / ((1+r)^n − 1)."
+        },
+        "2": {
+          "q": "Une durée plus courte réduit-elle les intérêts ?",
+          "a": "Oui. La mensualité augmente mais le capital est remboursé plus vite."
+        },
+        "3": {
+          "q": "Le calculateur est-il gratuit ?",
+          "a": "Oui. Il tourne dans le navigateur et ne stocke pas vos chiffres."
+        }
+      }
+    },
+    "sip": {
+      "nav": "Calculateur SIP",
+      "title": "Calculateur SIP",
+      "card": "Estimez la valeur future d’un plan d’investissement mensuel.",
+      "lead": "Projetez la valeur à l’échéance d’un SIP mensuel.",
+      "amount": "Versement mensuel (₹)",
+      "rate": "Rendement attendu (% / an)",
+      "years": "Durée (années)",
+      "resultLabel": "Valeur estimée",
+      "invested": "Montant investi",
+      "gain": "Rendement estimé",
+      "schedule": "Projection annuelle",
+      "how1": "This uses the standard beginning-of-period SIP formula: FV = M × [((1+i)^n − 1) / i] × (1+i). M is the monthly instalment, i is the monthly expected return, and n is the number of months. A 12% annual assumption becomes 1% per month.",
+      "how2": "The invested amount is simply instalment × months. Estimated returns are future value minus invested amount. Markets do not compound in a straight line — treat the chart as a planning range, not a promise.",
+      "metaTitle": "Calculateur SIP — rendement et valeur à l’échéance | Kapil Rana",
+      "metaDescription": "Calculateur SIP gratuit. Capital investi, rendement attendu et valeur future.",
+      "ogTitle": "Calculateur SIP — valeur future",
+      "ogDescription": "Estimez capital, rendement et valeur d’un SIP.",
+      "faq": {
+        "0": {
+          "q": "Qu’est-ce qu’un SIP ?",
+          "a": "Un Systematic Investment Plan investit un montant fixe à intervalle régulier, souvent chaque mois."
+        },
+        "1": {
+          "q": "Comment calcule-t-on la maturité ?",
+          "a": "VF = M × [((1+i)^n − 1) / i] × (1+i)."
+        },
+        "2": {
+          "q": "Les rendements SIP sont-ils garantis ?",
+          "a": "Non. Le rendement est une hypothèse. Les fonds varient avec les marchés."
+        },
+        "3": {
+          "q": "SIP ou versement unique ?",
+          "a": "Le SIP étale les achats dans le temps. Ce calculateur ne modélise qu’un SIP mensuel."
+        }
+      }
+    },
+    "gst": {
+      "nav": "Calculateur GST",
+      "title": "Calculateur GST",
+      "card": "Ajouter ou retirer la GST à 5 %, 12 %, 18 % ou 28 %.",
+      "lead": "Ajoutez la GST à un prix hors taxe ou extrayez-la d’un prix TTC.",
+      "amount": "Montant (₹)",
+      "mode": "Type de prix",
+      "exclusive": "Hors taxe (ajouter GST)",
+      "inclusive": "TTC (retirer GST)",
+      "rate": "Taux GST (%)",
+      "split": "Type de fourniture",
+      "intra": "Intra-État (CGST + SGST)",
+      "inter": "Inter-États (IGST)",
+      "resultLabel": "Détail de la taxe",
+      "base": "Base taxable",
+      "tax": "Montant GST",
+      "how1": "Exclusive GST: tax = amount × rate / 100, total = amount + tax. Inclusive GST: base = amount / (1 + rate/100), tax = amount − base. Intra-state supply splits tax 50/50 into CGST and SGST. Inter-state supply shows the same tax as IGST.",
+      "how2": "Common slabs in India are 0%, 5%, 12%, 18%, and 28%. Some goods also attract compensation cess — this calculator does not add cess. Confirm the HSN/SAC rate before you issue or pay an invoice.",
+      "metaTitle": "Calculateur GST — ajouter ou retirer la GST | Kapil Rana",
+      "metaDescription": "Calculateur GST Inde. Ajoutez ou retirez 5–28 %. CGST/SGST ou IGST.",
+      "ogTitle": "Calculateur GST — CGST, SGST, IGST",
+      "ogDescription": "Ajouter ou retirer la GST indienne.",
+      "faq": {
+        "0": {
+          "q": "Qu’est-ce que la GST ?",
+          "a": "La Goods and Services Tax est la taxe indirecte indienne. Tranches courantes : 0, 5, 12, 18 et 28 %."
+        },
+        "1": {
+          "q": "Hors taxe vs TTC ?",
+          "a": "Hors taxe ajoute la taxe. TTC l’extrait : base = montant / (1 + taux/100)."
+        },
+        "2": {
+          "q": "CGST + SGST vs IGST ?",
+          "a": "Intra-État : 50/50 CGST/SGST. Inter-États : IGST égal à la GST totale."
+        },
+        "3": {
+          "q": "Dépose-t-il les déclarations ?",
+          "a": "Non. Il estime seulement la taxe — pas un logiciel de filing."
+        }
+      }
+    }
   }
 }
