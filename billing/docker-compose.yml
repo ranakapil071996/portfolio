@@ -1,0 +1,20 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: billing-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: billing
+    volumes:
+      - billing-mongo:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+      start_period: 10s
+
+volumes:
+  billing-mongo:

@@ -14,6 +14,7 @@ ICON_GST = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 ICON_RUPEE = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M7 6h10M7 10h10M7 6c4.5 0 7 2 7 5.5S13 17 7 17M11 21 7 17"/></svg>"""
 ICON_PCT = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="7.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/><path d="m18 6-12 12"/></svg>"""
 ICON_CAL = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3.5V7M16 3.5V7M3.5 10h17"/></svg>"""
+ICON_BILL = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10a1 1 0 0 1 1 1v16l-2.2-1.4L13.6 20 12 18.6 10.4 20 8.2 18.6 6 20V4a1 1 0 0 1 1-1z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>"""
 
 
 def ambient() -> str:
@@ -53,6 +54,7 @@ def nav(home: str, tools: dict[str, str]) -> str:
           <a href="{tools["emi"]}" data-tool="emi" data-i18n="tools.emi.nav">EMI Calculator</a>
           <a href="{tools["sip"]}" data-tool="sip" data-i18n="tools.sip.nav">SIP Calculator</a>
           <a href="{tools["gst"]}" data-tool="gst" data-i18n="tools.gst.nav">GST Calculator</a>
+          <a href="{tools["billing"]}" data-tool="billing" data-i18n="tools.billing.nav">Billing</a>
           <a href="{tools["hub"]}" class="nav-menu-all" data-tool="hub" data-i18n="nav.allTools">All tools</a>
         </div>
       </div>
@@ -116,7 +118,9 @@ def head(
 """
 
 
-def footer(home: str) -> str:
+def footer(home: str, extra_js: str | list[str] = "") -> str:
+    extras = extra_js if isinstance(extra_js, list) else ([extra_js] if extra_js else [])
+    extra = "".join(f'  <script src="{home}{src}" defer></script>\n' for src in extras)
     return f"""  <footer class="footer" role="contentinfo">
     <div class="container footer-inner">
       <p><span data-i18n="footer.copy">© {{year}} Kapil Rana.</span></p>
@@ -127,6 +131,7 @@ def footer(home: str) -> str:
   <script src="{home}js/tools-data.js" defer></script>
   <script src="{home}js/tools-nav.js" defer></script>
   <script src="{home}js/tools.js" defer></script>
+{extra}
 </body>
 </html>
 """
@@ -151,6 +156,7 @@ def related(links: list[tuple[str, str, str]]) -> str:
         "tools.emi.title": ("hub-icon-emi", ICON_EMI),
         "tools.sip.title": ("hub-icon-sip", ICON_SIP),
         "tools.gst.title": ("hub-icon-gst", ICON_GST),
+        "tools.billing.title": ("hub-icon-bill", ICON_BILL),
     }
     cards = []
     for href, title_key, title in links:
@@ -292,6 +298,7 @@ def write_hub() -> None:
             "emi": "emi-calculator/",
             "sip": "sip-calculator/",
             "gst": "gst-calculator/",
+            "billing": "billing/",
             "hub": "./",
         },
     )
@@ -329,6 +336,12 @@ def write_hub() -> None:
             <strong data-i18n="tools.gst.title">GST Calculator</strong>
             <p data-i18n="tools.gst.card">Add or remove GST at 5%, 12%, 18%, or 28%. Split CGST/SGST or apply IGST.</p>
             <span class="hub-go" data-i18n="tools.common.open">Open calculator →</span>
+          </a>
+          <a class="hub-card glass" href="billing/">
+            <span class="hub-icon hub-icon-bill" aria-hidden="true">{ICON_BILL}</span>
+            <strong data-i18n="tools.billing.title">Billing</strong>
+            <p data-i18n="tools.billing.card">Sign in with your mobile number and set up your business to create GST invoices.</p>
+            <span class="hub-go" data-i18n="tools.billing.open">Open billing →</span>
           </a>
         </div>
       </div>
@@ -370,6 +383,7 @@ def write_emi() -> None:
             "emi": "./",
             "sip": "../sip-calculator/",
             "gst": "../gst-calculator/",
+            "billing": "../billing/",
             "hub": "../",
         },
     )
@@ -502,6 +516,7 @@ def write_sip() -> None:
             "emi": "../emi-calculator/",
             "sip": "./",
             "gst": "../gst-calculator/",
+            "billing": "../billing/",
             "hub": "../",
         },
     )
@@ -627,6 +642,7 @@ def write_gst() -> None:
             "emi": "../emi-calculator/",
             "sip": "../sip-calculator/",
             "gst": "./",
+            "billing": "../billing/",
             "hub": "../",
         },
     )
@@ -734,11 +750,154 @@ def write_gst() -> None:
     print("wrote", out.relative_to(ROOT))
 
 
+def write_billing() -> None:
+    canonical = f"{SITE}/tools/billing/"
+    html = head(
+        base="../../",
+        tool_id="billing",
+        title="Billing Software — Sign in",
+        description="Sign in to Billing Software with your mobile number. New accounts set a business name; GSTIN is optional.",
+        canonical=canonical,
+        json_ld=json_ld_app(
+            "Billing",
+            canonical,
+            "Mobile OTP login and business onboarding for GST billing.",
+            [
+                (
+                    "How do I sign in?",
+                    "Enter your 10-digit Indian mobile number and the 4-digit OTP. New and existing users use the same steps.",
+                ),
+                (
+                    "What is the OTP?",
+                    "OTP is currently hardcoded to 0000 while SMS is not connected.",
+                ),
+                (
+                    "What do I need to register?",
+                    "Mobile number and business name are required. GSTIN is optional and can be added later.",
+                ),
+                (
+                    "Are my details stored?",
+                    "Yes. Your mobile, business name, and optional GSTIN are stored so you can sign back in. The session cookie stays on this site.",
+                ),
+            ],
+        ),
+    )
+    html += "<body class=\"tools-page billing-software\">\n"
+    html += '  <a class="skip-link" href="#main-content" data-i18n="nav.skip">Skip to main content</a>\n'
+    html += ambient()
+    html += f"""
+  <aside class="bill-drawer" id="bill-drawer" hidden>
+    <div class="bill-drawer-brand">
+      <span class="logo-mark hub-icon-bill" aria-hidden="true">{ICON_BILL}</span>
+      <span class="bill-drawer-label" data-i18n="tools.billing.product">Billing Software</span>
+    </div>
+    <button type="button" class="bill-drawer-toggle" id="bill-drawer-toggle" aria-controls="bill-drawer" aria-expanded="true">
+      <span class="bill-tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 7h14M5 12h14M5 17h14"/></svg></span>
+      <span class="bill-drawer-label" data-i18n="tools.billing.menu">Menu</span>
+    </button>
+    <nav class="bill-tab-list" id="bill-tab-list" aria-label="Workspace"></nav>
+    <button type="button" class="bill-tab bill-tab-exit" id="billing-logout">
+      <span class="bill-tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 7V5a1 1 0 0 1 1-1h8v16h-8a1 1 0 0 1-1-1v-2"/><path d="M4 12h10M8 8l-4 4 4 4"/></svg></span>
+      <span class="bill-drawer-label" data-i18n="tools.billing.logout">Log out</span>
+    </button>
+  </aside>
+  <div class="bill-frame">
+  <header class="bill-top" id="nav" role="banner">
+    <a class="bill-brand" id="bill-header-brand" href="./" aria-label="Billing Software">
+      <span class="logo-mark hub-icon-bill" aria-hidden="true">{ICON_BILL}</span>
+      <span class="bill-brand-text" data-i18n="tools.billing.product">Billing Software</span>
+    </a>
+    <h1 class="bill-biz-name" id="bill-biz-name"></h1>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle theme">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 14.5A8.5 8.5 0 1110.5 3a7 7 0 0010.5 11.5z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+  <main class="bill-main" id="main-content" tabindex="-1">
+    <div class="billing-layout">
+      <div id="billing-app" class="billing-app" aria-live="polite">
+        <section class="billing-card glass">
+          <p class="tool-kicker" data-i18n="tools.billing.kicker">Mobile login</p>
+          <h2 data-i18n="tools.billing.signInTitle">Sign in or create an account</h2>
+          <p class="tool-lead" data-i18n="tools.billing.signInLead">Use your business mobile number. New and existing users follow the same steps.</p>
+          <form id="bill-phone-form" method="post" action="#" onsubmit="return false;">
+            <div class="tool-field">
+              <label for="billing-mobile"><span data-i18n="tools.billing.mobile">Mobile number</span> <span class="billing-req">*</span></label>
+              <div class="billing-input"><span>+91</span>
+                <input id="billing-mobile" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="9876543210" required />
+              </div>
+              <span class="tool-note" data-i18n="tools.billing.mobileHint">10-digit Indian mobile number</span>
+            </div>
+            <p class="billing-err" id="billing-error" role="alert"></p>
+            <button class="btn btn-primary" type="submit" data-i18n="tools.billing.sendOtp">Send OTP</button>
+          </form>
+        </section>
+      </div>
+      <aside class="billing-showcase" aria-label="Billing highlights">
+        <div class="billing-carousel" id="billing-carousel">
+          <div class="billing-slides">
+            <figure class="billing-slide is-active">
+              <img src="../../assets/billing/workspace.jpg" alt="A quiet desk ready for invoicing" width="1200" height="900" />
+              <figcaption data-i18n="tools.billing.slide1">Create clean invoices in minutes</figcaption>
+            </figure>
+            <figure class="billing-slide">
+              <img src="../../assets/billing/counter.jpg" alt="A merchant billing a customer at the counter" width="1200" height="900" />
+              <figcaption data-i18n="tools.billing.slide2">Built for everyday shop billing</figcaption>
+            </figure>
+            <figure class="billing-slide">
+              <img src="../../assets/billing/documents.jpg" alt="Invoice and tax documents on a desk" width="1200" height="900" />
+              <figcaption data-i18n="tools.billing.slide3">GST-ready totals when you need them</figcaption>
+            </figure>
+            <figure class="billing-slide">
+              <img src="../../assets/billing/dashboard.jpg" alt="A finance dashboard on a laptop" width="1200" height="900" />
+              <figcaption data-i18n="tools.billing.slide4">See what you billed at a glance</figcaption>
+            </figure>
+          </div>
+          <div class="billing-carousel-nav">
+            <button type="button" class="billing-carousel-btn" data-carousel-prev aria-label="Previous slide">‹</button>
+            <div class="billing-dots" role="tablist" aria-label="Carousel slides">
+              <button type="button" class="is-on" data-carousel-dot="0" aria-label="Slide 1"></button>
+              <button type="button" data-carousel-dot="1" aria-label="Slide 2"></button>
+              <button type="button" data-carousel-dot="2" aria-label="Slide 3"></button>
+              <button type="button" data-carousel-dot="3" aria-label="Slide 4"></button>
+            </div>
+            <button type="button" class="billing-carousel-btn" data-carousel-next aria-label="Next slide">›</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <section class="bill-stage" id="bill-stage" hidden></section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <footer class="bill-foot" role="contentinfo">
+    <p>Made with love · Developed by <a href="../../">Kapil Rana</a></p>
+  </footer>
+  </div>
+  <script src="../../js/i18n.js" defer></script>
+  <script src="../../js/tools.js" defer></script>
+  <script src="../../js/billing-config.js" defer></script>
+  <script src="../../js/billing-app.js" defer></script>
+</body>
+</html>
+"""
+    out = ROOT / "tools" / "billing" / "index.html"
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(html, encoding="utf-8")
+    print("wrote", out.relative_to(ROOT))
+
+
 def main() -> None:
     write_hub()
     write_emi()
     write_sip()
     write_gst()
+    write_billing()
 
 
 if __name__ == "__main__":

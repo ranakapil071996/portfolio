@@ -27,6 +27,13 @@ window.TOOLS = {
           titleKey: "tools.gst.title",
           blurbKey: "tools.gst.card",
         },
+        {
+          id: "billing",
+          slug: "billing",
+          navKey: "tools.billing.nav",
+          titleKey: "tools.billing.title",
+          blurbKey: "tools.billing.card",
+        },
       ],
     },
   ],

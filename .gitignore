@@ -6,3 +6,6 @@ node_modules/
 __pycache__/
 kapilaudio.wav
 my-audio.ogg
+billing/dist/
+billing/.env
+billing/coverage/
