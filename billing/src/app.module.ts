@@ -4,6 +4,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { AuthModule } from "./auth/auth.module";
+import { BusinessModule } from "./businesses/business.module";
 import { loadEnv, type AppEnv } from "./config/env.validation";
 import { CustomersModule } from "./customers/customers.module";
 import { HealthController } from "./health.controller";
@@ -30,6 +31,7 @@ import { ItemsModule } from "./items/items.module";
       throttlers: [{ name: "default", ttl: 60_000, limit: 40 }],
     }),
     AuthModule,
+    BusinessModule,
     ItemsModule,
     CustomersModule,
     InvoicesModule,

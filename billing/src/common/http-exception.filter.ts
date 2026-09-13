@@ -29,10 +29,12 @@ export class HttpErrorFilter implements ExceptionFilter {
       } else if (body && typeof body === "object") {
         const rec = body as Record<string, unknown>;
         const inner =
-          rec.message && typeof rec.message === "object"
+          rec.message && typeof rec.message === "object" && !Array.isArray(rec.message)
             ? (rec.message as Record<string, unknown>)
             : rec;
-        if (Array.isArray(inner.message)) {
+        if (Array.isArray(rec.message)) {
+          message = rec.message.map(String).join(", ");
+        } else if (Array.isArray(inner.message)) {
           message = inner.message.map(String).join(", ");
         } else if (inner.message != null) {
           message = String(inner.message);
@@ -40,9 +42,7 @@ export class HttpErrorFilter implements ExceptionFilter {
           message = rec.message;
         }
         const rawCode = inner.error ?? rec.error;
-        if (rawCode != null && typeof rawCode === "string" && !/^[A-Z]/.test(rawCode)) {
-          code = rawCode.toLowerCase().replace(/\s+/g, "_");
-        } else if (typeof rawCode === "string") {
+        if (typeof rawCode === "string") {
           code = rawCode.toLowerCase().replace(/\s+/g, "_");
         }
       }

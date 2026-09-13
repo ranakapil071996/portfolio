@@ -1638,6 +1638,206 @@ html[dir="rtl"] .tool-table td { text-align: start; }
   gap: 0.55rem;
 }
 
+.bill-profile-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.2rem 0.7rem 0.2rem 0.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  background: rgba(251, 191, 36, 0.14);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.35);
+  animation: bill-profile-pulse 1.8s ease-in-out infinite;
+}
+
+.bill-profile-chip[hidden] { display: none !important; }
+
+.bill-profile-chip-copy {
+  display: grid;
+  line-height: 1.15;
+}
+
+.bill-profile-chip-copy strong {
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.bill-profile-chip-copy em {
+  font-style: normal;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+@keyframes bill-profile-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.28); }
+  50% { box-shadow: 0 0 0 6px rgba(251, 191, 36, 0); }
+}
+
+.bill-ring-bg { stroke: rgba(148, 163, 184, 0.28); }
+.bill-ring-fg { stroke: #f59e0b; }
+.bill-tab-progress.is-done .bill-ring-fg,
+.bill-profile-meter .bill-ring-fg { stroke: #34d399; }
+
+.bill-tab-progress {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.bill-tab-progress.is-alert .bill-ring-fg { stroke: #f59e0b; }
+
+.bill-profile-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 8.5rem;
+}
+
+.bill-profile-meter strong {
+  display: block;
+  font-size: 1.35rem;
+  letter-spacing: -0.04em;
+}
+
+.bill-profile-meter span { color: var(--text-muted); font-size: 0.82rem; }
+
+.bill-profile-check {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.7rem;
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.bill-profile-check li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.bill-profile-check li.is-on { color: #34d399; }
+
+.bill-item-form h3 {
+  margin: 1.15rem 0 0.7rem;
+  font-size: 0.92rem;
+}
+
+.bill-profile-assets {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.bill-asset-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: 14px;
+  background: var(--stat-bg);
+  cursor: pointer;
+}
+
+.bill-asset-card span { font-size: 0.82rem; font-weight: 700; }
+.bill-asset-card em { font-style: normal; font-weight: 600; color: var(--text-muted); }
+.bill-asset-empty { color: var(--text-muted); font-weight: 500 !important; }
+.bill-asset-card img {
+  width: 100%;
+  max-height: 120px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.bill-crop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(5, 8, 22, 0.72);
+}
+
+.bill-crop[hidden] { display: none !important; }
+
+.bill-crop-card {
+  width: min(28rem, 100%);
+  padding: 1.1rem 1.15rem 1.2rem;
+  border-radius: 18px;
+  border: 1px solid var(--border-strong);
+  background: #0f172a;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .bill-crop-card { background: #ffffff; }
+
+.bill-crop-card h3 { margin: 0 0 0.35rem; }
+
+.bill-crop-stage {
+  position: relative;
+  overflow: hidden;
+  margin: 0.85rem auto 0.9rem;
+  border-radius: 14px;
+  border: 2px solid var(--border-strong);
+  background: #111827;
+  cursor: grab;
+  touch-action: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.bill-crop-stage:active { cursor: grabbing; }
+
+.bill-crop-stage img {
+  position: absolute;
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.bill-crop-zoom {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.bill-crop-zoom input { width: 100%; }
+
+@media (max-width: 720px) {
+  .bill-profile-assets { grid-template-columns: 1fr; }
+  .bill-profile-chip-copy em { display: none; }
+}
+
+.billing-software .toast {
+  z-index: 300;
+  bottom: 1.75rem;
+}
+
+.billing-software .toast.is-ok {
+  border-color: rgba(52, 211, 153, 0.55);
+}
+
+.billing-software .toast.is-err {
+  border-color: rgba(251, 113, 133, 0.65);
+  color: #fecdd3;
+}
+
+[data-theme="light"] .billing-software .toast.is-err {
+  color: #9f1239;
+}
+
 .bill-row-link { cursor: pointer; }
 .bill-row-link:hover td { background: color-mix(in srgb, var(--accent, #38bdf8) 8%, transparent); }
 

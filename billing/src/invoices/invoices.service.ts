@@ -250,7 +250,7 @@ export class InvoicesService {
       });
     }
 
-    const sellerState = stateCodeFromParty(undefined, business.gstin);
+    const sellerState = stateCodeFromParty(business.stateCode, business.gstin);
     const buyerState = stateCodeFromParty(customer.stateCode, customer.gstin);
     const split = taxSplit(sellerState, buyerState);
     const placeCode = buyerState || sellerState;
@@ -338,9 +338,13 @@ export class InvoicesService {
         seller: {
           name: business.name,
           mobile: business.mobile,
+          email: business.email,
           gstin: business.gstin,
-          stateCode: sellerState,
-          state: sellerStateName,
+          address: business.address,
+          city: business.city,
+          stateCode: business.stateCode || sellerState,
+          state: business.state || sellerStateName,
+          pincode: business.pincode,
         } as InvoiceParty,
         placeOfSupply: buyerStateName || sellerStateName,
         placeOfSupplyCode: placeCode,

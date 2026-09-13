@@ -27,16 +27,17 @@
     return fallback == null ? key : fallback;
   }
 
-  function toast(msg) {
+  function toast(msg, kind) {
     if (!toastEl) return;
     toastEl.hidden = false;
     toastEl.textContent = msg;
-    toastEl.classList.add("show");
+    toastEl.classList.remove("is-ok", "is-err");
+    toastEl.classList.add("show", kind === "err" ? "is-err" : "is-ok");
     clearTimeout(toastEl._t);
     toastEl._t = setTimeout(function () {
-      toastEl.classList.remove("show");
+      toastEl.classList.remove("show", "is-ok", "is-err");
       toastEl.hidden = true;
-    }, 2600);
+    }, kind === "err" ? 3600 : 2600);
   }
 
   function apiBase() {
@@ -62,9 +63,16 @@
       signal: ctrl ? ctrl.signal : undefined,
       headers: {
         Accept: "application/json",
-        ...(opts && opts.body ? { "Content-Type": "application/json" } : {}),
+        ...(opts && opts.body && !(opts.body instanceof FormData)
+          ? { "Content-Type": "application/json" }
+          : {}),
       },
-      body: opts && opts.body ? JSON.stringify(opts.body) : undefined,
+      body:
+        opts && opts.body
+          ? opts.body instanceof FormData
+            ? opts.body
+            : JSON.stringify(opts.body)
+          : undefined,
     })
       .then(function (res) {
         return res.json().catch(function () {
@@ -122,6 +130,7 @@
       var biz = state.session && state.session.business;
       nameEl.textContent = dash && biz ? biz.name : "";
     }
+    renderProfileChip();
   }
 
   function setBusy(form, busy) {
@@ -355,7 +364,8 @@
         form.id !== "bill-onboard-form" &&
         form.id !== "bill-item-form" &&
         form.id !== "bill-customer-form" &&
-        form.id !== "bill-invoice-form"
+        form.id !== "bill-invoice-form" &&
+        form.id !== "bill-profile-form"
       ) {
         return;
       }
@@ -366,6 +376,7 @@
       else if (form.id === "bill-item-form") handleItemSubmit();
       else if (form.id === "bill-customer-form") handleCustomerSubmit();
       else if (form.id === "bill-invoice-form") handleInvoiceSubmit();
+      else if (form.id === "bill-profile-form") handleProfileSubmit();
       else handleOnboardSubmit();
     },
     true,
@@ -540,7 +551,7 @@
     { id: "customers", key: "tools.billing.tabCustomers", label: "Customers", icon: "customers" },
     { id: "items", key: "tools.billing.tabItems", label: "Items", icon: "items" },
     { id: "reports", key: "tools.billing.tabReports", label: "Reports", icon: "reports" },
-    { id: "settings", key: "tools.billing.tabSettings", label: "Settings", icon: "settings" },
+    { id: "profile", key: "tools.billing.tabProfile", label: "Profile", icon: "settings" },
   ];
 
   function drawerOpen() {
@@ -624,11 +635,84 @@
     );
   }
 
+  function profileInfo() {
+    var biz = state.session && state.session.business;
+    return (biz && biz.profile) || { percent: 0, complete: true, missing: [] };
+  }
+
+  function ringSvg(percent, size) {
+    var p = Math.max(0, Math.min(100, Math.round(Number(percent) || 0)));
+    var r = 15.5;
+    var c = 2 * Math.PI * r;
+    var dash = (p / 100) * c;
+    return (
+      '<svg class="bill-ring" viewBox="0 0 36 36" width="' +
+      size +
+      '" height="' +
+      size +
+      '" aria-hidden="true"><circle class="bill-ring-bg" cx="18" cy="18" r="15.5" fill="none" stroke-width="3.2"></circle><circle class="bill-ring-fg" cx="18" cy="18" r="15.5" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="' +
+      dash.toFixed(2) +
+      " " +
+      (c - dash).toFixed(2) +
+      '" transform="rotate(-90 18 18)"></circle></svg>'
+    );
+  }
+
+  function renderProfileChip() {
+    var chip = document.getElementById("bill-profile-chip");
+    if (!chip) return;
+    var dash = document.body.classList.contains("billing-dash");
+    var info = profileInfo();
+    if (!dash || info.complete) {
+      chip.hidden = true;
+      chip.innerHTML = "";
+      return;
+    }
+    var next = (info.missing && info.missing[0]) || t("tools.billing.profileMissing", "missing details");
+    chip.hidden = false;
+    chip.classList.add("is-alert");
+    chip.innerHTML =
+      ringSvg(info.percent, 28) +
+      '<span class="bill-profile-chip-copy"><strong>' +
+      esc(String(info.percent)) +
+      "% " +
+      esc(t("tools.billing.profileCompleteLabel", "complete")) +
+      "</strong><em>" +
+      esc(t("tools.billing.profileAddNext", "Add {field}").replace("{field}", next.toLowerCase())) +
+      "</em></span>";
+  }
+
+  function syncSessionProfile(profile) {
+    if (!state.session || !state.session.business || !profile) return;
+    state.session.business.profile = {
+      percent: profile.percent,
+      complete: profile.complete,
+      missing: profile.missing || [],
+    };
+    if (profile.name) state.session.business.name = profile.name;
+    if (profile.gstin !== undefined) state.session.business.gstin = profile.gstin;
+    renderProfileChip();
+    var nameEl = document.getElementById("bill-biz-name");
+    if (nameEl && state.session.business.name) nameEl.textContent = state.session.business.name;
+    var list = document.getElementById("bill-tab-list");
+    if (list) fillDrawer(view().tab === "settings" ? "profile" : view().tab);
+  }
+
   function fillDrawer(tab) {
     var list = document.getElementById("bill-tab-list");
     if (!list) return;
+    if (tab === "settings") tab = "profile";
+    var info = profileInfo();
     list.innerHTML = TABS.map(function (item) {
       var on = item.id === tab || (tab === "items" && item.id === "items");
+      var ico =
+        item.id === "profile"
+          ? '<span class="bill-tab-progress' +
+            (info.complete ? " is-done" : " is-alert") +
+            '" aria-hidden="true">' +
+            ringSvg(info.percent, 22) +
+            "</span>"
+          : '<span class="bill-tab-ico" aria-hidden="true">' + ICO[item.icon] + "</span>";
       return (
         '<a class="bill-tab' +
         (on ? " is-on" : "") +
@@ -638,10 +722,12 @@
         item.id +
         '" title="' +
         esc(t(item.key, item.label)) +
-        '"><span class="bill-tab-ico" aria-hidden="true">' +
-        ICO[item.icon] +
-        '</span><span class="bill-drawer-label">' +
+        (item.id === "profile" ? " · " + info.percent + "%" : "") +
+        '">' +
+        ico +
+        '<span class="bill-drawer-label">' +
         esc(t(item.key, item.label)) +
+        (item.id === "profile" ? " " + info.percent + "%" : "") +
         "</span></a>"
       );
     }).join("");
@@ -2900,6 +2986,513 @@
       });
   }
 
+  function profileFieldCheck(id, label, on) {
+    return (
+      '<li class="' +
+      (on ? "is-on" : "") +
+      '"><span>' +
+      (on ? "✓" : "○") +
+      "</span>" +
+      esc(label) +
+      "</li>"
+    );
+  }
+
+  var crop = {
+    kind: "",
+    previewId: "",
+    img: null,
+    aspect: 1,
+    scale: 1,
+    minScale: 1,
+    x: 0,
+    y: 0,
+    drag: false,
+    sx: 0,
+    sy: 0,
+    ox: 0,
+    oy: 0,
+  };
+
+  function cropViewSize() {
+    var wide = Math.min(360, window.innerWidth - 72);
+    return { w: wide, h: Math.round(wide / crop.aspect) };
+  }
+
+  function clampCrop() {
+    if (!crop.img) return;
+    var view = cropViewSize();
+    var w = crop.img.naturalWidth * crop.scale;
+    var h = crop.img.naturalHeight * crop.scale;
+    crop.x = Math.min(0, Math.max(view.w - w, crop.x));
+    crop.y = Math.min(0, Math.max(view.h - h, crop.y));
+  }
+
+  function paintCrop() {
+    var img = document.getElementById("bill-crop-img");
+    var stage = document.getElementById("bill-crop-stage");
+    var zoom = document.getElementById("bill-crop-zoom");
+    if (!img || !stage || !crop.img) return;
+    var view = cropViewSize();
+    stage.style.width = view.w + "px";
+    stage.style.height = view.h + "px";
+    clampCrop();
+    img.style.width = crop.img.naturalWidth * crop.scale + "px";
+    img.style.height = crop.img.naturalHeight * crop.scale + "px";
+    img.style.left = crop.x + "px";
+    img.style.top = crop.y + "px";
+    if (zoom) zoom.value = String(crop.scale);
+  }
+
+  function closeCrop() {
+    var modal = document.getElementById("bill-crop");
+    if (modal) modal.hidden = true;
+    crop.img = null;
+    crop.drag = false;
+    ["profile-logo", "profile-signature", "profile-qr"].forEach(function (id) {
+      var input = document.getElementById(id);
+      if (input) input.value = "";
+    });
+  }
+
+  function uploadCroppedBlob(kind, previewId, blob) {
+    var data = new FormData();
+    data.append("file", blob, kind + ".png");
+    return api("/business/" + kind, { method: "POST", body: data }).then(function (biz) {
+      toast(
+        kind === "logo"
+          ? t("tools.billing.profileLogoSaved", "Logo saved")
+          : kind === "qr"
+            ? t("tools.billing.profileQrSaved", "QR saved")
+            : t("tools.billing.profileSignSaved", "Signature saved"),
+      );
+      syncSessionProfile(biz.profile ? Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile) : biz);
+      showProfileAsset(kind, previewId);
+      refreshProfileChecklist(biz.profile);
+    });
+  }
+
+  function applyCrop() {
+    if (!crop.img) return;
+    var view = cropViewSize();
+    var outW = crop.kind === "signature" ? 800 : 512;
+    var outH = Math.round(outW / crop.aspect);
+    var canvas = document.createElement("canvas");
+    canvas.width = outW;
+    canvas.height = outH;
+    var ctx = canvas.getContext("2d");
+    var sx = -crop.x / crop.scale;
+    var sy = -crop.y / crop.scale;
+    var sw = view.w / crop.scale;
+    var sh = view.h / crop.scale;
+    ctx.drawImage(crop.img, sx, sy, sw, sh, 0, 0, outW, outH);
+    var kind = crop.kind;
+    var previewId = crop.previewId;
+    canvas.toBlob(
+      function (blob) {
+        if (!blob) {
+          toast(t("tools.billing.profileCropFail", "Could not crop that image"));
+          return;
+        }
+        closeCrop();
+        uploadCroppedBlob(kind, previewId, blob).catch(function (ex) {
+          toast(ex.message);
+        });
+      },
+      "image/png",
+      0.95,
+    );
+  }
+
+  function bindCropOnce() {
+    var modal = document.getElementById("bill-crop");
+    if (!modal || modal._bound) return;
+    modal._bound = true;
+    modal.addEventListener("click", function (e) {
+      if (e.target.id === "bill-crop" || (e.target.closest && e.target.closest("[data-crop-cancel]"))) {
+        closeCrop();
+      }
+      if (e.target.closest && e.target.closest("[data-crop-apply]")) applyCrop();
+    });
+    var stage = document.getElementById("bill-crop-stage");
+    if (stage) {
+      stage.addEventListener("pointerdown", function (e) {
+        if (!crop.img) return;
+        crop.drag = true;
+        crop.sx = e.clientX;
+        crop.sy = e.clientY;
+        crop.ox = crop.x;
+        crop.oy = crop.y;
+        stage.setPointerCapture(e.pointerId);
+      });
+      stage.addEventListener("pointermove", function (e) {
+        if (!crop.drag) return;
+        crop.x = crop.ox + (e.clientX - crop.sx);
+        crop.y = crop.oy + (e.clientY - crop.sy);
+        paintCrop();
+      });
+      stage.addEventListener("pointerup", function () {
+        crop.drag = false;
+      });
+      stage.addEventListener(
+        "wheel",
+        function (e) {
+          if (!crop.img) return;
+          e.preventDefault();
+          var next = crop.scale * (e.deltaY < 0 ? 1.08 : 0.92);
+          crop.scale = Math.max(crop.minScale, Math.min(crop.minScale * 4, next));
+          paintCrop();
+        },
+        { passive: false },
+      );
+    }
+    var zoom = document.getElementById("bill-crop-zoom");
+    if (zoom) {
+      zoom.addEventListener("input", function () {
+        crop.scale = Number(zoom.value) || crop.minScale;
+        paintCrop();
+      });
+    }
+  }
+
+  function openCropper(kind, file, previewId) {
+    var img = new Image();
+    img.onload = function () {
+      crop.kind = kind;
+      crop.previewId = previewId;
+      crop.img = img;
+      crop.aspect = kind === "signature" ? 2 : 1;
+      var view = cropViewSize();
+      crop.minScale = Math.max(view.w / img.naturalWidth, view.h / img.naturalHeight);
+      crop.scale = crop.minScale;
+      crop.x = (view.w - img.naturalWidth * crop.scale) / 2;
+      crop.y = (view.h - img.naturalHeight * crop.scale) / 2;
+      var modal = document.getElementById("bill-crop");
+      if (!modal) return;
+      var title = document.getElementById("bill-crop-title");
+      var hint = document.getElementById("bill-crop-hint");
+      var frame = document.getElementById("bill-crop-img");
+      var zoom = document.getElementById("bill-crop-zoom");
+      if (title) {
+        title.textContent =
+          kind === "logo"
+            ? t("tools.billing.profileCropLogo", "Crop logo · 1:1")
+            : kind === "qr"
+              ? t("tools.billing.profileCropQr", "Crop QR · 1:1")
+              : t("tools.billing.profileCropSign", "Crop signature · 2:1");
+      }
+      if (hint) hint.textContent = t("tools.billing.profileCropHint", "Drag to reposition. Use the slider or scroll to zoom.");
+      if (frame) frame.src = img.src;
+      if (zoom) {
+        zoom.min = String(crop.minScale);
+        zoom.max = String(crop.minScale * 4);
+        zoom.step = String(crop.minScale / 40);
+        zoom.value = String(crop.scale);
+      }
+      modal.hidden = false;
+      bindCropOnce();
+      paintCrop();
+    };
+    img.onerror = function () {
+      toast(t("tools.billing.profileCropFail", "Could not crop that image"));
+    };
+    img.src = URL.createObjectURL(file);
+  }
+
+  function bindProfileAsset(kind, previewId) {
+    var input = document.getElementById("profile-" + kind);
+    if (!input || input._bound) return;
+    input._bound = true;
+    input.addEventListener("change", function () {
+      var file = input.files && input.files[0];
+      if (!file) return;
+      if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+        toast(t("tools.billing.profileCropType", "Use a PNG, JPG, or WebP image"));
+        input.value = "";
+        return;
+      }
+      openCropper(kind, file, previewId);
+    });
+  }
+
+  function showProfileAsset(kind, previewId) {
+    var img = document.getElementById(previewId);
+    var empty = document.getElementById(previewId + "-empty");
+    if (!img) return;
+    fetch(apiBase() + "/api/business/" + kind, { credentials: "include" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("missing");
+        return res.blob();
+      })
+      .then(function (blob) {
+        img.src = URL.createObjectURL(blob);
+        img.hidden = false;
+        if (empty) empty.hidden = true;
+      })
+      .catch(function () {
+        img.hidden = true;
+        if (empty) empty.hidden = false;
+      });
+  }
+
+  function refreshProfileChecklist(profile) {
+    var box = document.getElementById("profile-check");
+    var meter = document.getElementById("profile-meter");
+    if (!profile) return;
+    if (meter) {
+      meter.innerHTML =
+        ringSvg(profile.percent, 72) +
+        '<div><strong>' +
+        esc(String(profile.percent)) +
+        "%</strong><span>" +
+        esc(t("tools.billing.profileCompleteLabel", "complete")) +
+        "</span></div>";
+    }
+    if (box) {
+      var map = {};
+      (profile.fields || []).forEach(function (f) {
+        map[f.id] = f;
+      });
+      box.innerHTML =
+        profileFieldCheck("name", t("tools.billing.businessName", "Business name"), !!(map.name && map.name.filled)) +
+        profileFieldCheck("email", t("tools.billing.profileEmail", "Email"), !!(map.email && map.email.filled)) +
+        profileFieldCheck("address", t("tools.billing.customerAddress", "Billing address"), !!(map.address && map.address.filled)) +
+        profileFieldCheck("logo", t("tools.billing.profileLogo", "Business logo"), !!(map.logo && map.logo.filled)) +
+        profileFieldCheck("signature", t("tools.billing.profileSignature", "Signature"), !!(map.signature && map.signature.filled));
+    }
+  }
+
+  function profileView() {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    stage.innerHTML =
+      '<p class="tool-note">' + esc(t("tools.billing.profileLoading", "Loading profile…")) + "</p>";
+    api("/business")
+      .then(function (biz) {
+        var stateOpts =
+          '<option value="">' +
+          esc(t("tools.billing.customerStateNone", "Select state")) +
+          "</option>" +
+          IN_STATES.map(function (row) {
+            return (
+              '<option value="' +
+              row.code +
+              '"' +
+              (biz.stateCode === row.code ? " selected" : "") +
+              ">" +
+              esc(row.name) +
+              "</option>"
+            );
+          }).join("");
+        stage.innerHTML =
+          '<header class="bill-stage-head bill-stage-head-row"><div><h2>' +
+          esc(t("tools.billing.tabProfile", "Profile")) +
+          "</h2><p>" +
+          esc(
+            t(
+              "tools.billing.profileLead",
+              "Add the details printed on every invoice — address, logo, and signature.",
+            ),
+          ) +
+          "</p></div>" +
+          '<div id="profile-meter" class="bill-profile-meter"></div></header>' +
+          '<ul id="profile-check" class="bill-profile-check"></ul>' +
+          '<form id="bill-profile-form" class="bill-item-form glass" method="post" action="#" onsubmit="return false;">' +
+          "<h3>" +
+          esc(t("tools.billing.profileIdentity", "Business identity")) +
+          "</h3>" +
+          '<div class="bill-form-grid">' +
+          '<div class="tool-field bill-span-2"><label for="profile-name">' +
+          esc(t("tools.billing.businessName", "Business name")) +
+          ' <span class="billing-req">*</span></label>' +
+          '<input id="profile-name" type="text" maxlength="120" required value="' +
+          esc(biz.name || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label for="profile-email">' +
+          esc(t("tools.billing.profileEmail", "Email")) +
+          ' <span class="billing-req">*</span></label>' +
+          '<input id="profile-email" type="email" maxlength="120" value="' +
+          esc(biz.email || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label>' +
+          esc(t("tools.billing.mobile", "Mobile number")) +
+          "</label>" +
+          '<input type="text" value="+91 ' +
+          esc(biz.mobile || "") +
+          '" disabled /></div>' +
+          '<div class="tool-field"><label for="profile-gstin">' +
+          esc(t("tools.billing.gstin", "GSTIN")) +
+          "</label>" +
+          '<input id="profile-gstin" type="text" maxlength="15" value="' +
+          esc(biz.gstin || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label for="profile-pan">' +
+          esc(t("tools.billing.profilePan", "PAN")) +
+          "</label>" +
+          '<input id="profile-pan" type="text" maxlength="10" value="' +
+          esc(biz.pan || "") +
+          '" /></div></div>' +
+          "<h3>" +
+          esc(t("tools.billing.profileAddress", "Business address")) +
+          "</h3>" +
+          '<div class="bill-form-grid">' +
+          '<div class="tool-field bill-span-2"><label for="profile-address">' +
+          esc(t("tools.billing.customerAddress", "Billing address")) +
+          ' <span class="billing-req">*</span></label>' +
+          '<input id="profile-address" type="text" maxlength="200" value="' +
+          esc(biz.address || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label for="profile-city">' +
+          esc(t("tools.billing.customerCity", "City")) +
+          ' <span class="billing-req">*</span></label>' +
+          '<input id="profile-city" type="text" maxlength="80" value="' +
+          esc(biz.city || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label for="profile-state">' +
+          esc(t("tools.billing.customerState", "State")) +
+          ' <span class="billing-req">*</span></label>' +
+          '<select id="profile-state">' +
+          stateOpts +
+          "</select></div>" +
+          '<div class="tool-field"><label for="profile-pincode">' +
+          esc(t("tools.billing.customerPincode", "PIN code")) +
+          ' <span class="billing-req">*</span></label>' +
+          '<input id="profile-pincode" type="text" inputmode="numeric" maxlength="6" value="' +
+          esc(biz.pincode || "") +
+          '" /></div></div>' +
+          "<h3>" +
+          esc(t("tools.billing.profileBrand", "Logo, signature, and QR")) +
+          "</h3>" +
+          '<div class="bill-profile-assets">' +
+          '<label class="bill-asset-card"><span>' +
+          esc(t("tools.billing.profileLogo", "Business logo")) +
+          '</span><img id="profile-logo-preview" alt="" hidden /><span id="profile-logo-preview-empty" class="bill-asset-empty">' +
+          esc(t("tools.billing.profileLogoHint", "Square PNG or JPG, under 2 MB")) +
+          '</span><input id="profile-logo" type="file" accept="image/png,image/jpeg,image/webp" /></label>' +
+          '<label class="bill-asset-card"><span>' +
+          esc(t("tools.billing.profileSignature", "Signature")) +
+          '</span><img id="profile-sign-preview" alt="" hidden /><span id="profile-sign-preview-empty" class="bill-asset-empty">' +
+          esc(t("tools.billing.profileSignHint", "Sign on white paper and upload")) +
+          '</span><input id="profile-signature" type="file" accept="image/png,image/jpeg,image/webp" /></label>' +
+          '<label class="bill-asset-card"><span>' +
+          esc(t("tools.billing.profileQr", "Payment QR")) +
+          ' <em>' +
+          esc(t("tools.billing.optional", "optional")) +
+          "</em></span><img id=\"profile-qr-preview\" alt=\"\" hidden /><span id=\"profile-qr-preview-empty\" class=\"bill-asset-empty\">" +
+          esc(t("tools.billing.profileQrHint", "Square UPI or payment QR, 1:1")) +
+          '</span><input id="profile-qr" type="file" accept="image/png,image/jpeg,image/webp" /></label></div>' +
+          "<h3>" +
+          esc(t("tools.billing.profileBank", "Bank and UPI")) +
+          "</h3>" +
+          '<div class="bill-form-grid">' +
+          '<div class="tool-field"><label for="profile-bank-name">' +
+          esc(t("tools.billing.profileBankName", "Bank name")) +
+          "</label>" +
+          '<input id="profile-bank-name" type="text" maxlength="80" value="' +
+          esc(biz.bankName || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label for="profile-bank-holder">' +
+          esc(t("tools.billing.profileBankHolder", "Account holder")) +
+          "</label>" +
+          '<input id="profile-bank-holder" type="text" maxlength="120" value="' +
+          esc(biz.bankAccountName || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label for="profile-bank-no">' +
+          esc(t("tools.billing.profileBankNo", "Account number")) +
+          "</label>" +
+          '<input id="profile-bank-no" type="text" maxlength="24" value="' +
+          esc(biz.bankAccountNumber || "") +
+          '" /></div>' +
+          '<div class="tool-field"><label for="profile-ifsc">' +
+          esc(t("tools.billing.profileIfsc", "IFSC")) +
+          "</label>" +
+          '<input id="profile-ifsc" type="text" maxlength="11" value="' +
+          esc(biz.bankIfsc || "") +
+          '" /></div>' +
+          '<div class="tool-field bill-span-2"><label for="profile-upi">' +
+          esc(t("tools.billing.profileUpi", "UPI ID")) +
+          "</label>" +
+          '<input id="profile-upi" type="text" maxlength="80" value="' +
+          esc(biz.upiId || "") +
+          '" /></div></div>' +
+          '<p class="billing-err" id="billing-error" role="alert"></p>' +
+          '<div class="billing-actions"><button class="btn btn-primary" type="submit">' +
+          esc(t("tools.billing.profileSave", "Save profile")) +
+          "</button></div></form>";
+        refreshProfileChecklist(biz.profile);
+        if (biz.hasLogo) showProfileAsset("logo", "profile-logo-preview");
+        if (biz.hasSignature) showProfileAsset("signature", "profile-sign-preview");
+        if (biz.hasQr) showProfileAsset("qr", "profile-qr-preview");
+        bindProfileAsset("logo", "profile-logo-preview");
+        bindProfileAsset("signature", "profile-sign-preview");
+        bindProfileAsset("qr", "profile-qr-preview");
+        syncSessionProfile(Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile));
+      })
+      .catch(function (ex) {
+        stage.innerHTML = '<div class="bill-empty glass"><p>' + esc(ex.message) + "</p></div>";
+      });
+  }
+
+  function handleProfileSubmit() {
+    var form = document.getElementById("bill-profile-form");
+    var err = errBox();
+    if (!form) return;
+    if (err) err.textContent = "";
+    var name = fieldVal("profile-name");
+    if (name.length < 2) {
+      var nameMsg = t("tools.billing.profileNameRequired", "Business name is required");
+      if (err) err.textContent = nameMsg;
+      toast(nameMsg, "err");
+      return;
+    }
+    var email = fieldVal("profile-email");
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      var emailMsg = t("tools.billing.customerEmailInvalid", "Enter a valid email, or leave it blank");
+      if (err) err.textContent = emailMsg;
+      toast(emailMsg, "err");
+      return;
+    }
+    var acct = fieldVal("profile-bank-no").replace(/\s+/g, "");
+    if (acct && !/^\d{6,22}$/.test(acct)) {
+      var acctMsg = t("tools.billing.profileBankNoInvalid", "Enter a valid account number, or leave it blank");
+      if (err) err.textContent = acctMsg;
+      toast(acctMsg, "err");
+      return;
+    }
+    setBusy(form, true);
+    api("/business", {
+      method: "PATCH",
+      body: {
+        name: name,
+        email: email || undefined,
+        gstin: fieldVal("profile-gstin") || undefined,
+        pan: fieldVal("profile-pan") || undefined,
+        address: fieldVal("profile-address") || undefined,
+        city: fieldVal("profile-city") || undefined,
+        stateCode: fieldVal("profile-state") || undefined,
+        pincode: fieldVal("profile-pincode") || undefined,
+        bankName: fieldVal("profile-bank-name") || undefined,
+        bankAccountName: fieldVal("profile-bank-holder") || undefined,
+        bankAccountNumber: fieldVal("profile-bank-no") || undefined,
+        bankIfsc: fieldVal("profile-ifsc") || undefined,
+        upiId: fieldVal("profile-upi") || undefined,
+      },
+    })
+      .then(function (biz) {
+        toast(t("tools.billing.profileSaved", "Profile saved"), "ok");
+        syncSessionProfile(Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile));
+        refreshProfileChecklist(biz.profile);
+      })
+      .catch(function (ex) {
+        var msg = ex.message || t("tools.billing.profileSaveFail", "Could not save profile");
+        if (err) err.textContent = msg;
+        toast(msg, "err");
+      })
+      .then(function () {
+        setBusy(form, false);
+      });
+  }
+
   function appView(tab, screen, extra) {
     var s = state.session;
     if (!s) return;
@@ -2939,6 +3532,10 @@
     }
     if (tab === "invoices") {
       invoicesListView(screen);
+      return;
+    }
+    if (tab === "profile" || tab === "settings") {
+      profileView();
       return;
     }
     stage.innerHTML = tabPanel(tab, s);

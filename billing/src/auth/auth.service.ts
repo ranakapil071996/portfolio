@@ -16,6 +16,7 @@ import { normalizeMobile } from "../common/mobile";
 import { Business, BusinessDocument } from "../businesses/schemas/business.schema";
 import { OtpChallenge, OtpDocument } from "../otp/schemas/otp.schema";
 import { User, UserDocument } from "../users/schemas/user.schema";
+import { profileStatus } from "../common/profile-completion";
 import type { AuthUser, SessionPayload } from "./auth.types";
 
 @Injectable()
@@ -200,6 +201,14 @@ export class AuthService {
             name: business.name,
             mobile: business.mobile,
             gstin: business.gstin || null,
+            profile: (() => {
+              const status = profileStatus(business);
+              return {
+                percent: status.percent,
+                complete: status.complete,
+                missing: status.missing,
+              };
+            })(),
           }
         : null,
     };

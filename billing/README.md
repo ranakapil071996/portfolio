@@ -52,6 +52,14 @@ On Vercel, set `BILLING_API_PRODUCTION` in `js/billing-config.js` to the public 
 | `GET` | `/api/invoices/:id/pdf` | cookie — PDF download |
 | `GET` | `/api/hsn?q=&type=` | cookie — find HSN/SAC + GST rate |
 | `POST` | `/api/hsn` | cookie — add a missing HSN/SAC |
+| `GET` | `/api/business` | cookie — full profile + completion |
+| `PATCH` | `/api/business` | cookie — name, address, GSTIN, PAN, bank |
+| `POST` | `/api/business/logo` | cookie — multipart `file` |
+| `POST` | `/api/business/signature` | cookie — multipart `file` |
+| `POST` | `/api/business/qr` | cookie — multipart `file` (optional) |
+| `GET` | `/api/business/logo` | cookie |
+| `GET` | `/api/business/signature` | cookie |
+| `GET` | `/api/business/qr` | cookie |
 | `GET` | `/api/health` | public |
 
 ## Tests

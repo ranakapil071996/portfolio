@@ -18,5 +18,10 @@ export type SessionPayload = {
     name: string;
     mobile: string;
     gstin: string | null;
+    profile: {
+      percent: number;
+      complete: boolean;
+      missing: string[];
+    };
   } | null;
 };

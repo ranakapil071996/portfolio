@@ -9,3 +9,4 @@ my-audio.ogg
 billing/dist/
 billing/.env
 billing/coverage/
+billing/uploads/
