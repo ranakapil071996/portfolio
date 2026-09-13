@@ -13,7 +13,7 @@ export class ItemsController {
 
   @Get()
   list(@CurrentUser() user: AuthUser, @Query() query: ListItemsDto) {
-    return this.items.list(user, query.page, query.limit);
+    return this.items.list(user, query.page, query.limit, query.q);
   }
 
   @Post()

@@ -14,6 +14,9 @@ export class Business {
 
   @Prop({ uppercase: true, trim: true, maxlength: 15 })
   gstin?: string;
+
+  @Prop({ default: 0, min: 0 })
+  invoiceSeq?: number;
 }
 
 export type BusinessDocument = HydratedDocument<Business>;

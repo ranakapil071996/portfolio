@@ -31,6 +31,7 @@
     "cookie-parser": "^1.4.7",
     "helmet": "^8.1.0",
     "mongoose": "^8.18.1",
+    "pdfkit": "^0.20.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
   },
@@ -43,6 +44,7 @@
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.1",
+    "@types/pdfkit": "^0.17.6",
     "@types/supertest": "^6.0.3",
     "jest": "^30.1.3",
     "mongodb-memory-server": "^10.2.0",
@@ -53,11 +55,21 @@
     "typescript": "^5.9.2"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
-    "transform": { "^.+\\.ts$": "ts-jest" },
-    "collectCoverageFrom": ["**/*.ts", "!**/*.module.ts", "!main.ts"],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!**/*.module.ts",
+      "!main.ts"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

@@ -39,8 +39,17 @@ On Vercel, set `BILLING_API_PRODUCTION` in `js/billing-config.js` to the public 
 | `POST` | `/api/auth/onboarding` | `{ businessName, gstin? }` + cookie |
 | `GET` | `/api/auth/me` | cookie |
 | `POST` | `/api/auth/logout` | clears cookie |
-| `GET` | `/api/items?page=&limit=` | cookie |
+| `GET` | `/api/items?page=&limit=&q=` | cookie |
 | `POST` | `/api/items` | cookie |
+| `GET` | `/api/customers?page=&limit=&q=` | cookie |
+| `POST` | `/api/customers` | cookie |
+| `GET` | `/api/customers/:id` | cookie — full record for invoicing |
+| `GET` | `/api/invoices?page=&limit=` | cookie |
+| `POST` | `/api/invoices` | cookie — `{ customerId, invoiceDate?, notes?, lines: [{ itemId, qty, rate? }] }` |
+| `GET` | `/api/invoices/:id` | cookie |
+| `PATCH` | `/api/invoices/:id` | cookie — same body as create |
+| `DELETE` | `/api/invoices/:id` | cookie |
+| `GET` | `/api/invoices/:id/pdf` | cookie — PDF download |
 | `GET` | `/api/hsn?q=&type=` | cookie — find HSN/SAC + GST rate |
 | `POST` | `/api/hsn` | cookie — add a missing HSN/SAC |
 | `GET` | `/api/health` | public |

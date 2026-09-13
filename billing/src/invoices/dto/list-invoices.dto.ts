@@ -1,7 +1,7 @@
 import { Transform } from "class-transformer";
-import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
+import { IsInt, IsOptional, Max, Min } from "class-validator";
 
-export class ListItemsDto {
+export class ListInvoicesDto {
   @Transform(({ value }) => (value == null || value === "" ? 1 : Number(value)))
   @IsOptional()
   @IsInt()
@@ -14,13 +14,4 @@ export class ListItemsDto {
   @Min(1)
   @Max(50)
   limit?: number = 10;
-
-  @Transform(({ value }) => {
-    const text = String(value ?? "").trim();
-    return text ? text : undefined;
-  })
-  @IsOptional()
-  @IsString()
-  @MaxLength(80)
-  q?: string;
 }

@@ -5,8 +5,10 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { AuthModule } from "./auth/auth.module";
 import { loadEnv, type AppEnv } from "./config/env.validation";
+import { CustomersModule } from "./customers/customers.module";
 import { HealthController } from "./health.controller";
 import { HsnModule } from "./hsn/hsn.module";
+import { InvoicesModule } from "./invoices/invoices.module";
 import { ItemsModule } from "./items/items.module";
 
 @Module({
@@ -29,6 +31,8 @@ import { ItemsModule } from "./items/items.module";
     }),
     AuthModule,
     ItemsModule,
+    CustomersModule,
+    InvoicesModule,
     HsnModule,
   ],
   controllers: [HealthController],

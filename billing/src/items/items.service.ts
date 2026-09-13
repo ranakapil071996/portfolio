@@ -36,10 +36,16 @@ export class ItemsService {
     user: AuthUser,
     page = 1,
     limit = 10,
+    q?: string,
   ): Promise<{ items: ItemPayload[]; page: number; limit: number; total: number; pages: number }> {
     const business = await this.requireBusiness(user);
     const take = Math.min(50, Math.max(1, limit || 10));
-    const filter = { businessId: business._id };
+    const filter: Record<string, unknown> = { businessId: business._id };
+    const query = (q || "").trim();
+    if (query) {
+      const rx = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+      filter.$or = [{ name: rx }, { sku: rx }, { hsnSac: rx }];
+    }
     const total = await this.items.countDocuments(filter);
     const pages = Math.max(1, Math.ceil(total / take) || 1);
     const current = Math.min(Math.max(1, page || 1), pages);

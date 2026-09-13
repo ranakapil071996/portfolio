@@ -97,7 +97,7 @@
     var parts = hash.split("/");
     if (parts[0] === "onboarding") return { page: "onboarding", tab: "home" };
     if (parts[0] === "app") {
-      return { page: "app", tab: parts[1] || "home", screen: parts[2] || "" };
+      return { page: "app", tab: parts[1] || "home", screen: parts[2] || "", extra: parts[3] || "" };
     }
     if (parts[0] === "otp") return { page: "otp", tab: "home" };
     return { page: "login", tab: "home" };
@@ -279,6 +279,61 @@
       });
   }
 
+  function handleCustomerSubmit() {
+    var form = document.getElementById("bill-customer-form");
+    var err = errBox();
+    if (!form) return;
+    if (err) err.textContent = "";
+    var name = fieldVal("customer-name");
+    if (name.length < 2) {
+      if (err) err.textContent = t("tools.billing.customerNameRequired", "Customer name is required");
+      return;
+    }
+    var mobile = fieldVal("customer-mobile").replace(/\D/g, "");
+    if (mobile && !/^[6-9]\d{9}$/.test(mobile)) {
+      if (err) err.textContent = t("tools.billing.mobileInvalid", "Enter a valid 10-digit Indian mobile number");
+      return;
+    }
+    var email = fieldVal("customer-email");
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (err) err.textContent = t("tools.billing.customerEmailInvalid", "Enter a valid email, or leave it blank");
+      return;
+    }
+    var gstin = fieldVal("customer-gstin").toUpperCase();
+    if (gstin && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(gstin)) {
+      if (err) err.textContent = t("tools.billing.customerGstinInvalid", "Enter a valid 15-character GSTIN, or leave it blank");
+      return;
+    }
+    var pincode = fieldVal("customer-pincode");
+    if (pincode && !/^\d{6}$/.test(pincode)) {
+      if (err) err.textContent = t("tools.billing.customerPincodeInvalid", "Enter a 6-digit PIN code, or leave it blank");
+      return;
+    }
+    var payload = {
+      name: name,
+      mobile: mobile || undefined,
+      email: email || undefined,
+      gstin: gstin || undefined,
+      address: fieldVal("customer-address") || undefined,
+      city: fieldVal("customer-city") || undefined,
+      stateCode: fieldVal("customer-state") || undefined,
+      pincode: pincode || undefined,
+      notes: fieldVal("customer-notes") || undefined,
+    };
+    setBusy(form, true);
+    api("/customers", { method: "POST", body: payload })
+      .then(function () {
+        toast(t("tools.billing.customerSaved", "Customer saved"));
+        go("app/customers");
+      })
+      .catch(function (ex) {
+        if (err) err.textContent = ex.message;
+      })
+      .then(function () {
+        setBusy(form, false);
+      });
+  }
+
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Escape") return;
     var modal = document.getElementById("bill-hsn-modal");
@@ -298,7 +353,9 @@
         form.id !== "bill-phone-form" &&
         form.id !== "bill-otp-form" &&
         form.id !== "bill-onboard-form" &&
-        form.id !== "bill-item-form"
+        form.id !== "bill-item-form" &&
+        form.id !== "bill-customer-form" &&
+        form.id !== "bill-invoice-form"
       ) {
         return;
       }
@@ -307,6 +364,8 @@
       if (form.id === "bill-phone-form") handlePhoneSubmit();
       else if (form.id === "bill-otp-form") handleOtpSubmit();
       else if (form.id === "bill-item-form") handleItemSubmit();
+      else if (form.id === "bill-customer-form") handleCustomerSubmit();
+      else if (form.id === "bill-invoice-form") handleInvoiceSubmit();
       else handleOnboardSubmit();
     },
     true,
@@ -1296,7 +1355,1552 @@
     }
   }
 
-  function appView(tab, screen) {
+  var IN_STATES = [
+    { code: "01", name: "Jammu and Kashmir" },
+    { code: "02", name: "Himachal Pradesh" },
+    { code: "03", name: "Punjab" },
+    { code: "04", name: "Chandigarh" },
+    { code: "05", name: "Uttarakhand" },
+    { code: "06", name: "Haryana" },
+    { code: "07", name: "Delhi" },
+    { code: "08", name: "Rajasthan" },
+    { code: "09", name: "Uttar Pradesh" },
+    { code: "10", name: "Bihar" },
+    { code: "11", name: "Sikkim" },
+    { code: "12", name: "Arunachal Pradesh" },
+    { code: "13", name: "Nagaland" },
+    { code: "14", name: "Manipur" },
+    { code: "15", name: "Mizoram" },
+    { code: "16", name: "Tripura" },
+    { code: "17", name: "Meghalaya" },
+    { code: "18", name: "Assam" },
+    { code: "19", name: "West Bengal" },
+    { code: "20", name: "Jharkhand" },
+    { code: "21", name: "Odisha" },
+    { code: "22", name: "Chhattisgarh" },
+    { code: "23", name: "Madhya Pradesh" },
+    { code: "24", name: "Gujarat" },
+    { code: "26", name: "Dadra and Nagar Haveli and Daman and Diu" },
+    { code: "27", name: "Maharashtra" },
+    { code: "29", name: "Karnataka" },
+    { code: "30", name: "Goa" },
+    { code: "31", name: "Lakshadweep" },
+    { code: "32", name: "Kerala" },
+    { code: "33", name: "Tamil Nadu" },
+    { code: "34", name: "Puducherry" },
+    { code: "35", name: "Andaman and Nicobar Islands" },
+    { code: "36", name: "Telangana" },
+    { code: "37", name: "Andhra Pradesh" },
+    { code: "38", name: "Ladakh" },
+    { code: "97", name: "Other Territory" },
+  ];
+
+  function customersHref(page) {
+    var n = Number(page) || 1;
+    return n <= 1 ? "#app/customers" : "#app/customers/" + n;
+  }
+
+  function customersListView(page) {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    var asked = Math.max(1, Number(page) || 1);
+    stage.innerHTML =
+      '<header class="bill-stage-head bill-stage-head-row">' +
+      "<div><h2>" +
+      esc(t("tools.billing.tabCustomers", "Customers")) +
+      "</h2><p>" +
+      esc(t("tools.billing.customersLead", "Parties you bill — name, mobile, GSTIN, and address for invoices.")) +
+      "</p></div>" +
+      '<a class="btn btn-primary" href="#app/customers/new">' +
+      esc(t("tools.billing.addCustomer", "Add customer")) +
+      "</a></header>" +
+      '<p class="tool-note" id="customers-status">' +
+      esc(t("tools.billing.customersLoading", "Loading customers…")) +
+      "</p>";
+    api("/customers?page=" + encodeURIComponent(String(asked)) + "&limit=10")
+      .then(function (data) {
+        var items = (data && data.items) || [];
+        var total = Number(data && data.total) || 0;
+        var current = Number(data && data.page) || asked;
+        var pages = Number(data && data.pages) || 0;
+        var limit = Number(data && data.limit) || 10;
+        var status = document.getElementById("customers-status");
+        if (status) status.remove();
+        if (current !== asked && pages > 0) {
+          go(customersHref(current).slice(1));
+          return;
+        }
+        if (!total) {
+          stage.insertAdjacentHTML(
+            "beforeend",
+            '<div class="bill-empty glass"><p>' +
+              esc(t("tools.billing.customersEmpty", "No customers yet. Add your first customer.")) +
+              '</p><a class="btn btn-primary" href="#app/customers/new">' +
+              esc(t("tools.billing.addCustomer", "Add customer")) +
+              "</a></div>",
+          );
+          return;
+        }
+        var rows = items
+          .map(function (it) {
+            var place = [it.city, it.state].filter(Boolean).join(", ") || "—";
+            var gst = it.gstin
+              ? esc(it.gstin)
+              : '<span class="bill-sub">' +
+                esc(t("tools.billing.customerUnregistered", "Unregistered")) +
+                "</span>";
+            return (
+              "<tr><td><strong>" +
+              esc(it.name) +
+              "</strong>" +
+              (it.email ? '<span class="bill-sub">' + esc(it.email) + "</span>" : "") +
+              "</td><td>" +
+              (it.mobile ? "+91 " + esc(it.mobile) : "—") +
+              "</td><td>" +
+              gst +
+              "</td><td>" +
+              esc(place) +
+              (it.pincode ? '<span class="bill-sub">' + esc(it.pincode) + "</span>" : "") +
+              "</td></tr>"
+            );
+          })
+          .join("");
+        var from = (current - 1) * limit + 1;
+        var to = Math.min(total, (current - 1) * limit + items.length);
+        var prev =
+          current > 1
+            ? '<a class="btn btn-ghost" href="' +
+              customersHref(current - 1) +
+              '">' +
+              esc(t("tools.billing.customersPrev", "Previous")) +
+              "</a>"
+            : '<span class="btn btn-ghost" aria-disabled="true">' +
+              esc(t("tools.billing.customersPrev", "Previous")) +
+              "</span>";
+        var next =
+          current < pages
+            ? '<a class="btn btn-ghost" href="' +
+              customersHref(current + 1) +
+              '">' +
+              esc(t("tools.billing.customersNext", "Next")) +
+              "</a>"
+            : '<span class="btn btn-ghost" aria-disabled="true">' +
+              esc(t("tools.billing.customersNext", "Next")) +
+              "</span>";
+        stage.insertAdjacentHTML(
+          "beforeend",
+          '<div class="bill-table-wrap"><table class="bill-table"><thead><tr>' +
+            "<th>" +
+            esc(t("tools.billing.customerName", "Customer")) +
+            "</th><th>" +
+            esc(t("tools.billing.mobile", "Mobile number")) +
+            "</th><th>" +
+            esc(t("tools.billing.gstin", "GSTIN")) +
+            "</th><th>" +
+            esc(t("tools.billing.customerPlace", "Place of supply")) +
+            "</th></tr></thead><tbody>" +
+            rows +
+            "</tbody></table></div>" +
+            '<nav class="bill-pager" aria-label="' +
+            esc(t("tools.billing.customersPages", "Customer pages")) +
+            '">' +
+            prev +
+            '<p class="bill-pager-meta">' +
+            esc(
+              t("tools.billing.customersRange", "Showing {from}–{to} of {total}")
+                .replace("{from}", String(from))
+                .replace("{to}", String(to))
+                .replace("{total}", String(total)),
+            ) +
+            "<span>" +
+            esc(
+              t("tools.billing.customersPage", "Page {page} of {pages}")
+                .replace("{page}", String(current))
+                .replace("{pages}", String(pages)),
+            ) +
+            "</span></p>" +
+            next +
+            "</nav>",
+        );
+      })
+      .catch(function (ex) {
+        var status = document.getElementById("customers-status");
+        if (status) status.textContent = ex.message;
+      });
+  }
+
+  function customerFormView() {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    var stateOpts =
+      '<option value="">' +
+      esc(t("tools.billing.customerStateNone", "Select state")) +
+      "</option>" +
+      IN_STATES.map(function (row) {
+        return '<option value="' + row.code + '">' + esc(row.name) + "</option>";
+      }).join("");
+    stage.innerHTML =
+      '<header class="bill-stage-head">' +
+      "<h2>" +
+      esc(t("tools.billing.addCustomerTitle", "Add customer")) +
+      "</h2><p>" +
+      esc(t("tools.billing.addCustomerLead", "These details are copied onto invoices for this customer.")) +
+      "</p></header>" +
+      '<form id="bill-customer-form" class="bill-item-form glass" method="post" action="#" onsubmit="return false;">' +
+      '<div class="bill-form-grid">' +
+      '<div class="tool-field bill-span-2"><label for="customer-name">' +
+      esc(t("tools.billing.customerName", "Customer name")) +
+      ' <span class="billing-req">*</span></label>' +
+      '<input id="customer-name" type="text" maxlength="160" required autocomplete="organization" /></div>' +
+      '<div class="tool-field"><label for="customer-mobile">' +
+      esc(t("tools.billing.mobile", "Mobile number")) +
+      "</label>" +
+      '<div class="billing-input"><span>+91</span>' +
+      '<input id="customer-mobile" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel" /></div></div>' +
+      '<div class="tool-field"><label for="customer-email">' +
+      esc(t("tools.billing.customerEmail", "Email")) +
+      "</label>" +
+      '<input id="customer-email" type="email" maxlength="120" autocomplete="email" /></div>' +
+      '<div class="tool-field bill-span-2"><label for="customer-gstin">' +
+      esc(t("tools.billing.gstin", "GSTIN")) +
+      " <span class=\"tool-note\">(" +
+      esc(t("tools.billing.optional", "optional")) +
+      ")</span></label>" +
+      '<input id="customer-gstin" type="text" maxlength="15" autocomplete="off" placeholder="22AAAAA0000A1Z5" />' +
+      '<span class="tool-note">' +
+      esc(t("tools.billing.customerGstinHint", "If added, state is filled from the GSTIN for place of supply.")) +
+      "</span></div>" +
+      '<div class="tool-field bill-span-2"><label for="customer-address">' +
+      esc(t("tools.billing.customerAddress", "Billing address")) +
+      "</label>" +
+      '<input id="customer-address" type="text" maxlength="200" autocomplete="street-address" /></div>' +
+      '<div class="tool-field"><label for="customer-city">' +
+      esc(t("tools.billing.customerCity", "City")) +
+      "</label>" +
+      '<input id="customer-city" type="text" maxlength="80" autocomplete="address-level2" /></div>' +
+      '<div class="tool-field"><label for="customer-state">' +
+      esc(t("tools.billing.customerState", "State")) +
+      "</label>" +
+      '<select id="customer-state">' +
+      stateOpts +
+      "</select></div>" +
+      '<div class="tool-field"><label for="customer-pincode">' +
+      esc(t("tools.billing.customerPincode", "PIN code")) +
+      "</label>" +
+      '<input id="customer-pincode" type="text" inputmode="numeric" maxlength="6" autocomplete="postal-code" /></div>' +
+      '<div class="tool-field bill-span-2"><label for="customer-notes">' +
+      esc(t("tools.billing.customerNotes", "Notes")) +
+      "</label>" +
+      '<textarea id="customer-notes" rows="2" maxlength="400"></textarea></div>' +
+      "</div>" +
+      '<p class="billing-err" id="billing-error" role="alert"></p>' +
+      '<div class="billing-actions">' +
+      '<button class="btn btn-primary" type="submit">' +
+      esc(t("tools.billing.saveCustomer", "Save customer")) +
+      '</button><a class="btn btn-ghost" href="#app/customers">' +
+      esc(t("tools.billing.backToCustomers", "Back to customers")) +
+      "</a></div></form>";
+
+    var gstEl = document.getElementById("customer-gstin");
+    var stateEl = document.getElementById("customer-state");
+    function fillStateFromGstin() {
+      if (!gstEl || !stateEl) return;
+      var compact = String(gstEl.value || "").replace(/\s+/g, "").toUpperCase();
+      if (compact) gstEl.value = compact;
+      if (compact.length < 2) return;
+      var code = compact.slice(0, 2);
+      var i;
+      for (i = 0; i < stateEl.options.length; i += 1) {
+        if (stateEl.options[i].value === code) {
+          stateEl.value = code;
+          return;
+        }
+      }
+    }
+    if (gstEl) gstEl.addEventListener("blur", fillStateFromGstin);
+    var nameEl = document.getElementById("customer-name");
+    if (nameEl) nameEl.focus();
+  }
+
+  var invDraft = { customer: null, lines: [], charges: [], seq: 0 };
+  var GST_OPTS = [0, 3, 5, 12, 18, 28, 40];
+  var CHARGE_PRESETS = ["Delivery", "Packing", "Installation", "Loading", "Round off"];
+
+  function isObjectId(value) {
+    return /^[a-f0-9]{24}$/i.test(String(value || ""));
+  }
+
+  function roundMoney(n) {
+    return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+  }
+
+  function lineAmounts(qty, rate, gstRate, cessRate, taxInclusive) {
+    var units = Number(qty) || 0;
+    var price = Number(rate) || 0;
+    var gstPct = Number(gstRate) || 0;
+    var cessPct = Number(cessRate) || 0;
+    var gross = units * price;
+    var taxable;
+    if (taxInclusive) {
+      var factor = 1 + gstPct / 100 + cessPct / 100;
+      taxable = factor > 0 ? roundMoney(gross / factor) : roundMoney(gross);
+    } else {
+      taxable = roundMoney(gross);
+    }
+    var gst = roundMoney((taxable * gstPct) / 100);
+    var cess = roundMoney((taxable * cessPct) / 100);
+    return { taxable: taxable, gst: gst, cess: cess, lineTotal: roundMoney(taxable + gst + cess) };
+  }
+
+  function invoiceTaxSplit(customer) {
+    var sellerGstin = state.session && state.session.business && state.session.business.gstin;
+    var sellerState = sellerGstin ? String(sellerGstin).slice(0, 2) : "";
+    var buyerState = customer && (customer.stateCode || (customer.gstin ? String(customer.gstin).slice(0, 2) : ""));
+    if (sellerState && buyerState && sellerState !== buyerState) return "igst";
+    return "cgst_sgst";
+  }
+
+  function splitGstPreview(gst, mode) {
+    var amount = roundMoney(gst);
+    if (mode === "igst") return { cgst: 0, sgst: 0, igst: amount };
+    var paise = Math.round(amount * 100);
+    var cgstPaise = Math.floor(paise / 2);
+    return { cgst: cgstPaise / 100, sgst: (paise - cgstPaise) / 100, igst: 0 };
+  }
+
+  function downloadInvoicePdf(id, number) {
+    var base = apiBase();
+    if (!base) {
+      toast(t("tools.billing.apiMissing", "Billing API URL is not configured. Set it in js/billing-config.js"));
+      return Promise.reject(new Error("missing api"));
+    }
+    return fetch(base + "/api/invoices/" + encodeURIComponent(id) + "/pdf", {
+      credentials: "include",
+      headers: { Accept: "application/pdf" },
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          return res
+            .json()
+            .catch(function () {
+              return {};
+            })
+            .then(function (data) {
+              throw new Error((data.error && data.error.message) || t("tools.billing.invoicePdfFail", "Could not download PDF"));
+            });
+        }
+        return res.blob();
+      })
+      .then(function (blob) {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = (number || "invoice") + ".pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () {
+          URL.revokeObjectURL(url);
+        }, 1200);
+      })
+      .catch(function (ex) {
+        toast(ex.message || t("tools.billing.invoicePdfFail", "Could not download PDF"));
+        throw ex;
+      });
+  }
+
+  function deleteInvoice(id) {
+    if (
+      !window.confirm(
+        t("tools.billing.invoiceDeleteConfirm", "Delete this invoice? Catalog stock will be restored."),
+      )
+    ) {
+      return Promise.resolve(false);
+    }
+    return api("/invoices/" + encodeURIComponent(id), { method: "DELETE" }).then(function () {
+      toast(t("tools.billing.invoiceDeleted", "Invoice deleted"));
+      return true;
+    });
+  }
+
+  function invoiceActionButtons(id, number) {
+    return (
+      '<div class="bill-inv-actions">' +
+      '<button type="button" class="bill-act" data-act="pdf" data-id="' +
+      esc(id) +
+      '" data-no="' +
+      esc(number) +
+      '">' +
+      esc(t("tools.billing.invoicePdf", "PDF")) +
+      "</button>" +
+      '<button type="button" class="bill-act" data-act="edit" data-id="' +
+      esc(id) +
+      '">' +
+      esc(t("tools.billing.invoiceEdit", "Edit")) +
+      "</button>" +
+      '<button type="button" class="bill-act bill-act-danger" data-act="del" data-id="' +
+      esc(id) +
+      '">' +
+      esc(t("tools.billing.invoiceDelete", "Delete")) +
+      "</button></div>"
+    );
+  }
+
+  function bindInvoiceActions(root) {
+    if (!root) return;
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest("[data-act]") : null;
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var id = btn.getAttribute("data-id");
+      var act = btn.getAttribute("data-act");
+      if (act === "pdf") {
+        downloadInvoicePdf(id, btn.getAttribute("data-no"));
+        return;
+      }
+      if (act === "edit") {
+        go("app/invoices/" + id + "/edit");
+        return;
+      }
+      if (act === "del") {
+        deleteInvoice(id)
+          .then(function (ok) {
+            if (ok) go("app/invoices");
+          })
+          .catch(function (ex) {
+            toast(ex.message);
+          });
+      }
+    });
+  }
+
+  function invoicesHref(page) {
+    var n = Number(page) || 1;
+    return n <= 1 ? "#app/invoices" : "#app/invoices/" + n;
+  }
+
+  function invoicesListView(page) {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    var asked = Math.max(1, Number(page) || 1);
+    stage.innerHTML =
+      '<header class="bill-stage-head bill-stage-head-row">' +
+      "<div><h2>" +
+      esc(t("tools.billing.tabInvoices", "Invoices")) +
+      "</h2><p>" +
+      esc(t("tools.billing.invoicesLead", "GST invoices with a customer snapshot and line totals.")) +
+      "</p></div>" +
+      '<a class="btn btn-primary" href="#app/invoices/new">' +
+      esc(t("tools.billing.addInvoice", "Create invoice")) +
+      "</a></header>" +
+      '<p class="tool-note" id="invoices-status">' +
+      esc(t("tools.billing.invoicesLoading", "Loading invoices…")) +
+      "</p>";
+    api("/invoices?page=" + encodeURIComponent(String(asked)) + "&limit=10")
+      .then(function (data) {
+        var items = (data && data.items) || [];
+        var total = Number(data && data.total) || 0;
+        var current = Number(data && data.page) || asked;
+        var pages = Number(data && data.pages) || 0;
+        var limit = Number(data && data.limit) || 10;
+        var status = document.getElementById("invoices-status");
+        if (status) status.remove();
+        if (current !== asked && pages > 0) {
+          go(invoicesHref(current).slice(1));
+          return;
+        }
+        if (!total) {
+          stage.insertAdjacentHTML(
+            "beforeend",
+            '<div class="bill-empty glass"><p>' +
+              esc(t("tools.billing.invoicesEmpty", "No invoices yet. Create your first bill.")) +
+              '</p><a class="btn btn-primary" href="#app/invoices/new">' +
+              esc(t("tools.billing.addInvoice", "Create invoice")) +
+              "</a></div>",
+          );
+          return;
+        }
+        var rows = items
+          .map(function (it) {
+            var taxLabel =
+              it.taxSplit === "igst"
+                ? t("tools.billing.invoiceIgst", "IGST")
+                : t("tools.billing.invoiceCgstSgst", "CGST + SGST");
+            return (
+              '<tr class="bill-row-link" data-href="#app/invoices/' +
+              esc(it.id) +
+              '"><td><strong>' +
+              esc(it.invoiceNumber) +
+              '</strong><span class="bill-sub">' +
+              esc(it.invoiceDate) +
+              "</span></td><td>" +
+              esc(it.customerName) +
+              (it.customerGstin ? '<span class="bill-sub">' + esc(it.customerGstin) + "</span>" : "") +
+              "</td><td>" +
+              esc(it.placeOfSupply || "—") +
+              '<span class="bill-sub">' +
+              esc(taxLabel) +
+              "</span></td><td>" +
+              esc(moneyInr(it.grandTotal)) +
+              '<span class="bill-sub">' +
+              esc(String(it.lineCount)) +
+              " " +
+              esc(t("tools.billing.invoiceLines", "lines")) +
+              "</span></td><td>" +
+              invoiceActionButtons(it.id, it.invoiceNumber) +
+              "</td></tr>"
+            );
+          })
+          .join("");
+        var from = (current - 1) * limit + 1;
+        var to = Math.min(total, (current - 1) * limit + items.length);
+        var prev =
+          current > 1
+            ? '<a class="btn btn-ghost" href="' +
+              invoicesHref(current - 1) +
+              '">' +
+              esc(t("tools.billing.invoicesPrev", "Previous")) +
+              "</a>"
+            : '<span class="btn btn-ghost" aria-disabled="true">' +
+              esc(t("tools.billing.invoicesPrev", "Previous")) +
+              "</span>";
+        var next =
+          current < pages
+            ? '<a class="btn btn-ghost" href="' +
+              invoicesHref(current + 1) +
+              '">' +
+              esc(t("tools.billing.invoicesNext", "Next")) +
+              "</a>"
+            : '<span class="btn btn-ghost" aria-disabled="true">' +
+              esc(t("tools.billing.invoicesNext", "Next")) +
+              "</span>";
+        stage.insertAdjacentHTML(
+          "beforeend",
+          '<div class="bill-table-wrap"><table class="bill-table"><thead><tr>' +
+            "<th>" +
+            esc(t("tools.billing.invoiceNumber", "Invoice")) +
+            "</th><th>" +
+            esc(t("tools.billing.customerName", "Customer")) +
+            "</th><th>" +
+            esc(t("tools.billing.customerPlace", "Place of supply")) +
+            "</th><th>" +
+            esc(t("tools.billing.invoiceTotal", "Total")) +
+            "</th><th>" +
+            esc(t("tools.billing.invoiceActions", "Actions")) +
+            "</th></tr></thead><tbody>" +
+            rows +
+            "</tbody></table></div>" +
+            '<nav class="bill-pager" aria-label="' +
+            esc(t("tools.billing.invoicesPages", "Invoice pages")) +
+            '">' +
+            prev +
+            '<p class="bill-pager-meta">' +
+            esc(
+              t("tools.billing.invoicesRange", "Showing {from}–{to} of {total}")
+                .replace("{from}", String(from))
+                .replace("{to}", String(to))
+                .replace("{total}", String(total)),
+            ) +
+            "<span>" +
+            esc(
+              t("tools.billing.invoicesPage", "Page {page} of {pages}")
+                .replace("{page}", String(current))
+                .replace("{pages}", String(pages)),
+            ) +
+            "</span></p>" +
+            next +
+            "</nav>",
+        );
+        bindInvoiceActions(stage);
+        stage.querySelectorAll("[data-href]").forEach(function (row) {
+          row.addEventListener("click", function (e) {
+            if (e.target.closest && e.target.closest("[data-act]")) return;
+            go(row.getAttribute("data-href").replace(/^#/, ""));
+          });
+        });
+      })
+      .catch(function (ex) {
+        var status = document.getElementById("invoices-status");
+        if (status) status.textContent = ex.message;
+      });
+  }
+
+  function invoiceAllLines() {
+    return (invDraft.lines || []).concat(invDraft.charges || []);
+  }
+
+  function gstSelect(value) {
+    var cur = String(value == null ? 18 : value);
+    return (
+      '<div class="bill-dd" data-value="' +
+      cur +
+      '"><button type="button" class="bill-dd-btn" aria-haspopup="listbox" aria-expanded="false">' +
+      cur +
+      '%</button><div class="bill-dd-menu" hidden role="listbox">' +
+      GST_OPTS.map(function (n) {
+        return (
+          '<button type="button" class="bill-dd-opt' +
+          (String(n) === cur ? " is-on" : "") +
+          '" role="option" data-value="' +
+          n +
+          '">' +
+          n +
+          "%</button>"
+        );
+      }).join("") +
+      "</div></div>"
+    );
+  }
+
+  function closeGstMenus(except) {
+    document.querySelectorAll(".bill-dd.is-open").forEach(function (dd) {
+      if (except && dd === except) return;
+      dd.classList.remove("is-open");
+      var menu = dd.querySelector(".bill-dd-menu");
+      var btn = dd.querySelector(".bill-dd-btn");
+      if (menu) menu.hidden = true;
+      if (btn) btn.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function closeSuggestLists(except) {
+    document.querySelectorAll(".bill-suggest-list").forEach(function (list) {
+      if (except && list === except) return;
+      list.hidden = true;
+      list.innerHTML = "";
+      if (list.parentNode) list.parentNode.classList.remove("is-open");
+    });
+  }
+
+  function setGstValue(dd, val) {
+    if (!dd) return;
+    dd.setAttribute("data-value", String(val));
+    var btn = dd.querySelector(".bill-dd-btn");
+    if (btn) btn.textContent = val + "%";
+    dd.querySelectorAll(".bill-dd-opt").forEach(function (opt) {
+      opt.classList.toggle("is-on", opt.getAttribute("data-value") === String(val));
+    });
+    var row = dd.closest("tr[data-line]");
+    if (row) {
+      var line = invDraft.lines.filter(function (l) {
+        return l.key === row.getAttribute("data-line");
+      })[0];
+      if (line) {
+        line.gstRate = Number(val) || 0;
+        var amt = lineAmounts(line.qty, line.rate, line.gstRate, line.cessRate, line.taxInclusive);
+        var cell = row.querySelector(".inv-amt");
+        if (cell) cell.textContent = moneyInr(amt.lineTotal);
+        renderInvoiceTotals();
+      }
+      return;
+    }
+    var charge = dd.closest("[data-charge]");
+    if (!charge) return;
+    var ch = invDraft.charges.filter(function (c) {
+      return c.key === charge.getAttribute("data-charge");
+    })[0];
+    if (!ch) return;
+    ch.gstRate = Number(val) || 0;
+    renderInvoiceTotals();
+  }
+
+  function bindGstMenus(root) {
+    if (!root || root._gstBound) return;
+    root._gstBound = true;
+    root.addEventListener("click", function (e) {
+      var opt = e.target.closest ? e.target.closest(".bill-dd-opt") : null;
+      if (opt) {
+        e.preventDefault();
+        e.stopPropagation();
+        setGstValue(opt.closest(".bill-dd"), opt.getAttribute("data-value"));
+        closeGstMenus();
+        return;
+      }
+      var btn = e.target.closest ? e.target.closest(".bill-dd-btn") : null;
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var dd = btn.closest(".bill-dd");
+      var open = !dd.classList.contains("is-open");
+      closeGstMenus();
+      if (!open) return;
+      dd.classList.add("is-open");
+      var menu = dd.querySelector(".bill-dd-menu");
+      if (menu) menu.hidden = false;
+      btn.setAttribute("aria-expanded", "true");
+    });
+  }
+
+  function invoiceTotals(customer, lines) {
+    var mode = invoiceTaxSplit(customer);
+    var taxable = 0;
+    var cgst = 0;
+    var sgst = 0;
+    var igst = 0;
+    var cess = 0;
+    var grand = 0;
+    (lines || invoiceAllLines()).forEach(function (line) {
+      var amt = lineAmounts(line.qty, line.rate, line.gstRate, line.cessRate, line.taxInclusive);
+      var split = splitGstPreview(amt.gst, mode);
+      taxable += amt.taxable;
+      cgst += split.cgst;
+      sgst += split.sgst;
+      igst += split.igst;
+      cess += amt.cess;
+      grand += amt.lineTotal;
+    });
+    return {
+      mode: mode,
+      taxable: roundMoney(taxable),
+      cgst: roundMoney(cgst),
+      sgst: roundMoney(sgst),
+      igst: roundMoney(igst),
+      cess: roundMoney(cess),
+      grand: roundMoney(grand),
+    };
+  }
+
+  function renderInvoiceTotals() {
+    var totalsEl = document.getElementById("inv-totals");
+    if (!totalsEl) return;
+    var tot = invoiceTotals(invDraft.customer, invoiceAllLines());
+    var taxRows =
+      tot.mode === "igst"
+        ? "<div><span>IGST</span><strong>" + esc(moneyInr(tot.igst)) + "</strong></div>"
+        : "<div><span>CGST</span><strong>" +
+          esc(moneyInr(tot.cgst)) +
+          "</strong></div><div><span>SGST</span><strong>" +
+          esc(moneyInr(tot.sgst)) +
+          "</strong></div>";
+    totalsEl.innerHTML =
+      "<div><span>" +
+      esc(t("tools.billing.invoiceTaxable", "Taxable")) +
+      "</span><strong>" +
+      esc(moneyInr(tot.taxable)) +
+      "</strong></div>" +
+      taxRows +
+      (tot.cess
+        ? "<div><span>Cess</span><strong>" + esc(moneyInr(tot.cess)) + "</strong></div>"
+        : "") +
+      '<div class="bill-total-grand"><span>' +
+      esc(t("tools.billing.invoiceTotal", "Total")) +
+      "</span><strong>" +
+      esc(moneyInr(tot.grand)) +
+      "</strong></div>";
+  }
+
+  function renderInvoiceLines() {
+    var body = document.getElementById("inv-lines-body");
+    if (!body) return;
+    if (!invDraft.lines.length) {
+      body.innerHTML =
+        '<tr><td colspan="6" class="bill-sub">' +
+        esc(t("tools.billing.invoiceNoLines", "Search and add items below.")) +
+        "</td></tr>";
+    } else {
+      body.innerHTML = invDraft.lines
+        .map(function (line) {
+          var amt = lineAmounts(line.qty, line.rate, line.gstRate, line.cessRate, line.taxInclusive);
+          var chip =
+            line.source === "custom"
+              ? '<span class="bill-chip">' + esc(t("tools.billing.invoiceOneOff", "This bill only")) + "</span>"
+              : "";
+          return (
+            '<tr data-line="' +
+            line.key +
+            '"><td><strong>' +
+            esc(line.name) +
+            "</strong>" +
+            chip +
+            (line.hsnSac ? '<span class="bill-sub">' + esc(line.hsnSac) + "</span>" : "") +
+            '</td><td><input class="inv-qty" type="number" min="0.001" step="0.001" value="' +
+            esc(String(line.qty)) +
+            '" /></td><td><input class="inv-rate" type="number" min="0" step="0.01" value="' +
+            esc(String(line.rate)) +
+            '" /></td><td class="inv-gst-cell">' +
+            gstSelect(line.gstRate) +
+            '</td><td class="inv-amt">' +
+            esc(moneyInr(amt.lineTotal)) +
+            '</td><td><button type="button" class="btn btn-ghost inv-remove">' +
+            esc(t("tools.billing.invoiceRemove", "Remove")) +
+            "</button></td></tr>"
+          );
+        })
+        .join("");
+    }
+    renderInvoiceTotals();
+  }
+
+  function renderPickedCustomer() {
+    var box = document.getElementById("inv-customer-picked");
+    var search = document.getElementById("inv-customer-search");
+    if (!box) return;
+    var c = invDraft.customer;
+    if (!c) {
+      box.hidden = true;
+      box.innerHTML = "";
+      if (search) search.hidden = false;
+      return;
+    }
+    box.hidden = false;
+    if (search) search.hidden = true;
+    var place = [c.city, c.state].filter(Boolean).join(", ") || t("tools.billing.customerUnregistered", "Unregistered");
+    var mode = invoiceTaxSplit(c);
+    box.innerHTML =
+      "<div><strong>" +
+      esc(c.name) +
+      "</strong><span class=\"bill-sub\">" +
+      esc(c.gstin || t("tools.billing.customerUnregistered", "Unregistered")) +
+      " · " +
+      esc(place) +
+      "</span></div><div class=\"bill-sub\">" +
+      esc(
+        mode === "igst"
+          ? t("tools.billing.invoiceIgstHint", "Inter-state — IGST")
+          : t("tools.billing.invoiceLocalHint", "Intra-state — CGST + SGST"),
+      ) +
+      '</div><button type="button" class="btn btn-ghost" id="inv-customer-clear">' +
+      esc(t("tools.billing.invoiceChangeParty", "Change")) +
+      "</button>";
+    var clear = document.getElementById("inv-customer-clear");
+    if (clear)
+      clear.addEventListener("click", function () {
+        invDraft.customer = null;
+        renderPickedCustomer();
+        renderInvoiceLines();
+        var q = document.getElementById("inv-customer-q");
+        if (q) q.focus();
+      });
+  }
+
+  function bindSuggest(inputId, listId, searchFn, pickFn) {
+    var input = document.getElementById(inputId);
+    var list = document.getElementById(listId);
+    if (!input || !list) return;
+    var timer = 0;
+    var seq = 0;
+    function close() {
+      list.hidden = true;
+      list.innerHTML = "";
+      if (list.parentNode) list.parentNode.classList.remove("is-open");
+    }
+    function run() {
+      var q = input.value.trim();
+      if (q.length < 1) {
+        close();
+        return;
+      }
+      var my = (seq += 1);
+      list.hidden = false;
+      if (list.parentNode) list.parentNode.classList.add("is-open");
+      list.innerHTML = '<p class="tool-note">' + esc(t("tools.billing.findHsnLoading", "Searching…")) + "</p>";
+      searchFn(q)
+        .then(function (items) {
+          if (my !== seq) return;
+          if (!items.length) {
+            list.innerHTML =
+              '<div class="bill-suggest-empty"><p>' +
+              esc(t("tools.billing.invoiceNoMatches", "No matching customers")) +
+              "</p></div>";
+            return;
+          }
+          list.innerHTML = items
+            .map(function (hit, idx) {
+              return (
+                '<button type="button" class="bill-hsn-hit" data-idx="' +
+                idx +
+                '"><span class="bill-hsn-hit-top"><strong>' +
+                esc(hit.title) +
+                '</strong><span class="bill-chip">' +
+                esc(hit.meta) +
+                '</span></span><span class="bill-hsn-hit-desc">' +
+                esc(hit.sub || "") +
+                "</span></button>"
+              );
+            })
+            .join("");
+          list._hits = items;
+        })
+        .catch(function (ex) {
+          if (my !== seq) return;
+          list.innerHTML = '<p class="billing-err">' + esc(ex.message) + "</p>";
+        });
+    }
+    input.addEventListener("input", function () {
+      clearTimeout(timer);
+      timer = setTimeout(run, 220);
+    });
+    list.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest("[data-idx]") : null;
+      if (!btn || !list._hits) return;
+      var hit = list._hits[Number(btn.getAttribute("data-idx"))];
+      if (!hit) return;
+      pickFn(hit.raw);
+      input.value = "";
+      close();
+    });
+  }
+
+  function addInvoiceLine(line) {
+    invDraft.seq += 1;
+    invDraft.lines.push(
+      Object.assign(
+        {
+          key: "l" + invDraft.seq,
+          source: "catalog",
+          qty: 1,
+          rate: 0,
+          gstRate: 18,
+          cessRate: 0,
+          taxInclusive: false,
+        },
+        line,
+      ),
+    );
+    renderInvoiceLines();
+  }
+
+  function itemEmptyActions(q) {
+    return (
+      '<div class="bill-suggest-empty">' +
+      '<p>' +
+      esc(t("tools.billing.invoiceNoMatches", "No matching items")) +
+      "</p>" +
+      '<div class="bill-suggest-actions">' +
+      '<button type="button" class="btn btn-primary" data-inv-custom="' +
+      esc(q) +
+      '">' +
+      esc(t("tools.billing.invoiceUseOnce", "Use on this bill")) +
+      "</button>" +
+      '<button type="button" class="btn btn-ghost" data-inv-save="' +
+      esc(q) +
+      '">' +
+      esc(t("tools.billing.invoiceSaveItem", "Save to items")) +
+      "</button></div></div>"
+    );
+  }
+
+  function bindItemSearch() {
+    var input = document.getElementById("inv-item-q");
+    var list = document.getElementById("inv-item-hits");
+    if (!input || !list) return;
+    var timer = 0;
+    var seq = 0;
+    function close() {
+      list.hidden = true;
+      list.innerHTML = "";
+      if (list.parentNode) list.parentNode.classList.remove("is-open");
+    }
+    function addCustom(name) {
+      var label = String(name || "").trim();
+      if (label.length < 2) return;
+      addInvoiceLine({ source: "custom", name: label, qty: 1, rate: 0, gstRate: 18 });
+      input.value = "";
+      close();
+    }
+    function saveItem(name) {
+      var label = String(name || "").trim();
+      if (label.length < 2) return;
+      api("/items", {
+        method: "POST",
+        body: {
+          name: label,
+          type: "goods",
+          unit: "pcs",
+          salePrice: 0,
+          gstRate: 18,
+          taxInclusive: false,
+        },
+      })
+        .then(function (it) {
+          addInvoiceLine({
+            source: "catalog",
+            itemId: it.id,
+            name: it.name,
+            hsnSac: it.hsnSac,
+            qty: 1,
+            rate: Number(it.salePrice) || 0,
+            gstRate: Number(it.gstRate) || 18,
+            cessRate: Number(it.cessRate) || 0,
+            taxInclusive: Boolean(it.taxInclusive),
+          });
+          toast(t("tools.billing.itemSaved", "Item saved"));
+          input.value = "";
+          close();
+        })
+        .catch(function (ex) {
+          list.innerHTML = '<p class="billing-err">' + esc(ex.message) + "</p>";
+          list.hidden = false;
+        });
+    }
+    function run() {
+      var q = input.value.trim();
+      if (q.length < 1) {
+        close();
+        return;
+      }
+      var my = (seq += 1);
+      list.hidden = false;
+      if (list.parentNode) list.parentNode.classList.add("is-open");
+      list.innerHTML = '<p class="tool-note">' + esc(t("tools.billing.findHsnLoading", "Searching…")) + "</p>";
+      api("/items?q=" + encodeURIComponent(q) + "&limit=20")
+        .then(function (data) {
+          if (my !== seq) return;
+          var items = (data && data.items) || [];
+          var html = items
+            .map(function (it, idx) {
+              return (
+                '<button type="button" class="bill-hsn-hit" data-idx="' +
+                idx +
+                '"><span class="bill-hsn-hit-top"><strong>' +
+                esc(it.name) +
+                '</strong><span class="bill-chip">' +
+                esc(moneyInr(it.salePrice)) +
+                '</span></span><span class="bill-hsn-hit-desc">' +
+                esc([it.hsnSac, it.unit, it.gstRate + "% GST"].filter(Boolean).join(" · ")) +
+                "</span></button>"
+              );
+            })
+            .join("");
+          if (!items.length) {
+            html = itemEmptyActions(q);
+          } else if (
+            !items.some(function (it) {
+              return String(it.name).toLowerCase() === q.toLowerCase();
+            })
+          ) {
+            html += itemEmptyActions(q);
+          }
+          list.innerHTML = html || itemEmptyActions(q);
+          list._hits = items;
+          list._q = q;
+        })
+        .catch(function (ex) {
+          if (my !== seq) return;
+          list.innerHTML = '<p class="billing-err">' + esc(ex.message) + "</p>";
+        });
+    }
+    input.addEventListener("input", function () {
+      clearTimeout(timer);
+      timer = setTimeout(run, 220);
+    });
+    list.addEventListener("click", function (e) {
+      var custom = e.target.closest ? e.target.closest("[data-inv-custom]") : null;
+      if (custom) {
+        addCustom(custom.getAttribute("data-inv-custom") || list._q);
+        return;
+      }
+      var save = e.target.closest ? e.target.closest("[data-inv-save]") : null;
+      if (save) {
+        saveItem(save.getAttribute("data-inv-save") || list._q);
+        return;
+      }
+      var btn = e.target.closest ? e.target.closest("[data-idx]") : null;
+      if (!btn || !list._hits) return;
+      var it = list._hits[Number(btn.getAttribute("data-idx"))];
+      if (!it) return;
+      addInvoiceLine({
+        source: "catalog",
+        itemId: it.id,
+        name: it.name,
+        hsnSac: it.hsnSac,
+        qty: 1,
+        rate: Number(it.salePrice) || 0,
+        gstRate: Number(it.gstRate) || 0,
+        cessRate: Number(it.cessRate) || 0,
+        taxInclusive: Boolean(it.taxInclusive),
+      });
+      input.value = "";
+      close();
+    });
+  }
+
+  function renderCharges() {
+    var root = document.getElementById("inv-charges");
+    if (!root) return;
+    if (!invDraft.charges.length) {
+      root.innerHTML = "";
+      renderInvoiceTotals();
+      return;
+    }
+    var listId = "inv-charge-presets";
+    root.innerHTML =
+      '<datalist id="' +
+      listId +
+      '">' +
+      CHARGE_PRESETS.map(function (n) {
+        return '<option value="' + esc(n) + '"></option>';
+      }).join("") +
+      "</datalist>" +
+      invDraft.charges
+        .map(function (ch) {
+          return (
+            '<div class="bill-charge-row" data-charge="' +
+            ch.key +
+            '"><input class="inv-charge-name" type="text" list="' +
+            listId +
+            '" maxlength="80" value="' +
+            esc(ch.name) +
+            '" placeholder="' +
+            esc(t("tools.billing.invoiceChargeName", "Charge name")) +
+            '" />' +
+            '<input class="inv-rate" type="number" min="0" step="0.01" value="' +
+            esc(String(ch.rate)) +
+            '" aria-label="' +
+            esc(t("tools.billing.invoiceAmount", "Amount")) +
+            '" />' +
+            gstSelect(ch.gstRate) +
+            '<button type="button" class="btn btn-ghost inv-charge-remove">' +
+            esc(t("tools.billing.invoiceRemove", "Remove")) +
+            "</button></div>"
+          );
+        })
+        .join("");
+    renderInvoiceTotals();
+  }
+
+  function bindCharges() {
+    var addBtn = document.getElementById("inv-add-charge");
+    var root = document.getElementById("inv-charges");
+    if (addBtn)
+      addBtn.addEventListener("click", function () {
+        invDraft.seq += 1;
+        invDraft.charges.push({
+          key: "c" + invDraft.seq,
+          source: "charge",
+          kind: "charge",
+          name: "Delivery",
+          qty: 1,
+          rate: 0,
+          gstRate: 0,
+          cessRate: 0,
+          taxInclusive: false,
+        });
+        renderCharges();
+      });
+    if (!root) return;
+    root.addEventListener("input", function (e) {
+      var row = e.target.closest ? e.target.closest("[data-charge]") : null;
+      if (!row) return;
+      var ch = invDraft.charges.filter(function (c) {
+        return c.key === row.getAttribute("data-charge");
+      })[0];
+      if (!ch) return;
+      if (e.target.classList.contains("inv-rate")) ch.rate = Number(e.target.value) || 0;
+      if (e.target.classList.contains("inv-charge-name")) ch.name = e.target.value.trim() || ch.name;
+      renderInvoiceTotals();
+    });
+    root.addEventListener("change", function (e) {
+      var row = e.target.closest ? e.target.closest("[data-charge]") : null;
+      if (!row) return;
+      var ch = invDraft.charges.filter(function (c) {
+        return c.key === row.getAttribute("data-charge");
+      })[0];
+      if (!ch) return;
+      if (e.target.classList.contains("inv-charge-name")) ch.name = e.target.value.trim() || ch.name;
+      renderInvoiceTotals();
+    });
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest(".inv-charge-remove") : null;
+      if (!btn) return;
+      var row = btn.closest("[data-charge]");
+      if (!row) return;
+      invDraft.charges = invDraft.charges.filter(function (c) {
+        return c.key !== row.getAttribute("data-charge");
+      });
+      renderCharges();
+    });
+  }
+
+  function bindInvoiceChrome() {
+    if (document._billInvChrome) return;
+    document._billInvChrome = true;
+    document.addEventListener("click", function (e) {
+      var t = e.target;
+      if (!t.closest || !t.closest(".bill-dd")) closeGstMenus();
+      if (!t.closest || !t.closest(".bill-suggest")) closeSuggestLists();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      closeGstMenus();
+      closeSuggestLists();
+    });
+  }
+
+  function invoiceFormView(editId) {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    invDraft = { customer: null, lines: [], charges: [], seq: 0, editId: editId || null };
+    var today = new Date();
+    var iso =
+      today.getFullYear() +
+      "-" +
+      String(today.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(today.getDate()).padStart(2, "0");
+    stage.innerHTML =
+      '<header class="bill-stage-head">' +
+      "<h2>" +
+      esc(
+        editId
+          ? t("tools.billing.editInvoiceTitle", "Edit invoice")
+          : t("tools.billing.addInvoiceTitle", "Create invoice"),
+      ) +
+      "</h2><p>" +
+      esc(t("tools.billing.addInvoiceLead", "Pick a customer, add items, and GST is calculated from place of supply.")) +
+      "</p></header>" +
+      '<form id="bill-invoice-form" class="bill-item-form glass" method="post" action="#" onsubmit="return false;">' +
+      '<div class="bill-form-grid">' +
+      '<div class="tool-field bill-span-2"><label for="inv-customer-q">' +
+      esc(t("tools.billing.invoiceCustomer", "Customer")) +
+      ' <span class="billing-req">*</span></label>' +
+      '<div id="inv-customer-search" class="bill-suggest"><input id="inv-customer-q" type="search" maxlength="80" autocomplete="off" placeholder="' +
+      esc(t("tools.billing.invoiceCustomerHint", "Search name, mobile, or GSTIN")) +
+      '" /><div id="inv-customer-hits" class="bill-suggest-list" hidden></div></div>' +
+      '<div id="inv-customer-picked" class="bill-picked" hidden></div></div>' +
+      '<div class="tool-field"><label for="inv-date">' +
+      esc(t("tools.billing.invoiceDate", "Invoice date")) +
+      "</label>" +
+      '<input id="inv-date" type="date" value="' +
+      iso +
+      '" required /></div>' +
+      '<div class="tool-field bill-span-2"><label>' +
+      esc(t("tools.billing.invoiceItems", "Items")) +
+      ' <span class="billing-req">*</span></label>' +
+      '<div class="bill-table-wrap"><table class="bill-table bill-inv-lines"><thead><tr>' +
+      "<th>" +
+      esc(t("tools.billing.itemName", "Item")) +
+      "</th><th>" +
+      esc(t("tools.billing.invoiceQty", "Qty")) +
+      "</th><th>" +
+      esc(t("tools.billing.invoiceRate", "Rate")) +
+      "</th><th>GST</th><th>" +
+      esc(t("tools.billing.invoiceAmount", "Amount")) +
+      "</th><th></th></tr></thead><tbody id=\"inv-lines-body\"></tbody></table></div>" +
+      '<div class="bill-suggest"><input id="inv-item-q" type="search" maxlength="80" autocomplete="off" placeholder="' +
+      esc(t("tools.billing.invoiceItemHint", "Search catalog to add a line")) +
+      '" /><div id="inv-item-hits" class="bill-suggest-list" hidden></div></div></div>' +
+      '<div class="tool-field bill-span-2"><label>' +
+      esc(t("tools.billing.invoiceCharges", "Other charges")) +
+      "</label>" +
+      '<div id="inv-charges" class="bill-charge-list"></div>' +
+      '<div class="bill-charge-actions">' +
+      '<button class="bill-add-charge" type="button" id="inv-add-charge">+ ' +
+      esc(t("tools.billing.invoiceAddCharge", "Add charge")) +
+      "</button>" +
+      '<span class="tool-note">' +
+      esc(t("tools.billing.invoiceChargesHint", "Delivery, packing, or any extra amount on this bill.")) +
+      "</span></div></div>" +
+      '<div class="tool-field bill-span-2"><label for="inv-notes">' +
+      esc(t("tools.billing.invoiceNotes", "Notes")) +
+      "</label>" +
+      '<textarea id="inv-notes" rows="2" maxlength="400"></textarea></div></div>' +
+      '<div id="inv-totals" class="bill-inv-totals"></div>' +
+      '<p class="billing-err" id="billing-error" role="alert"></p>' +
+      '<div class="billing-actions">' +
+      '<button class="btn btn-primary" type="submit">' +
+      esc(editId ? t("tools.billing.saveInvoiceChanges", "Save changes") : t("tools.billing.saveInvoice", "Save invoice")) +
+      '</button><a class="btn btn-ghost" href="#app/invoices">' +
+      esc(t("tools.billing.backToInvoices", "Back to invoices")) +
+      "</a></div></form>";
+
+    renderInvoiceLines();
+    bindSuggest(
+      "inv-customer-q",
+      "inv-customer-hits",
+      function (q) {
+        return api("/customers?q=" + encodeURIComponent(q) + "&limit=20").then(function (data) {
+          return ((data && data.items) || []).map(function (c) {
+            return {
+              title: c.name,
+              meta: c.gstin || t("tools.billing.customerUnregistered", "Unregistered"),
+              sub: [c.mobile ? "+91 " + c.mobile : "", c.city, c.state].filter(Boolean).join(" · "),
+              raw: c,
+            };
+          });
+        });
+      },
+      function (c) {
+        invDraft.customer = c;
+        renderPickedCustomer();
+        renderInvoiceLines();
+      },
+    );
+    bindItemSearch();
+    bindCharges();
+    bindGstMenus(document.getElementById("bill-invoice-form"));
+    bindInvoiceChrome();
+    var body = document.getElementById("inv-lines-body");
+    if (body) {
+      body.addEventListener("input", function (e) {
+        var row = e.target.closest ? e.target.closest("tr[data-line]") : null;
+        if (!row) return;
+        var line = invDraft.lines.filter(function (l) {
+          return l.key === row.getAttribute("data-line");
+        })[0];
+        if (!line) return;
+        if (e.target.classList.contains("inv-qty")) line.qty = Number(e.target.value) || 0;
+        if (e.target.classList.contains("inv-rate")) line.rate = Number(e.target.value) || 0;
+        var amt = lineAmounts(line.qty, line.rate, line.gstRate, line.cessRate, line.taxInclusive);
+        var cell = row.querySelector(".inv-amt");
+        if (cell) cell.textContent = moneyInr(amt.lineTotal);
+        renderInvoiceTotals();
+      });
+      body.addEventListener("click", function (e) {
+        var btn = e.target.closest ? e.target.closest(".inv-remove") : null;
+        if (!btn) return;
+        var row = btn.closest("tr[data-line]");
+        if (!row) return;
+        invDraft.lines = invDraft.lines.filter(function (l) {
+          return l.key !== row.getAttribute("data-line");
+        });
+        renderInvoiceLines();
+      });
+    }
+    var q = document.getElementById("inv-customer-q");
+    if (q) q.focus();
+    if (editId) {
+      api("/invoices/" + encodeURIComponent(editId))
+        .then(fillInvoiceDraft)
+        .catch(function (ex) {
+          toast(ex.message);
+          go("app/invoices");
+        });
+    }
+  }
+
+  function fillInvoiceDraft(inv) {
+    invDraft.customer = Object.assign({ id: inv.customerId }, inv.customer || {});
+    invDraft.lines = [];
+    invDraft.charges = [];
+    invDraft.seq = 0;
+    (inv.lines || []).forEach(function (line) {
+      invDraft.seq += 1;
+      var row = {
+        key: (line.source === "charge" ? "c" : "l") + invDraft.seq,
+        itemId: line.itemId || undefined,
+        source: line.source || (line.itemId ? "catalog" : "custom"),
+        name: line.name,
+        hsnSac: line.hsnSac,
+        qty: line.qty,
+        rate: line.rate,
+        gstRate: line.gstRate,
+        cessRate: line.cessRate || 0,
+        taxInclusive: Boolean(line.taxInclusive),
+      };
+      if (row.source === "charge") invDraft.charges.push(row);
+      else invDraft.lines.push(row);
+    });
+    var dateEl = document.getElementById("inv-date");
+    if (dateEl && inv.invoiceDate) dateEl.value = inv.invoiceDate;
+    var notes = document.getElementById("inv-notes");
+    if (notes) notes.value = inv.notes || "";
+    var title = document.querySelector("#bill-stage .bill-stage-head h2");
+    if (title) title.textContent = t("tools.billing.editInvoiceTitle", "Edit invoice") + " " + inv.invoiceNumber;
+    renderPickedCustomer();
+    renderInvoiceLines();
+    renderCharges();
+  }
+
+  function handleInvoiceSubmit() {
+    var form = document.getElementById("bill-invoice-form");
+    var err = errBox();
+    if (!form) return;
+    if (err) err.textContent = "";
+    if (!invDraft.customer || !invDraft.customer.id) {
+      if (err) err.textContent = t("tools.billing.invoiceCustomerRequired", "Choose a customer");
+      return;
+    }
+    var itemLines = invDraft.lines.filter(function (line) {
+      return (line.itemId || (line.name && line.name.trim().length >= 2)) && Number(line.qty) > 0;
+    });
+    var chargeLines = (invDraft.charges || []).filter(function (line) {
+      return line.name && line.name.trim().length >= 2 && Number(line.rate) >= 0;
+    });
+    if (!itemLines.length && !chargeLines.length) {
+      if (err) err.textContent = t("tools.billing.invoiceLinesRequired", "Add at least one item");
+      return;
+    }
+    setBusy(form, true);
+    var editing = Boolean(invDraft.editId);
+    api(editing ? "/invoices/" + encodeURIComponent(invDraft.editId) : "/invoices", {
+      method: editing ? "PATCH" : "POST",
+      body: {
+        customerId: invDraft.customer.id,
+        invoiceDate: fieldVal("inv-date") || undefined,
+        notes: fieldVal("inv-notes") || undefined,
+        lines: itemLines
+          .map(function (line) {
+            if (line.itemId) {
+              return {
+                itemId: line.itemId,
+                qty: Number(line.qty),
+                rate: Number(line.rate),
+                gstRate: Number(line.gstRate),
+              };
+            }
+            return {
+              name: line.name,
+              kind: "goods",
+              qty: Number(line.qty),
+              rate: Number(line.rate),
+              gstRate: Number(line.gstRate),
+            };
+          })
+          .concat(
+            chargeLines.map(function (line) {
+              return {
+                name: line.name.trim(),
+                kind: "charge",
+                qty: 1,
+                rate: Number(line.rate) || 0,
+                gstRate: Number(line.gstRate) || 0,
+              };
+            }),
+          ),
+      },
+    })
+      .then(function (inv) {
+        toast(
+          editing
+            ? t("tools.billing.invoiceUpdated", "Invoice updated")
+            : t("tools.billing.invoiceSaved", "Invoice saved"),
+        );
+        go("app/invoices/" + inv.id);
+      })
+      .catch(function (ex) {
+        if (err) err.textContent = ex.message;
+      })
+      .then(function () {
+        setBusy(form, false);
+      });
+  }
+
+  function invoiceDetailView(id) {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    stage.innerHTML =
+      '<p class="tool-note">' + esc(t("tools.billing.invoicesLoading", "Loading invoices…")) + "</p>";
+    api("/invoices/" + encodeURIComponent(id))
+      .then(function (inv) {
+        var party = function (p, title) {
+          if (!p) return "";
+          return (
+            '<div class="bill-party"><h3>' +
+            esc(title) +
+            "</h3><strong>" +
+            esc(p.name) +
+            "</strong>" +
+            (p.gstin ? "<p>GSTIN " + esc(p.gstin) + "</p>" : "") +
+            (p.mobile ? "<p>+91 " + esc(p.mobile) + "</p>" : "") +
+            (p.address ? "<p>" + esc(p.address) + "</p>" : "") +
+            "<p>" +
+            esc([p.city, p.state, p.pincode].filter(Boolean).join(", ")) +
+            "</p></div>"
+          );
+        };
+        var taxLabel =
+          inv.taxSplit === "igst"
+            ? t("tools.billing.invoiceIgst", "IGST")
+            : t("tools.billing.invoiceCgstSgst", "CGST + SGST");
+        var rows = (inv.lines || [])
+          .map(function (line) {
+            var chip =
+              line.source === "charge"
+                ? '<span class="bill-chip">' + esc(t("tools.billing.invoiceChargeChip", "Charge")) + "</span>"
+                : line.source === "custom"
+                  ? '<span class="bill-chip">' + esc(t("tools.billing.invoiceOneOff", "This bill only")) + "</span>"
+                  : "";
+            return (
+              "<tr><td><strong>" +
+              esc(line.name) +
+              "</strong>" +
+              chip +
+              (line.hsnSac ? '<span class="bill-sub">' + esc(line.hsnSac) + "</span>" : "") +
+              "</td><td>" +
+              esc(String(line.qty)) +
+              " " +
+              esc(line.unit) +
+              "</td><td>" +
+              esc(moneyInr(line.rate)) +
+              "</td><td>" +
+              esc(String(line.gstRate)) +
+              "%</td><td>" +
+              esc(moneyInr(line.lineTotal)) +
+              "</td></tr>"
+            );
+          })
+          .join("");
+        var taxRows =
+          inv.taxSplit === "igst"
+            ? "<div><span>IGST</span><strong>" + esc(moneyInr(inv.igstTotal)) + "</strong></div>"
+            : "<div><span>CGST</span><strong>" +
+              esc(moneyInr(inv.cgstTotal)) +
+              "</strong></div><div><span>SGST</span><strong>" +
+              esc(moneyInr(inv.sgstTotal)) +
+              "</strong></div>";
+        stage.innerHTML =
+          '<header class="bill-stage-head bill-stage-head-row"><div><h2>' +
+          esc(inv.invoiceNumber) +
+          "</h2><p>" +
+          esc(inv.invoiceDate) +
+          " · " +
+          esc(taxLabel) +
+          (inv.placeOfSupply ? " · " + esc(inv.placeOfSupply) : "") +
+          "</p></div>" +
+          '<div class="bill-inv-toolbar">' +
+          invoiceActionButtons(inv.id, inv.invoiceNumber) +
+          '<a class="btn btn-ghost" href="#app/invoices">' +
+          esc(t("tools.billing.backToInvoices", "Back to invoices")) +
+          "</a></div></header>" +
+          '<section class="bill-invoice glass">' +
+          '<div class="bill-parties">' +
+          party(inv.seller, t("tools.billing.invoiceFrom", "From")) +
+          party(inv.customer, t("tools.billing.invoiceTo", "Bill to")) +
+          "</div>" +
+          '<div class="bill-table-wrap"><table class="bill-table"><thead><tr>' +
+          "<th>" +
+          esc(t("tools.billing.itemName", "Item")) +
+          "</th><th>" +
+          esc(t("tools.billing.invoiceQty", "Qty")) +
+          "</th><th>" +
+          esc(t("tools.billing.invoiceRate", "Rate")) +
+          "</th><th>GST</th><th>" +
+          esc(t("tools.billing.invoiceAmount", "Amount")) +
+          "</th></tr></thead><tbody>" +
+          rows +
+          "</tbody></table></div>" +
+          '<div class="bill-inv-totals">' +
+          "<div><span>" +
+          esc(t("tools.billing.invoiceTaxable", "Taxable")) +
+          "</span><strong>" +
+          esc(moneyInr(inv.taxableTotal)) +
+          "</strong></div>" +
+          taxRows +
+          (inv.cessTotal
+            ? "<div><span>Cess</span><strong>" + esc(moneyInr(inv.cessTotal)) + "</strong></div>"
+            : "") +
+          '<div class="bill-total-grand"><span>' +
+          esc(t("tools.billing.invoiceTotal", "Total")) +
+          "</span><strong>" +
+          esc(moneyInr(inv.grandTotal)) +
+          "</strong></div></div>" +
+          (inv.notes ? '<p class="tool-note">' + esc(inv.notes) + "</p>" : "") +
+          "</section>";
+        bindInvoiceActions(stage);
+      })
+      .catch(function (ex) {
+        stage.innerHTML =
+          '<div class="bill-empty glass"><p>' +
+          esc(ex.message) +
+          '</p><a class="btn btn-ghost" href="#app/invoices">' +
+          esc(t("tools.billing.backToInvoices", "Back to invoices")) +
+          "</a></div>";
+      });
+  }
+
+  function appView(tab, screen, extra) {
     var s = state.session;
     if (!s) return;
     tab = tab || "home";
@@ -1311,6 +2915,30 @@
     }
     if (tab === "items") {
       itemsListView(screen);
+      return;
+    }
+    if (tab === "customers" && screen === "new") {
+      customerFormView();
+      return;
+    }
+    if (tab === "customers") {
+      customersListView(screen);
+      return;
+    }
+    if (tab === "invoices" && screen === "new") {
+      invoiceFormView();
+      return;
+    }
+    if (tab === "invoices" && isObjectId(screen) && extra === "edit") {
+      invoiceFormView(screen);
+      return;
+    }
+    if (tab === "invoices" && isObjectId(screen)) {
+      invoiceDetailView(screen);
+      return;
+    }
+    if (tab === "invoices") {
+      invoicesListView(screen);
       return;
     }
     stage.innerHTML = tabPanel(tab, s);
@@ -1350,7 +2978,7 @@
       return;
     }
     if (name === "onboarding") onboardingView();
-    else if (name === "app") appView(route.tab, route.screen);
+    else if (name === "app") appView(route.tab, route.screen, route.extra);
     else if (name === "otp" && state.mobile) otpView();
     else phoneView();
     if (window.I18n && window.I18n.apply) window.I18n.apply();

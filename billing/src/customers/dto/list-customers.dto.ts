@@ -1,7 +1,7 @@
 import { Transform } from "class-transformer";
 import { IsInt, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
 
-export class ListItemsDto {
+export class ListCustomersDto {
   @Transform(({ value }) => (value == null || value === "" ? 1 : Number(value)))
   @IsOptional()
   @IsInt()
