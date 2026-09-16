@@ -4,6 +4,7 @@ import { CurrentUser } from "../common/current-user.decorator";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import type { AuthUser } from "../auth/auth.types";
 import { CreateInvoiceDto } from "./dto/create-invoice.dto";
+import { InvoicePdfQueryDto } from "./dto/invoice-pdf-query.dto";
 import { ListInvoicesDto } from "./dto/list-invoices.dto";
 import { InvoicesService } from "./invoices.service";
 
@@ -17,9 +18,19 @@ export class InvoicesController {
     return this.invoices.list(user, query.page, query.limit);
   }
 
+  @Get("templates")
+  templates(@CurrentUser() user: AuthUser) {
+    return this.invoices.templates(user);
+  }
+
   @Get(":id/pdf")
-  async pdf(@CurrentUser() user: AuthUser, @Param("id") id: string, @Res() res: Response) {
-    const file = await this.invoices.pdf(user, id);
+  async pdf(
+    @CurrentUser() user: AuthUser,
+    @Param("id") id: string,
+    @Query() query: InvoicePdfQueryDto,
+    @Res() res: Response,
+  ) {
+    const file = await this.invoices.pdf(user, id, query);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename="${file.filename}"`);
     res.send(file.buffer);

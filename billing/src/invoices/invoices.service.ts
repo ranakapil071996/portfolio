@@ -21,6 +21,8 @@ import {
   taxSplit,
 } from "./invoice-tax";
 import { Invoice, InvoiceDocument, InvoiceLine, InvoiceParty } from "./schemas/invoice.schema";
+import { loadBrandAssets } from "./templates/brand";
+import { catalogPayload, resolvePrint, type PrintChoice } from "./templates/catalog";
 
 export type InvoiceLinePayload = {
   itemId: string | null;
@@ -195,9 +197,31 @@ export class InvoicesService {
     return { ok: true };
   }
 
-  async pdf(user: AuthUser, id: string): Promise<{ buffer: Buffer; filename: string }> {
+  async templates(user: AuthUser): Promise<{
+    templates: ReturnType<typeof catalogPayload>["templates"];
+    printers: ReturnType<typeof catalogPayload>["printers"];
+    selected: PrintChoice;
+  }> {
+    const business = await this.requireBusiness(user);
+    return {
+      ...catalogPayload(),
+      selected: resolvePrint(business.invoiceTemplate, business.invoicePrinter),
+    };
+  }
+
+  async pdf(
+    user: AuthUser,
+    id: string,
+    opts?: { template?: string; printer?: string },
+  ): Promise<{ buffer: Buffer; filename: string }> {
     const inv = await this.findOne(user, id);
-    const buffer = await renderInvoicePdf(inv);
+    const business = await this.requireBusiness(user);
+    const print = resolvePrint(
+      opts?.template || business.invoiceTemplate,
+      opts?.printer || business.invoicePrinter,
+    );
+    const brand = await loadBrandAssets(business);
+    const buffer = await renderInvoicePdf(inv, brand, print);
     return { buffer, filename: `${inv.invoiceNumber}.pdf` };
   }
 

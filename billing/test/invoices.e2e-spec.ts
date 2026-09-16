@@ -135,6 +135,34 @@ describe("Invoices (e2e)", () => {
     expect(pdf.headers["content-type"]).toMatch(/pdf/);
     expect(Buffer.isBuffer(pdf.body) ? pdf.body.length : pdf.text.length).toBeGreaterThan(100);
 
+    const catalog = await request(server).get("/api/invoices/templates").set("Cookie", cookie).expect(200);
+    expect(catalog.body.selected).toEqual({ template: "classic", printer: "a4" });
+    expect(catalog.body.templates.map((row: { id: string }) => row.id)).toEqual([
+      "classic",
+      "modern",
+      "minimal",
+      "thermal",
+    ]);
+
+    const thermal = await request(server)
+      .get(`/api/invoices/${created.body.id}/pdf?template=thermal&printer=thermal80`)
+      .set("Cookie", cookie)
+      .expect(200);
+    expect(thermal.headers["content-type"]).toMatch(/pdf/);
+
+    await request(server)
+      .get(`/api/invoices/${created.body.id}/pdf?template=poster`)
+      .set("Cookie", cookie)
+      .expect(400);
+
+    await request(server)
+      .patch("/api/business")
+      .set("Cookie", cookie)
+      .send({ name: "Hawkey", invoiceTemplate: "thermal", invoicePrinter: "thermal58" })
+      .expect(200);
+    const saved = await request(server).get("/api/invoices/templates").set("Cookie", cookie).expect(200);
+    expect(saved.body.selected).toEqual({ template: "thermal", printer: "thermal58" });
+
     const edited = await request(server)
       .patch(`/api/invoices/${created.body.id}`)
       .set("Cookie", cookie)

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" class="billing-boot">
 <head>
   <script>window.__LANG=window.__LANG||undefined;window.__I18N_BASE="../../";window.__I18N_KEEP_HEAD=true;window.__TOOL_ID="billing";</script>
   <meta charset="UTF-8" />
@@ -138,6 +138,10 @@
       <span class="bill-tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 7h14M5 12h14M5 17h14"/></svg></span>
       <span class="bill-drawer-label" data-i18n="tools.billing.menu">Menu</span>
     </button>
+    <a class="bill-tab bill-tab-create" id="bill-create-invoice" href="#app/invoices/new" title="Create invoice">
+      <span class="bill-tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+      <span class="bill-drawer-label" data-i18n="tools.billing.addInvoice">Create invoice</span>
+    </a>
     <nav class="bill-tab-list" id="bill-tab-list" aria-label="Workspace"></nav>
     <button type="button" class="bill-tab bill-tab-exit" id="billing-logout">
       <span class="bill-tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 7V5a1 1 0 0 1 1-1h8v16h-8a1 1 0 0 1-1-1v-2"/><path d="M4 12h10M8 8l-4 4 4 4"/></svg></span>
@@ -152,7 +156,7 @@
     </a>
     <h1 class="bill-biz-name" id="bill-biz-name"></h1>
     <div class="nav-actions">
-      <a id="bill-profile-chip" class="bill-profile-chip" href="#app/profile" hidden></a>
+      <a id="bill-profile-chip" class="bill-profile-chip" href="#app/settings/profile" hidden></a>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle theme">
         <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
@@ -164,6 +168,10 @@
     </div>
   </header>
   <main class="bill-main" id="main-content" tabindex="-1">
+    <div class="bill-boot" id="bill-boot" role="status" aria-live="polite">
+      <span class="bill-boot-spin" aria-hidden="true"></span>
+      <span data-i18n="tools.billing.loading">Loading billing…</span>
+    </div>
     <div class="billing-layout">
       <div id="billing-app" class="billing-app" aria-live="polite">
         <section class="billing-card glass">

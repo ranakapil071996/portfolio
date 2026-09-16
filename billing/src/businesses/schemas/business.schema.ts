@@ -62,6 +62,12 @@ export class Business {
 
   @Prop({ default: 0, min: 0 })
   invoiceSeq?: number;
+
+  @Prop({ trim: true, maxlength: 20 })
+  invoiceTemplate?: string;
+
+  @Prop({ trim: true, maxlength: 20 })
+  invoicePrinter?: string;
 }
 
 export type BusinessDocument = HydratedDocument<Business>;

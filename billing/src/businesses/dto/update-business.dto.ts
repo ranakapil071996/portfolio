@@ -9,6 +9,7 @@ import {
   MinLength,
 } from "class-validator";
 import { INDIAN_STATE_CODES } from "../../common/indian-states";
+import { INVOICE_PRINTERS, INVOICE_TEMPLATES } from "../../invoices/templates/catalog";
 
 function emptyToUndef(value: unknown): unknown {
   if (value == null) return undefined;
@@ -101,4 +102,14 @@ export class UpdateBusinessDto {
     message: "Enter a valid UPI ID, or leave it blank",
   })
   upiId?: string;
+
+  @Transform(({ value }) => emptyToUndef(value != null ? String(value).trim() : value))
+  @IsOptional()
+  @IsIn(INVOICE_TEMPLATES, { message: "Choose a valid invoice template" })
+  invoiceTemplate?: (typeof INVOICE_TEMPLATES)[number];
+
+  @Transform(({ value }) => emptyToUndef(value != null ? String(value).trim() : value))
+  @IsOptional()
+  @IsIn(INVOICE_PRINTERS, { message: "Choose a valid printer size" })
+  invoicePrinter?: (typeof INVOICE_PRINTERS)[number];
 }

@@ -17,6 +17,7 @@ import { Business, BusinessDocument } from "../businesses/schemas/business.schem
 import { OtpChallenge, OtpDocument } from "../otp/schemas/otp.schema";
 import { User, UserDocument } from "../users/schemas/user.schema";
 import { profileStatus } from "../common/profile-completion";
+import { resolvePrint } from "../invoices/templates/catalog";
 import type { AuthUser, SessionPayload } from "./auth.types";
 
 @Injectable()
@@ -201,6 +202,8 @@ export class AuthService {
             name: business.name,
             mobile: business.mobile,
             gstin: business.gstin || null,
+            invoiceTemplate: resolvePrint(business.invoiceTemplate, business.invoicePrinter).template,
+            invoicePrinter: resolvePrint(business.invoiceTemplate, business.invoicePrinter).printer,
             profile: (() => {
               const status = profileStatus(business);
               return {

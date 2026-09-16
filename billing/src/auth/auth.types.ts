@@ -18,6 +18,8 @@ export type SessionPayload = {
     name: string;
     mobile: string;
     gstin: string | null;
+    invoiceTemplate: string;
+    invoicePrinter: string;
     profile: {
       percent: number;
       complete: boolean;

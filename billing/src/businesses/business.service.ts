@@ -7,6 +7,7 @@ import type { AuthUser } from "../auth/auth.types";
 import { normalizeGstin } from "../common/gstin";
 import { stateName } from "../common/indian-states";
 import { profileStatus, type ProfileStatus } from "../common/profile-completion";
+import { resolvePrint, type PrintChoice } from "../invoices/templates/catalog";
 import { UpdateBusinessDto } from "./dto/update-business.dto";
 import { Business, BusinessDocument } from "./schemas/business.schema";
 
@@ -33,6 +34,8 @@ export type BusinessPayload = {
   logoUrl: string | null;
   signatureUrl: string | null;
   qrUrl: string | null;
+  invoiceTemplate: PrintChoice["template"];
+  invoicePrinter: PrintChoice["printer"];
   profile: ProfileStatus;
 };
 
@@ -69,6 +72,14 @@ export class BusinessService {
     business.bankAccountNumber = dto.bankAccountNumber || undefined;
     business.bankIfsc = dto.bankIfsc?.trim().toUpperCase() || undefined;
     business.upiId = dto.upiId?.trim().toLowerCase() || undefined;
+    if (dto.invoiceTemplate || dto.invoicePrinter) {
+      const print = resolvePrint(
+        dto.invoiceTemplate || business.invoiceTemplate,
+        dto.invoicePrinter || business.invoicePrinter,
+      );
+      business.invoiceTemplate = print.template;
+      business.invoicePrinter = print.printer;
+    }
     await business.save();
     return this.toPayload(business);
   }
@@ -158,6 +169,7 @@ export class BusinessService {
     const hasLogo = Boolean(row.logoFile);
     const hasSignature = Boolean(row.signatureFile);
     const hasQr = Boolean(row.qrFile);
+    const print = resolvePrint(row.invoiceTemplate, row.invoicePrinter);
     return {
       id: String(row._id),
       name: row.name,
@@ -181,6 +193,8 @@ export class BusinessService {
       logoUrl: hasLogo ? "/business/logo" : null,
       signatureUrl: hasSignature ? "/business/signature" : null,
       qrUrl: hasQr ? "/business/qr" : null,
+      invoiceTemplate: print.template,
+      invoicePrinter: print.printer,
       profile: profileStatus(row),
     };
   }

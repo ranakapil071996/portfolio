@@ -9,7 +9,7 @@
   if (!mount) return;
 
   var toastEl = document.getElementById("toast");
-  var state = { mobile: "", session: null };
+  var state = { mobile: "", session: null, boot: true };
 
   function esc(s) {
     return String(s == null ? "" : s)
@@ -117,6 +117,7 @@
   }
 
   function setChrome(page) {
+    if (state.boot && page !== "app") return;
     var dash = page === "app";
     document.body.classList.toggle("billing-dash", dash);
     var drawer = document.getElementById("bill-drawer");
@@ -365,7 +366,8 @@
         form.id !== "bill-item-form" &&
         form.id !== "bill-customer-form" &&
         form.id !== "bill-invoice-form" &&
-        form.id !== "bill-profile-form"
+        form.id !== "bill-profile-form" &&
+        form.id !== "bill-print-form"
       ) {
         return;
       }
@@ -377,6 +379,7 @@
       else if (form.id === "bill-customer-form") handleCustomerSubmit();
       else if (form.id === "bill-invoice-form") handleInvoiceSubmit();
       else if (form.id === "bill-profile-form") handleProfileSubmit();
+      else if (form.id === "bill-print-form") handlePrintSettingsSubmit();
       else handleOnboardSubmit();
     },
     true,
@@ -551,7 +554,12 @@
     { id: "customers", key: "tools.billing.tabCustomers", label: "Customers", icon: "customers" },
     { id: "items", key: "tools.billing.tabItems", label: "Items", icon: "items" },
     { id: "reports", key: "tools.billing.tabReports", label: "Reports", icon: "reports" },
-    { id: "profile", key: "tools.billing.tabProfile", label: "Profile", icon: "settings" },
+    { id: "settings", key: "tools.billing.tabSettings", label: "Settings", icon: "settings" },
+  ];
+
+  var SETTINGS_TABS = [
+    { id: "profile", key: "tools.billing.tabProfile", label: "Profile" },
+    { id: "print", key: "tools.billing.profilePrint", label: "Invoice print" },
   ];
 
   function drawerOpen() {
@@ -581,6 +589,41 @@
     }
   }
 
+  function homeProfileCard() {
+    var info = profileInfo();
+    if (info.complete) return "";
+    var missing = (info.missing || []).filter(Boolean);
+    var next = missing[0] || t("tools.billing.profileMissing", "missing details");
+    var list = missing.length
+      ? '<ul class="bill-home-missing">' +
+        missing
+          .map(function (item) {
+            return "<li>" + esc(item) + "</li>";
+          })
+          .join("") +
+        "</ul>"
+      : "";
+    return (
+      '<a class="bill-home-card glass" href="#app/settings/profile">' +
+      '<span class="bill-home-card-ico" aria-hidden="true">' +
+      ICO.settings +
+      "</span><span class=\"bill-home-card-copy\"><strong>" +
+      esc(t("tools.billing.homeProfileTitle", "Finish your business profile")) +
+      "</strong><em>" +
+      esc(
+        t(
+          "tools.billing.homeProfileLead",
+          "Add the details printed on every invoice — address, logo, and signature.",
+        ),
+      ) +
+      "</em>" +
+      list +
+      '<span class="bill-home-card-cta">' +
+      esc(t("tools.billing.profileAddNext", "Add {field}").replace("{field}", next.toLowerCase())) +
+      "</span></span></a>"
+    );
+  }
+
   function tabPanel(tab, s) {
     var biz = s && s.business;
     if (tab === "home") {
@@ -590,6 +633,7 @@
         "</h2><p>" +
         esc(t("tools.billing.signedIn", "Overview of this business. Use the sidebar to open invoices, customers, and more.")) +
         "</p></header>" +
+        homeProfileCard() +
         '<div class="billing-meta">' +
         "<div><span>" +
         esc(t("tools.billing.mobile", "Mobile number")) +
@@ -661,25 +705,8 @@
   function renderProfileChip() {
     var chip = document.getElementById("bill-profile-chip");
     if (!chip) return;
-    var dash = document.body.classList.contains("billing-dash");
-    var info = profileInfo();
-    if (!dash || info.complete) {
-      chip.hidden = true;
-      chip.innerHTML = "";
-      return;
-    }
-    var next = (info.missing && info.missing[0]) || t("tools.billing.profileMissing", "missing details");
-    chip.hidden = false;
-    chip.classList.add("is-alert");
-    chip.innerHTML =
-      ringSvg(info.percent, 28) +
-      '<span class="bill-profile-chip-copy"><strong>' +
-      esc(String(info.percent)) +
-      "% " +
-      esc(t("tools.billing.profileCompleteLabel", "complete")) +
-      "</strong><em>" +
-      esc(t("tools.billing.profileAddNext", "Add {field}").replace("{field}", next.toLowerCase())) +
-      "</em></span>";
+    chip.hidden = true;
+    chip.innerHTML = "";
   }
 
   function syncSessionProfile(profile) {
@@ -695,42 +722,78 @@
     var nameEl = document.getElementById("bill-biz-name");
     if (nameEl && state.session.business.name) nameEl.textContent = state.session.business.name;
     var list = document.getElementById("bill-tab-list");
-    if (list) fillDrawer(view().tab === "settings" ? "profile" : view().tab);
+    if (list) fillDrawer(view().tab);
   }
 
   function fillDrawer(tab) {
     var list = document.getElementById("bill-tab-list");
     if (!list) return;
-    if (tab === "settings") tab = "profile";
-    var info = profileInfo();
+    if (tab === "profile") tab = "settings";
     list.innerHTML = TABS.map(function (item) {
       var on = item.id === tab || (tab === "items" && item.id === "items");
-      var ico =
-        item.id === "profile"
-          ? '<span class="bill-tab-progress' +
-            (info.complete ? " is-done" : " is-alert") +
-            '" aria-hidden="true">' +
-            ringSvg(info.percent, 22) +
-            "</span>"
-          : '<span class="bill-tab-ico" aria-hidden="true">' + ICO[item.icon] + "</span>";
       return (
         '<a class="bill-tab' +
         (on ? " is-on" : "") +
         '" href="#app' +
-        (item.id === "home" ? "" : "/" + item.id) +
+        (item.id === "home" ? "" : item.id === "settings" ? "/settings/profile" : "/" + item.id) +
         '" data-tab="' +
         item.id +
         '" title="' +
         esc(t(item.key, item.label)) +
-        (item.id === "profile" ? " · " + info.percent + "%" : "") +
         '">' +
-        ico +
-        '<span class="bill-drawer-label">' +
+        '<span class="bill-tab-ico" aria-hidden="true">' +
+        ICO[item.icon] +
+        '</span><span class="bill-drawer-label">' +
         esc(t(item.key, item.label)) +
-        (item.id === "profile" ? " " + info.percent + "%" : "") +
         "</span></a>"
       );
     }).join("");
+    var create = document.getElementById("bill-create-invoice");
+    if (create) {
+      create.setAttribute("title", t("tools.billing.addInvoice", "Create invoice"));
+    }
+  }
+
+  function settingsSubNav(active) {
+    return (
+      '<nav class="bill-subtabs" aria-label="' +
+      esc(t("tools.billing.tabSettings", "Settings")) +
+      '">' +
+      SETTINGS_TABS.map(function (item) {
+        return (
+          '<a class="bill-subtab' +
+          (item.id === active ? " is-on" : "") +
+          '" href="#app/settings/' +
+          item.id +
+          '">' +
+          esc(t(item.key, item.label)) +
+          "</a>"
+        );
+      }).join("") +
+      "</nav>"
+    );
+  }
+
+  function settingsHead(active, lead) {
+    var info = profileInfo();
+    return (
+      '<header class="bill-stage-head bill-stage-head-row"><div><h2>' +
+      esc(t("tools.billing.tabSettings", "Settings")) +
+      "</h2><p>" +
+      esc(lead) +
+      "</p></div>" +
+      (active === "profile"
+        ? '<div id="profile-meter" class="bill-profile-meter"></div>'
+        : '<div class="bill-profile-meter">' +
+          ringSvg(info.percent, 72) +
+          "<div><strong>" +
+          esc(String(info.percent)) +
+          "%</strong><span>" +
+          esc(t("tools.billing.profileCompleteLabel", "complete")) +
+          "</span></div></div>") +
+      "</header>" +
+      settingsSubNav(active)
+    );
   }
 
   function bindDrawerOnce() {
@@ -1754,13 +1817,20 @@
     return { cgst: cgstPaise / 100, sgst: (paise - cgstPaise) / 100, igst: 0 };
   }
 
-  function downloadInvoicePdf(id, number) {
+  function downloadInvoicePdf(id, number, template, printer) {
     var base = apiBase();
     if (!base) {
       toast(t("tools.billing.apiMissing", "Billing API URL is not configured. Set it in js/billing-config.js"));
       return Promise.reject(new Error("missing api"));
     }
-    return fetch(base + "/api/invoices/" + encodeURIComponent(id) + "/pdf", {
+    var qs = "";
+    if (template) {
+      qs =
+        "?template=" +
+        encodeURIComponent(template) +
+        (printer ? "&printer=" + encodeURIComponent(printer) : "");
+    }
+    return fetch(base + "/api/invoices/" + encodeURIComponent(id) + "/pdf" + qs, {
       credentials: "include",
       headers: { Accept: "application/pdf" },
     })
@@ -1842,7 +1912,14 @@
       var id = btn.getAttribute("data-id");
       var act = btn.getAttribute("data-act");
       if (act === "pdf") {
-        downloadInvoicePdf(id, btn.getAttribute("data-no"));
+        var onDetail =
+          view().tab === "invoices" && isObjectId(view().screen) && !view().extra && invStudio.inv;
+        downloadInvoicePdf(
+          id,
+          btn.getAttribute("data-no"),
+          onDetail ? invStudio.template : undefined,
+          onDetail ? invStudio.printer : undefined,
+        );
         return;
       }
       if (act === "edit") {
@@ -2863,69 +2940,555 @@
       });
   }
 
+  var INVOICE_TEMPLATES = [
+    {
+      id: "classic",
+      name: "Classic GST",
+      hint: "Full tax invoice with HSN, bank, logo, QR, and signature",
+      printers: ["a4", "a5"],
+      def: "a4",
+    },
+    {
+      id: "modern",
+      name: "Modern",
+      hint: "Bold header for laser and inkjet printers",
+      printers: ["a4", "a5"],
+      def: "a4",
+    },
+    {
+      id: "minimal",
+      name: "Compact",
+      hint: "Dense retail bill — A4, A5, or 80 mm",
+      printers: ["a4", "a5", "thermal80"],
+      def: "a5",
+    },
+    {
+      id: "thermal",
+      name: "Receipt",
+      hint: "Centered POS slip for 80 mm and 58 mm rolls",
+      printers: ["thermal80", "thermal58"],
+      def: "thermal80",
+    },
+  ];
+
+  var INVOICE_PRINTERS = [
+    { id: "a4", name: "A4", hint: "210 × 297 mm" },
+    { id: "a5", name: "A5", hint: "148 × 210 mm" },
+    { id: "thermal80", name: "80 mm", hint: "Thermal roll" },
+    { id: "thermal58", name: "58 mm", hint: "Compact roll" },
+  ];
+
+  var invStudio = { template: "classic", printer: "a4", inv: null, biz: null, assets: {} };
+
+  function invoiceTemplateInfo(id) {
+    var i = 0;
+    for (i = 0; i < INVOICE_TEMPLATES.length; i += 1) {
+      if (INVOICE_TEMPLATES[i].id === id) return INVOICE_TEMPLATES[i];
+    }
+    return INVOICE_TEMPLATES[0];
+  }
+
+  function resolvePrintChoice(template, printer) {
+    var info = invoiceTemplateInfo(template);
+    if (printer && info.printers.indexOf(printer) !== -1) return { template: info.id, printer: printer };
+    return { template: info.id, printer: info.def };
+  }
+
+  function amountInWordsInr(value) {
+    var ones = [
+      "",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten",
+      "Eleven",
+      "Twelve",
+      "Thirteen",
+      "Fourteen",
+      "Fifteen",
+      "Sixteen",
+      "Seventeen",
+      "Eighteen",
+      "Nineteen",
+    ];
+    var tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+    function below100(n) {
+      if (n < 20) return ones[n];
+      return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "");
+    }
+    function chunk(n, scale) {
+      if (!n) return "";
+      if (n > 99) {
+        return (
+          ones[Math.floor(n / 100)] +
+          " Hundred" +
+          (n % 100 ? " " + below100(n % 100) : "") +
+          (scale ? " " + scale : "")
+        );
+      }
+      return below100(n) + (scale ? " " + scale : "");
+    }
+    var rounded = Math.round((Number(value) || 0) * 100) / 100;
+    var rupees = Math.floor(rounded);
+    var paise = Math.round((rounded - rupees) * 100);
+    if (!rupees && !paise) return "Zero Rupees Only";
+    var parts = [
+      chunk(Math.floor(rupees / 10000000), "Crore"),
+      chunk(Math.floor((rupees % 10000000) / 100000), "Lakh"),
+      chunk(Math.floor((rupees % 100000) / 1000), "Thousand"),
+      rupees % 1000 ? chunk(rupees % 1000, "") : "",
+    ].filter(Boolean);
+    var out = parts.join(" ").replace(/\s+/g, " ").trim();
+    out = out ? out + (rupees === 1 ? " Rupee" : " Rupees") : "Zero Rupees";
+    if (paise) out += " and " + below100(paise) + (paise === 1 ? " Paisa" : " Paise");
+    return out + " Only";
+  }
+
+  function loadBrandAssets() {
+    return Promise.all(
+      ["logo", "signature", "qr"].map(function (kind) {
+        return fetch(apiBase() + "/api/business/" + kind, { credentials: "include" })
+          .then(function (res) {
+            if (!res.ok) throw new Error("missing");
+            return res.blob();
+          })
+          .then(function (blob) {
+            if (invStudio.assets[kind]) URL.revokeObjectURL(invStudio.assets[kind]);
+            invStudio.assets[kind] = URL.createObjectURL(blob);
+          })
+          .catch(function () {
+            invStudio.assets[kind] = "";
+          });
+      }),
+    );
+  }
+
+  function invPartyHtml(p) {
+    if (!p) return "";
+    var bits = ["<strong>" + esc(p.name) + "</strong>"];
+    if (p.gstin) bits.push("<span>GSTIN " + esc(p.gstin) + "</span>");
+    if (p.mobile) bits.push("<span>+91 " + esc(p.mobile) + "</span>");
+    if (p.address) bits.push("<span>" + esc(p.address) + "</span>");
+    var place = [p.city, p.state, p.pincode].filter(Boolean).join(", ");
+    if (place) bits.push("<span>" + esc(place) + "</span>");
+    return bits.join("");
+  }
+
+  function invTaxRowsHtml(inv) {
+    var rows =
+      inv.taxSplit === "igst"
+        ? '<div><span>IGST</span><strong>' + esc(moneyInr(inv.igstTotal)) + "</strong></div>"
+        : "<div><span>CGST</span><strong>" +
+          esc(moneyInr(inv.cgstTotal)) +
+          "</strong></div><div><span>SGST</span><strong>" +
+          esc(moneyInr(inv.sgstTotal)) +
+          "</strong></div>";
+    return (
+      "<div><span>" +
+      esc(t("tools.billing.invoiceTaxable", "Taxable")) +
+      "</span><strong>" +
+      esc(moneyInr(inv.taxableTotal)) +
+      "</strong></div>" +
+      rows +
+      (inv.cessTotal
+        ? "<div><span>Cess</span><strong>" + esc(moneyInr(inv.cessTotal)) + "</strong></div>"
+        : "") +
+      '<div class="inv-grand"><span>' +
+      esc(t("tools.billing.invoiceTotal", "Total")) +
+      "</span><strong>" +
+      esc(moneyInr(inv.grandTotal)) +
+      "</strong></div>"
+    );
+  }
+
+  function invBrandFooterHtml(biz, wide) {
+    var bank = [];
+    if (biz.bankName) bank.push(esc(biz.bankName));
+    if (biz.bankAccountName) bank.push(esc(biz.bankAccountName));
+    if (biz.bankAccountNumber) bank.push("A/C " + esc(biz.bankAccountNumber));
+    if (biz.bankIfsc) bank.push("IFSC " + esc(biz.bankIfsc));
+    if (biz.upiId) bank.push("UPI " + esc(biz.upiId));
+    var qr = invStudio.assets.qr
+      ? '<div class="inv-foot-col"><h4>' +
+        esc(t("tools.billing.invoicePayQr", "Pay by QR")) +
+        '</h4><img class="inv-qr" src="' +
+        esc(invStudio.assets.qr) +
+        '" alt="" />' +
+        (biz.upiId ? "<span>" + esc(biz.upiId) + "</span>" : "") +
+        "</div>"
+      : "";
+    var sign = invStudio.assets.signature
+      ? '<img class="inv-sign" src="' + esc(invStudio.assets.signature) + '" alt="" />'
+      : '<span class="inv-sign-line"></span>';
+    return (
+      '<div class="inv-foot' +
+      (wide ? " is-wide" : "") +
+      '">' +
+      (bank.length
+        ? '<div class="inv-foot-col"><h4>' +
+          esc(t("tools.billing.invoiceBank", "Bank details")) +
+          "</h4><p>" +
+          bank.join("<br/>") +
+          "</p></div>"
+        : "") +
+      qr +
+      '<div class="inv-foot-col inv-foot-sign"><h4>' +
+      esc(t("tools.billing.invoiceSign", "Authorised signatory")) +
+      "</h4>" +
+      sign +
+      '</div></div><p class="inv-fine">' +
+      esc(t("tools.billing.invoiceComputer", "This is a computer generated invoice.")) +
+      "</p>"
+    );
+  }
+
+  function invoiceSheetHtml(inv, biz) {
+    var taxLabel =
+      inv.taxSplit === "igst"
+        ? t("tools.billing.invoiceIgst", "IGST")
+        : t("tools.billing.invoiceCgstSgst", "CGST + SGST");
+    var logo = invStudio.assets.logo
+      ? '<img class="inv-logo" src="' + esc(invStudio.assets.logo) + '" alt="" />'
+      : '<span class="inv-logo-fallback">' + esc(String((inv.seller && inv.seller.name) || "B").charAt(0)) + "</span>";
+    var tpl = invStudio.template;
+    var lines = inv.lines || [];
+    var compact = invStudio.printer !== "a4";
+
+    if (tpl === "thermal") {
+      return (
+        '<div class="inv-thermal-head">' +
+        logo +
+        "<strong>" +
+        esc(inv.seller.name) +
+        "</strong>" +
+        (inv.seller.gstin ? "<span>GSTIN " + esc(inv.seller.gstin) + "</span>" : "") +
+        (inv.seller.mobile ? "<span>+91 " + esc(inv.seller.mobile) + "</span>" : "") +
+        (inv.seller.address ? "<span>" + esc(inv.seller.address) + "</span>" : "") +
+        '</div><div class="inv-dash"></div><div class="inv-thermal-meta"><strong>TAX INVOICE</strong><span>' +
+        esc(inv.invoiceNumber) +
+        "</span><span>" +
+        esc(inv.invoiceDate) +
+        "</span><span>Bill to: " +
+        esc(inv.customer.name) +
+        "</span>" +
+        (inv.placeOfSupply ? "<span>POS " + esc(inv.placeOfSupply) + " · " + esc(taxLabel) + "</span>" : "") +
+        '</div><div class="inv-dash"></div><div class="inv-thermal-lines">' +
+        lines
+          .map(function (line) {
+            return (
+              "<p><strong>" +
+              esc(line.name) +
+              "</strong><span>" +
+              esc(String(line.qty)) +
+              " " +
+              esc(line.unit) +
+              " × " +
+              esc(moneyInr(line.rate)) +
+              " · GST " +
+              esc(String(line.gstRate)) +
+              "%</span><b>" +
+              esc(moneyInr(line.lineTotal)) +
+              "</b></p>"
+            );
+          })
+          .join("") +
+        '</div><div class="inv-dash"></div><div class="inv-totals inv-totals-thermal">' +
+        invTaxRowsHtml(inv) +
+        "</div>" +
+        (inv.notes ? '<p class="inv-notes">' + esc(inv.notes) + "</p>" : "") +
+        '<div class="inv-thermal-end">' +
+        (invStudio.assets.qr
+          ? '<img class="inv-qr inv-qr-center" src="' + esc(invStudio.assets.qr) + '" alt="" />'
+          : "") +
+        (biz.upiId ? '<p class="inv-upi">' + esc(biz.upiId) + "</p>" : "") +
+        (invStudio.assets.signature
+          ? '<img class="inv-sign inv-sign-center" src="' + esc(invStudio.assets.signature) + '" alt="" />'
+          : "") +
+        '<p class="inv-thanks">' +
+        esc(t("tools.billing.invoiceThanks", "Thank you. Visit again.")) +
+        "</p></div>"
+      );
+    }
+
+    var table =
+      tpl === "minimal"
+        ? '<table class="inv-table"><thead><tr><th>' +
+          esc(t("tools.billing.itemName", "Item")) +
+          "</th><th>" +
+          esc(t("tools.billing.invoiceQty", "Qty")) +
+          "</th><th>" +
+          esc(t("tools.billing.invoiceAmount", "Amount")) +
+          "</th></tr></thead><tbody>" +
+          lines
+            .map(function (line) {
+              return (
+                "<tr><td><strong>" +
+                esc(line.name) +
+                "</strong><span>" +
+                esc(moneyInr(line.rate)) +
+                " · GST " +
+                esc(String(line.gstRate)) +
+                "%</span></td><td>" +
+                esc(String(line.qty)) +
+                "</td><td>" +
+                esc(moneyInr(line.lineTotal)) +
+                "</td></tr>"
+              );
+            })
+            .join("") +
+          "</tbody></table>"
+        : '<table class="inv-table"><thead><tr><th>' +
+          esc(t("tools.billing.itemName", "Item")) +
+          "</th>" +
+          (compact ? "" : "<th>HSN</th>") +
+          "<th>" +
+          esc(t("tools.billing.invoiceQty", "Qty")) +
+          "</th><th>" +
+          esc(t("tools.billing.invoiceRate", "Rate")) +
+          "</th><th>GST</th><th>" +
+          esc(t("tools.billing.invoiceAmount", "Amount")) +
+          "</th></tr></thead><tbody>" +
+          lines
+            .map(function (line) {
+              return (
+                "<tr><td><strong>" +
+                esc(line.name) +
+                "</strong></td>" +
+                (compact ? "" : "<td>" + esc(line.hsnSac || "—") + "</td>") +
+                "<td>" +
+                esc(String(line.qty)) +
+                " " +
+                esc(line.unit) +
+                "</td><td>" +
+                esc(moneyInr(line.rate)) +
+                "</td><td>" +
+                esc(String(line.gstRate)) +
+                "%</td><td>" +
+                esc(moneyInr(line.lineTotal)) +
+                "</td></tr>"
+              );
+            })
+            .join("") +
+          "</tbody></table>";
+
+    var header =
+      tpl === "modern"
+        ? '<div class="inv-modern-head">' +
+          logo +
+          "<div><strong>" +
+          esc(inv.seller.name) +
+          "</strong>" +
+          (inv.seller.gstin ? "<span>GSTIN " + esc(inv.seller.gstin) + "</span>" : "") +
+          '</div><div class="inv-modern-meta"><em>TAX INVOICE</em><span>' +
+          esc(inv.invoiceNumber) +
+          "</span><span>" +
+          esc(inv.invoiceDate) +
+          "</span></div></div>"
+        : '<div class="inv-classic-head">' +
+          logo +
+          "<div><strong>" +
+          esc(inv.seller.name) +
+          "</strong>" +
+          (inv.seller.gstin ? "<span>GSTIN " + esc(inv.seller.gstin) + "</span>" : "") +
+          (inv.seller.mobile ? "<span>+91 " + esc(inv.seller.mobile) + "</span>" : "") +
+          (inv.seller.address ? "<span>" + esc(inv.seller.address) + "</span>" : "") +
+          '</div><div class="inv-classic-meta"><em>TAX INVOICE</em><span>' +
+          esc(inv.invoiceNumber) +
+          "</span><span>" +
+          esc(inv.invoiceDate) +
+          "</span></div></div>";
+
+    return (
+      header +
+      '<div class="inv-parties"><div><h4>' +
+      esc(t("tools.billing.invoiceFrom", "From")) +
+      "</h4>" +
+      invPartyHtml(inv.seller) +
+      "</div><div><h4>" +
+      esc(t("tools.billing.invoiceTo", "Bill to")) +
+      "</h4>" +
+      invPartyHtml(inv.customer) +
+      '</div></div><p class="inv-pos">Place of supply: ' +
+      esc(inv.placeOfSupply || "—") +
+      " · " +
+      esc(taxLabel) +
+      "</p>" +
+      table +
+      '<div class="inv-totals">' +
+      invTaxRowsHtml(inv) +
+      "</div>" +
+      (tpl !== "minimal"
+        ? '<p class="inv-words"><em>' +
+          esc(t("tools.billing.invoiceAmountWords", "Amount in words")) +
+          "</em> " +
+          esc(amountInWordsInr(inv.grandTotal)) +
+          "</p>"
+        : "") +
+      (inv.notes ? '<p class="inv-notes">' + esc(inv.notes) + "</p>" : "") +
+      invBrandFooterHtml(biz, tpl === "classic" && invStudio.printer === "a4")
+    );
+  }
+
+  function renderInvoiceSheet() {
+    var root = document.getElementById("inv-sheet");
+    if (!root || !invStudio.inv || !invStudio.biz) return;
+    root.className = "inv-sheet inv-sheet--" + invStudio.template + " inv-sheet--" + invStudio.printer;
+    root.innerHTML = invoiceSheetHtml(invStudio.inv, invStudio.biz);
+  }
+
+  function setPrintPageSize() {
+    var style = document.getElementById("inv-print-page");
+    if (!style) {
+      style = document.createElement("style");
+      style.id = "inv-print-page";
+      document.head.appendChild(style);
+    }
+    var sizes = { a4: "A4", a5: "A5", thermal80: "80mm auto", thermal58: "58mm auto" };
+    var margin = String(invStudio.printer).indexOf("thermal") === 0 ? "3mm" : "10mm";
+    style.textContent = "@page { size: " + (sizes[invStudio.printer] || "A4") + "; margin: " + margin + "; }";
+  }
+
+  function printInvoiceSheet() {
+    setPrintPageSize();
+    document.body.classList.add("inv-printing");
+    window.print();
+    setTimeout(function () {
+      document.body.classList.remove("inv-printing");
+    }, 400);
+  }
+
+  function saveInvoicePrintDefault() {
+    var biz = invStudio.biz;
+    if (!biz) return Promise.resolve();
+    return api("/business", {
+      method: "PATCH",
+      body: {
+        name: biz.name,
+        email: biz.email || undefined,
+        gstin: biz.gstin || undefined,
+        pan: biz.pan || undefined,
+        address: biz.address || undefined,
+        city: biz.city || undefined,
+        stateCode: biz.stateCode || undefined,
+        pincode: biz.pincode || undefined,
+        bankName: biz.bankName || undefined,
+        bankAccountName: biz.bankAccountName || undefined,
+        bankIfsc: biz.bankIfsc || undefined,
+        bankAccountNumber: biz.bankAccountNumber || undefined,
+        upiId: biz.upiId || undefined,
+        invoiceTemplate: invStudio.template,
+        invoicePrinter: invStudio.printer,
+      },
+    }).then(function (saved) {
+      invStudio.biz = saved;
+      if (state.session && state.session.business) {
+        state.session.business.invoiceTemplate = saved.invoiceTemplate;
+        state.session.business.invoicePrinter = saved.invoicePrinter;
+      }
+      toast(t("tools.billing.invoicePrintSaved", "Saved as default print layout"));
+    });
+  }
+
+  function paintInvoiceStudioControls() {
+    var tpls = document.getElementById("inv-tpls");
+    var printers = document.getElementById("inv-printers");
+    if (tpls) {
+      tpls.innerHTML = INVOICE_TEMPLATES.map(function (row) {
+        return (
+          '<button type="button" class="inv-tpl' +
+          (row.id === invStudio.template ? " is-on" : "") +
+          '" data-tpl="' +
+          row.id +
+          '"><strong>' +
+          esc(t("tools.billing.invoiceTpl_" + row.id, row.name)) +
+          "</strong><span>" +
+          esc(t("tools.billing.invoiceTplHint_" + row.id, row.hint)) +
+          "</span></button>"
+        );
+      }).join("");
+    }
+    var info = invoiceTemplateInfo(invStudio.template);
+    if (printers) {
+      printers.innerHTML = INVOICE_PRINTERS.filter(function (row) {
+        return info.printers.indexOf(row.id) !== -1;
+      })
+        .map(function (row) {
+          return (
+            '<button type="button" class="inv-printer' +
+            (row.id === invStudio.printer ? " is-on" : "") +
+            '" data-printer="' +
+            row.id +
+            '">' +
+            esc(t("tools.billing.invoicePrinter_" + row.id, row.name)) +
+            "<em>" +
+            esc(row.hint) +
+            "</em></button>"
+          );
+        })
+        .join("");
+    }
+  }
+
+  function bindInvoiceStudio(root) {
+    if (!root) return;
+    root.addEventListener("click", function (e) {
+      var tpl = e.target.closest ? e.target.closest("[data-tpl]") : null;
+      var printer = e.target.closest ? e.target.closest("[data-printer]") : null;
+      var act = e.target.closest ? e.target.closest("[data-studio]") : null;
+      if (tpl) {
+        var next = resolvePrintChoice(tpl.getAttribute("data-tpl"), invStudio.printer);
+        invStudio.template = next.template;
+        invStudio.printer = next.printer;
+        paintInvoiceStudioControls();
+        renderInvoiceSheet();
+        return;
+      }
+      if (printer) {
+        invStudio.printer = printer.getAttribute("data-printer");
+        paintInvoiceStudioControls();
+        renderInvoiceSheet();
+        return;
+      }
+      if (!act) return;
+      var kind = act.getAttribute("data-studio");
+      if (kind === "print") printInvoiceSheet();
+      if (kind === "default") {
+        saveInvoicePrintDefault().catch(function (ex) {
+          toast(ex.message, "err");
+        });
+      }
+    });
+  }
+
   function invoiceDetailView(id) {
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
     stage.innerHTML =
       '<p class="tool-note">' + esc(t("tools.billing.invoicesLoading", "Loading invoices…")) + "</p>";
-    api("/invoices/" + encodeURIComponent(id))
+    Promise.all([api("/invoices/" + encodeURIComponent(id)), api("/business")])
+      .then(function (pair) {
+        var inv = pair[0];
+        var biz = pair[1];
+        var choice = resolvePrintChoice(biz.invoiceTemplate, biz.invoicePrinter);
+        invStudio.inv = inv;
+        invStudio.biz = biz;
+        invStudio.template = choice.template;
+        invStudio.printer = choice.printer;
+        return loadBrandAssets().then(function () {
+          return inv;
+        });
+      })
       .then(function (inv) {
-        var party = function (p, title) {
-          if (!p) return "";
-          return (
-            '<div class="bill-party"><h3>' +
-            esc(title) +
-            "</h3><strong>" +
-            esc(p.name) +
-            "</strong>" +
-            (p.gstin ? "<p>GSTIN " + esc(p.gstin) + "</p>" : "") +
-            (p.mobile ? "<p>+91 " + esc(p.mobile) + "</p>" : "") +
-            (p.address ? "<p>" + esc(p.address) + "</p>" : "") +
-            "<p>" +
-            esc([p.city, p.state, p.pincode].filter(Boolean).join(", ")) +
-            "</p></div>"
-          );
-        };
         var taxLabel =
           inv.taxSplit === "igst"
             ? t("tools.billing.invoiceIgst", "IGST")
             : t("tools.billing.invoiceCgstSgst", "CGST + SGST");
-        var rows = (inv.lines || [])
-          .map(function (line) {
-            var chip =
-              line.source === "charge"
-                ? '<span class="bill-chip">' + esc(t("tools.billing.invoiceChargeChip", "Charge")) + "</span>"
-                : line.source === "custom"
-                  ? '<span class="bill-chip">' + esc(t("tools.billing.invoiceOneOff", "This bill only")) + "</span>"
-                  : "";
-            return (
-              "<tr><td><strong>" +
-              esc(line.name) +
-              "</strong>" +
-              chip +
-              (line.hsnSac ? '<span class="bill-sub">' + esc(line.hsnSac) + "</span>" : "") +
-              "</td><td>" +
-              esc(String(line.qty)) +
-              " " +
-              esc(line.unit) +
-              "</td><td>" +
-              esc(moneyInr(line.rate)) +
-              "</td><td>" +
-              esc(String(line.gstRate)) +
-              "%</td><td>" +
-              esc(moneyInr(line.lineTotal)) +
-              "</td></tr>"
-            );
-          })
-          .join("");
-        var taxRows =
-          inv.taxSplit === "igst"
-            ? "<div><span>IGST</span><strong>" + esc(moneyInr(inv.igstTotal)) + "</strong></div>"
-            : "<div><span>CGST</span><strong>" +
-              esc(moneyInr(inv.cgstTotal)) +
-              "</strong></div><div><span>SGST</span><strong>" +
-              esc(moneyInr(inv.sgstTotal)) +
-              "</strong></div>";
         stage.innerHTML =
           '<header class="bill-stage-head bill-stage-head-row"><div><h2>' +
           esc(inv.invoiceNumber) +
@@ -2936,44 +3499,29 @@
           (inv.placeOfSupply ? " · " + esc(inv.placeOfSupply) : "") +
           "</p></div>" +
           '<div class="bill-inv-toolbar">' +
+          '<button type="button" class="bill-act" data-studio="print">' +
+          esc(t("tools.billing.invoicePrint", "Print")) +
+          "</button>" +
           invoiceActionButtons(inv.id, inv.invoiceNumber) +
-          '<a class="btn btn-ghost" href="#app/invoices">' +
+          '<button type="button" class="bill-act" data-studio="default">' +
+          esc(t("tools.billing.invoiceSavePrint", "Save as default")) +
+          '</button><a class="btn btn-ghost" href="#app/invoices">' +
           esc(t("tools.billing.backToInvoices", "Back to invoices")) +
           "</a></div></header>" +
-          '<section class="bill-invoice glass">' +
-          '<div class="bill-parties">' +
-          party(inv.seller, t("tools.billing.invoiceFrom", "From")) +
-          party(inv.customer, t("tools.billing.invoiceTo", "Bill to")) +
-          "</div>" +
-          '<div class="bill-table-wrap"><table class="bill-table"><thead><tr>' +
-          "<th>" +
-          esc(t("tools.billing.itemName", "Item")) +
-          "</th><th>" +
-          esc(t("tools.billing.invoiceQty", "Qty")) +
-          "</th><th>" +
-          esc(t("tools.billing.invoiceRate", "Rate")) +
-          "</th><th>GST</th><th>" +
-          esc(t("tools.billing.invoiceAmount", "Amount")) +
-          "</th></tr></thead><tbody>" +
-          rows +
-          "</tbody></table></div>" +
-          '<div class="bill-inv-totals">' +
-          "<div><span>" +
-          esc(t("tools.billing.invoiceTaxable", "Taxable")) +
-          "</span><strong>" +
-          esc(moneyInr(inv.taxableTotal)) +
-          "</strong></div>" +
-          taxRows +
-          (inv.cessTotal
-            ? "<div><span>Cess</span><strong>" + esc(moneyInr(inv.cessTotal)) + "</strong></div>"
-            : "") +
-          '<div class="bill-total-grand"><span>' +
-          esc(t("tools.billing.invoiceTotal", "Total")) +
-          "</span><strong>" +
-          esc(moneyInr(inv.grandTotal)) +
-          "</strong></div></div>" +
-          (inv.notes ? '<p class="tool-note">' + esc(inv.notes) + "</p>" : "") +
-          "</section>";
+          '<div class="inv-studio">' +
+          '<aside class="inv-studio-aside glass">' +
+          "<h3>" +
+          esc(t("tools.billing.invoiceTemplate", "Invoice template")) +
+          "</h3><p>" +
+          esc(t("tools.billing.invoiceTemplatesLead", "Preview uses your logo, signature, QR, and bank details.")) +
+          '</p><div id="inv-tpls" class="inv-tpl-grid"></div>' +
+          "<h3>" +
+          esc(t("tools.billing.invoicePrinter", "Printer")) +
+          '</h3><div id="inv-printers" class="inv-printers"></div></aside>' +
+          '<div class="inv-preview inv-print-root"><div id="inv-sheet" class="inv-sheet"></div></div></div>';
+        paintInvoiceStudioControls();
+        renderInvoiceSheet();
+        bindInvoiceStudio(stage);
         bindInvoiceActions(stage);
       })
       .catch(function (ex) {
@@ -3262,13 +3810,22 @@
     }
   }
 
+  var profileBiz = null;
+
   function profileView() {
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
     stage.innerHTML =
-      '<p class="tool-note">' + esc(t("tools.billing.profileLoading", "Loading profile…")) + "</p>";
+      settingsHead(
+        "profile",
+        t("tools.billing.profileLead", "Add the details printed on every invoice — address, logo, and signature."),
+      ) +
+      '<p class="tool-note">' +
+      esc(t("tools.billing.profileLoading", "Loading profile…")) +
+      "</p>";
     api("/business")
       .then(function (biz) {
+        profileBiz = biz;
         var stateOpts =
           '<option value="">' +
           esc(t("tools.billing.customerStateNone", "Select state")) +
@@ -3285,17 +3842,10 @@
             );
           }).join("");
         stage.innerHTML =
-          '<header class="bill-stage-head bill-stage-head-row"><div><h2>' +
-          esc(t("tools.billing.tabProfile", "Profile")) +
-          "</h2><p>" +
-          esc(
-            t(
-              "tools.billing.profileLead",
-              "Add the details printed on every invoice — address, logo, and signature.",
-            ),
+          settingsHead(
+            "profile",
+            t("tools.billing.profileLead", "Add the details printed on every invoice — address, logo, and signature."),
           ) +
-          "</p></div>" +
-          '<div id="profile-meter" class="bill-profile-meter"></div></header>' +
           '<ul id="profile-check" class="bill-profile-check"></ul>' +
           '<form id="bill-profile-form" class="bill-item-form glass" method="post" action="#" onsubmit="return false;">' +
           "<h3>" +
@@ -3429,8 +3979,152 @@
         syncSessionProfile(Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile));
       })
       .catch(function (ex) {
-        stage.innerHTML = '<div class="bill-empty glass"><p>' + esc(ex.message) + "</p></div>";
+        stage.innerHTML =
+          settingsHead(
+            "profile",
+            t("tools.billing.profileLead", "Add the details printed on every invoice — address, logo, and signature."),
+          ) +
+          '<div class="bill-empty glass"><p>' +
+          esc(ex.message) +
+          "</p></div>";
       });
+  }
+
+  function sampleInvoiceFromBiz(biz) {
+    var sellerState = biz && biz.stateCode ? String(biz.stateCode) : "";
+    var buyerState = "27";
+    var igst = sellerState && sellerState !== buyerState;
+    return {
+      invoiceNumber: "INV-0001",
+      invoiceDate: new Date().toISOString().slice(0, 10),
+      taxSplit: igst ? "igst" : "cgst_sgst",
+      placeOfSupply: "Maharashtra",
+      notes: t("tools.billing.invoiceSampleNote", "Sample invoice — not saved"),
+      seller: {
+        name: (biz && biz.name) || t("tools.billing.businessName", "Business name"),
+        mobile: (biz && biz.mobile) || null,
+        email: (biz && biz.email) || null,
+        gstin: (biz && biz.gstin) || null,
+        address: (biz && biz.address) || null,
+        city: (biz && biz.city) || null,
+        stateCode: (biz && biz.stateCode) || null,
+        state: (biz && biz.state) || null,
+        pincode: (biz && biz.pincode) || null,
+      },
+      customer: {
+        name: "Sample Customer",
+        mobile: "9876543210",
+        email: null,
+        gstin: "27AAAAA0000A1Z5",
+        address: "12 MG Road",
+        city: "Mumbai",
+        stateCode: "27",
+        state: "Maharashtra",
+        pincode: "400001",
+      },
+      lines: [
+        {
+          name: "Notebook",
+          hsnSac: "482010",
+          qty: 2,
+          unit: "pcs",
+          rate: 100,
+          gstRate: 18,
+          lineTotal: 236,
+          source: "catalog",
+        },
+        {
+          name: "Delivery",
+          hsnSac: "",
+          qty: 1,
+          unit: "nos",
+          rate: 40,
+          gstRate: 18,
+          lineTotal: 47.2,
+          source: "charge",
+        },
+      ],
+      taxableTotal: 240,
+      cgstTotal: igst ? 0 : 21.6,
+      sgstTotal: igst ? 0 : 21.6,
+      igstTotal: igst ? 43.2 : 0,
+      cessTotal: 0,
+      grandTotal: 283.2,
+    };
+  }
+
+  function printerInfo(id) {
+    var i = 0;
+    for (i = 0; i < INVOICE_PRINTERS.length; i += 1) {
+      if (INVOICE_PRINTERS[i].id === id) return INVOICE_PRINTERS[i];
+    }
+    return INVOICE_PRINTERS[0];
+  }
+
+  function syncPrintSettingsPreview() {
+    var sheet = document.getElementById("inv-sheet");
+    if (!sheet || !profileBiz) return;
+    var choice = resolvePrintChoice(fieldVal("profile-template"), fieldVal("profile-printer"));
+    invStudio.template = choice.template;
+    invStudio.printer = choice.printer;
+    invStudio.biz = profileBiz;
+    invStudio.inv = sampleInvoiceFromBiz(profileBiz);
+    renderInvoiceSheet();
+    var cap = document.getElementById("inv-sample-caption");
+    if (cap) {
+      var tpl = invoiceTemplateInfo(choice.template);
+      var prn = printerInfo(choice.printer);
+      cap.textContent =
+        t("tools.billing.invoiceTpl_" + tpl.id, tpl.name) +
+        " · " +
+        t("tools.billing.invoicePrinter_" + prn.id, prn.name) +
+        " · " +
+        prn.hint;
+    }
+  }
+
+  function fillProfilePrinters(template, selected) {
+    var sel = document.getElementById("profile-printer");
+    if (!sel) return;
+    var info = invoiceTemplateInfo(template);
+    var choice = resolvePrintChoice(template, selected);
+    sel.innerHTML = INVOICE_PRINTERS.filter(function (row) {
+      return info.printers.indexOf(row.id) !== -1;
+    })
+      .map(function (row) {
+        return (
+          '<option value="' +
+          row.id +
+          '"' +
+          (row.id === choice.printer ? " selected" : "") +
+          ">" +
+          esc(t("tools.billing.invoicePrinter_" + row.id, row.name)) +
+          " — " +
+          esc(row.hint) +
+          "</option>"
+        );
+      })
+      .join("");
+  }
+
+  function bindProfilePrintSelects(template, printer) {
+    var tpl = document.getElementById("profile-template");
+    var prn = document.getElementById("profile-printer");
+    fillProfilePrinters(template || (tpl && tpl.value) || "classic", printer);
+    if (tpl && !tpl._bound) {
+      tpl._bound = true;
+      tpl.addEventListener("change", function () {
+        fillProfilePrinters(tpl.value, prn && prn.value);
+        syncPrintSettingsPreview();
+      });
+    }
+    if (prn && !prn._bound) {
+      prn._bound = true;
+      prn.addEventListener("change", function () {
+        syncPrintSettingsPreview();
+      });
+    }
+    syncPrintSettingsPreview();
   }
 
   function handleProfileSubmit() {
@@ -3476,10 +4170,19 @@
         bankAccountNumber: fieldVal("profile-bank-no") || undefined,
         bankIfsc: fieldVal("profile-ifsc") || undefined,
         upiId: fieldVal("profile-upi") || undefined,
+        invoiceTemplate:
+          fieldVal("profile-template") || (profileBiz && profileBiz.invoiceTemplate) || undefined,
+        invoicePrinter:
+          fieldVal("profile-printer") || (profileBiz && profileBiz.invoicePrinter) || undefined,
       },
     })
       .then(function (biz) {
         toast(t("tools.billing.profileSaved", "Profile saved"), "ok");
+        profileBiz = biz;
+        if (state.session && state.session.business) {
+          state.session.business.invoiceTemplate = biz.invoiceTemplate;
+          state.session.business.invoicePrinter = biz.invoicePrinter;
+        }
         syncSessionProfile(Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile));
         refreshProfileChecklist(biz.profile);
       })
@@ -3491,6 +4194,165 @@
       .then(function () {
         setBusy(form, false);
       });
+  }
+
+  function businessPatchBody(biz, extra) {
+    var body = {
+      name: biz.name,
+      email: biz.email || undefined,
+      gstin: biz.gstin || undefined,
+      pan: biz.pan || undefined,
+      address: biz.address || undefined,
+      city: biz.city || undefined,
+      stateCode: biz.stateCode || undefined,
+      pincode: biz.pincode || undefined,
+      bankName: biz.bankName || undefined,
+      bankAccountName: biz.bankAccountName || undefined,
+      bankAccountNumber: biz.bankAccountNumber || undefined,
+      bankIfsc: biz.bankIfsc || undefined,
+      upiId: biz.upiId || undefined,
+      invoiceTemplate: biz.invoiceTemplate || undefined,
+      invoicePrinter: biz.invoicePrinter || undefined,
+    };
+    if (extra) {
+      Object.keys(extra).forEach(function (key) {
+        body[key] = extra[key];
+      });
+    }
+    return body;
+  }
+
+  function printSettingsView() {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    stage.innerHTML =
+      settingsHead(
+        "print",
+        t(
+          "tools.billing.profilePrintLead",
+          "Used when you download or print a bill. You can still change it on each invoice.",
+        ),
+      ) +
+      '<p class="tool-note">' +
+      esc(t("tools.billing.profileLoading", "Loading profile…")) +
+      "</p>";
+    api("/business")
+      .then(function (biz) {
+        profileBiz = biz;
+        var note = document.querySelector("#bill-stage > .tool-note");
+        if (note) note.remove();
+        stage.insertAdjacentHTML(
+          "beforeend",
+          '<div class="inv-sample-studio">' +
+            '<form id="bill-print-form" class="bill-item-form glass" method="post" action="#" onsubmit="return false;">' +
+            "<h3>" +
+            esc(t("tools.billing.profilePrint", "Invoice print defaults")) +
+            "</h3>" +
+            '<p class="tool-note">' +
+            esc(
+              t(
+                "tools.billing.invoiceSampleLead",
+                "The sample updates when you change the template or printer. It is not a real invoice.",
+              ),
+            ) +
+            "</p>" +
+            '<div class="bill-form-grid">' +
+            '<div class="tool-field"><label for="profile-template">' +
+            esc(t("tools.billing.invoiceTemplate", "Invoice template")) +
+            "</label>" +
+            '<select id="profile-template">' +
+            INVOICE_TEMPLATES.map(function (row) {
+              return (
+                '<option value="' +
+                row.id +
+                '"' +
+                (biz.invoiceTemplate === row.id ? " selected" : "") +
+                ">" +
+                esc(t("tools.billing.invoiceTpl_" + row.id, row.name)) +
+                "</option>"
+              );
+            }).join("") +
+            "</select></div>" +
+            '<div class="tool-field"><label for="profile-printer">' +
+            esc(t("tools.billing.invoicePrinter", "Printer")) +
+            '</label><select id="profile-printer"></select></div></div>' +
+            '<p class="billing-err" id="billing-error" role="alert"></p>' +
+            '<div class="billing-actions"><button class="btn btn-primary" type="submit">' +
+            esc(t("tools.billing.invoiceSavePrint", "Save as default")) +
+            "</button></div></form>" +
+            '<div class="inv-preview inv-sample-preview">' +
+            '<p class="inv-sample-badge">' +
+            esc(t("tools.billing.invoiceSample", "Sample")) +
+            '</p><p class="inv-sample-caption" id="inv-sample-caption"></p>' +
+            '<div id="inv-sheet" class="inv-sheet"></div></div></div>',
+        );
+        invStudio.biz = biz;
+        invStudio.inv = sampleInvoiceFromBiz(biz);
+        loadBrandAssets().then(function () {
+          bindProfilePrintSelects(biz.invoiceTemplate, biz.invoicePrinter);
+        });
+        syncSessionProfile(Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile));
+      })
+      .catch(function (ex) {
+        stage.innerHTML =
+          settingsHead(
+            "print",
+            t(
+              "tools.billing.profilePrintLead",
+              "Used when you download or print a bill. You can still change it on each invoice.",
+            ),
+          ) +
+          '<div class="bill-empty glass"><p>' +
+          esc(ex.message) +
+          "</p></div>";
+      });
+  }
+
+  function handlePrintSettingsSubmit() {
+    var form = document.getElementById("bill-print-form");
+    var err = errBox();
+    if (!form || !profileBiz) return;
+    if (err) err.textContent = "";
+    setBusy(form, true);
+    api("/business", {
+      method: "PATCH",
+      body: businessPatchBody(profileBiz, {
+        invoiceTemplate: fieldVal("profile-template") || undefined,
+        invoicePrinter: fieldVal("profile-printer") || undefined,
+      }),
+    })
+      .then(function (biz) {
+        profileBiz = biz;
+        if (state.session && state.session.business) {
+          state.session.business.invoiceTemplate = biz.invoiceTemplate;
+          state.session.business.invoicePrinter = biz.invoicePrinter;
+        }
+        toast(t("tools.billing.invoicePrintSaved", "Saved as default print layout"));
+      })
+      .catch(function (ex) {
+        var msg = ex.message || t("tools.billing.profileSaveFail", "Could not save profile");
+        if (err) err.textContent = msg;
+        toast(msg, "err");
+      })
+      .then(function () {
+        setBusy(form, false);
+      });
+  }
+
+  function settingsView(sub) {
+    if (!sub || sub === "profile") {
+      if (!sub) {
+        go("app/settings/profile");
+        return;
+      }
+      profileView();
+      return;
+    }
+    if (sub === "print") {
+      printSettingsView();
+      return;
+    }
+    go("app/settings/profile");
   }
 
   function appView(tab, screen, extra) {
@@ -3534,8 +4396,12 @@
       invoicesListView(screen);
       return;
     }
-    if (tab === "profile" || tab === "settings") {
-      profileView();
+    if (tab === "profile") {
+      go("app/settings/profile");
+      return;
+    }
+    if (tab === "settings") {
+      settingsView(screen);
       return;
     }
     stage.innerHTML = tabPanel(tab, s);
@@ -3545,25 +4411,45 @@
     paint(view());
   }
 
+  function finishBoot() {
+    state.boot = false;
+    document.documentElement.classList.remove("billing-boot");
+    paint(view());
+  }
+
   function restoreSession() {
     api("/auth/me", { timeout: 5000 })
       .then(function (session) {
-        if (!session || session.needsOnboarding) return;
+        if (!session) return;
         state.session = session;
+        if (session.needsOnboarding) {
+          if (view().page !== "onboarding") go("onboarding");
+          return;
+        }
         if (view().page !== "app") go("app");
-        else paint(view());
       })
       .catch(function () {
-        /* stay on the login form */
+        /* no cookie — show login after boot */
+      })
+      .then(function () {
+        finishBoot();
       });
   }
 
   function paint(route) {
     if (typeof route === "string") route = { page: route, tab: "home" };
     var name = route.page;
+    if (state.boot && name !== "app") {
+      setChrome("boot");
+      return;
+    }
     setChrome(name);
     if (state.session && !state.session.needsOnboarding && name !== "app") {
       go("app");
+      return;
+    }
+    if (state.session && state.session.needsOnboarding && name !== "onboarding") {
+      go("onboarding");
       return;
     }
     if (!state.session && name === "app") {
@@ -3637,7 +4523,6 @@
   try {
     state.mobile = sessionStorage.getItem("billing_mobile") || "";
   } catch (_) {}
-  render();
   restoreSession();
   initCarousel();
 })();

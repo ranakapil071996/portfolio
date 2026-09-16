@@ -564,6 +564,40 @@
   align-items: stretch;
 }
 
+html.billing-boot .billing-layout,
+html.billing-boot .bill-drawer,
+html.billing-boot .bill-stage,
+html.billing-boot .bill-foot {
+  visibility: hidden !important;
+}
+
+html.billing-boot .bill-boot {
+  display: flex;
+}
+
+.bill-boot {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 42vh;
+  color: var(--text-muted);
+  font-weight: 650;
+}
+
+.bill-boot-spin {
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent, #38bdf8);
+  animation: bill-boot-spin 0.7s linear infinite;
+}
+
+@keyframes bill-boot-spin {
+  to { transform: rotate(360deg); }
+}
+
 .billing-software {
   min-height: 100dvh;
 }
@@ -696,6 +730,8 @@
 .bill-drawer.is-collapsed {
   width: 72px;
   flex-basis: 72px;
+  align-items: center;
+  padding-inline: 0.65rem;
 }
 
 .bill-drawer-brand {
@@ -756,19 +792,69 @@
 }
 
 .bill-drawer.is-collapsed .bill-drawer-label {
-  opacity: 0;
-  width: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .bill-drawer.is-collapsed .bill-drawer-toggle,
 .bill-drawer.is-collapsed .bill-tab,
-.bill-drawer.is-collapsed .bill-drawer-brand {
+.bill-drawer.is-collapsed .bill-tab-create {
   justify-content: center;
-  padding-inline: 0.55rem;
+  align-items: center;
+  gap: 0;
+  width: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0;
+  margin-inline: 0;
 }
 
-.bill-tab-list { display: grid; gap: 0.2rem; flex: 1; }
+.bill-drawer.is-collapsed .bill-drawer-brand {
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  padding: 0 0 0.65rem;
+}
+
+.bill-tab-create {
+  margin: 0.2rem 0 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #3b2504;
+  font-weight: 800;
+  box-shadow: 0 8px 16px rgba(245, 158, 11, 0.22);
+}
+
+.bill-tab.bill-tab-create:hover,
+.bill-tab.bill-tab-create:focus-visible {
+  background: linear-gradient(135deg, #fcd34d, #f59e0b);
+  color: #3b2504;
+  box-shadow: 0 10px 18px rgba(245, 158, 11, 0.28);
+}
+
+.bill-tab.bill-tab-create.is-on {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #3b2504;
+  box-shadow: 0 8px 16px rgba(245, 158, 11, 0.22);
+}
+
+.bill-tab-create .bill-tab-ico {
+  width: 24px;
+  height: 24px;
+  flex-basis: 24px;
+  border-radius: 999px;
+  background: rgba(59, 37, 4, 0.12);
+}
+
+.bill-drawer.is-collapsed .bill-tab-create {
+  border-radius: 12px;
+}
+
+.bill-tab-list { display: grid; gap: 0.2rem; flex: 1; width: 100%; }
+
+.bill-drawer.is-collapsed .bill-tab-list {
+  justify-items: center;
+}
 
 .bill-tab-exit { margin-top: auto; color: var(--text-dim); }
 
@@ -785,6 +871,35 @@
 }
 
 .bill-stage-head p { color: var(--text-muted); margin: 0 0 1rem; }
+
+.bill-subtabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: -0.25rem 0 1rem;
+}
+
+.bill-subtab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.05rem;
+  padding: 0.32rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--stat-bg);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.84rem;
+}
+
+.bill-subtab:hover { color: var(--text); }
+
+.bill-subtab.is-on {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--accent, #38bdf8) 70%, transparent);
+  background: color-mix(in srgb, var(--accent, #38bdf8) 16%, transparent);
+}
 
 .billing-app { min-width: 0; }
 
@@ -1313,6 +1428,74 @@
   font-size: 0.85rem;
   min-height: 1.2em;
   margin: 0 0 0.75rem;
+}
+
+.bill-home-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 0 0 1.1rem;
+  padding: 1rem 1.1rem 1.05rem;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.bill-home-card:hover { border-color: rgba(251, 191, 36, 0.75); }
+
+.bill-home-card-ico {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: 0 0 2.4rem;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(251, 191, 36, 0.18);
+  color: #f59e0b;
+}
+
+.bill-home-card-ico svg { width: 1.25rem; height: 1.25rem; }
+
+.bill-home-card-copy {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.bill-home-card-copy strong { font-size: 1rem; letter-spacing: -0.02em; }
+
+.bill-home-card-copy em {
+  font-style: normal;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.bill-home-missing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0.35rem 0 0.15rem;
+  padding: 0;
+}
+
+.bill-home-missing li {
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.18);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+[data-theme="light"] .bill-home-missing li { background: rgba(15, 23, 42, 0.06); }
+
+.bill-home-card-cta {
+  margin-top: 0.25rem;
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: #f59e0b;
 }
 
 .billing-meta {
@@ -1898,4 +2081,458 @@ html[dir="rtl"] .tool-table td { text-align: start; }
 
 @media (max-width: 720px) {
   .bill-parties { grid-template-columns: 1fr; }
+}
+
+.inv-studio {
+  display: grid;
+  grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.inv-studio-aside {
+  padding: 1rem 1.05rem 1.15rem;
+  position: sticky;
+  top: 0.75rem;
+}
+
+.inv-studio-aside h3 {
+  margin: 0.85rem 0 0.35rem;
+  font-size: 0.86rem;
+}
+
+.inv-studio-aside h3:first-child { margin-top: 0; }
+
+.inv-studio-aside p {
+  margin: 0 0 0.7rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.inv-tpl-grid {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.inv-tpl {
+  display: grid;
+  gap: 0.15rem;
+  text-align: left;
+  padding: 0.62rem 0.7rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  background: var(--stat-bg);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.inv-tpl strong { font-size: 0.86rem; }
+.inv-tpl span { color: var(--text-muted); font-size: 0.74rem; line-height: 1.35; }
+.inv-tpl.is-on {
+  border-color: color-mix(in srgb, var(--accent, #38bdf8) 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent, #38bdf8) 45%, transparent);
+}
+
+.inv-printers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.inv-printer {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: var(--stat-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inv-printer em {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.inv-printer.is-on {
+  border-color: color-mix(in srgb, var(--accent, #38bdf8) 70%, transparent);
+  background: color-mix(in srgb, var(--accent, #38bdf8) 16%, transparent);
+}
+
+.inv-sample-studio {
+  display: grid;
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.inv-sample-preview {
+  position: relative;
+  max-height: min(78vh, 920px);
+}
+
+.inv-sample-badge {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 2;
+  margin: 0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.92);
+  color: #3b2504;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.inv-sample-caption {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@media (max-width: 960px) {
+  .inv-sample-studio { grid-template-columns: 1fr; }
+}
+
+.inv-preview {
+  overflow: auto;
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+[data-theme="light"] .inv-preview { background: #e2e8f0; }
+
+.inv-sheet {
+  background: #fff;
+  color: #0f172a;
+  margin: 0 auto;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.inv-sheet--a4 { width: min(210mm, 100%); padding: 12mm; }
+.inv-sheet--a5 { width: min(148mm, 100%); padding: 8mm; font-size: 0.92em; }
+.inv-sheet--thermal80 { width: 80mm; padding: 4mm; font-size: 0.86em; }
+.inv-sheet--thermal58 { width: 58mm; padding: 3mm; font-size: 0.78em; }
+
+.inv-logo,
+.inv-logo-fallback {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.inv-logo-fallback {
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.inv-classic-head,
+.inv-modern-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.75rem;
+  align-items: start;
+  margin-bottom: 0.85rem;
+}
+
+.inv-classic-head strong,
+.inv-modern-head strong {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.inv-classic-head span,
+.inv-modern-head span {
+  display: block;
+  color: #475569;
+  font-size: 0.78rem;
+}
+
+.inv-classic-meta,
+.inv-modern-meta { text-align: right; }
+
+.inv-classic-meta em,
+.inv-modern-meta em {
+  display: block;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.inv-sheet--modern .inv-modern-head {
+  background: #0f172a;
+  color: #fff;
+  padding: 0.85rem;
+  border-radius: 10px;
+}
+
+.inv-sheet--modern .inv-modern-head span { color: #cbd5e1; }
+.inv-sheet--modern .inv-pos { color: #0f766e; }
+
+.inv-parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin: 0.7rem 0;
+}
+
+.inv-sheet--thermal80 .inv-parties,
+.inv-sheet--thermal58 .inv-parties {
+  gap: 0.4rem;
+}
+
+.inv-sheet--thermal80 .inv-parties h4,
+.inv-sheet--thermal58 .inv-parties h4 {
+  font-size: 0.62rem;
+}
+
+.inv-parties h4,
+.inv-foot-col h4 {
+  margin: 0 0 0.3rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.inv-foot-col {
+  text-align: center;
+}
+
+.inv-foot-col h4 { text-align: center; }
+
+.inv-sheet--thermal80 .inv-foot,
+.inv-sheet--thermal58 .inv-foot,
+.inv-sheet--minimal.inv-sheet--thermal80 .inv-foot {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.inv-parties strong,
+.inv-parties span {
+  display: block;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.inv-pos { margin: 0 0 0.7rem; color: #475569; font-size: 0.78rem; }
+
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.inv-table th {
+  text-align: left;
+  background: #e2e8f0;
+  padding: 0.35rem 0.4rem;
+}
+
+.inv-sheet--modern .inv-table th { background: #0f766e; color: #fff; }
+
+.inv-table td {
+  padding: 0.35rem 0.4rem;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+
+.inv-table td span {
+  display: block;
+  color: #64748b;
+  font-size: 0.7rem;
+}
+
+.inv-totals {
+  margin: 0.8rem 0 0 auto;
+  max-width: 14rem;
+  display: grid;
+  gap: 0.28rem;
+  font-size: 0.82rem;
+}
+
+.inv-totals > div,
+.inv-totals-thermal > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.inv-grand {
+  padding-top: 0.35rem;
+  border-top: 1px solid #94a3b8;
+  font-weight: 800;
+}
+
+.inv-words,
+.inv-notes,
+.inv-fine,
+.inv-thanks,
+.inv-upi {
+  color: #334155;
+  font-size: 0.78rem;
+}
+
+.inv-words em { color: #64748b; font-style: normal; font-weight: 700; }
+
+.inv-foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.inv-foot.is-wide { grid-template-columns: 1fr 1fr 1fr; }
+
+.inv-foot-col p,
+.inv-foot-col span {
+  margin: 0;
+  font-size: 0.76rem;
+  color: #0f172a;
+}
+
+.inv-qr { width: 72px; height: 72px; object-fit: contain; background: #fff; display: block; margin: 0 auto; }
+.inv-qr-center,
+.inv-sign-center { display: block; margin: 0.35rem auto 0.15rem; }
+.inv-sign { width: 110px; height: 36px; object-fit: contain; display: block; margin: 0 auto; }
+.inv-sign-line {
+  display: block;
+  width: 110px;
+  border-bottom: 1px solid #cbd5e1;
+  margin: 1.2rem auto 0;
+}
+
+.inv-fine { text-align: center; color: #94a3b8; font-size: 0.68rem; }
+
+.inv-thermal-head,
+.inv-thermal-meta {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 0.15rem;
+}
+
+.inv-thermal-head .inv-logo,
+.inv-thermal-head .inv-logo-fallback {
+  width: 44px;
+  height: 44px;
+}
+
+.inv-dash {
+  border-top: 1px dashed #94a3b8;
+  margin: 0.45rem 0;
+}
+
+.inv-thermal-lines p {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin: 0.35rem 0;
+  font-size: 0.76rem;
+}
+
+.inv-thermal-lines p span {
+  grid-column: 1;
+  color: #475569;
+  font-size: 0.68rem;
+}
+
+.inv-totals-thermal {
+  margin: 0.4rem 0 0;
+  max-width: none;
+}
+
+.inv-thanks { text-align: center; color: #64748b; margin: 0.45rem 0 0; }
+
+.inv-thermal-end {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.inv-thanks,
+.inv-upi,
+.inv-qr-center,
+.inv-sign-center {
+  break-before: avoid;
+  page-break-before: avoid;
+}
+
+.inv-sheet--thermal80,
+.inv-sheet--thermal58 {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+@media (max-width: 960px) {
+  .inv-studio { grid-template-columns: 1fr; }
+  .inv-studio-aside { position: static; }
+}
+
+@media print {
+  body.inv-printing .bill-drawer,
+  body.inv-printing .bill-top,
+  body.inv-printing .bill-frame > header,
+  body.inv-printing .inv-studio-aside,
+  body.inv-printing .bill-stage-head,
+  body.inv-printing .toast,
+  body.inv-printing .tool-ambient,
+  body.inv-printing .skip-link {
+    display: none !important;
+  }
+
+  body.inv-printing,
+  body.inv-printing .bill-frame,
+  body.inv-printing .bill-stage,
+  body.inv-printing .inv-studio,
+  body.inv-printing .inv-preview {
+    background: #fff !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: none !important;
+    display: block !important;
+  }
+
+  body.inv-printing .inv-sheet {
+    box-shadow: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  body.inv-printing .inv-sheet--thermal80,
+  body.inv-printing .inv-sheet--thermal58 {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  body.inv-printing .inv-thermal-end,
+  body.inv-printing .inv-thanks {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    break-before: avoid;
+    page-break-before: avoid;
+  }
 }

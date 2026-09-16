@@ -30,6 +30,8 @@ On Vercel, set `BILLING_API_PRODUCTION` in `js/billing-config.js` to the public 
 3. New users set **business name** (required) and **GSTIN** (optional)
 4. Existing users land in the workspace
 
+Invoice print: open a saved invoice and pick a **template** (Classic GST, Modern, Compact, Receipt) plus a **printer** (A4, A5, 80 mm, 58 mm). Preview uses the business logo, signature, payment QR, and bank/UPI from Profile. **Print** sends the on-screen sheet to the printer; **PDF** downloads that layout. **Save as default** stores the pair on the business profile.
+
 ## API
 
 | Method | Path | Auth |
@@ -49,7 +51,8 @@ On Vercel, set `BILLING_API_PRODUCTION` in `js/billing-config.js` to the public 
 | `GET` | `/api/invoices/:id` | cookie |
 | `PATCH` | `/api/invoices/:id` | cookie — same body as create |
 | `DELETE` | `/api/invoices/:id` | cookie |
-| `GET` | `/api/invoices/:id/pdf` | cookie — PDF download |
+| `GET` | `/api/invoices/templates` | cookie — layouts + printer sizes + saved default |
+| `GET` | `/api/invoices/:id/pdf` | cookie — `?template=classic\|modern\|minimal\|thermal&printer=a4\|a5\|thermal80\|thermal58` |
 | `GET` | `/api/hsn?q=&type=` | cookie — find HSN/SAC + GST rate |
 | `POST` | `/api/hsn` | cookie — add a missing HSN/SAC |
 | `GET` | `/api/business` | cookie — full profile + completion |
