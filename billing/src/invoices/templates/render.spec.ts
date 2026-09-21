@@ -63,6 +63,13 @@ function sample(): InvoicePayload {
     cessTotal: 0,
     grandTotal: 236,
     notes: "Sample bill",
+    paid: false,
+    partial: false,
+    amountPaid: 0,
+    amountDue: 236,
+    payMode: "cash",
+    payModeOther: null,
+    paidAt: null,
     createdAt: "2026-09-16T00:00:00.000Z",
   };
 }

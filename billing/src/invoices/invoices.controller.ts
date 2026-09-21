@@ -6,6 +6,7 @@ import type { AuthUser } from "../auth/auth.types";
 import { CreateInvoiceDto } from "./dto/create-invoice.dto";
 import { InvoicePdfQueryDto } from "./dto/invoice-pdf-query.dto";
 import { ListInvoicesDto } from "./dto/list-invoices.dto";
+import { MarkPaidDto } from "./dto/mark-paid.dto";
 import { InvoicesService } from "./invoices.service";
 
 @Controller("invoices")
@@ -15,7 +16,17 @@ export class InvoicesController {
 
   @Get()
   list(@CurrentUser() user: AuthUser, @Query() query: ListInvoicesDto) {
-    return this.invoices.list(user, query.page, query.limit);
+    return this.invoices.list(
+      user,
+      query.page,
+      query.limit,
+      query.q,
+      query.sort,
+      query.dir,
+      query.from,
+      query.to,
+      query.pay,
+    );
   }
 
   @Get("templates")
@@ -45,6 +56,11 @@ export class InvoicesController {
   @HttpCode(201)
   create(@CurrentUser() user: AuthUser, @Body() body: CreateInvoiceDto) {
     return this.invoices.create(user, body);
+  }
+
+  @Patch(":id/paid")
+  markPaid(@CurrentUser() user: AuthUser, @Param("id") id: string, @Body() body: MarkPaidDto) {
+    return this.invoices.markPaid(user, id, body);
   }
 
   @Patch(":id")

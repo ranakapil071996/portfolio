@@ -12,62 +12,65 @@ import {
   Min,
   MinLength,
 } from "class-validator";
+import {
+  CESS_MAX,
+  cleanLine,
+  cleanMultiline,
+  emptyToUndef,
+  HSN_RE,
+  MONEY_MAX,
+  SKU_RE,
+  STOCK_MAX,
+  toFiniteNumber,
+} from "../../common/input";
 import { GST_RATES, ITEM_TYPES, ITEM_UNITS } from "../schemas/item.schema";
 
-function emptyToUndef(value: unknown): unknown {
-  if (value == null) return undefined;
-  if (typeof value === "string" && value.trim() === "") return undefined;
-  return value;
-}
-
 export class CreateItemDto {
-  @Transform(({ value }) => String(value ?? "").trim())
+  @Transform(({ value }) => cleanLine(value))
   @IsString()
   @IsNotEmpty({ message: "Item name is required" })
   @MinLength(2, { message: "Item name must be at least 2 characters" })
   @MaxLength(160)
   name!: string;
 
-  @Transform(({ value }) => emptyToUndef(value != null ? String(value).trim() : value))
+  @Transform(({ value }) => emptyToUndef(cleanLine(value)))
   @IsOptional()
-  @IsString()
-  @MaxLength(40)
+  @Matches(SKU_RE, { message: "SKU can only use letters, numbers, and . _ - /" })
   sku?: string;
 
-  @Transform(({ value }) => emptyToUndef(value != null ? String(value).trim() : value))
+  @Transform(({ value }) => emptyToUndef(cleanMultiline(value)))
   @IsOptional()
   @IsString()
   @MaxLength(400)
   description?: string;
 
-  @Transform(({ value }) => String(value ?? "goods").trim())
+  @Transform(({ value }) => cleanLine(value || "goods"))
   @IsIn(ITEM_TYPES, { message: "Type must be goods or service" })
   type!: (typeof ITEM_TYPES)[number];
 
-  @Transform(({ value }) =>
-    emptyToUndef(value != null ? String(value).trim().toUpperCase() : value),
-  )
+  @Transform(({ value }) => emptyToUndef(cleanLine(value).toUpperCase()))
   @IsOptional()
-  @IsString()
-  @Matches(/^[A-Z0-9]{2,12}$/, { message: "Enter a valid HSN/SAC code" })
+  @Matches(HSN_RE, { message: "Enter a valid HSN/SAC code" })
   hsnSac?: string;
 
-  @Transform(({ value }) => String(value ?? "pcs").trim())
+  @Transform(({ value }) => cleanLine(value || "pcs"))
   @IsIn(ITEM_UNITS, { message: "Choose a valid unit" })
   unit!: (typeof ITEM_UNITS)[number];
 
-  @Transform(({ value }) => Number(value))
-  @IsNumber({ maxDecimalPlaces: 2 })
+  @Transform(({ value }) => toFiniteNumber(value))
+  @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
   @Min(0, { message: "Sale price cannot be negative" })
+  @Max(MONEY_MAX, { message: "Sale price is too large" })
   salePrice!: number;
 
-  @Transform(({ value }) => (value === "" || value == null ? undefined : Number(value)))
+  @Transform(({ value }) => toFiniteNumber(value))
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0)
+  @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
+  @Min(0, { message: "Purchase price cannot be negative" })
+  @Max(MONEY_MAX, { message: "Purchase price is too large" })
   purchasePrice?: number;
 
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => toFiniteNumber(value))
   @IsIn(GST_RATES, { message: "GST rate must be 0, 3, 5, 12, 18, 28, or 40" })
   gstRate!: number;
 
@@ -75,22 +78,24 @@ export class CreateItemDto {
   @IsBoolean()
   taxInclusive!: boolean;
 
-  @Transform(({ value }) => (value === "" || value == null ? 0 : Number(value)))
+  @Transform(({ value }) => (value === "" || value == null ? 0 : toFiniteNumber(value)))
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 2 })
+  @IsNumber({ maxDecimalPlaces: 2, allowNaN: false, allowInfinity: false })
   @Min(0)
-  @Max(100)
+  @Max(CESS_MAX)
   cessRate?: number;
 
-  @Transform(({ value }) => (value === "" || value == null ? 0 : Number(value)))
+  @Transform(({ value }) => (value === "" || value == null ? 0 : toFiniteNumber(value)))
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsNumber({ maxDecimalPlaces: 3, allowNaN: false, allowInfinity: false })
   @Min(0)
+  @Max(STOCK_MAX, { message: "Stock quantity is too large" })
   stockQty?: number;
 
-  @Transform(({ value }) => (value === "" || value == null ? undefined : Number(value)))
+  @Transform(({ value }) => toFiniteNumber(value))
   @IsOptional()
-  @IsNumber({ maxDecimalPlaces: 3 })
+  @IsNumber({ maxDecimalPlaces: 3, allowNaN: false, allowInfinity: false })
   @Min(0)
+  @Max(STOCK_MAX, { message: "Low-stock alert is too large" })
   lowStockAt?: number;
 }

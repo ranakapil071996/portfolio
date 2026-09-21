@@ -114,12 +114,15 @@ describe("InvoicesService", () => {
     expect(out.taxSplit).toBe("igst");
     expect(out.grandTotal).toBe(236);
     expect(out.customer.name).toBe("Sharma Stores");
+    expect(out.paid).toBe(false);
+    expect(out.payMode).toBeNull();
     expect(invoices.create).toHaveBeenCalledWith(
       expect.objectContaining({
         invoiceNumber: "INV-0001",
         taxSplit: "igst",
         igstTotal: 36,
         grandTotal: 236,
+        status: "issued",
       }),
     );
     expect(items.updateOne).toHaveBeenCalledWith(
@@ -223,6 +226,101 @@ describe("InvoicesService", () => {
     await expect(service.findOne(user(), new Types.ObjectId().toHexString())).rejects.toBeInstanceOf(
       NotFoundException,
     );
+  });
+
+  it("saves pay mode and paid status on create", async () => {
+    const businessId = new Types.ObjectId();
+    const customerId = new Types.ObjectId();
+    const invoices = {
+      create: jest.fn().mockResolvedValue({
+        toObject: () => ({
+          _id: new Types.ObjectId(),
+          invoiceNumber: "INV-0003",
+          invoiceDate: new Date("2026-09-12T00:00:00.000Z"),
+          status: "paid",
+          payMode: "upi",
+          paidAt: new Date("2026-09-12T10:00:00.000Z"),
+          customerId,
+          customer: { name: "Cash" },
+          seller: { name: "hawkey" },
+          taxSplit: "cgst_sgst",
+          lines: [],
+          taxableTotal: 100,
+          cgstTotal: 0,
+          sgstTotal: 0,
+          igstTotal: 0,
+          cessTotal: 0,
+          grandTotal: 100,
+        }),
+      }),
+    };
+    const service = new InvoicesService(
+      invoices as never,
+      { findOne: jest.fn().mockResolvedValue({ _id: customerId, name: "Cash" }) } as never,
+      { find: jest.fn().mockResolvedValue([]), updateOne: jest.fn() } as never,
+      {
+        findOne: jest.fn().mockResolvedValue({ _id: businessId, name: "hawkey", mobile: "9717360112" }),
+        findOneAndUpdate: jest.fn().mockResolvedValue({ invoiceSeq: 3 }),
+      } as never,
+    );
+    const out = await service.create(user(), {
+      customerId: String(customerId),
+      paid: true,
+      payMode: "upi",
+      lines: [{ name: "Loose sugar", kind: "goods", qty: 1, rate: 100, gstRate: 0 }],
+    });
+    expect(out.paid).toBe(true);
+    expect(out.payMode).toBe("upi");
+    expect(invoices.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: "paid",
+        payMode: "upi",
+      }),
+    );
+  });
+
+  it("marks an unpaid invoice as paid", async () => {
+    const row = {
+      status: "issued",
+      payMode: undefined,
+      payModeOther: undefined,
+      paidAt: undefined,
+      grandTotal: 10,
+      amountPaid: 0,
+      set: jest.fn(),
+      save: jest.fn().mockResolvedValue(undefined),
+      toObject: () => ({
+        _id: new Types.ObjectId(),
+        invoiceNumber: "INV-0004",
+        invoiceDate: new Date("2026-09-12T00:00:00.000Z"),
+        status: "paid",
+        payMode: "cash",
+        paidAt: new Date("2026-09-12T11:00:00.000Z"),
+        customerId: new Types.ObjectId(),
+        customer: { name: "Cash" },
+        seller: { name: "hawkey" },
+        taxSplit: "cgst_sgst",
+        lines: [],
+        taxableTotal: 10,
+        cgstTotal: 0,
+        sgstTotal: 0,
+        igstTotal: 0,
+        cessTotal: 0,
+        grandTotal: 10,
+      }),
+    };
+    const service = new InvoicesService(
+      { findOne: jest.fn().mockResolvedValue(row) } as never,
+      { findOne: jest.fn() } as never,
+      { find: jest.fn() } as never,
+      { findOne: jest.fn().mockResolvedValue({ _id: new Types.ObjectId() }) } as never,
+    );
+    const out = await service.markPaid(user(), new Types.ObjectId().toHexString(), { payMode: "cash" });
+    expect(row.status).toBe("paid");
+    expect(row.payMode).toBe("cash");
+    expect(row.save).toHaveBeenCalled();
+    expect(out.paid).toBe(true);
+    expect(out.payMode).toBe("cash");
   });
 
   it("restores stock when an invoice is deleted", async () => {

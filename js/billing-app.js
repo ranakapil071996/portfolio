@@ -100,15 +100,44 @@
       });
   }
 
+  function parseHashQuery() {
+    var hash = location.hash || "";
+    var i = hash.indexOf("?");
+    var out = { q: "", sort: "", dir: "desc", from: "", to: "", pay: "" };
+    if (i < 0) return out;
+    hash
+      .slice(i + 1)
+      .split("&")
+      .forEach(function (part) {
+        if (!part) return;
+        var p = part.split("=");
+        var k = decodeURIComponent(p[0] || "");
+        var v = decodeURIComponent((p.slice(1).join("=") || "").replace(/\+/g, " "));
+        if (k === "q" || k === "sort" || k === "dir" || k === "from" || k === "to" || k === "pay") out[k] = v;
+      });
+    if (out.dir !== "asc") out.dir = "desc";
+    if (out.pay !== "unpaid" && out.pay !== "partial" && out.pay !== "paid") out.pay = "";
+    return out;
+  }
+
   function view() {
     var hash = (location.hash || "").replace(/^#\/?/, "");
+    var qi = hash.indexOf("?");
+    if (qi >= 0) hash = hash.slice(0, qi);
     var parts = hash.split("/");
-    if (parts[0] === "onboarding") return { page: "onboarding", tab: "home" };
+    var query = parseHashQuery();
+    if (parts[0] === "onboarding") return { page: "onboarding", tab: "home", query: query };
     if (parts[0] === "app") {
-      return { page: "app", tab: parts[1] || "home", screen: parts[2] || "", extra: parts[3] || "" };
+      return {
+        page: "app",
+        tab: parts[1] || "home",
+        screen: parts[2] || "",
+        extra: parts[3] || "",
+        query: query,
+      };
     }
-    if (parts[0] === "otp") return { page: "otp", tab: "home" };
-    return { page: "login", tab: "home" };
+    if (parts[0] === "otp") return { page: "otp", tab: "home", query: query };
+    return { page: "login", tab: "home", query: query };
   }
 
   function go(name) {
@@ -151,8 +180,9 @@
     var err = errBox();
     if (!form || !input) return;
     if (err) err.textContent = "";
-    var mobile = input.value.trim();
-    if (!/^[6-9]\d{9}$/.test(mobile)) {
+    var mobile = compactMobile(input.value);
+    input.value = mobile;
+    if (!RE.mobile.test(mobile)) {
       if (err) err.textContent = t("tools.billing.mobileInvalid", "Enter a valid 10-digit Indian mobile number");
       input.focus();
       return;
@@ -182,8 +212,13 @@
     if (!form) return;
     if (err) err.textContent = "";
     var code = boxes.map(function (b) { return b.value; }).join("");
-    if (!/^\d{4}$/.test(code)) {
+    if (!RE.otp.test(code)) {
       if (err) err.textContent = t("tools.billing.otpInvalid", "Enter the 4-digit OTP");
+      return;
+    }
+    if (!RE.mobile.test(state.mobile || "")) {
+      if (err) err.textContent = t("tools.billing.mobileInvalid", "Enter a valid 10-digit Indian mobile number");
+      go("login");
       return;
     }
     setBusy(form, true);
@@ -207,10 +242,18 @@
     if (err) err.textContent = "";
     var nameEl = document.getElementById("billing-name");
     var gstEl = document.getElementById("billing-gstin");
-    var businessName = nameEl ? nameEl.value.trim() : "";
-    var gstin = gstEl ? gstEl.value.trim() : "";
-    if (businessName.length < 2) {
+    var businessName = cleanLine(nameEl ? nameEl.value : "");
+    var gstin = cleanLine(gstEl ? gstEl.value : "").toUpperCase();
+    if (nameEl) nameEl.value = businessName;
+    if (gstEl) gstEl.value = gstin;
+    if (businessName.length < 2 || businessName.length > 120) {
       if (err) err.textContent = t("tools.billing.businessRequired", "Business name is required");
+      if (nameEl) nameEl.focus();
+      return;
+    }
+    if (gstin && !RE.gstin.test(gstin)) {
+      if (err) err.textContent = t("tools.billing.customerGstinInvalid", "Enter a valid 15-character GSTIN, or leave it blank");
+      if (gstEl) gstEl.focus();
       return;
     }
     setBusy(form, true);
@@ -250,30 +293,137 @@
     return el ? String(el.value || "").trim() : "";
   }
 
+  var LIMITS = { money: 999999999.99, qty: 1000000, stock: 10000000, notes: 400, name: 160 };
+  var GST_RATES_OK = [0, 3, 5, 12, 18, 28, 40];
+  var ITEM_TYPES_OK = ["goods", "service"];
+  var ITEM_UNITS_OK = ["pcs", "nos", "kg", "g", "ltr", "mtr", "box", "hour", "day", "sqft"];
+  var TEMPLATES_OK = ["classic", "modern", "minimal", "thermal"];
+  var PRINTERS_OK = ["a4", "a5", "thermal80", "thermal58"];
+  var RE = {
+    mobile: /^[6-9]\d{9}$/,
+    otp: /^\d{4}$/,
+    gstin: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/,
+    pan: /^[A-Z]{5}[0-9]{4}[A-Z]$/,
+    pin: /^\d{6}$/,
+    ifsc: /^[A-Z]{4}0[A-Z0-9]{6}$/,
+    upi: /^[a-z0-9.\-_]{2,256}@[a-z]{2,64}$/i,
+    hsn: /^[A-Z0-9]{2,12}$/,
+    sku: /^[A-Za-z0-9][A-Za-z0-9._\-/]{0,39}$/,
+    account: /^\d{6,22}$/,
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    objectId: /^[a-f0-9]{24}$/i,
+    payOther: /^[A-Za-z0-9\u0900-\u097F][A-Za-z0-9\u0900-\u097F .,&/'()+-]{0,39}$/,
+  };
+
+  function cleanLine(value) {
+    return String(value == null ? "" : value)
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u202A-\u202E\u2066-\u2069]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function compactMobile(raw) {
+    var digits = String(raw || "").replace(/\D/g, "");
+    if (digits.indexOf("91") === 0 && digits.length === 12) digits = digits.slice(2);
+    else if (digits.charAt(0) === "0" && digits.length === 11) digits = digits.slice(1);
+    return digits;
+  }
+
+  function isInvoiceDate(value) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ""));
+    if (!m) return false;
+    var y = Number(m[1]);
+    var mo = Number(m[2]);
+    var d = Number(m[3]);
+    var dt = new Date(Date.UTC(y, mo - 1, d));
+    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) return false;
+    var min = Date.UTC(2017, 6, 1);
+    var max = Date.now() + 366 * 24 * 60 * 60 * 1000;
+    var t = dt.getTime();
+    return t >= min && t <= max;
+  }
+
+  function invoiceDateMax() {
+    var d = new Date(Date.now() + 366 * 24 * 60 * 60 * 1000);
+    return d.getUTCFullYear() + "-" + String(d.getUTCMonth() + 1).padStart(2, "0") + "-" + String(d.getUTCDate()).padStart(2, "0");
+  }
+
+  function finiteMoney(n) {
+    return typeof n === "number" && isFinite(n) && n >= 0 && n <= LIMITS.money;
+  }
+
+  function failForm(msg, focusId) {
+    var err = errBox();
+    if (err) err.textContent = msg;
+    var el = focusId ? document.getElementById(focusId) : null;
+    if (el && el.focus) el.focus();
+    return false;
+  }
+
   function handleItemSubmit() {
     var form = document.getElementById("bill-item-form");
     var err = errBox();
     if (!form) return;
     if (err) err.textContent = "";
-    var name = fieldVal("item-name");
-    if (name.length < 2) {
-      if (err) err.textContent = t("tools.billing.itemNameRequired", "Item name is required");
-      return;
+    var name = cleanLine(fieldVal("item-name"));
+    var sku = cleanLine(fieldVal("item-sku"));
+    var desc = cleanLine(fieldVal("item-desc"));
+    var type = fieldVal("item-type") || "goods";
+    var hsn = cleanLine(fieldVal("item-hsn")).toUpperCase();
+    var unit = fieldVal("item-unit") || "pcs";
+    var sale = Number(fieldVal("item-sale"));
+    var cost = fieldVal("item-cost") === "" ? undefined : Number(fieldVal("item-cost"));
+    var gstRate = Number(fieldVal("item-gst") || 18);
+    var cess = fieldVal("item-cess") === "" ? 0 : Number(fieldVal("item-cess"));
+    var stock = fieldVal("item-stock") === "" ? 0 : Number(fieldVal("item-stock"));
+    var low = fieldVal("item-low") === "" ? undefined : Number(fieldVal("item-low"));
+    if (name.length < 2 || name.length > LIMITS.name) {
+      return failForm(t("tools.billing.itemNameRequired", "Item name is required"), "item-name");
+    }
+    if (sku && !RE.sku.test(sku)) {
+      return failForm(t("tools.billing.itemSkuInvalid", "SKU can only use letters, numbers, and . _ - /"), "item-sku");
+    }
+    if (ITEM_TYPES_OK.indexOf(type) === -1) {
+      return failForm(t("tools.billing.itemTypeInvalid", "Type must be goods or service"), "item-type");
+    }
+    if (hsn && !RE.hsn.test(hsn)) {
+      return failForm(t("tools.billing.itemHsnInvalid", "Enter a valid HSN/SAC code"), "item-hsn");
+    }
+    if (ITEM_UNITS_OK.indexOf(unit) === -1) {
+      return failForm(t("tools.billing.itemUnitInvalid", "Choose a valid unit"), "item-unit");
+    }
+    if (!finiteMoney(sale)) {
+      return failForm(t("tools.billing.itemPriceInvalid", "Enter a valid sale price"), "item-sale");
+    }
+    if (cost !== undefined && !finiteMoney(cost)) {
+      return failForm(t("tools.billing.itemCostInvalid", "Enter a valid purchase price, or leave it blank"), "item-cost");
+    }
+    if (GST_RATES_OK.indexOf(gstRate) === -1) {
+      return failForm(t("tools.billing.itemGstInvalid", "GST rate must be 0, 3, 5, 12, 18, 28, or 40"), "item-gst");
+    }
+    if (!isFinite(cess) || cess < 0 || cess > 100) {
+      return failForm(t("tools.billing.itemCessInvalid", "Cess must be between 0 and 100"), "item-cess");
+    }
+    if (type !== "service" && (!isFinite(stock) || stock < 0 || stock > LIMITS.stock)) {
+      return failForm(t("tools.billing.itemStockInvalid", "Enter a valid stock quantity"), "item-stock");
+    }
+    if (low !== undefined && (!isFinite(low) || low < 0 || low > LIMITS.stock)) {
+      return failForm(t("tools.billing.itemLowInvalid", "Enter a valid low-stock alert, or leave it blank"), "item-low");
     }
     var payload = {
       name: name,
-      sku: fieldVal("item-sku") || undefined,
-      description: fieldVal("item-desc") || undefined,
-      type: fieldVal("item-type") || "goods",
-      hsnSac: fieldVal("item-hsn") || undefined,
-      unit: fieldVal("item-unit") || "pcs",
-      salePrice: Number(fieldVal("item-sale") || 0),
-      purchasePrice: fieldVal("item-cost") === "" ? undefined : Number(fieldVal("item-cost")),
-      gstRate: Number(fieldVal("item-gst") || 18),
+      sku: sku || undefined,
+      description: desc || undefined,
+      type: type,
+      hsnSac: hsn || undefined,
+      unit: unit,
+      salePrice: sale,
+      purchasePrice: cost,
+      gstRate: gstRate,
       taxInclusive: fieldVal("item-taxmode") === "inc",
-      cessRate: fieldVal("item-cess") === "" ? 0 : Number(fieldVal("item-cess")),
-      stockQty: fieldVal("item-stock") === "" ? 0 : Number(fieldVal("item-stock")),
-      lowStockAt: fieldVal("item-low") === "" ? undefined : Number(fieldVal("item-low")),
+      cessRate: cess,
+      stockQty: type === "service" ? 0 : stock,
+      lowStockAt: type === "service" ? undefined : low,
     };
     setBusy(form, true);
     api("/items", { method: "POST", body: payload })
@@ -294,41 +444,47 @@
     var err = errBox();
     if (!form) return;
     if (err) err.textContent = "";
-    var name = fieldVal("customer-name");
-    if (name.length < 2) {
-      if (err) err.textContent = t("tools.billing.customerNameRequired", "Customer name is required");
-      return;
+    var name = cleanLine(fieldVal("customer-name"));
+    if (name.length < 2 || name.length > LIMITS.name) {
+      return failForm(t("tools.billing.customerNameRequired", "Customer name is required"), "customer-name");
     }
-    var mobile = fieldVal("customer-mobile").replace(/\D/g, "");
-    if (mobile && !/^[6-9]\d{9}$/.test(mobile)) {
-      if (err) err.textContent = t("tools.billing.mobileInvalid", "Enter a valid 10-digit Indian mobile number");
-      return;
+    var mobile = compactMobile(fieldVal("customer-mobile"));
+    if (mobile && !RE.mobile.test(mobile)) {
+      return failForm(t("tools.billing.mobileInvalid", "Enter a valid 10-digit Indian mobile number"), "customer-mobile");
     }
-    var email = fieldVal("customer-email");
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      if (err) err.textContent = t("tools.billing.customerEmailInvalid", "Enter a valid email, or leave it blank");
-      return;
+    var email = cleanLine(fieldVal("customer-email")).toLowerCase();
+    if (email && !RE.email.test(email)) {
+      return failForm(t("tools.billing.customerEmailInvalid", "Enter a valid email, or leave it blank"), "customer-email");
     }
-    var gstin = fieldVal("customer-gstin").toUpperCase();
-    if (gstin && !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(gstin)) {
-      if (err) err.textContent = t("tools.billing.customerGstinInvalid", "Enter a valid 15-character GSTIN, or leave it blank");
-      return;
+    var gstin = cleanLine(fieldVal("customer-gstin")).toUpperCase();
+    if (gstin && !RE.gstin.test(gstin)) {
+      return failForm(t("tools.billing.customerGstinInvalid", "Enter a valid 15-character GSTIN, or leave it blank"), "customer-gstin");
     }
-    var pincode = fieldVal("customer-pincode");
-    if (pincode && !/^\d{6}$/.test(pincode)) {
-      if (err) err.textContent = t("tools.billing.customerPincodeInvalid", "Enter a 6-digit PIN code, or leave it blank");
-      return;
+    var pincode = cleanLine(fieldVal("customer-pincode"));
+    if (pincode && !RE.pin.test(pincode)) {
+      return failForm(t("tools.billing.customerPincodeInvalid", "Enter a 6-digit PIN code, or leave it blank"), "customer-pincode");
+    }
+    var stateCode = fieldVal("customer-state");
+    if (stateCode) {
+      var stateOk = IN_STATES.some(function (row) { return row.code === stateCode; });
+      if (!stateOk) {
+        return failForm(t("tools.billing.customerStateInvalid", "Choose a valid Indian state"), "customer-state");
+      }
+    }
+    var notes = cleanLine(fieldVal("customer-notes"));
+    if (notes.length > LIMITS.notes) {
+      return failForm(t("tools.billing.notesTooLong", "Notes must be 400 characters or fewer"), "customer-notes");
     }
     var payload = {
       name: name,
       mobile: mobile || undefined,
       email: email || undefined,
       gstin: gstin || undefined,
-      address: fieldVal("customer-address") || undefined,
-      city: fieldVal("customer-city") || undefined,
-      stateCode: fieldVal("customer-state") || undefined,
+      address: cleanLine(fieldVal("customer-address")) || undefined,
+      city: cleanLine(fieldVal("customer-city")) || undefined,
+      stateCode: stateCode || undefined,
       pincode: pincode || undefined,
-      notes: fieldVal("customer-notes") || undefined,
+      notes: notes || undefined,
     };
     setBusy(form, true);
     api("/customers", { method: "POST", body: payload })
@@ -818,14 +974,237 @@
     }
   }
 
-  function itemsHref(page) {
+  function listHref(tab, page, query) {
     var n = Number(page) || 1;
-    return n <= 1 ? "#app/items" : "#app/items/" + n;
+    var path = "app/" + tab + (n > 1 ? "/" + n : "");
+    var q = query || parseHashQuery();
+    var parts = [];
+    if (q.q) parts.push("q=" + encodeURIComponent(q.q));
+    if (q.sort) parts.push("sort=" + encodeURIComponent(q.sort));
+    if (q.sort && q.dir === "asc") parts.push("dir=asc");
+    else if (q.sort && q.dir === "desc") parts.push("dir=desc");
+    if (q.from) parts.push("from=" + encodeURIComponent(q.from));
+    if (q.to) parts.push("to=" + encodeURIComponent(q.to));
+    if (q.pay) parts.push("pay=" + encodeURIComponent(q.pay));
+    return "#" + path + (parts.length ? "?" + parts.join("&") : "");
+  }
+
+  function listApiQs(page, query) {
+    var q = query || parseHashQuery();
+    var parts = ["page=" + encodeURIComponent(String(page || 1)), "limit=10"];
+    if (q.q) parts.push("q=" + encodeURIComponent(q.q));
+    if (q.sort) parts.push("sort=" + encodeURIComponent(q.sort));
+    if (q.sort && q.dir) parts.push("dir=" + encodeURIComponent(q.dir));
+    if (q.from) parts.push("from=" + encodeURIComponent(q.from));
+    if (q.to) parts.push("to=" + encodeURIComponent(q.to));
+    if (q.pay) parts.push("pay=" + encodeURIComponent(q.pay));
+    return parts.join("&");
+  }
+
+  function invoiceFilterHtml(query) {
+    var pay = query.pay || "";
+    return (
+      '<div class="bill-list-dates"><label class="bill-list-date">' +
+      esc(t("tools.billing.invoiceFrom", "From")) +
+      '<input id="bill-list-from" type="date" min="2017-07-01" max="' +
+      invoiceDateMax() +
+      '" value="' +
+      esc(query.from || "") +
+      '" /></label><label class="bill-list-date">' +
+      esc(t("tools.billing.invoiceTo", "To")) +
+      '<input id="bill-list-to" type="date" min="2017-07-01" max="' +
+      invoiceDateMax() +
+      '" value="' +
+      esc(query.to || "") +
+      '" /></label></div>' +
+      '<div class="bill-list-pay"><label for="bill-list-pay">' +
+      esc(t("tools.billing.invoicePayment", "Payment")) +
+      '</label><select id="bill-list-pay">' +
+      '<option value=""' +
+      (pay ? "" : " selected") +
+      ">" +
+      esc(t("tools.billing.invoicePayAll", "All")) +
+      "</option>" +
+      '<option value="unpaid"' +
+      (pay === "unpaid" ? " selected" : "") +
+      ">" +
+      esc(t("tools.billing.invoiceUnpaid", "Unpaid")) +
+      "</option>" +
+      '<option value="partial"' +
+      (pay === "partial" ? " selected" : "") +
+      ">" +
+      esc(t("tools.billing.invoicePartial", "Partial")) +
+      "</option>" +
+      '<option value="paid"' +
+      (pay === "paid" ? " selected" : "") +
+      ">" +
+      esc(t("tools.billing.invoicePaid", "Paid")) +
+      "</option></select></div>"
+    );
+  }
+
+  function listToolbar(placeholder, query, extra) {
+    return (
+      '<div class="bill-list-tools"><label class="bill-list-search" for="bill-list-q"><span class="bill-list-search-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></svg></span><input id="bill-list-q" type="search" maxlength="80" value="' +
+      esc(query.q || "") +
+      '" placeholder="' +
+      esc(placeholder) +
+      '" autocomplete="off" /></label>' +
+      (extra || "") +
+      "</div>"
+    );
+  }
+
+  function sortTh(label, key, query) {
+    var on = query.sort === key;
+    var dir = on ? query.dir : "";
+    var next = on && query.dir === "asc" ? "desc" : "asc";
+    return (
+      '<th><button type="button" class="bill-sort' +
+      (on ? " is-on is-" + dir : "") +
+      '" data-sort="' +
+      esc(key) +
+      '" data-dir="' +
+      next +
+      '">' +
+      esc(label) +
+      '<span class="bill-sort-ico" aria-hidden="true"></span></button></th>'
+    );
+  }
+
+  function bindListTools(tab, query) {
+    var input = document.getElementById("bill-list-q");
+    var fromEl = document.getElementById("bill-list-from");
+    var toEl = document.getElementById("bill-list-to");
+    var payEl = document.getElementById("bill-list-pay");
+    var timer = 0;
+    function readQuery(over) {
+      return Object.assign(
+        {
+          q: input ? cleanLine(input.value) : query.q,
+          sort: query.sort,
+          dir: query.dir,
+          from: fromEl ? fromEl.value : query.from,
+          to: toEl ? toEl.value : query.to,
+          pay: payEl ? payEl.value : query.pay,
+        },
+        over || {},
+      );
+    }
+    function apply(over) {
+      go(listHref(tab, 1, readQuery(over)).slice(1));
+    }
+    if (input) {
+      if (query.q && !fromEl) {
+        input.focus();
+        if (input.setSelectionRange) input.setSelectionRange(input.value.length, input.value.length);
+      }
+      input.addEventListener("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          apply({ q: cleanLine(input.value) });
+        }, 280);
+      });
+      input.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        clearTimeout(timer);
+        apply({ q: cleanLine(input.value) });
+      });
+    }
+    function onFilter() {
+      apply({});
+    }
+    if (fromEl) fromEl.addEventListener("change", onFilter);
+    if (toEl) toEl.addEventListener("change", onFilter);
+    if (payEl) payEl.addEventListener("change", onFilter);
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    if (payEl) enhanceSelects(stage);
+    stage.querySelectorAll(".bill-sort").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        apply({
+          sort: btn.getAttribute("data-sort") || "",
+          dir: btn.getAttribute("data-dir") || "asc",
+        });
+      });
+    });
+  }
+
+  function listEmpty(query, emptyMsg, actionHref, actionLabel) {
+    if (query.q || query.from || query.to || query.pay) {
+      return (
+        '<div class="bill-empty glass"><p>' +
+        esc(t("tools.billing.listNoMatches", "No matching records.")) +
+        "</p></div>"
+      );
+    }
+    return (
+      '<div class="bill-empty glass"><p>' +
+      esc(emptyMsg) +
+      '</p><a class="btn btn-primary" href="' +
+      actionHref +
+      '">' +
+      esc(actionLabel) +
+      "</a></div>"
+    );
+  }
+
+  function listPager(tab, current, pages, from, to, total, query, ariaKey, ariaFallback) {
+    var prev =
+      current > 1
+        ? '<a class="btn btn-ghost" href="' +
+          listHref(tab, current - 1, query) +
+          '">' +
+          esc(t("tools.billing.invoicesPrev", "Previous")) +
+          "</a>"
+        : '<span class="btn btn-ghost" aria-disabled="true">' +
+          esc(t("tools.billing.invoicesPrev", "Previous")) +
+          "</span>";
+    var next =
+      current < pages
+        ? '<a class="btn btn-ghost" href="' +
+          listHref(tab, current + 1, query) +
+          '">' +
+          esc(t("tools.billing.invoicesNext", "Next")) +
+          "</a>"
+        : '<span class="btn btn-ghost" aria-disabled="true">' +
+          esc(t("tools.billing.invoicesNext", "Next")) +
+          "</span>";
+    return (
+      '<nav class="bill-pager" aria-label="' +
+      esc(t(ariaKey, ariaFallback)) +
+      '">' +
+      prev +
+      '<p class="bill-pager-meta">' +
+      esc(
+        t("tools.billing.invoicesRange", "Showing {from}–{to} of {total}")
+          .replace("{from}", String(from))
+          .replace("{to}", String(to))
+          .replace("{total}", String(total)),
+      ) +
+      "<span>" +
+      esc(
+        t("tools.billing.invoicesPage", "Page {page} of {pages}")
+          .replace("{page}", String(current))
+          .replace("{pages}", String(pages)),
+      ) +
+      "</span></p>" +
+      next +
+      "</nav>"
+    );
+  }
+
+  function itemsHref(page) {
+    return listHref("items", page, parseHashQuery());
   }
 
   function itemsListView(page) {
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
+    var query = parseHashQuery();
     var asked = Math.max(1, Number(page) || 1);
     stage.innerHTML =
       '<header class="bill-stage-head bill-stage-head-row">' +
@@ -837,10 +1216,11 @@
       '<a class="btn btn-primary" href="#app/items/new">' +
       esc(t("tools.billing.addItem", "Add item")) +
       "</a></header>" +
+      listToolbar(t("tools.billing.itemsSearch", "Search name, SKU, or HSN"), query) +
       '<p class="tool-note" id="items-status">' +
       esc(t("tools.billing.itemsLoading", "Loading items…")) +
       "</p>";
-    api("/items?page=" + encodeURIComponent(String(asked)) + "&limit=10")
+    api("/items?" + listApiQs(asked, query))
       .then(function (data) {
         var items = (data && data.items) || [];
         var total = Number(data && data.total) || 0;
@@ -850,18 +1230,20 @@
         var status = document.getElementById("items-status");
         if (status) status.remove();
         if (current !== asked && pages > 0) {
-          go(itemsHref(current).slice(1));
+          go(listHref("items", current, query).slice(1));
           return;
         }
         if (!total) {
           stage.insertAdjacentHTML(
             "beforeend",
-            '<div class="bill-empty glass"><p>' +
-              esc(t("tools.billing.itemsEmpty", "No items yet. Add your first product or service.")) +
-              '</p><a class="btn btn-primary" href="#app/items/new">' +
-              esc(t("tools.billing.addItem", "Add item")) +
-              "</a></div>",
+            listEmpty(
+              query,
+              t("tools.billing.itemsEmpty", "No items yet. Add your first product or service."),
+              "#app/items/new",
+              t("tools.billing.addItem", "Add item"),
+            ),
           );
+          bindListTools("items", query);
           return;
         }
         var rows = items
@@ -896,59 +1278,24 @@
           .join("");
         var from = (current - 1) * limit + 1;
         var to = Math.min(total, (current - 1) * limit + items.length);
-        var prev = current > 1
-          ? '<a class="btn btn-ghost" href="' + itemsHref(current - 1) + '">' +
-            esc(t("tools.billing.itemsPrev", "Previous")) +
-            "</a>"
-          : '<span class="btn btn-ghost" aria-disabled="true">' +
-            esc(t("tools.billing.itemsPrev", "Previous")) +
-            "</span>";
-        var next = current < pages
-          ? '<a class="btn btn-ghost" href="' + itemsHref(current + 1) + '">' +
-            esc(t("tools.billing.itemsNext", "Next")) +
-            "</a>"
-          : '<span class="btn btn-ghost" aria-disabled="true">' +
-            esc(t("tools.billing.itemsNext", "Next")) +
-            "</span>";
         stage.insertAdjacentHTML(
           "beforeend",
           '<div class="bill-table-wrap"><table class="bill-table"><thead><tr>' +
+            sortTh(t("tools.billing.itemName", "Item"), "name", query) +
+            sortTh(t("tools.billing.itemType", "Type"), "type", query) +
+            sortTh(t("tools.billing.itemHsn", "HSN/SAC"), "hsn", query) +
             "<th>" +
-            esc(t("tools.billing.itemName", "Item")) +
-            "</th><th>" +
-            esc(t("tools.billing.itemType", "Type")) +
-            "</th><th>" +
-            esc(t("tools.billing.itemHsn", "HSN/SAC")) +
-            "</th><th>" +
             esc(t("tools.billing.itemUnit", "Unit")) +
-            "</th><th>" +
-            esc(t("tools.billing.itemPrice", "Sale price")) +
-            "</th><th>GST</th><th>" +
-            esc(t("tools.billing.itemStock", "Stock")) +
-            "</th></tr></thead><tbody>" +
+            "</th>" +
+            sortTh(t("tools.billing.itemPrice", "Sale price"), "price", query) +
+            sortTh("GST", "gst", query) +
+            sortTh(t("tools.billing.itemStock", "Stock"), "stock", query) +
+            "</tr></thead><tbody>" +
             rows +
             "</tbody></table></div>" +
-            '<nav class="bill-pager" aria-label="' +
-            esc(t("tools.billing.itemsPages", "Item pages")) +
-            '">' +
-            prev +
-            '<p class="bill-pager-meta">' +
-            esc(
-              t("tools.billing.itemsRange", "Showing {from}–{to} of {total}")
-                .replace("{from}", String(from))
-                .replace("{to}", String(to))
-                .replace("{total}", String(total)),
-            ) +
-            "<span>" +
-            esc(
-              t("tools.billing.itemsPage", "Page {page} of {pages}")
-                .replace("{page}", String(current))
-                .replace("{pages}", String(pages)),
-            ) +
-            "</span></p>" +
-            next +
-            "</nav>",
+            listPager("items", current, pages, from, to, total, query, "tools.billing.itemsPages", "Item pages"),
         );
+        bindListTools("items", query);
       })
       .catch(function (ex) {
         var status = document.getElementById("items-status");
@@ -1015,11 +1362,11 @@
       '<div class="tool-field"><label for="item-sale">' +
       esc(t("tools.billing.itemPrice", "Sale price (₹)")) +
       ' <span class="billing-req">*</span></label>' +
-      '<input id="item-sale" type="number" inputmode="decimal" min="0" step="0.01" value="0" required /></div>' +
+      '<input id="item-sale" type="number" inputmode="decimal" min="0" max="999999999.99" step="0.01" value="0" required /></div>' +
       '<div class="tool-field"><label for="item-cost">' +
       esc(t("tools.billing.itemCost", "Purchase price (₹)")) +
       "</label>" +
-      '<input id="item-cost" type="number" inputmode="decimal" min="0" step="0.01" /></div>' +
+      '<input id="item-cost" type="number" inputmode="decimal" min="0" max="999999999.99" step="0.01" /></div>' +
       '<div class="tool-field"><label for="item-gst">GST %</label>' +
       '<select id="item-gst"><option>0</option><option>3</option><option>5</option><option>12</option><option value="18" selected>18</option><option>28</option><option>40</option></select></div>' +
       '<div class="tool-field"><label for="item-taxmode">' +
@@ -1037,11 +1384,11 @@
       '<div class="tool-field" id="item-stock-field"><label for="item-stock">' +
       esc(t("tools.billing.itemStock", "Opening stock")) +
       "</label>" +
-      '<input id="item-stock" type="number" inputmode="decimal" min="0" step="0.001" value="0" /></div>' +
+      '<input id="item-stock" type="number" inputmode="decimal" min="0" max="10000000" step="0.001" value="0" /></div>' +
       '<div class="tool-field" id="item-low-field"><label for="item-low">' +
       esc(t("tools.billing.itemLow", "Low-stock alert")) +
       "</label>" +
-      '<input id="item-low" type="number" inputmode="decimal" min="0" step="0.001" /></div>' +
+      '<input id="item-low" type="number" inputmode="decimal" min="0" max="10000000" step="0.001" /></div>' +
       "</div>" +
       '<p class="billing-err" id="billing-error" role="alert"></p>' +
       '<div class="billing-actions">' +
@@ -1106,6 +1453,7 @@
     if (typeEl) typeEl.addEventListener("change", syncType);
     syncType();
     bindHsnFinder();
+    enhanceSelects(stage);
     var nameEl = document.getElementById("item-name");
     if (nameEl) nameEl.focus();
   }
@@ -1144,6 +1492,7 @@
       sel.appendChild(opt);
     }
     sel.value = v;
+    refreshSelect(sel);
   }
 
   function applyHsnHit(hit, quiet) {
@@ -1393,14 +1742,24 @@
       if (addErr) addErr.textContent = "";
       var code = addCode ? String(addCode.value || "").trim().toUpperCase() : "";
       var description = addDesc ? String(addDesc.value || "").trim() : "";
-      if (!looksLikeHsnCode(code)) {
+      if (!RE.hsn.test(code)) {
         if (addErr) addErr.textContent = t("tools.billing.findHsnAddCodeRequired", "Enter a valid 2–12 character HSN/SAC code");
         if (addCode) addCode.focus();
         return;
       }
-      if (description.length < 2) {
+      if (description.length < 2 || description.length > 400) {
         if (addErr) addErr.textContent = t("tools.billing.findHsnAddDescRequired", "Enter a description");
         if (addDesc) addDesc.focus();
+        return;
+      }
+      var addTypeVal = addType ? addType.value : itemTypeValue();
+      if (ITEM_TYPES_OK.indexOf(addTypeVal) === -1) {
+        if (addErr) addErr.textContent = t("tools.billing.itemTypeInvalid", "Type must be goods or service");
+        return;
+      }
+      var addGstVal = Number(addGst ? addGst.value : 18);
+      if (GST_RATES_OK.indexOf(addGstVal) === -1) {
+        if (addErr) addErr.textContent = t("tools.billing.itemGstInvalid", "GST rate must be 0, 3, 5, 12, 18, 28, or 40");
         return;
       }
       if (addSave) addSave.disabled = true;
@@ -1409,8 +1768,8 @@
         body: {
           code: code,
           description: description,
-          type: addType ? addType.value : itemTypeValue(),
-          gstRate: Number(addGst ? addGst.value : 18),
+          type: addTypeVal,
+          gstRate: addGstVal,
         },
       })
         .then(function (hit) {
@@ -1545,13 +1904,13 @@
   ];
 
   function customersHref(page) {
-    var n = Number(page) || 1;
-    return n <= 1 ? "#app/customers" : "#app/customers/" + n;
+    return listHref("customers", page, parseHashQuery());
   }
 
   function customersListView(page) {
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
+    var query = parseHashQuery();
     var asked = Math.max(1, Number(page) || 1);
     stage.innerHTML =
       '<header class="bill-stage-head bill-stage-head-row">' +
@@ -1563,10 +1922,11 @@
       '<a class="btn btn-primary" href="#app/customers/new">' +
       esc(t("tools.billing.addCustomer", "Add customer")) +
       "</a></header>" +
+      listToolbar(t("tools.billing.customersSearch", "Search name, mobile, or GSTIN"), query) +
       '<p class="tool-note" id="customers-status">' +
       esc(t("tools.billing.customersLoading", "Loading customers…")) +
       "</p>";
-    api("/customers?page=" + encodeURIComponent(String(asked)) + "&limit=10")
+    api("/customers?" + listApiQs(asked, query))
       .then(function (data) {
         var items = (data && data.items) || [];
         var total = Number(data && data.total) || 0;
@@ -1576,18 +1936,20 @@
         var status = document.getElementById("customers-status");
         if (status) status.remove();
         if (current !== asked && pages > 0) {
-          go(customersHref(current).slice(1));
+          go(listHref("customers", current, query).slice(1));
           return;
         }
         if (!total) {
           stage.insertAdjacentHTML(
             "beforeend",
-            '<div class="bill-empty glass"><p>' +
-              esc(t("tools.billing.customersEmpty", "No customers yet. Add your first customer.")) +
-              '</p><a class="btn btn-primary" href="#app/customers/new">' +
-              esc(t("tools.billing.addCustomer", "Add customer")) +
-              "</a></div>",
+            listEmpty(
+              query,
+              t("tools.billing.customersEmpty", "No customers yet. Add your first customer."),
+              "#app/customers/new",
+              t("tools.billing.addCustomer", "Add customer"),
+            ),
           );
+          bindListTools("customers", query);
           return;
         }
         var rows = items
@@ -1616,61 +1978,29 @@
           .join("");
         var from = (current - 1) * limit + 1;
         var to = Math.min(total, (current - 1) * limit + items.length);
-        var prev =
-          current > 1
-            ? '<a class="btn btn-ghost" href="' +
-              customersHref(current - 1) +
-              '">' +
-              esc(t("tools.billing.customersPrev", "Previous")) +
-              "</a>"
-            : '<span class="btn btn-ghost" aria-disabled="true">' +
-              esc(t("tools.billing.customersPrev", "Previous")) +
-              "</span>";
-        var next =
-          current < pages
-            ? '<a class="btn btn-ghost" href="' +
-              customersHref(current + 1) +
-              '">' +
-              esc(t("tools.billing.customersNext", "Next")) +
-              "</a>"
-            : '<span class="btn btn-ghost" aria-disabled="true">' +
-              esc(t("tools.billing.customersNext", "Next")) +
-              "</span>";
         stage.insertAdjacentHTML(
           "beforeend",
           '<div class="bill-table-wrap"><table class="bill-table"><thead><tr>' +
-            "<th>" +
-            esc(t("tools.billing.customerName", "Customer")) +
-            "</th><th>" +
-            esc(t("tools.billing.mobile", "Mobile number")) +
-            "</th><th>" +
-            esc(t("tools.billing.gstin", "GSTIN")) +
-            "</th><th>" +
-            esc(t("tools.billing.customerPlace", "Place of supply")) +
-            "</th></tr></thead><tbody>" +
+            sortTh(t("tools.billing.customerName", "Customer"), "name", query) +
+            sortTh(t("tools.billing.mobile", "Mobile number"), "mobile", query) +
+            sortTh(t("tools.billing.gstin", "GSTIN"), "gstin", query) +
+            sortTh(t("tools.billing.customerPlace", "Place of supply"), "place", query) +
+            "</tr></thead><tbody>" +
             rows +
             "</tbody></table></div>" +
-            '<nav class="bill-pager" aria-label="' +
-            esc(t("tools.billing.customersPages", "Customer pages")) +
-            '">' +
-            prev +
-            '<p class="bill-pager-meta">' +
-            esc(
-              t("tools.billing.customersRange", "Showing {from}–{to} of {total}")
-                .replace("{from}", String(from))
-                .replace("{to}", String(to))
-                .replace("{total}", String(total)),
-            ) +
-            "<span>" +
-            esc(
-              t("tools.billing.customersPage", "Page {page} of {pages}")
-                .replace("{page}", String(current))
-                .replace("{pages}", String(pages)),
-            ) +
-            "</span></p>" +
-            next +
-            "</nav>",
+            listPager(
+              "customers",
+              current,
+              pages,
+              from,
+              to,
+              total,
+              query,
+              "tools.billing.customersPages",
+              "Customer pages",
+            ),
         );
+        bindListTools("customers", query);
       })
       .catch(function (ex) {
         var status = document.getElementById("customers-status");
@@ -1762,11 +2092,13 @@
       for (i = 0; i < stateEl.options.length; i += 1) {
         if (stateEl.options[i].value === code) {
           stateEl.value = code;
+          refreshSelect(stateEl);
           return;
         }
       }
     }
     if (gstEl) gstEl.addEventListener("blur", fillStateFromGstin);
+    enhanceSelects(stage);
     var nameEl = document.getElementById("customer-name");
     if (nameEl) nameEl.focus();
   }
@@ -1879,9 +2211,359 @@
     });
   }
 
-  function invoiceActionButtons(id, number) {
+  var PAY_MODES = [
+    { id: "cash", key: "tools.billing.invoicePayCash", label: "Cash" },
+    { id: "upi", key: "tools.billing.invoicePayUpi", label: "UPI" },
+    { id: "card", key: "tools.billing.invoicePayCard", label: "Card" },
+    { id: "bank", key: "tools.billing.invoicePayBank", label: "Bank transfer" },
+    { id: "cheque", key: "tools.billing.invoicePayCheque", label: "Cheque" },
+    { id: "other", key: "tools.billing.invoicePayOther", label: "Other" },
+  ];
+
+  function knownPayMode(id) {
+    var i = 0;
+    for (i = 0; i < PAY_MODES.length; i += 1) {
+      if (PAY_MODES[i].id === id) return true;
+    }
+    return false;
+  }
+
+  function lastPayChoice() {
+    try {
+      var raw = localStorage.getItem("billing_paymode");
+      if (!raw) return { mode: "cash", other: "" };
+      var parsed = JSON.parse(raw);
+      var mode = parsed && parsed.mode;
+      if (!knownPayMode(mode)) mode = "cash";
+      return { mode: mode, other: parsed && parsed.other ? String(parsed.other) : "" };
+    } catch (_) {
+      return { mode: "cash", other: "" };
+    }
+  }
+
+  function rememberPayChoice(mode, other) {
+    var choice = { mode: knownPayMode(mode) ? mode : "cash", other: "" };
+    if (choice.mode === "other") choice.other = cleanLine(other);
+    try {
+      localStorage.setItem("billing_paymode", JSON.stringify(choice));
+    } catch (_) {}
+    return choice;
+  }
+
+  function readPayChoice(selectId, otherId) {
+    var mode = fieldVal(selectId) || "cash";
+    if (!knownPayMode(mode)) mode = "cash";
+    return {
+      mode: mode,
+      other: mode === "other" ? fieldVal(otherId) : "",
+    };
+  }
+
+  function payModeLabel(id, other) {
+    if (id === "other") {
+      var custom = String(other || "").trim();
+      return custom || t("tools.billing.invoicePayOther", "Other");
+    }
+    var i = 0;
+    for (i = 0; i < PAY_MODES.length; i += 1) {
+      if (PAY_MODES[i].id === id) return t(PAY_MODES[i].key, PAY_MODES[i].label);
+    }
+    return "";
+  }
+
+  function payModeOptions(selected) {
+    var cur = knownPayMode(selected) ? selected : "cash";
+    return PAY_MODES.map(function (mode) {
+      return (
+        '<option value="' +
+        mode.id +
+        '"' +
+        (mode.id === cur ? " selected" : "") +
+        ">" +
+        esc(t(mode.key, mode.label)) +
+        "</option>"
+      );
+    }).join("");
+  }
+
+  function payModeOtherInput(id, value, visible) {
+    return (
+      '<input id="' +
+      id +
+      '" class="bill-pay-other" type="text" maxlength="40" autocomplete="off" placeholder="' +
+      esc(t("tools.billing.invoicePayOtherHint", "Enter pay mode")) +
+      '" value="' +
+      esc(value || "") +
+      '"' +
+      (visible ? "" : " hidden") +
+      " />"
+    );
+  }
+
+  function payModeOtherRow(id, value, visible) {
+    return (
+      '<div class="tool-field" id="' +
+      id +
+      '-wrap"' +
+      (visible ? "" : " hidden") +
+      '><label for="' +
+      id +
+      '">' +
+      esc(t("tools.billing.invoicePayOtherHint", "Enter pay mode")) +
+      "</label>" +
+      '<input id="' +
+      id +
+      '" type="text" maxlength="40" autocomplete="off" placeholder="' +
+      esc(t("tools.billing.invoicePayOtherHint", "Enter pay mode")) +
+      '" value="' +
+      esc(value || "") +
+      '" /></div>'
+    );
+  }
+
+  function syncPayModeOther(selectId, inputId, focus) {
+    var sel = document.getElementById(selectId);
+    var input = document.getElementById(inputId);
+    var wrap = document.getElementById(inputId + "-wrap");
+    var row = document.getElementById("inv-pay-row");
+    var on = Boolean(sel && sel.value === "other");
+    if (wrap) wrap.hidden = !on;
+    else if (input) input.hidden = !on;
+    if (row) row.classList.toggle("is-other", on);
+    if (on && focus && input) input.focus();
+  }
+
+  function bindPayModeInput(selectId, inputId) {
+    var sel = document.getElementById(selectId);
+    if (!sel) return;
+    sel.addEventListener("change", function () {
+      syncPayModeOther(selectId, inputId, true);
+    });
+    syncPayModeOther(selectId, inputId, false);
+  }
+
+  function invoiceIsPaid(inv) {
+    return Boolean(inv && (inv.paid === true || inv.status === "paid"));
+  }
+
+  function invoiceIsPartial(inv) {
+    return Boolean(inv && !invoiceIsPaid(inv) && (inv.partial === true || inv.status === "partial" || Number(inv.amountPaid) > 0));
+  }
+
+  function invoiceAmountDue(inv) {
+    var due = Number(inv && inv.amountDue);
+    if (isFinite(due) && due >= 0) return roundMoney(due);
+    if (invoiceIsPaid(inv)) return 0;
+    var total = Number(inv && inv.grandTotal) || 0;
+    var paidAmt = Number(inv && inv.amountPaid) || 0;
+    return roundMoney(Math.max(0, total - paidAmt));
+  }
+
+  function paymentLabel(inv) {
+    var mode = payModeLabel(inv && inv.payMode, inv && inv.payModeOther);
+    if (invoiceIsPaid(inv)) return mode ? t("tools.billing.invoicePaid", "Paid") + " · " + mode : t("tools.billing.invoicePaid", "Paid");
+    if (invoiceIsPartial(inv)) {
+      var due = invoiceAmountDue(inv);
+      var status = mode ? t("tools.billing.invoicePartial", "Partial") + " · " + mode : t("tools.billing.invoicePartial", "Partial");
+      return due > 0 ? status + " · " + moneyInr(due) + " " + t("tools.billing.invoiceDue", "due") : status;
+    }
+    return mode ? t("tools.billing.invoiceUnpaid", "Unpaid") + " · " + mode : t("tools.billing.invoiceUnpaid", "Unpaid");
+  }
+
+  function paymentChipClass(inv) {
+    if (invoiceIsPaid(inv)) return " bill-chip-paid";
+    if (invoiceIsPartial(inv)) return " bill-chip-partial";
+    return " bill-chip-warn";
+  }
+
+  function payStatusOptions(selected) {
+    var cur = selected === "partial" || selected === "paid" ? selected : "unpaid";
+    var opts = [
+      { id: "unpaid", key: "tools.billing.invoiceUnpaid", label: "Unpaid" },
+      { id: "partial", key: "tools.billing.invoicePartial", label: "Partial" },
+      { id: "paid", key: "tools.billing.invoicePaid", label: "Paid" },
+    ];
+    return opts
+      .map(function (opt) {
+        return (
+          '<option value="' +
+          opt.id +
+          '"' +
+          (opt.id === cur ? " selected" : "") +
+          ">" +
+          esc(t(opt.key, opt.label)) +
+          "</option>"
+        );
+      })
+      .join("");
+  }
+
+  function syncPayStatus(focus) {
+    var sel = document.getElementById("inv-paystatus");
+    var wrap = document.getElementById("inv-partial-wrap");
+    var on = Boolean(sel && sel.value === "partial");
+    if (wrap) wrap.hidden = !on;
+    if (on && focus) {
+      var input = document.getElementById("inv-partial");
+      if (input) input.focus();
+    }
+  }
+
+  function bindPayStatus() {
+    var sel = document.getElementById("inv-paystatus");
+    if (!sel) return;
+    sel.addEventListener("change", function () {
+      syncPayStatus(true);
+    });
+    syncPayStatus(false);
+  }
+
+  function choosePayMode(current, number, currentOther, remaining) {
+    return new Promise(function (resolve) {
+      var existing = document.getElementById("bill-pay-mask");
+      if (existing) existing.remove();
+      var last = lastPayChoice();
+      var mode = knownPayMode(current) ? current : last.mode;
+      var other = mode === "other" ? currentOther || last.other : last.other;
+      var mask = document.createElement("div");
+      mask.id = "bill-pay-mask";
+      mask.className = "bill-pay-mask";
+      mask.innerHTML =
+        '<div class="bill-pay-dialog glass" role="dialog" aria-modal="true" aria-labelledby="bill-pay-title">' +
+        '<h3 id="bill-pay-title">' +
+        esc(t("tools.billing.invoiceMarkPaidTitle", "Mark as paid")) +
+        "</h3><p>" +
+        esc(
+          t("tools.billing.invoiceMarkPaidLead", "Record payment for {number}.").replace(
+            "{number}",
+            number || t("tools.billing.tabInvoices", "Invoices"),
+          ),
+        ) +
+        '</p><div class="tool-field"><label for="bill-pay-mode">' +
+        esc(t("tools.billing.invoicePayMode", "Pay mode")) +
+        '</label><select id="bill-pay-mode">' +
+        payModeOptions(mode) +
+        "</select>" +
+        payModeOtherInput("bill-pay-mode-other", other, mode === "other") +
+        "</div>" +
+        (remaining > 0
+          ? '<p class="bill-pay-due">' +
+            esc(t("tools.billing.invoiceRemaining", "Remaining amount")) +
+            ": <strong>" +
+            esc(moneyInr(remaining)) +
+            "</strong></p>" +
+            '<div class="tool-field"><label for="bill-pay-amount">' +
+            esc(t("tools.billing.invoiceAmountReceived", "Amount received")) +
+            '</label><input id="bill-pay-amount" type="number" inputmode="decimal" min="0.01" step="0.01" max="' +
+            remaining +
+            '" value="' +
+            remaining +
+            '" required /></div>'
+          : "") +
+        '<div class="billing-actions">' +
+        '<button type="button" class="btn btn-ghost" data-pay="cancel">' +
+        esc(t("tools.billing.invoiceCancel", "Cancel")) +
+        '</button><button type="button" class="btn btn-primary" data-pay="ok">' +
+        esc(t("tools.billing.invoiceMarkPaidConfirm", "Mark paid")) +
+        "</button></div></div>";
+      function close(value) {
+        document.removeEventListener("keydown", onKey);
+        mask.remove();
+        resolve(value);
+      }
+      function onKey(e) {
+        if (e.key !== "Escape") return;
+        if (mask.querySelector(".bill-select.is-open")) {
+          closeThemeSelects();
+          return;
+        }
+        close(null);
+      }
+      mask.addEventListener("click", function (e) {
+        if (e.target === mask) {
+          close(null);
+          return;
+        }
+        var btn = e.target.closest ? e.target.closest("[data-pay]") : null;
+        if (!btn) return;
+        if (btn.getAttribute("data-pay") === "cancel") close(null);
+        if (btn.getAttribute("data-pay") === "ok") {
+          var choice = readPayChoice("bill-pay-mode", "bill-pay-mode-other");
+          if (choice.mode === "other" && choice.other && !RE.payOther.test(choice.other)) {
+            var otherEl = document.getElementById("bill-pay-mode-other");
+            if (otherEl) otherEl.focus();
+            return;
+          }
+          if (remaining > 0) {
+            var amt = Number(fieldVal("bill-pay-amount"));
+            var amtEl = document.getElementById("bill-pay-amount");
+            var dueNote = mask.querySelector(".bill-pay-due");
+            if (!isFinite(amt) || amt <= 0) {
+              if (amtEl) amtEl.focus();
+              return;
+            }
+            if (amt > remaining) {
+              if (dueNote) {
+                dueNote.innerHTML =
+                  esc(t("tools.billing.invoicePartialOverRemain", "Amount cannot be more than the remaining balance")) +
+                  ": <strong>" +
+                  esc(moneyInr(remaining)) +
+                  "</strong>";
+              }
+              if (amtEl) amtEl.focus();
+              return;
+            }
+            choice.amountPaid = roundMoney(amt);
+          }
+          close(choice);
+        }
+      });
+      document.addEventListener("keydown", onKey);
+      document.body.appendChild(mask);
+      bindPayModeInput("bill-pay-mode", "bill-pay-mode-other");
+      enhanceSelects(mask);
+      var sel = document.getElementById("bill-pay-mode");
+      var selBtn = mask.querySelector(".bill-select-btn");
+      if (selBtn) selBtn.focus();
+      else if (sel) sel.focus();
+    });
+  }
+
+  function refreshInvoiceSurface() {
+    var route = view();
+    if (route.tab !== "invoices") return;
+    if (isObjectId(route.screen) && route.extra === "edit") return;
+    if (isObjectId(route.screen) && !route.extra) {
+      invoiceDetailView(route.screen);
+      return;
+    }
+    invoicesListView(route.screen);
+  }
+
+  function invoiceActionButtons(inv) {
+    var id = inv && inv.id;
+    var number = (inv && inv.invoiceNumber) || "";
+    var paid = invoiceIsPaid(inv);
+    var mode = (inv && inv.payMode) || "cash";
+    var other = (inv && inv.payModeOther) || "";
+    var due = invoiceIsPartial(inv) ? invoiceAmountDue(inv) : 0;
     return (
       '<div class="bill-inv-actions">' +
+      (paid
+        ? ""
+        : '<button type="button" class="bill-act" data-act="paid" data-id="' +
+          esc(id) +
+          '" data-no="' +
+          esc(number) +
+          '" data-mode="' +
+          esc(mode) +
+          '" data-other="' +
+          esc(other) +
+          '" data-due="' +
+          (due > 0 ? String(due) : "") +
+          '">' +
+          esc(t("tools.billing.invoiceMarkPaid", "Mark paid")) +
+          "</button>") +
       '<button type="button" class="bill-act" data-act="pdf" data-id="' +
       esc(id) +
       '" data-no="' +
@@ -1903,7 +2585,8 @@
   }
 
   function bindInvoiceActions(root) {
-    if (!root) return;
+    if (!root || root._billActs) return;
+    root._billActs = true;
     root.addEventListener("click", function (e) {
       var btn = e.target.closest ? e.target.closest("[data-act]") : null;
       if (!btn) return;
@@ -1926,6 +2609,39 @@
         go("app/invoices/" + id + "/edit");
         return;
       }
+      if (act === "paid") {
+        choosePayMode(
+          btn.getAttribute("data-mode") || "cash",
+          btn.getAttribute("data-no"),
+          btn.getAttribute("data-other"),
+          Number(btn.getAttribute("data-due")) || 0,
+        )
+          .then(function (choice) {
+            if (!choice) return null;
+            rememberPayChoice(choice.mode, choice.other);
+            return api("/invoices/" + encodeURIComponent(id) + "/paid", {
+              method: "PATCH",
+              body: {
+                payMode: choice.mode,
+                payModeOther: choice.other || undefined,
+                amountPaid: choice.amountPaid,
+              },
+            });
+          })
+          .then(function (inv) {
+            if (!inv) return;
+            toast(
+              invoiceIsPaid(inv)
+                ? t("tools.billing.invoiceMarkedPaid", "Invoice marked as paid")
+                : t("tools.billing.invoicePartialSaved", "Partial payment recorded"),
+            );
+            refreshInvoiceSurface();
+          })
+          .catch(function (ex) {
+            toast(ex.message);
+          });
+        return;
+      }
       if (act === "del") {
         deleteInvoice(id)
           .then(function (ok) {
@@ -1939,13 +2655,13 @@
   }
 
   function invoicesHref(page) {
-    var n = Number(page) || 1;
-    return n <= 1 ? "#app/invoices" : "#app/invoices/" + n;
+    return listHref("invoices", page, parseHashQuery());
   }
 
   function invoicesListView(page) {
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
+    var query = parseHashQuery();
     var asked = Math.max(1, Number(page) || 1);
     stage.innerHTML =
       '<header class="bill-stage-head bill-stage-head-row">' +
@@ -1957,10 +2673,15 @@
       '<a class="btn btn-primary" href="#app/invoices/new">' +
       esc(t("tools.billing.addInvoice", "Create invoice")) +
       "</a></header>" +
+      listToolbar(
+        t("tools.billing.invoicesSearch", "Search invoice, customer, or GSTIN"),
+        query,
+        invoiceFilterHtml(query),
+      ) +
       '<p class="tool-note" id="invoices-status">' +
       esc(t("tools.billing.invoicesLoading", "Loading invoices…")) +
       "</p>";
-    api("/invoices?page=" + encodeURIComponent(String(asked)) + "&limit=10")
+    api("/invoices?" + listApiQs(asked, query))
       .then(function (data) {
         var items = (data && data.items) || [];
         var total = Number(data && data.total) || 0;
@@ -1970,18 +2691,20 @@
         var status = document.getElementById("invoices-status");
         if (status) status.remove();
         if (current !== asked && pages > 0) {
-          go(invoicesHref(current).slice(1));
+          go(listHref("invoices", current, query).slice(1));
           return;
         }
         if (!total) {
           stage.insertAdjacentHTML(
             "beforeend",
-            '<div class="bill-empty glass"><p>' +
-              esc(t("tools.billing.invoicesEmpty", "No invoices yet. Create your first bill.")) +
-              '</p><a class="btn btn-primary" href="#app/invoices/new">' +
-              esc(t("tools.billing.addInvoice", "Create invoice")) +
-              "</a></div>",
+            listEmpty(
+              query,
+              t("tools.billing.invoicesEmpty", "No invoices yet. Create your first bill."),
+              "#app/invoices/new",
+              t("tools.billing.addInvoice", "Create invoice"),
+            ),
           );
+          bindListTools("invoices", query);
           return;
         }
         var rows = items
@@ -1990,6 +2713,7 @@
               it.taxSplit === "igst"
                 ? t("tools.billing.invoiceIgst", "IGST")
                 : t("tools.billing.invoiceCgstSgst", "CGST + SGST");
+            var pay = paymentLabel(it);
             return (
               '<tr class="bill-row-link" data-href="#app/invoices/' +
               esc(it.id) +
@@ -2005,76 +2729,48 @@
               '<span class="bill-sub">' +
               esc(taxLabel) +
               "</span></td><td>" +
+              '<span class="bill-inv-total">' +
+              "<strong>" +
               esc(moneyInr(it.grandTotal)) +
-              '<span class="bill-sub">' +
-              esc(String(it.lineCount)) +
-              " " +
-              esc(t("tools.billing.invoiceLines", "lines")) +
-              "</span></td><td>" +
-              invoiceActionButtons(it.id, it.invoiceNumber) +
+              '</strong><span class="bill-chip' +
+              paymentChipClass(it) +
+              '" title="' +
+              esc(pay) +
+              '">' +
+              esc(pay) +
+              "</span></span></td><td>" +
+              invoiceActionButtons(it) +
               "</td></tr>"
             );
           })
           .join("");
         var from = (current - 1) * limit + 1;
         var to = Math.min(total, (current - 1) * limit + items.length);
-        var prev =
-          current > 1
-            ? '<a class="btn btn-ghost" href="' +
-              invoicesHref(current - 1) +
-              '">' +
-              esc(t("tools.billing.invoicesPrev", "Previous")) +
-              "</a>"
-            : '<span class="btn btn-ghost" aria-disabled="true">' +
-              esc(t("tools.billing.invoicesPrev", "Previous")) +
-              "</span>";
-        var next =
-          current < pages
-            ? '<a class="btn btn-ghost" href="' +
-              invoicesHref(current + 1) +
-              '">' +
-              esc(t("tools.billing.invoicesNext", "Next")) +
-              "</a>"
-            : '<span class="btn btn-ghost" aria-disabled="true">' +
-              esc(t("tools.billing.invoicesNext", "Next")) +
-              "</span>";
         stage.insertAdjacentHTML(
           "beforeend",
-          '<div class="bill-table-wrap"><table class="bill-table"><thead><tr>' +
+          '<div class="bill-table-wrap"><table class="bill-table bill-table-invoices"><thead><tr>' +
+            sortTh(t("tools.billing.invoiceNumber", "Invoice"), "number", query) +
+            sortTh(t("tools.billing.customerName", "Customer"), "customer", query) +
+            sortTh(t("tools.billing.customerPlace", "Place of supply"), "place", query) +
+            sortTh(t("tools.billing.invoiceTotal", "Total"), "total", query) +
             "<th>" +
-            esc(t("tools.billing.invoiceNumber", "Invoice")) +
-            "</th><th>" +
-            esc(t("tools.billing.customerName", "Customer")) +
-            "</th><th>" +
-            esc(t("tools.billing.customerPlace", "Place of supply")) +
-            "</th><th>" +
-            esc(t("tools.billing.invoiceTotal", "Total")) +
-            "</th><th>" +
             esc(t("tools.billing.invoiceActions", "Actions")) +
             "</th></tr></thead><tbody>" +
             rows +
             "</tbody></table></div>" +
-            '<nav class="bill-pager" aria-label="' +
-            esc(t("tools.billing.invoicesPages", "Invoice pages")) +
-            '">' +
-            prev +
-            '<p class="bill-pager-meta">' +
-            esc(
-              t("tools.billing.invoicesRange", "Showing {from}–{to} of {total}")
-                .replace("{from}", String(from))
-                .replace("{to}", String(to))
-                .replace("{total}", String(total)),
-            ) +
-            "<span>" +
-            esc(
-              t("tools.billing.invoicesPage", "Page {page} of {pages}")
-                .replace("{page}", String(current))
-                .replace("{pages}", String(pages)),
-            ) +
-            "</span></p>" +
-            next +
-            "</nav>",
+            listPager(
+              "invoices",
+              current,
+              pages,
+              from,
+              to,
+              total,
+              query,
+              "tools.billing.invoicesPages",
+              "Invoice pages",
+            ),
         );
+        bindListTools("invoices", query);
         bindInvoiceActions(stage);
         stage.querySelectorAll("[data-href]").forEach(function (row) {
           row.addEventListener("click", function (e) {
@@ -2091,6 +2787,139 @@
 
   function invoiceAllLines() {
     return (invDraft.lines || []).concat(invDraft.charges || []);
+  }
+
+  function closeThemeSelects(except) {
+    document.querySelectorAll(".bill-select.is-open").forEach(function (wrap) {
+      if (except && wrap === except) return;
+      wrap.classList.remove("is-open");
+      var menu = wrap.querySelector(".bill-select-menu");
+      var btn = wrap.querySelector(".bill-select-btn");
+      if (menu) {
+        menu.hidden = true;
+        menu.classList.remove("is-up");
+      }
+      if (btn) btn.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function selectLabel(sel) {
+    var opt = sel && sel.options[sel.selectedIndex];
+    return opt ? String(opt.textContent || "").trim() : "";
+  }
+
+  function paintSelectMenu(wrap) {
+    var sel = wrap.querySelector("select");
+    var menu = wrap.querySelector(".bill-select-menu");
+    var btn = wrap.querySelector(".bill-select-btn");
+    if (!sel || !menu || !btn) return;
+    var cur = sel.value;
+    btn.innerHTML = '<span class="bill-select-label">' + esc(selectLabel(sel) || "—") + "</span>";
+    menu.innerHTML = Array.prototype.map
+      .call(sel.options, function (opt) {
+        return (
+          '<button type="button" class="bill-select-opt' +
+          (opt.value === cur ? " is-on" : "") +
+          '" role="option" data-value="' +
+          esc(opt.value) +
+          '"' +
+          (opt.disabled ? " disabled" : "") +
+          ">" +
+          esc(String(opt.textContent || "").trim() || "—") +
+          "</button>"
+        );
+      })
+      .join("");
+  }
+
+  function refreshSelect(sel) {
+    if (!sel) return;
+    var wrap = sel.closest ? sel.closest(".bill-select") : null;
+    if (wrap) paintSelectMenu(wrap);
+  }
+
+  function openThemeSelect(wrap) {
+    if (!wrap) return;
+    wrap.classList.add("is-open");
+    var menu = wrap.querySelector(".bill-select-menu");
+    var btn = wrap.querySelector(".bill-select-btn");
+    if (menu) {
+      menu.hidden = false;
+      menu.classList.remove("is-up");
+      var box = menu.getBoundingClientRect();
+      if (box.bottom > window.innerHeight - 12 && box.top > box.height + 48) {
+        menu.classList.add("is-up");
+      }
+      var on = menu.querySelector(".bill-select-opt.is-on");
+      if (on && on.scrollIntoView) on.scrollIntoView({ block: "nearest" });
+    }
+    if (btn) btn.setAttribute("aria-expanded", "true");
+  }
+
+  function enhanceSelect(sel) {
+    if (!sel || sel._billSelect || sel.disabled) return;
+    sel._billSelect = true;
+    var wrap = document.createElement("div");
+    wrap.className = "bill-select";
+    sel.parentNode.insertBefore(wrap, sel);
+    wrap.appendChild(sel);
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "bill-select-btn";
+    btn.setAttribute("aria-haspopup", "listbox");
+    btn.setAttribute("aria-expanded", "false");
+    if (sel.id) btn.setAttribute("aria-controls", sel.id);
+    var menu = document.createElement("div");
+    menu.className = "bill-select-menu";
+    menu.hidden = true;
+    menu.setAttribute("role", "listbox");
+    wrap.appendChild(btn);
+    wrap.appendChild(menu);
+    paintSelectMenu(wrap);
+    sel.tabIndex = -1;
+    sel.addEventListener("change", function () {
+      paintSelectMenu(wrap);
+    });
+    sel.addEventListener("focus", function () {
+      btn.focus();
+    });
+    wrap.addEventListener("click", function (e) {
+      var opt = e.target.closest ? e.target.closest(".bill-select-opt") : null;
+      if (opt) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (opt.disabled) return;
+        sel.value = opt.getAttribute("data-value") || "";
+        sel.dispatchEvent(new Event("change", { bubbles: true }));
+        closeThemeSelects();
+        return;
+      }
+      if (!(e.target.closest && e.target.closest(".bill-select-btn"))) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var open = !wrap.classList.contains("is-open");
+      closeThemeSelects();
+      closeGstMenus();
+      if (open) openThemeSelect(wrap);
+    });
+  }
+
+  function enhanceSelects(root) {
+    bindThemeSelects();
+    (root || document).querySelectorAll("select").forEach(enhanceSelect);
+  }
+
+  function bindThemeSelects() {
+    if (document._billSelectBound) return;
+    document._billSelectBound = true;
+    document.addEventListener("click", function (e) {
+      var t = e.target;
+      if (t.closest && t.closest(".bill-select")) return;
+      closeThemeSelects();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeThemeSelects();
+    });
   }
 
   function gstSelect(value) {
@@ -2186,6 +3015,7 @@
       e.stopPropagation();
       var dd = btn.closest(".bill-dd");
       var open = !dd.classList.contains("is-open");
+      closeThemeSelects();
       closeGstMenus();
       if (!open) return;
       dd.classList.add("is-open");
@@ -2251,6 +3081,8 @@
       "</span><strong>" +
       esc(moneyInr(tot.grand)) +
       "</strong></div>";
+    var partial = document.getElementById("inv-partial");
+    if (partial && tot.grand > 0) partial.max = String(tot.grand);
   }
 
   function renderInvoiceLines() {
@@ -2310,9 +3142,13 @@
     if (search) search.hidden = true;
     var place = [c.city, c.state].filter(Boolean).join(", ") || t("tools.billing.customerUnregistered", "Unregistered");
     var mode = invoiceTaxSplit(c);
+    var oneOff = Boolean(c.oneOff) || !c.id;
     box.innerHTML =
       "<div><strong>" +
       esc(c.name) +
+      (oneOff
+        ? ' <span class="bill-chip">' + esc(t("tools.billing.invoiceOneOff", "This bill only")) + "</span>"
+        : "") +
       "</strong><span class=\"bill-sub\">" +
       esc(c.gstin || t("tools.billing.customerUnregistered", "Unregistered")) +
       " · " +
@@ -2335,6 +3171,48 @@
         var q = document.getElementById("inv-customer-q");
         if (q) q.focus();
       });
+  }
+
+  function customerWalkInActions(q) {
+    return (
+      '<div class="bill-suggest-empty">' +
+      "<p>" +
+      esc(t("tools.billing.invoiceCustomerAsk", "Save this name as a customer, or use it on this bill only?")) +
+      "</p>" +
+      '<div class="bill-suggest-actions">' +
+      '<button type="button" class="btn btn-primary" data-inv-once="' +
+      esc(q) +
+      '">' +
+      esc(t("tools.billing.invoiceUseOnce", "Use on this bill")) +
+      '</button><button type="button" class="btn btn-ghost" data-inv-save-cust="' +
+      esc(q) +
+      '">' +
+      esc(t("tools.billing.invoiceSaveCustomer", "Save as customer")) +
+      "</button></div></div>"
+    );
+  }
+
+  function pickOneTimeCustomer(name) {
+    var label = cleanLine(name);
+    if (label.length < 2) return false;
+    invDraft.customer = { name: label, oneOff: true };
+    renderPickedCustomer();
+    renderInvoiceLines();
+    return true;
+  }
+
+  function saveTypedCustomer(name) {
+    var label = cleanLine(name);
+    if (label.length < 2) {
+      return Promise.reject(new Error(t("tools.billing.customerNameRequired", "Customer name is required")));
+    }
+    return api("/customers", { method: "POST", body: { name: label } }).then(function (c) {
+      invDraft.customer = c;
+      renderPickedCustomer();
+      renderInvoiceLines();
+      toast(t("tools.billing.customerSaved", "Customer saved"));
+      return c;
+    });
   }
 
   function bindSuggest(inputId, listId, searchFn, pickFn) {
@@ -2361,14 +3239,7 @@
       searchFn(q)
         .then(function (items) {
           if (my !== seq) return;
-          if (!items.length) {
-            list.innerHTML =
-              '<div class="bill-suggest-empty"><p>' +
-              esc(t("tools.billing.invoiceNoMatches", "No matching customers")) +
-              "</p></div>";
-            return;
-          }
-          list.innerHTML = items
+          var html = items
             .map(function (hit, idx) {
               return (
                 '<button type="button" class="bill-hsn-hit" data-idx="' +
@@ -2383,18 +3254,67 @@
               );
             })
             .join("");
+          if (!items.length) {
+            html = customerWalkInActions(q);
+          } else if (
+            q.length >= 2 &&
+            !items.some(function (hit) {
+              return String(hit.title || "").toLowerCase() === q.toLowerCase();
+            })
+          ) {
+            html += customerWalkInActions(q);
+          }
+          list.innerHTML = html;
           list._hits = items;
+          list._q = q;
         })
         .catch(function (ex) {
           if (my !== seq) return;
           list.innerHTML = '<p class="billing-err">' + esc(ex.message) + "</p>";
         });
     }
+    var skipBlur = false;
     input.addEventListener("input", function () {
       clearTimeout(timer);
       timer = setTimeout(run, 220);
     });
+    list.addEventListener("mousedown", function () {
+      skipBlur = true;
+    });
+    input.addEventListener("blur", function () {
+      setTimeout(function () {
+        if (skipBlur) {
+          skipBlur = false;
+          return;
+        }
+        if (invDraft.customer) return;
+        if (pickOneTimeCustomer(input.value)) {
+          input.value = "";
+          close();
+        }
+      }, 160);
+    });
     list.addEventListener("click", function (e) {
+      var once = e.target.closest ? e.target.closest("[data-inv-once]") : null;
+      if (once) {
+        pickOneTimeCustomer(once.getAttribute("data-inv-once") || list._q || input.value);
+        input.value = "";
+        close();
+        return;
+      }
+      var saveCust = e.target.closest ? e.target.closest("[data-inv-save-cust]") : null;
+      if (saveCust) {
+        saveTypedCustomer(saveCust.getAttribute("data-inv-save-cust") || list._q || input.value)
+          .then(function () {
+            input.value = "";
+            close();
+          })
+          .catch(function (ex) {
+            list.innerHTML = '<p class="billing-err">' + esc(ex.message) + "</p>";
+            list.hidden = false;
+          });
+        return;
+      }
       var btn = e.target.closest ? e.target.closest("[data-idx]") : null;
       if (!btn || !list._hits) return;
       var hit = list._hits[Number(btn.getAttribute("data-idx"))];
@@ -2403,6 +3323,21 @@
       input.value = "";
       close();
     });
+  }
+
+  function catalogQtyOnBill(itemId) {
+    var n = 0;
+    (invDraft.lines || []).forEach(function (line) {
+      if (line.source === "catalog" && line.itemId === itemId) n += Number(line.qty) || 0;
+    });
+    return n;
+  }
+
+  function itemOutOfStock(it) {
+    if (!it || it.type === "service" || !it.id) return false;
+    var stock = Number(it.stockQty);
+    if (!isFinite(stock)) return false;
+    return stock - catalogQtyOnBill(it.id) <= 0;
   }
 
   function addInvoiceLine(line) {
@@ -2513,15 +3448,29 @@
           var items = (data && data.items) || [];
           var html = items
             .map(function (it, idx) {
+              var out = itemOutOfStock(it);
+              var bits = [it.hsnSac, it.unit, it.gstRate + "% GST"];
+              if (it.type !== "service") {
+                bits.push(
+                  out
+                    ? t("tools.billing.itemOutOfStock", "Out of stock")
+                    : t("tools.billing.itemInStock", "{qty} in stock").replace(
+                        "{qty}",
+                        String(Math.max(0, Number(it.stockQty) - catalogQtyOnBill(it.id))),
+                      ),
+                );
+              }
               return (
                 '<button type="button" class="bill-hsn-hit" data-idx="' +
                 idx +
                 '"><span class="bill-hsn-hit-top"><strong>' +
                 esc(it.name) +
-                '</strong><span class="bill-chip">' +
-                esc(moneyInr(it.salePrice)) +
+                '</strong><span class="bill-chip' +
+                (out ? " bill-chip-warn" : "") +
+                '">' +
+                esc(out ? t("tools.billing.itemOutOfStock", "Out of stock") : moneyInr(it.salePrice)) +
                 '</span></span><span class="bill-hsn-hit-desc">' +
-                esc([it.hsnSac, it.unit, it.gstRate + "% GST"].filter(Boolean).join(" · ")) +
+                esc(bits.filter(Boolean).join(" · ")) +
                 "</span></button>"
               );
             })
@@ -2563,6 +3512,12 @@
       if (!btn || !list._hits) return;
       var it = list._hits[Number(btn.getAttribute("data-idx"))];
       if (!it) return;
+      if (itemOutOfStock(it)) {
+        toast(
+          t("tools.billing.itemOutOfStockWarn", "{name} is out of stock").replace("{name}", it.name || t("tools.billing.itemName", "Item")),
+          "err",
+        );
+      }
       addInvoiceLine({
         source: "catalog",
         itemId: it.id,
@@ -2681,8 +3636,10 @@
     document._billInvChrome = true;
     document.addEventListener("click", function (e) {
       var t = e.target;
-      if (!t.closest || !t.closest(".bill-dd")) closeGstMenus();
-      if (!t.closest || !t.closest(".bill-suggest")) closeSuggestLists();
+      if (!t.closest) return;
+      if (!t.closest(".bill-dd")) closeGstMenus();
+      if (!t.closest(".bill-select")) closeThemeSelects();
+      if (!t.closest(".bill-suggest")) closeSuggestLists();
     });
     document.addEventListener("keydown", function (e) {
       if (e.key !== "Escape") return;
@@ -2695,6 +3652,7 @@
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
     invDraft = { customer: null, lines: [], charges: [], seq: 0, editId: editId || null };
+    var lastPay = lastPayChoice();
     var today = new Date();
     var iso =
       today.getFullYear() +
@@ -2722,12 +3680,25 @@
       esc(t("tools.billing.invoiceCustomerHint", "Search name, mobile, or GSTIN")) +
       '" /><div id="inv-customer-hits" class="bill-suggest-list" hidden></div></div>' +
       '<div id="inv-customer-picked" class="bill-picked" hidden></div></div>' +
+      '<div class="bill-pay-row' +
+      (lastPay.mode === "other" ? " is-other" : "") +
+      '" id="inv-pay-row">' +
       '<div class="tool-field"><label for="inv-date">' +
       esc(t("tools.billing.invoiceDate", "Invoice date")) +
       "</label>" +
-      '<input id="inv-date" type="date" value="' +
+      '<input id="inv-date" type="date" min="2017-07-01" max="' +
+      invoiceDateMax() +
+      '" value="' +
       iso +
       '" required /></div>' +
+      '<div class="tool-field"><label for="inv-paymode">' +
+      esc(t("tools.billing.invoicePayMode", "Pay mode")) +
+      "</label>" +
+      '<select id="inv-paymode">' +
+      payModeOptions(lastPay.mode) +
+      "</select></div>" +
+      payModeOtherRow("inv-paymode-other", lastPay.other, lastPay.mode === "other") +
+      "</div>" +
       '<div class="tool-field bill-span-2"><label>' +
       esc(t("tools.billing.invoiceItems", "Items")) +
       ' <span class="billing-req">*</span></label>' +
@@ -2760,6 +3731,17 @@
       "</label>" +
       '<textarea id="inv-notes" rows="2" maxlength="400"></textarea></div></div>' +
       '<div id="inv-totals" class="bill-inv-totals"></div>' +
+      '<div class="bill-pay-row bill-pay-after-total" id="inv-paystatus-row">' +
+      '<div class="tool-field"><label for="inv-paystatus">' +
+      esc(t("tools.billing.invoicePayment", "Payment")) +
+      "</label>" +
+      '<select id="inv-paystatus">' +
+      payStatusOptions("unpaid") +
+      "</select></div>" +
+      '<div class="tool-field" id="inv-partial-wrap" hidden><label for="inv-partial">' +
+      esc(t("tools.billing.invoiceAmountReceived", "Amount received")) +
+      '</label><input id="inv-partial" type="number" inputmode="decimal" min="0.01" step="0.01" max="999999999.99" /></div>' +
+      "</div>" +
       '<p class="billing-err" id="billing-error" role="alert"></p>' +
       '<div class="billing-actions">' +
       '<button class="btn btn-primary" type="submit">' +
@@ -2792,6 +3774,9 @@
     );
     bindItemSearch();
     bindCharges();
+    bindPayModeInput("inv-paymode", "inv-paymode-other");
+    bindPayStatus();
+    enhanceSelects(document.getElementById("bill-invoice-form"));
     bindGstMenus(document.getElementById("bill-invoice-form"));
     bindInvoiceChrome();
     var body = document.getElementById("inv-lines-body");
@@ -2834,7 +3819,10 @@
   }
 
   function fillInvoiceDraft(inv) {
-    invDraft.customer = Object.assign({ id: inv.customerId }, inv.customer || {});
+    invDraft.customer = Object.assign(
+      { id: inv.customerId || undefined, oneOff: !inv.customerId },
+      inv.customer || {},
+    );
     invDraft.lines = [];
     invDraft.charges = [];
     invDraft.seq = 0;
@@ -2857,6 +3845,19 @@
     });
     var dateEl = document.getElementById("inv-date");
     if (dateEl && inv.invoiceDate) dateEl.value = inv.invoiceDate;
+    var payEl = document.getElementById("inv-paymode");
+    var payOther = document.getElementById("inv-paymode-other");
+    if (payEl) payEl.value = knownPayMode(inv.payMode) ? inv.payMode : "cash";
+    if (payOther) payOther.value = inv.payModeOther || "";
+    syncPayModeOther("inv-paymode", "inv-paymode-other", false);
+    var statusEl = document.getElementById("inv-paystatus");
+    if (statusEl) {
+      statusEl.value = invoiceIsPaid(inv) ? "paid" : invoiceIsPartial(inv) ? "partial" : "unpaid";
+      refreshSelect(statusEl);
+    }
+    var partialEl = document.getElementById("inv-partial");
+    if (partialEl) partialEl.value = invoiceIsPartial(inv) ? String(Number(inv.amountPaid) || "") : "";
+    syncPayStatus(false);
     var notes = document.getElementById("inv-notes");
     if (notes) notes.value = inv.notes || "";
     var title = document.querySelector("#bill-stage .bill-stage-head h2");
@@ -2871,28 +3872,99 @@
     var err = errBox();
     if (!form) return;
     if (err) err.textContent = "";
-    if (!invDraft.customer || !invDraft.customer.id) {
-      if (err) err.textContent = t("tools.billing.invoiceCustomerRequired", "Choose a customer");
-      return;
+    if (!invDraft.customer || !(invDraft.customer.oneOff || RE.objectId.test(invDraft.customer.id))) {
+      if (pickOneTimeCustomer(fieldVal("inv-customer-q"))) {
+        /* one-time from the typed name */
+      } else {
+        return failForm(t("tools.billing.invoiceCustomerRequired", "Choose a customer"), "inv-customer-q");
+      }
+    }
+    var invoiceDate = fieldVal("inv-date");
+    if (invoiceDate && !isInvoiceDate(invoiceDate)) {
+      return failForm(t("tools.billing.invoiceDateInvalid", "Use a valid invoice date"), "inv-date");
+    }
+    var notes = cleanLine(fieldVal("inv-notes"));
+    if (notes.length > LIMITS.notes) {
+      return failForm(t("tools.billing.notesTooLong", "Notes must be 400 characters or fewer"), "inv-notes");
+    }
+    var payChoice = {
+      mode: fieldVal("inv-paymode") || "cash",
+      other: cleanLine(fieldVal("inv-paymode-other")),
+    };
+    if (!knownPayMode(payChoice.mode)) {
+      return failForm(t("tools.billing.invoicePayModeInvalid", "Choose a valid pay mode"), "inv-paymode");
+    }
+    if (payChoice.mode === "other" && payChoice.other && !RE.payOther.test(payChoice.other)) {
+      return failForm(t("tools.billing.invoicePayOtherInvalid", "Enter a valid pay mode"), "inv-paymode-other");
+    }
+    var payStatus = fieldVal("inv-paystatus") || "unpaid";
+    var received;
+    if (payStatus === "partial") {
+      received = roundMoney(Number(fieldVal("inv-partial")));
+      if (!isFinite(received) || received <= 0) {
+        return failForm(t("tools.billing.invoicePartialRequired", "Enter the amount received"), "inv-partial");
+      }
+      var billTotal = invoiceTotals(invDraft.customer, invoiceAllLines()).grand;
+      if (received > billTotal) {
+        return failForm(t("tools.billing.invoicePartialOver", "Amount cannot be more than the bill total"), "inv-partial");
+      }
+      if (received === billTotal && billTotal > 0) payStatus = "paid";
     }
     var itemLines = invDraft.lines.filter(function (line) {
-      return (line.itemId || (line.name && line.name.trim().length >= 2)) && Number(line.qty) > 0;
+      return (line.itemId || (line.name && cleanLine(line.name).length >= 2)) && Number(line.qty) > 0;
     });
     var chargeLines = (invDraft.charges || []).filter(function (line) {
-      return line.name && line.name.trim().length >= 2 && Number(line.rate) >= 0;
+      return line.name && cleanLine(line.name).length >= 2 && Number(line.rate) >= 0;
     });
     if (!itemLines.length && !chargeLines.length) {
-      if (err) err.textContent = t("tools.billing.invoiceLinesRequired", "Add at least one item");
+      return failForm(t("tools.billing.invoiceLinesRequired", "Add at least one item"), "inv-item-q");
+    }
+    var lineError = "";
+    itemLines.concat(chargeLines).some(function (line) {
+      var qty = Number(line.qty);
+      var rate = Number(line.rate);
+      var gst = Number(line.gstRate);
+      if (line.itemId && !RE.objectId.test(line.itemId)) {
+        lineError = t("tools.billing.invoiceItemInvalid", "One or more items are missing from the catalog");
+        return true;
+      }
+      if (!line.itemId && cleanLine(line.name).length > LIMITS.name) {
+        lineError = t("tools.billing.itemNameRequired", "Item name is required");
+        return true;
+      }
+      if (!isFinite(qty) || qty < 0.001 || qty > LIMITS.qty) {
+        lineError = t("tools.billing.invoiceQtyInvalid", "Quantity must be greater than 0");
+        return true;
+      }
+      if (!finiteMoney(rate)) {
+        lineError = t("tools.billing.invoiceRateInvalid", "Enter a valid rate");
+        return true;
+      }
+      if (GST_RATES_OK.indexOf(gst) === -1) {
+        lineError = t("tools.billing.itemGstInvalid", "GST rate must be 0, 3, 5, 12, 18, 28, or 40");
+        return true;
+      }
+      return false;
+    });
+    if (lineError) {
+      if (err) err.textContent = lineError;
       return;
     }
+    rememberPayChoice(payChoice.mode, payChoice.other);
     setBusy(form, true);
     var editing = Boolean(invDraft.editId);
     api(editing ? "/invoices/" + encodeURIComponent(invDraft.editId) : "/invoices", {
       method: editing ? "PATCH" : "POST",
       body: {
-        customerId: invDraft.customer.id,
-        invoiceDate: fieldVal("inv-date") || undefined,
-        notes: fieldVal("inv-notes") || undefined,
+        customerId: invDraft.customer.oneOff ? undefined : invDraft.customer.id,
+        customerName: invDraft.customer.oneOff ? invDraft.customer.name : undefined,
+        invoiceDate: invoiceDate || undefined,
+        notes: notes || undefined,
+        payMode: payChoice.mode,
+        payModeOther: payChoice.other || undefined,
+        paid: payStatus === "paid",
+        partial: payStatus === "partial",
+        amountPaid: payStatus === "partial" ? roundMoney(received) : undefined,
         lines: itemLines
           .map(function (line) {
             if (line.itemId) {
@@ -3201,6 +4273,11 @@
         '</div><div class="inv-dash"></div><div class="inv-totals inv-totals-thermal">' +
         invTaxRowsHtml(inv) +
         "</div>" +
+        '<p class="inv-pay ' +
+        (invoiceIsPaid(inv) ? "is-paid" : "is-due") +
+        '">' +
+        esc(paymentLabel(inv)) +
+        "</p>" +
         (inv.notes ? '<p class="inv-notes">' + esc(inv.notes) + "</p>" : "") +
         '<div class="inv-thermal-end">' +
         (invStudio.assets.qr
@@ -3323,6 +4400,11 @@
       '<div class="inv-totals">' +
       invTaxRowsHtml(inv) +
       "</div>" +
+      '<p class="inv-pay ' +
+      (invoiceIsPaid(inv) ? "is-paid" : "is-due") +
+      '">' +
+      esc(paymentLabel(inv)) +
+      "</p>" +
       (tpl !== "minimal"
         ? '<p class="inv-words"><em>' +
           esc(t("tools.billing.invoiceAmountWords", "Amount in words")) +
@@ -3497,12 +4579,14 @@
           " · " +
           esc(taxLabel) +
           (inv.placeOfSupply ? " · " + esc(inv.placeOfSupply) : "") +
+          " · " +
+          esc(paymentLabel(inv)) +
           "</p></div>" +
           '<div class="bill-inv-toolbar">' +
           '<button type="button" class="bill-act" data-studio="print">' +
           esc(t("tools.billing.invoicePrint", "Print")) +
           "</button>" +
-          invoiceActionButtons(inv.id, inv.invoiceNumber) +
+          invoiceActionButtons(inv) +
           '<button type="button" class="bill-act" data-studio="default">' +
           esc(t("tools.billing.invoiceSavePrint", "Save as default")) +
           '</button><a class="btn btn-ghost" href="#app/invoices">' +
@@ -3976,6 +5060,7 @@
         bindProfileAsset("logo", "profile-logo-preview");
         bindProfileAsset("signature", "profile-sign-preview");
         bindProfileAsset("qr", "profile-qr-preview");
+        enhanceSelects(document.getElementById("bill-profile-form"));
         syncSessionProfile(Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile));
       })
       .catch(function (ex) {
@@ -4050,6 +5135,13 @@
       igstTotal: igst ? 43.2 : 0,
       cessTotal: 0,
       grandTotal: 283.2,
+      paid: false,
+      partial: false,
+      amountPaid: 0,
+      amountDue: 283.2,
+      payMode: "upi",
+      payModeOther: null,
+      status: "issued",
     };
   }
 
@@ -4105,6 +5197,7 @@
         );
       })
       .join("");
+    refreshSelect(sel);
   }
 
   function bindProfilePrintSelects(template, printer) {
@@ -4132,26 +5225,48 @@
     var err = errBox();
     if (!form) return;
     if (err) err.textContent = "";
-    var name = fieldVal("profile-name");
-    if (name.length < 2) {
-      var nameMsg = t("tools.billing.profileNameRequired", "Business name is required");
-      if (err) err.textContent = nameMsg;
-      toast(nameMsg, "err");
-      return;
+    function profileFail(msg, focusId) {
+      if (err) err.textContent = msg;
+      toast(msg, "err");
+      var el = focusId ? document.getElementById(focusId) : null;
+      if (el && el.focus) el.focus();
+      return false;
     }
-    var email = fieldVal("profile-email");
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      var emailMsg = t("tools.billing.customerEmailInvalid", "Enter a valid email, or leave it blank");
-      if (err) err.textContent = emailMsg;
-      toast(emailMsg, "err");
-      return;
+    var name = cleanLine(fieldVal("profile-name"));
+    if (name.length < 2 || name.length > 120) {
+      return profileFail(t("tools.billing.profileNameRequired", "Business name is required"), "profile-name");
     }
-    var acct = fieldVal("profile-bank-no").replace(/\s+/g, "");
-    if (acct && !/^\d{6,22}$/.test(acct)) {
-      var acctMsg = t("tools.billing.profileBankNoInvalid", "Enter a valid account number, or leave it blank");
-      if (err) err.textContent = acctMsg;
-      toast(acctMsg, "err");
-      return;
+    var email = cleanLine(fieldVal("profile-email")).toLowerCase();
+    if (email && !RE.email.test(email)) {
+      return profileFail(t("tools.billing.customerEmailInvalid", "Enter a valid email, or leave it blank"), "profile-email");
+    }
+    var gstin = cleanLine(fieldVal("profile-gstin")).toUpperCase();
+    if (gstin && !RE.gstin.test(gstin)) {
+      return profileFail(t("tools.billing.customerGstinInvalid", "Enter a valid 15-character GSTIN, or leave it blank"), "profile-gstin");
+    }
+    var pan = cleanLine(fieldVal("profile-pan")).toUpperCase();
+    if (pan && !RE.pan.test(pan)) {
+      return profileFail(t("tools.billing.profilePanInvalid", "Enter a valid 10-character PAN, or leave it blank"), "profile-pan");
+    }
+    var pincode = cleanLine(fieldVal("profile-pincode"));
+    if (pincode && !RE.pin.test(pincode)) {
+      return profileFail(t("tools.billing.customerPincodeInvalid", "Enter a 6-digit PIN code, or leave it blank"), "profile-pincode");
+    }
+    var stateCode = fieldVal("profile-state");
+    if (stateCode && !IN_STATES.some(function (row) { return row.code === stateCode; })) {
+      return profileFail(t("tools.billing.customerStateInvalid", "Choose a valid Indian state"), "profile-state");
+    }
+    var acct = cleanLine(fieldVal("profile-bank-no")).replace(/\s+/g, "");
+    if (acct && !RE.account.test(acct)) {
+      return profileFail(t("tools.billing.profileBankNoInvalid", "Enter a valid account number, or leave it blank"), "profile-bank-no");
+    }
+    var ifsc = cleanLine(fieldVal("profile-ifsc")).toUpperCase();
+    if (ifsc && !RE.ifsc.test(ifsc)) {
+      return profileFail(t("tools.billing.profileIfscInvalid", "Enter a valid IFSC, or leave it blank"), "profile-ifsc");
+    }
+    var upi = cleanLine(fieldVal("profile-upi")).toLowerCase();
+    if (upi && !RE.upi.test(upi)) {
+      return profileFail(t("tools.billing.profileUpiInvalid", "Enter a valid UPI ID, or leave it blank"), "profile-upi");
     }
     setBusy(form, true);
     api("/business", {
@@ -4159,17 +5274,17 @@
       body: {
         name: name,
         email: email || undefined,
-        gstin: fieldVal("profile-gstin") || undefined,
-        pan: fieldVal("profile-pan") || undefined,
-        address: fieldVal("profile-address") || undefined,
-        city: fieldVal("profile-city") || undefined,
-        stateCode: fieldVal("profile-state") || undefined,
-        pincode: fieldVal("profile-pincode") || undefined,
-        bankName: fieldVal("profile-bank-name") || undefined,
-        bankAccountName: fieldVal("profile-bank-holder") || undefined,
-        bankAccountNumber: fieldVal("profile-bank-no") || undefined,
-        bankIfsc: fieldVal("profile-ifsc") || undefined,
-        upiId: fieldVal("profile-upi") || undefined,
+        gstin: gstin || undefined,
+        pan: pan || undefined,
+        address: cleanLine(fieldVal("profile-address")) || undefined,
+        city: cleanLine(fieldVal("profile-city")) || undefined,
+        stateCode: stateCode || undefined,
+        pincode: pincode || undefined,
+        bankName: cleanLine(fieldVal("profile-bank-name")) || undefined,
+        bankAccountName: cleanLine(fieldVal("profile-bank-holder")) || undefined,
+        bankAccountNumber: acct || undefined,
+        bankIfsc: ifsc || undefined,
+        upiId: upi || undefined,
         invoiceTemplate:
           fieldVal("profile-template") || (profileBiz && profileBiz.invoiceTemplate) || undefined,
         invoicePrinter:
@@ -4290,6 +5405,7 @@
         invStudio.inv = sampleInvoiceFromBiz(biz);
         loadBrandAssets().then(function () {
           bindProfilePrintSelects(biz.invoiceTemplate, biz.invoicePrinter);
+          enhanceSelects(document.getElementById("bill-print-form"));
         });
         syncSessionProfile(Object.assign({ name: biz.name, gstin: biz.gstin }, biz.profile));
       })
@@ -4313,12 +5429,22 @@
     var err = errBox();
     if (!form || !profileBiz) return;
     if (err) err.textContent = "";
+    var template = fieldVal("profile-template");
+    var printer = fieldVal("profile-printer");
+    if (template && TEMPLATES_OK.indexOf(template) === -1) {
+      if (err) err.textContent = t("tools.billing.invoiceTemplateInvalid", "Choose a valid invoice template");
+      return;
+    }
+    if (printer && PRINTERS_OK.indexOf(printer) === -1) {
+      if (err) err.textContent = t("tools.billing.invoicePrinterInvalid", "Choose a valid printer size");
+      return;
+    }
     setBusy(form, true);
     api("/business", {
       method: "PATCH",
       body: businessPatchBody(profileBiz, {
-        invoiceTemplate: fieldVal("profile-template") || undefined,
-        invoicePrinter: fieldVal("profile-printer") || undefined,
+        invoiceTemplate: template || undefined,
+        invoicePrinter: printer || undefined,
       }),
     })
       .then(function (biz) {

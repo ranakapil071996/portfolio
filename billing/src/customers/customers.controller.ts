@@ -13,7 +13,7 @@ export class CustomersController {
 
   @Get()
   list(@CurrentUser() user: AuthUser, @Query() query: ListCustomersDto) {
-    return this.customers.list(user, query.page, query.limit, query.q);
+    return this.customers.list(user, query.page, query.limit, query.q, query.sort, query.dir);
   }
 
   @Get(":id")

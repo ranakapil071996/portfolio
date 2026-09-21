@@ -18,6 +18,8 @@ async function bootstrap() {
 
   app.use(helmet());
   app.use(cookieParser());
+  app.useBodyParser("json", { limit: "200kb" });
+  app.useBodyParser("urlencoded", { limit: "50kb", extended: true });
   app.enableCors({
     origin: corsOrigins,
     credentials: true,

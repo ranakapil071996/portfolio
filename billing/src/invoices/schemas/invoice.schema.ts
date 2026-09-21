@@ -1,8 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Types } from "mongoose";
 
-export const INVOICE_STATUSES = ["issued"] as const;
+import { PAY_MODES } from "../invoice-payment";
+
+export const INVOICE_STATUSES = ["issued", "partial", "paid"] as const;
 export const TAX_SPLITS = ["cgst_sgst", "igst"] as const;
+export { PAY_MODES };
 
 @Schema({ _id: false })
 export class InvoiceParty {
@@ -113,8 +116,20 @@ export class Invoice {
   @Prop({ type: String, enum: INVOICE_STATUSES, default: "issued" })
   status!: (typeof INVOICE_STATUSES)[number];
 
-  @Prop({ type: Types.ObjectId, ref: "Customer", required: true, index: true })
-  customerId!: Types.ObjectId;
+  @Prop({ type: String, enum: PAY_MODES })
+  payMode?: (typeof PAY_MODES)[number];
+
+  @Prop({ trim: true, maxlength: 40 })
+  payModeOther?: string;
+
+  @Prop({ default: 0 })
+  amountPaid?: number;
+
+  @Prop()
+  paidAt?: Date;
+
+  @Prop({ type: Types.ObjectId, ref: "Customer", index: true })
+  customerId?: Types.ObjectId;
 
   @Prop({ type: InvoiceParty, required: true })
   customer!: InvoiceParty;

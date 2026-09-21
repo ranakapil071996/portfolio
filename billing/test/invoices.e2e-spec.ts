@@ -192,6 +192,146 @@ describe("Invoices (e2e)", () => {
     expect(afterDelete.body.items[0].stockQty).toBe(20);
   });
 
+  it("records pay mode and can mark a bill paid", async () => {
+    const server = app.getHttpServer();
+    const customer = await request(server)
+      .get("/api/customers?q=Sharma")
+      .set("Cookie", cookie)
+      .expect(200);
+    const created = await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerId: customer.body.items[0].id,
+        payMode: "upi",
+        paid: false,
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(201);
+    expect(created.body.paid).toBe(false);
+    expect(created.body.payMode).toBe("upi");
+    expect(created.body.status).toBe("issued");
+
+    const paid = await request(server)
+      .patch(`/api/invoices/${created.body.id}/paid`)
+      .set("Cookie", cookie)
+      .send({ payMode: "cash" })
+      .expect(200);
+    expect(paid.body.paid).toBe(true);
+    expect(paid.body.payMode).toBe("cash");
+    expect(paid.body.status).toBe("paid");
+    expect(paid.body.paidAt).toBeTruthy();
+
+    const listed = await request(server).get("/api/invoices").set("Cookie", cookie).expect(200);
+    const row = listed.body.items.find((item: { id: string }) => item.id === created.body.id);
+    expect(row.paid).toBe(true);
+    expect(row.payMode).toBe("cash");
+
+    await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerId: customer.body.items[0].id,
+        paid: true,
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(400);
+
+    const custom = await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerId: customer.body.items[0].id,
+        payMode: "other",
+        payModeOther: "Paytm",
+        paid: true,
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(201);
+    expect(custom.body.payMode).toBe("other");
+    expect(custom.body.payModeOther).toBe("Paytm");
+
+    const blankOther = await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerId: customer.body.items[0].id,
+        payMode: "other",
+        paid: false,
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(201);
+    expect(blankOther.body.payMode).toBe("other");
+
+    const partial = await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerId: customer.body.items[0].id,
+        payMode: "cash",
+        partial: true,
+        amountPaid: 4,
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(201);
+    expect(partial.body.status).toBe("partial");
+    expect(partial.body.partial).toBe(true);
+    expect(partial.body.amountPaid).toBe(4);
+    expect(partial.body.amountDue).toBe(6);
+
+    await request(server)
+      .patch(`/api/invoices/${partial.body.id}/paid`)
+      .set("Cookie", cookie)
+      .send({ payMode: "cash" })
+      .expect(400);
+
+    const settled = await request(server)
+      .patch(`/api/invoices/${partial.body.id}/paid`)
+      .set("Cookie", cookie)
+      .send({ payMode: "upi", amountPaid: 6 })
+      .expect(200);
+    expect(settled.body.paid).toBe(true);
+    expect(settled.body.amountPaid).toBe(10);
+    expect(settled.body.amountDue).toBe(0);
+    expect(settled.body.payMode).toBe("upi");
+
+    await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerId: customer.body.items[0].id,
+        payMode: "cash",
+        partial: true,
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(400);
+
+    await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerId: customer.body.items[0].id,
+        payMode: "cash",
+        partial: true,
+        amountPaid: 15,
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(400);
+
+    const walkIn = await request(server)
+      .post("/api/invoices")
+      .set("Cookie", cookie)
+      .send({
+        customerName: "Walk-in Guest",
+        payMode: "cash",
+        lines: [{ name: "Pen", kind: "goods", qty: 1, rate: 10, gstRate: 0 }],
+      })
+      .expect(201);
+    expect(walkIn.body.customerId).toBeNull();
+    expect(walkIn.body.customer.name).toBe("Walk-in Guest");
+    expect(blankOther.body.payModeOther).toBeNull();
+  });
+
   it("rejects an invoice with no lines", async () => {
     const server = app.getHttpServer();
     const customer = await request(server)

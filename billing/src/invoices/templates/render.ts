@@ -1,4 +1,5 @@
 import PDFDocument from "pdfkit";
+import { paymentLine } from "../invoice-payment";
 import type { InvoicePayload } from "../invoices.service";
 import type { InvoiceBrand } from "./brand";
 import type { InvoicePrinterId, PrintChoice } from "./catalog";
@@ -278,8 +279,13 @@ function paintTaxRows(p: Painter, inv: InvoicePayload, boxW: number, compact = f
 }
 
 function paintNotes(p: Painter, inv: InvoicePayload): void {
-  if (!inv.notes) return;
+  const line = paymentLine(inv);
+  const paid = inv.paid === true || inv.status === "paid";
   p.y += 8;
+  p.ensure(16);
+  p.doc.font("Helvetica-Bold").fontSize(8).fillColor(paid ? "#047857" : "#b45309").text(line, p.left, p.y);
+  p.y += 12;
+  if (!inv.notes) return;
   p.ensure(20);
   p.doc.font("Helvetica").fontSize(8).fillColor("#334155").text(inv.notes, p.left, p.y, { width: p.width });
   p.y += p.doc.heightOfString(inv.notes, { width: p.width }) + 4;

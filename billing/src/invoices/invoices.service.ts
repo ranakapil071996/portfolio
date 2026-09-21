@@ -11,7 +11,10 @@ import { Business, BusinessDocument } from "../businesses/schemas/business.schem
 import { Customer, CustomerDocument } from "../customers/schemas/customer.schema";
 import { stateName } from "../common/indian-states";
 import { Item, ItemDocument } from "../items/schemas/item.schema";
+import { escapeRegex, mongoSort } from "../common/list-query";
 import { CreateInvoiceDto } from "./dto/create-invoice.dto";
+import { MarkPaidDto } from "./dto/mark-paid.dto";
+import { isPayMode, normalizePayModeOther, type PayMode } from "./invoice-payment";
 import { renderInvoicePdf } from "./invoice-pdf";
 import {
   lineAmounts,
@@ -63,7 +66,7 @@ export type InvoicePayload = {
   invoiceNumber: string;
   invoiceDate: string;
   status: string;
-  customerId: string;
+  customerId: string | null;
   customer: InvoicePartyPayload;
   seller: InvoicePartyPayload;
   placeOfSupply: string | null;
@@ -77,6 +80,13 @@ export type InvoicePayload = {
   cessTotal: number;
   grandTotal: number;
   notes: string | null;
+  paid: boolean;
+  partial: boolean;
+  amountPaid: number;
+  amountDue: number;
+  payMode: PayMode | null;
+  payModeOther: string | null;
+  paidAt: string | null;
   createdAt: string | null;
 };
 
@@ -91,6 +101,21 @@ export type InvoiceListItem = {
   grandTotal: number;
   lineCount: number;
   status: string;
+  paid: boolean;
+  partial: boolean;
+  amountPaid: number;
+  amountDue: number;
+  payMode: PayMode | null;
+  payModeOther: string | null;
+};
+
+const INVOICE_SORT: Record<string, string> = {
+  number: "invoiceNumber",
+  date: "invoiceDate",
+  customer: "customer.name",
+  place: "placeOfSupply",
+  total: "grandTotal",
+  status: "status",
 };
 
 @Injectable()
@@ -106,6 +131,12 @@ export class InvoicesService {
     user: AuthUser,
     page = 1,
     limit = 10,
+    q?: string,
+    sort?: string,
+    dir?: string,
+    from?: string,
+    to?: string,
+    pay?: string,
   ): Promise<{
     items: InvoiceListItem[];
     page: number;
@@ -115,13 +146,29 @@ export class InvoicesService {
   }> {
     const business = await this.requireBusiness(user);
     const take = Math.min(50, Math.max(1, limit || 10));
-    const filter = { businessId: business._id };
+    const filter: Record<string, unknown> = { businessId: business._id };
+    const query = (q || "").trim();
+    if (query) {
+      const rx = new RegExp(escapeRegex(query), "i");
+      filter.$or = [
+        { invoiceNumber: rx },
+        { "customer.name": rx },
+        { "customer.gstin": rx },
+        { "customer.mobile": rx },
+        { placeOfSupply: rx },
+      ];
+    }
+    const dateRange = invoiceDateRange(from, to);
+    if (dateRange) filter.invoiceDate = dateRange;
+    if (pay === "paid") filter.status = "paid";
+    else if (pay === "partial") filter.status = "partial";
+    else if (pay === "unpaid") filter.status = "issued";
     const total = await this.invoices.countDocuments(filter);
     const pages = Math.max(1, Math.ceil(total / take) || 1);
     const current = Math.min(Math.max(1, page || 1), pages);
     const rows = await this.invoices
       .find(filter)
-      .sort({ createdAt: -1 })
+      .sort(mongoSort(INVOICE_SORT, sort, dir))
       .skip((current - 1) * take)
       .limit(take)
       .lean()
@@ -165,12 +212,13 @@ export class InvoicesService {
       { new: true },
     );
     const seq = seqDoc?.invoiceSeq || 1;
+    const payment = paymentFromDto(dto, draft.doc.grandTotal);
     const created = await this.invoices.create({
       businessId: business._id,
       userId: new Types.ObjectId(user.id),
       invoiceNumber: `INV-${String(seq).padStart(4, "0")}`,
       invoiceDate: parseInvoiceDate(dto.invoiceDate),
-      status: "issued",
+      ...payment,
       ...draft.doc,
     });
     await this.applyStockDelta(business._id, [], draft.doc.lines);
@@ -181,12 +229,69 @@ export class InvoicesService {
     const { business, row } = await this.loadOwned(user, id);
     const draft = await this.composeInvoice(business, dto);
     const previous = (row.lines || []) as InvoiceLine[];
+    const payment = paymentFromDto(dto, draft.doc.grandTotal, row);
     row.set({
       invoiceDate: parseInvoiceDate(dto.invoiceDate),
       ...draft.doc,
+      status: payment.status,
+      payMode: payment.payMode,
+      amountPaid: payment.amountPaid,
     });
+    if (payment.payModeOther) row.payModeOther = payment.payModeOther;
+    else row.set("payModeOther", undefined);
+    if (payment.paidAt) row.paidAt = payment.paidAt;
+    else row.set("paidAt", undefined);
     await row.save();
     await this.applyStockDelta(business._id, previous, draft.doc.lines);
+    return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
+  }
+
+  async markPaid(user: AuthUser, id: string, dto: MarkPaidDto): Promise<InvoicePayload> {
+    const { row } = await this.loadOwned(user, id);
+    const payMode = dto.payMode || (isPayMode(row.payMode) ? row.payMode : undefined);
+    if (!payMode) {
+      throw new BadRequestException({
+        error: "validation_error",
+        message: "Choose a pay mode",
+      });
+    }
+    const grandTotal = roundMoney(Number(row.grandTotal ?? 0));
+    const already = roundMoney(Number(row.amountPaid ?? 0));
+    const due = roundMoney(Math.max(0, grandTotal - already));
+    if (row.status === "partial" && (dto.amountPaid == null || !Number.isFinite(dto.amountPaid))) {
+      throw new BadRequestException({
+        error: "validation_error",
+        message: "Enter the remaining amount",
+      });
+    }
+    let extra = dto.amountPaid == null ? due : roundMoney(dto.amountPaid);
+    if (!(extra > 0)) {
+      throw new BadRequestException({
+        error: "validation_error",
+        message: "Enter the remaining amount",
+      });
+    }
+    if (extra > due) {
+      throw new BadRequestException({
+        error: "validation_error",
+        message: "Amount cannot be more than the remaining balance",
+      });
+    }
+    const nextPaid = roundMoney(already + extra);
+    const otherSource = dto.payMode ? dto.payModeOther : row.payModeOther;
+    const payModeOther = normalizePayModeOther(payMode, otherSource);
+    row.payMode = payMode;
+    if (payModeOther) row.payModeOther = payModeOther;
+    else row.set("payModeOther", undefined);
+    if (nextPaid >= grandTotal) {
+      row.status = "paid";
+      row.amountPaid = grandTotal;
+      row.paidAt = new Date();
+    } else {
+      row.status = "partial";
+      row.amountPaid = nextPaid;
+    }
+    await row.save();
     return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
   }
 
@@ -246,17 +351,52 @@ export class InvoicesService {
     return { business, row };
   }
 
-  private async composeInvoice(business: BusinessDocument, dto: CreateInvoiceDto) {
-    const customer = await this.customers.findOne({
-      _id: new Types.ObjectId(dto.customerId),
-      businessId: business._id,
-    });
-    if (!customer) {
-      throw new NotFoundException({
-        error: "customer_not_found",
-        message: "Choose a saved customer",
+  private async resolveCustomer(
+    business: BusinessDocument,
+    dto: CreateInvoiceDto,
+  ): Promise<{
+    _id?: Types.ObjectId;
+    name: string;
+    mobile?: string;
+    email?: string;
+    gstin?: string;
+    address?: string;
+    city?: string;
+    stateCode?: string;
+    state?: string;
+    pincode?: string;
+  }> {
+    if (dto.customerId) {
+      if (!Types.ObjectId.isValid(dto.customerId)) {
+        throw new NotFoundException({
+          error: "customer_not_found",
+          message: "Choose a saved customer",
+        });
+      }
+      const customer = await this.customers.findOne({
+        _id: new Types.ObjectId(dto.customerId),
+        businessId: business._id,
+      });
+      if (!customer) {
+        throw new NotFoundException({
+          error: "customer_not_found",
+          message: "Choose a saved customer",
+        });
+      }
+      return customer;
+    }
+    const name = String(dto.customerName || "").trim();
+    if (name.length < 2) {
+      throw new BadRequestException({
+        error: "validation_error",
+        message: "Choose a customer",
       });
     }
+    return { name };
+  }
+
+  private async composeInvoice(business: BusinessDocument, dto: CreateInvoiceDto) {
+    const customer = await this.resolveCustomer(business, dto);
 
     const itemIds = [...new Set(dto.lines.map((line) => line.itemId).filter(Boolean))] as string[];
     const itemRows = itemIds.length
@@ -428,6 +568,12 @@ export class InvoicesService {
       grandTotal: Number(row.grandTotal ?? 0),
       lineCount: lines.length,
       status: String(row.status ?? "issued"),
+      paid: String(row.status ?? "issued") === "paid",
+      partial: String(row.status ?? "issued") === "partial",
+      amountPaid: roundMoney(Number(row.amountPaid ?? 0)),
+      amountDue: roundMoney(Math.max(0, Number(row.grandTotal ?? 0) - Number(row.amountPaid ?? 0))),
+      payMode: isPayMode(row.payMode) ? row.payMode : null,
+      payModeOther: row.payModeOther ? String(row.payModeOther) : null,
     };
   }
 
@@ -439,7 +585,7 @@ export class InvoicesService {
       invoiceNumber: String(row.invoiceNumber ?? ""),
       invoiceDate: dateOnly(row.invoiceDate),
       status: String(row.status ?? "issued"),
-      customerId: String(row.customerId ?? ""),
+      customerId: row.customerId ? String(row.customerId) : null,
       customer: partyPayload(row.customer),
       seller: partyPayload(row.seller),
       placeOfSupply: row.placeOfSupply ? String(row.placeOfSupply) : null,
@@ -453,9 +599,84 @@ export class InvoicesService {
       cessTotal: Number(row.cessTotal ?? 0),
       grandTotal: Number(row.grandTotal ?? 0),
       notes: row.notes ? String(row.notes) : null,
+      paid: String(row.status ?? "issued") === "paid",
+      partial: String(row.status ?? "issued") === "partial",
+      amountPaid: roundMoney(Number(row.amountPaid ?? 0)),
+      amountDue: roundMoney(Math.max(0, Number(row.grandTotal ?? 0) - Number(row.amountPaid ?? 0))),
+      payMode: isPayMode(row.payMode) ? row.payMode : null,
+      payModeOther: row.payModeOther ? String(row.payModeOther) : null,
+      paidAt: row.paidAt instanceof Date && !Number.isNaN(row.paidAt.getTime()) ? row.paidAt.toISOString() : null,
       createdAt: created,
     };
   }
+}
+
+function paymentFromDto(
+  dto: CreateInvoiceDto,
+  grandTotal: number,
+  previous?: { status?: string; paidAt?: Date; payMode?: string; payModeOther?: string },
+): {
+  status: "issued" | "partial" | "paid";
+  payMode?: PayMode;
+  payModeOther?: string;
+  amountPaid: number;
+  paidAt?: Date;
+} {
+  const total = roundMoney(grandTotal);
+  const payMode = dto.payMode || (isPayMode(previous?.payMode) ? previous.payMode : undefined);
+  const wantsPaid = Boolean(dto.paid);
+  const wantsPartial = !wantsPaid && Boolean(dto.partial);
+  if ((wantsPaid || wantsPartial) && !payMode) {
+    throw new BadRequestException({
+      error: "validation_error",
+      message: "Choose a pay mode",
+    });
+  }
+  if (wantsPaid) {
+    return {
+      status: "paid",
+      payMode,
+      payModeOther: normalizePayModeOther(payMode, dto.payModeOther),
+      amountPaid: total,
+      paidAt: previous?.paidAt || new Date(),
+    };
+  }
+  if (wantsPartial) {
+    const received = roundMoney(Number(dto.amountPaid));
+    if (!(received > 0)) {
+      throw new BadRequestException({
+        error: "validation_error",
+        message: "Enter the amount received",
+      });
+    }
+    if (received > total) {
+      throw new BadRequestException({
+        error: "validation_error",
+        message: "Amount cannot be more than the bill total",
+      });
+    }
+    if (received === total) {
+      return {
+        status: "paid",
+        payMode,
+        payModeOther: normalizePayModeOther(payMode, dto.payModeOther),
+        amountPaid: total,
+        paidAt: previous?.paidAt || new Date(),
+      };
+    }
+    return {
+      status: "partial",
+      payMode,
+      payModeOther: normalizePayModeOther(payMode, dto.payModeOther),
+      amountPaid: received,
+    };
+  }
+  return {
+    status: "issued",
+    payMode,
+    payModeOther: normalizePayModeOther(payMode, dto.payModeOther),
+    amountPaid: 0,
+  };
 }
 
 function catalogGoodsQty(lines: InvoiceLine[]): Map<string, number> {
@@ -466,6 +687,29 @@ function catalogGoodsQty(lines: InvoiceLine[]): Map<string, number> {
     map.set(id, (map.get(id) || 0) + Number(line.qty || 0));
   }
   return map;
+}
+
+function utcDay(value?: string, end = false): Date | undefined {
+  const match = value ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value) : null;
+  if (!match) return undefined;
+  const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+  if (end) date.setUTCDate(date.getUTCDate() + 1);
+  return date;
+}
+
+function invoiceDateRange(from?: string, to?: string): { $gte?: Date; $lt?: Date } | undefined {
+  let start = utcDay(from);
+  let end = utcDay(to, true);
+  if (start && end && start >= end) {
+    const swap = start;
+    start = utcDay(to);
+    end = utcDay(from, true);
+  }
+  if (!start && !end) return undefined;
+  const range: { $gte?: Date; $lt?: Date } = {};
+  if (start) range.$gte = start;
+  if (end) range.$lt = end;
+  return range;
 }
 
 function parseInvoiceDate(value?: string): Date {

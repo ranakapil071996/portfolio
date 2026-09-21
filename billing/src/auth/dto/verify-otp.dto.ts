@@ -1,14 +1,14 @@
 import { Transform } from "class-transformer";
-import { IsNotEmpty, IsString, Matches } from "class-validator";
+import { Matches } from "class-validator";
+import { MOBILE_RE, OTP_RE } from "../../common/input";
+import { compactMobileDigits } from "../../common/mobile";
 
 export class VerifyOtpDto {
-  @Transform(({ value }) => String(value ?? "").trim())
-  @IsString()
-  @IsNotEmpty({ message: "Mobile number is required" })
+  @Transform(({ value }) => compactMobileDigits(value))
+  @Matches(MOBILE_RE, { message: "Enter a valid 10-digit Indian mobile number" })
   mobile!: string;
 
-  @Transform(({ value }) => String(value ?? "").trim())
-  @IsString()
-  @Matches(/^\d{4}$/, { message: "Enter the 4-digit OTP" })
+  @Transform(({ value }) => String(value ?? "").replace(/\D/g, ""))
+  @Matches(OTP_RE, { message: "Enter the 4-digit OTP" })
   code!: string;
 }

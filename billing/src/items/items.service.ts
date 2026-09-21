@@ -3,8 +3,19 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import type { AuthUser } from "../auth/auth.types";
 import { Business, BusinessDocument } from "../businesses/schemas/business.schema";
+import { escapeRegex, mongoSort } from "../common/list-query";
 import { CreateItemDto } from "./dto/create-item.dto";
 import { Item, ItemDocument } from "./schemas/item.schema";
+
+const ITEM_SORT: Record<string, string> = {
+  name: "name",
+  sku: "sku",
+  type: "type",
+  hsn: "hsnSac",
+  price: "salePrice",
+  gst: "gstRate",
+  stock: "stockQty",
+};
 
 export type ItemPayload = {
   id: string;
@@ -37,13 +48,15 @@ export class ItemsService {
     page = 1,
     limit = 10,
     q?: string,
+    sort?: string,
+    dir?: string,
   ): Promise<{ items: ItemPayload[]; page: number; limit: number; total: number; pages: number }> {
     const business = await this.requireBusiness(user);
     const take = Math.min(50, Math.max(1, limit || 10));
     const filter: Record<string, unknown> = { businessId: business._id };
     const query = (q || "").trim();
     if (query) {
-      const rx = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+      const rx = new RegExp(escapeRegex(query), "i");
       filter.$or = [{ name: rx }, { sku: rx }, { hsnSac: rx }];
     }
     const total = await this.items.countDocuments(filter);
@@ -51,7 +64,7 @@ export class ItemsService {
     const current = Math.min(Math.max(1, page || 1), pages);
     const rows = await this.items
       .find(filter)
-      .sort({ createdAt: -1 })
+      .sort(mongoSort(ITEM_SORT, sort, dir))
       .skip((current - 1) * take)
       .limit(take)
       .lean()

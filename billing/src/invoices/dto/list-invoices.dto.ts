@@ -1,17 +1,21 @@
 import { Transform } from "class-transformer";
-import { IsInt, IsOptional, Max, Min } from "class-validator";
+import { IsIn, IsOptional } from "class-validator";
+import { cleanLine, emptyToUndef, IsInvoiceDate } from "../../common/input";
+import { ListQueryDto } from "../../common/list-query.dto";
 
-export class ListInvoicesDto {
-  @Transform(({ value }) => (value == null || value === "" ? 1 : Number(value)))
+export class ListInvoicesDto extends ListQueryDto {
+  @Transform(({ value }) => emptyToUndef(cleanLine(value)))
   @IsOptional()
-  @IsInt()
-  @Min(1)
-  page?: number = 1;
+  @IsInvoiceDate()
+  from?: string;
 
-  @Transform(({ value }) => (value == null || value === "" ? 10 : Number(value)))
+  @Transform(({ value }) => emptyToUndef(cleanLine(value)))
   @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(50)
-  limit?: number = 10;
+  @IsInvoiceDate()
+  to?: string;
+
+  @Transform(({ value }) => emptyToUndef(cleanLine(value).toLowerCase()))
+  @IsOptional()
+  @IsIn(["unpaid", "partial", "paid"], { message: "Choose unpaid, partial, or paid" })
+  pay?: "unpaid" | "partial" | "paid";
 }

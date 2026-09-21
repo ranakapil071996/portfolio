@@ -11,8 +11,16 @@ import { Business, BusinessDocument } from "../businesses/schemas/business.schem
 import { normalizeGstin } from "../common/gstin";
 import { stateFromGstin, stateName } from "../common/indian-states";
 import { normalizeMobile } from "../common/mobile";
+import { escapeRegex, mongoSort } from "../common/list-query";
 import { CreateCustomerDto } from "./dto/create-customer.dto";
 import { Customer, CustomerDocument } from "./schemas/customer.schema";
+
+const CUSTOMER_SORT: Record<string, string> = {
+  name: "name",
+  mobile: "mobile",
+  gstin: "gstin",
+  place: "city",
+};
 
 export type CustomerPayload = {
   id: string;
@@ -43,6 +51,8 @@ export class CustomersService {
     page = 1,
     limit = 10,
     q?: string,
+    sort?: string,
+    dir?: string,
   ): Promise<{
     items: CustomerPayload[];
     page: number;
@@ -55,15 +65,15 @@ export class CustomersService {
     const filter: Record<string, unknown> = { businessId: business._id };
     const query = (q || "").trim();
     if (query) {
-      const rx = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
-      filter.$or = [{ name: rx }, { mobile: rx }, { gstin: rx }, { city: rx }];
+      const rx = new RegExp(escapeRegex(query), "i");
+      filter.$or = [{ name: rx }, { mobile: rx }, { gstin: rx }, { city: rx }, { state: rx }];
     }
     const total = await this.customers.countDocuments(filter);
     const pages = Math.max(1, Math.ceil(total / take) || 1);
     const current = Math.min(Math.max(1, page || 1), pages);
     const rows = await this.customers
       .find(filter)
-      .sort({ createdAt: -1 })
+      .sort(mongoSort(CUSTOMER_SORT, sort, dir))
       .skip((current - 1) * take)
       .limit(take)
       .lean()
