@@ -3,13 +3,15 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Optional,
   UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import * as bcrypt from "bcrypt";
-import { Model, Types } from "mongoose";
+import { ClientSession, Model, Types } from "mongoose";
+import { MongoTx } from "../common/mongo-tx";
 import type { AppEnv } from "../config/env.validation";
 import { normalizeGstin } from "../common/gstin";
 import { normalizeMobile } from "../common/mobile";
@@ -28,7 +30,13 @@ export class AuthService {
     @InjectModel(OtpChallenge.name) private readonly otps: Model<OtpDocument>,
     private readonly jwt: JwtService,
     private readonly config: ConfigService<AppEnv, true>,
+    @Optional() private readonly tx?: MongoTx,
   ) {}
+
+  private transaction<T>(work: (session: ClientSession | null) => Promise<T>): Promise<T> {
+    if (!this.tx) return work(null);
+    return this.tx.run(work);
+  }
 
   async requestOtp(mobileRaw: string): Promise<{ expiresInSeconds: number }> {
     const mobile = normalizeMobile(mobileRaw);
@@ -45,19 +53,15 @@ export class AuthService {
       );
     }
 
-    await this.otps.updateMany(
-      { mobile, consumedAt: { $exists: false } },
-      { $set: { consumedAt: new Date() } },
-    );
-
     const code = this.config.get("otpStaticCode", { infer: true });
     const codeHash = await bcrypt.hash(code, 10);
     const ttl = this.config.get("otpTtlSeconds", { infer: true });
-    await this.otps.create({
-      mobile,
-      codeHash,
-      expiresAt: new Date(Date.now() + ttl * 1000),
-      attempts: 0,
+    await this.transaction(async (session) => {
+      const opts = session ? { session } : {};
+      await this.otps.updateMany({ mobile, consumedAt: { $exists: false } }, { $set: { consumedAt: new Date() } }, opts);
+      const challenge = { mobile, codeHash, expiresAt: new Date(Date.now() + ttl * 1000), attempts: 0 };
+      if (session) await this.otps.create([challenge], opts);
+      else await this.otps.create(challenge);
     });
     return { expiresInSeconds: ttl };
   }
@@ -98,22 +102,27 @@ export class AuthService {
         message: "Incorrect OTP. Use 0000 for now",
       });
     }
-    otp.consumedAt = new Date();
-    await otp.save();
-
-    let user = await this.users.findOne({ mobile });
-    if (!user) {
-      user = await this.users.create({
-        mobile,
-        status: "pending_onboarding",
-        mobileVerifiedAt: new Date(),
-        lastLoginAt: new Date(),
-      });
-    } else {
-      user.mobileVerifiedAt = user.mobileVerifiedAt || new Date();
-      user.lastLoginAt = new Date();
-      await user.save();
-    }
+    const user = await this.transaction(async (session) => {
+      const opts = session ? { session } : {};
+      otp.consumedAt = new Date();
+      await otp.save(opts);
+      let account = await this.users.findOne({ mobile }, null, opts);
+      if (!account) {
+        const created = {
+          mobile,
+          status: "pending_onboarding" as const,
+          mobileVerifiedAt: new Date(),
+          lastLoginAt: new Date(),
+        };
+        const written = session ? await this.users.create([created], opts) : await this.users.create(created);
+        account = Array.isArray(written) ? written[0] : written;
+      } else {
+        account.mobileVerifiedAt = account.mobileVerifiedAt || new Date();
+        account.lastLoginAt = new Date();
+        await account.save(opts);
+      }
+      return account;
+    });
 
     return this.sessionFor(user);
   }
@@ -149,14 +158,14 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    await this.businesses.create({
-      userId: user._id,
-      name,
-      mobile: user.mobile,
-      gstin,
+    await this.transaction(async (session) => {
+      const opts = session ? { session } : {};
+      const business = { userId: user._id, name, mobile: user.mobile, gstin };
+      if (session) await this.businesses.create([business], opts);
+      else await this.businesses.create(business);
+      user.status = "active";
+      await user.save(opts);
     });
-    user.status = "active";
-    await user.save();
     return this.sessionFor(user);
   }
 

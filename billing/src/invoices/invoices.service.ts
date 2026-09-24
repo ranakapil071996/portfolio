@@ -3,9 +3,11 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  Optional,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { ClientSession, Model, Types } from "mongoose";
+import { MongoTx } from "../common/mongo-tx";
 import type { AuthUser } from "../auth/auth.types";
 import { Business, BusinessDocument } from "../businesses/schemas/business.schema";
 import { Customer, CustomerDocument } from "../customers/schemas/customer.schema";
@@ -25,6 +27,8 @@ import {
 } from "./invoice-tax";
 import { Invoice, InvoiceDocument, InvoiceLine, InvoiceParty } from "./schemas/invoice.schema";
 import { loadBrandAssets } from "./templates/brand";
+import { buildCharts, collectedAndDue, type StatInvoice } from "./invoice-stats";
+import { InvoiceStatsService } from "./invoice-stats.service";
 import { catalogPayload, resolvePrint, type PrintChoice } from "./templates/catalog";
 
 export type InvoiceLinePayload = {
@@ -125,7 +129,14 @@ export class InvoicesService {
     @InjectModel(Customer.name) private readonly customers: Model<CustomerDocument>,
     @InjectModel(Item.name) private readonly items: Model<ItemDocument>,
     @InjectModel(Business.name) private readonly businesses: Model<BusinessDocument>,
+    @Optional() private readonly stats?: InvoiceStatsService,
+    @Optional() private readonly tx?: MongoTx,
   ) {}
+
+  private transaction<T>(work: (session: ClientSession | null) => Promise<T>): Promise<T> {
+    if (!this.tx) return work(null);
+    return this.tx.run(work);
+  }
 
   async list(
     user: AuthUser,
@@ -207,48 +218,61 @@ export class InvoicesService {
   async create(user: AuthUser, dto: CreateInvoiceDto): Promise<InvoicePayload> {
     const business = await this.requireBusiness(user);
     const draft = await this.composeInvoice(business, dto);
-    const seqDoc = await this.businesses.findOneAndUpdate(
-      { _id: business._id },
-      { $inc: { invoiceSeq: 1 } },
-      { new: true },
-    );
-    const seq = seqDoc?.invoiceSeq || 1;
     const payment = paymentFromDto(dto, draft.doc.grandTotal);
-    const created = await this.invoices.create({
-      businessId: business._id,
-      userId: new Types.ObjectId(user.id),
-      invoiceNumber: `INV-${String(seq).padStart(4, "0")}`,
-      invoiceDate: parseInvoiceDate(dto.invoiceDate),
-      ...payment,
-      ...draft.doc,
+    const created = await this.transaction(async (session) => {
+      const seqDoc = await this.businesses.findOneAndUpdate(
+        { _id: business._id },
+        { $inc: { invoiceSeq: 1 } },
+        { new: true, ...(session ? { session } : {}) },
+      );
+      const seq = seqDoc?.invoiceSeq || 1;
+      const payload = {
+        businessId: business._id,
+        userId: new Types.ObjectId(user.id),
+        invoiceNumber: `INV-${String(seq).padStart(4, "0")}`,
+        invoiceDate: parseInvoiceDate(dto.invoiceDate),
+        ...payment,
+        ...draft.doc,
+      };
+      const written = session
+        ? await this.invoices.create([payload], { session })
+        : await this.invoices.create(payload);
+      const doc = Array.isArray(written) ? written[0] : written;
+      await this.applyStockDelta(business._id, [], draft.doc.lines, session);
+      return doc;
     });
-    await this.applyStockDelta(business._id, [], draft.doc.lines);
+    this.stats?.record(business._id, null, created.toObject());
     return this.toPayload(created.toObject() as unknown as Record<string, unknown>);
   }
 
   async update(user: AuthUser, id: string, dto: CreateInvoiceDto): Promise<InvoicePayload> {
     const { business, row } = await this.loadOwned(user, id);
+    const before = invoiceSnapshot(row);
     const draft = await this.composeInvoice(business, dto);
     const previous = (row.lines || []) as InvoiceLine[];
     const payment = paymentFromDto(dto, draft.doc.grandTotal, row);
-    row.set({
-      invoiceDate: parseInvoiceDate(dto.invoiceDate),
-      ...draft.doc,
-      status: payment.status,
-      payMode: payment.payMode,
-      amountPaid: payment.amountPaid,
+    await this.transaction(async (session) => {
+      row.set({
+        invoiceDate: parseInvoiceDate(dto.invoiceDate),
+        ...draft.doc,
+        status: payment.status,
+        payMode: payment.payMode,
+        amountPaid: payment.amountPaid,
+      });
+      if (payment.payModeOther) row.payModeOther = payment.payModeOther;
+      else row.set("payModeOther", undefined);
+      if (payment.paidAt) row.paidAt = payment.paidAt;
+      else row.set("paidAt", undefined);
+      await row.save(session ? { session } : undefined);
+      await this.applyStockDelta(business._id, previous, draft.doc.lines, session);
     });
-    if (payment.payModeOther) row.payModeOther = payment.payModeOther;
-    else row.set("payModeOther", undefined);
-    if (payment.paidAt) row.paidAt = payment.paidAt;
-    else row.set("paidAt", undefined);
-    await row.save();
-    await this.applyStockDelta(business._id, previous, draft.doc.lines);
+    this.stats?.record(business._id, before, invoiceSnapshot(row));
     return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
   }
 
   async markPaid(user: AuthUser, id: string, dto: MarkPaidDto): Promise<InvoicePayload> {
-    const { row } = await this.loadOwned(user, id);
+    const { business, row } = await this.loadOwned(user, id);
+    const before = invoiceSnapshot(row);
     const payMode = dto.payMode || (isPayMode(row.payMode) ? row.payMode : undefined);
     if (!payMode) {
       throw new BadRequestException({
@@ -292,22 +316,35 @@ export class InvoicesService {
       row.status = "partial";
       row.amountPaid = nextPaid;
     }
-    await row.save();
+    await this.transaction(async (session) => {
+      await row.save(session ? { session } : undefined);
+    });
+    this.stats?.record(business._id, before, invoiceSnapshot(row));
     return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
   }
 
   async remove(user: AuthUser, id: string): Promise<{ ok: true }> {
     const { business, row } = await this.loadOwned(user, id);
+    const before = invoiceSnapshot(row);
     if (row.deletedAt) {
       throw new NotFoundException({
         error: "invoice_not_found",
         message: "Invoice not found",
       });
     }
-    await this.applyStockDelta(business._id, (row.lines || []) as InvoiceLine[], []);
-    row.deletedAt = new Date();
-    await row.save();
+    await this.transaction(async (session) => {
+      await this.applyStockDelta(business._id, (row.lines || []) as InvoiceLine[], [], session);
+      row.deletedAt = new Date();
+      await row.save(session ? { session } : undefined);
+    });
+    this.stats?.record(business._id, before, null);
     return { ok: true };
+  }
+
+  async charts(user: AuthUser) {
+    const business = await this.requireBusiness(user);
+    if (!this.stats) return buildCharts(null, []);
+    return this.stats.charts(business._id);
   }
 
   async templates(user: AuthUser): Promise<{
@@ -540,6 +577,7 @@ export class InvoicesService {
     businessId: Types.ObjectId,
     previous: InvoiceLine[],
     next: InvoiceLine[],
+    session: ClientSession | null,
   ) {
     const before = catalogGoodsQty(previous);
     const after = catalogGoodsQty(next);
@@ -547,10 +585,10 @@ export class InvoicesService {
     for (const id of ids) {
       const delta = (before.get(id) || 0) - (after.get(id) || 0);
       if (!delta) continue;
-      await this.items.updateOne(
-        { _id: new Types.ObjectId(id), businessId },
-        { $inc: { stockQty: delta } },
-      );
+      const filter = { _id: new Types.ObjectId(id), businessId };
+      const update = { $inc: { stockQty: delta } };
+      if (session) await this.items.updateOne(filter, update, { session });
+      else await this.items.updateOne(filter, update);
     }
   }
 
@@ -568,6 +606,7 @@ export class InvoicesService {
   private toListItem(row: Record<string, unknown>): InvoiceListItem {
     const customer = (row.customer || {}) as Record<string, unknown>;
     const lines = Array.isArray(row.lines) ? row.lines : [];
+    const billMoney = collectedAndDue(String(row.status ?? "issued"), Number(row.grandTotal ?? 0), Number(row.amountPaid ?? 0));
     return {
       id: String(row._id),
       invoiceNumber: String(row.invoiceNumber ?? ""),
@@ -581,8 +620,8 @@ export class InvoicesService {
       status: String(row.status ?? "issued"),
       paid: String(row.status ?? "issued") === "paid",
       partial: String(row.status ?? "issued") === "partial",
-      amountPaid: roundMoney(Number(row.amountPaid ?? 0)),
-      amountDue: roundMoney(Math.max(0, Number(row.grandTotal ?? 0) - Number(row.amountPaid ?? 0))),
+      amountPaid: billMoney.paid,
+      amountDue: billMoney.due,
       payMode: isPayMode(row.payMode) ? row.payMode : null,
       payModeOther: row.payModeOther ? String(row.payModeOther) : null,
     };
@@ -591,6 +630,7 @@ export class InvoicesService {
   private toPayload(row: Record<string, unknown>): InvoicePayload {
     const created = row.createdAt instanceof Date ? row.createdAt.toISOString() : null;
     const lines = Array.isArray(row.lines) ? row.lines : [];
+    const billMoney = collectedAndDue(String(row.status ?? "issued"), Number(row.grandTotal ?? 0), Number(row.amountPaid ?? 0));
     return {
       id: String(row._id),
       invoiceNumber: String(row.invoiceNumber ?? ""),
@@ -612,14 +652,19 @@ export class InvoicesService {
       notes: row.notes ? String(row.notes) : null,
       paid: String(row.status ?? "issued") === "paid",
       partial: String(row.status ?? "issued") === "partial",
-      amountPaid: roundMoney(Number(row.amountPaid ?? 0)),
-      amountDue: roundMoney(Math.max(0, Number(row.grandTotal ?? 0) - Number(row.amountPaid ?? 0))),
+      amountPaid: billMoney.paid,
+      amountDue: billMoney.due,
       payMode: isPayMode(row.payMode) ? row.payMode : null,
       payModeOther: row.payModeOther ? String(row.payModeOther) : null,
       paidAt: row.paidAt instanceof Date && !Number.isNaN(row.paidAt.getTime()) ? row.paidAt.toISOString() : null,
       createdAt: created,
     };
   }
+}
+
+function invoiceSnapshot(row: { toObject?: () => object }): StatInvoice {
+  const raw = typeof row.toObject === "function" ? row.toObject() : row;
+  return raw as StatInvoice;
 }
 
 function paymentFromDto(

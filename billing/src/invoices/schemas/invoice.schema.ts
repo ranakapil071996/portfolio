@@ -179,3 +179,4 @@ export const InvoiceSchema = SchemaFactory.createForClass(Invoice);
 
 InvoiceSchema.index({ businessId: 1, invoiceNumber: 1 }, { unique: true });
 InvoiceSchema.index({ businessId: 1, createdAt: -1 });
+InvoiceSchema.index({ businessId: 1, deletedAt: 1, invoiceDate: 1 });

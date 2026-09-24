@@ -5,6 +5,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { AuthModule } from "./auth/auth.module";
 import { BusinessModule } from "./businesses/business.module";
+import { MongoTxModule } from "./common/mongo-tx.module";
 import { loadEnv, type AppEnv } from "./config/env.validation";
 import { CustomersModule } from "./customers/customers.module";
 import { HealthController } from "./health.controller";
@@ -30,6 +31,7 @@ import { ItemsModule } from "./items/items.module";
     ThrottlerModule.forRoot({
       throttlers: [{ name: "default", ttl: 60_000, limit: 40 }],
     }),
+    MongoTxModule,
     AuthModule,
     BusinessModule,
     ItemsModule,

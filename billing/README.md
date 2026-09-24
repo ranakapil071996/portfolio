@@ -51,6 +51,7 @@ Invoice print: open a saved invoice and pick a **template** (Classic GST, Modern
 | `GET` | `/api/customers/:id` | cookie — full record for invoicing |
 | `PATCH` | `/api/customers/:id` | cookie — same body as create |
 | `DELETE` | `/api/customers/:id` | cookie — soft delete |
+| `GET` | `/api/invoices/stats` | cookie — precomputed home charts (daily, monthly, collected, outstanding, GST, pay modes) |
 | `GET` | `/api/invoices?page=&limit=&q=&sort=&dir=&from=&to=&pay=` | cookie — `sort=number\|date\|customer\|place\|total\|status`, `pay=unpaid\|partial\|paid` |
 | `POST` | `/api/invoices` | cookie — `{ customerId, invoiceDate?, notes?, payMode?, paid?, lines: [{ itemId, qty, rate? }] }` |
 | `GET` | `/api/invoices/:id` | cookie |

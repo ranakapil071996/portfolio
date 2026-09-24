@@ -1,5 +1,6 @@
 import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import { Types } from "mongoose";
+import { InvoiceStatsService } from "./invoice-stats.service";
 import { InvoicesService } from "./invoices.service";
 import type { CreateInvoiceDto } from "./dto/create-invoice.dto";
 
@@ -345,5 +346,88 @@ describe("InvoicesService", () => {
     );
     expect(row.save).toHaveBeenCalled();
     expect(row.deletedAt).toBeInstanceOf(Date);
+  });
+
+  it("rebuilds chart totals when the rollup write fails after the invoice is saved", async () => {
+    const businessId = new Types.ObjectId();
+    const customerId = new Types.ObjectId();
+    const rollup = { sales: 0, count: 0, paid: 0, due: 0, rebuilt: true, statsVersion: 2 };
+    const saved = {
+      _id: new Types.ObjectId(),
+      invoiceNumber: "INV-0009",
+      invoiceDate: new Date("2026-09-24T00:00:00.000Z"),
+      status: "issued",
+      customerId,
+      customer: { name: "Walk In" },
+      seller: { name: "hawkey" },
+      taxSplit: "cgst_sgst",
+      lines: [],
+      taxableTotal: 200,
+      cgstTotal: 18,
+      sgstTotal: 18,
+      igstTotal: 0,
+      cessTotal: 0,
+      grandTotal: 236,
+      amountPaid: 0,
+    };
+    const invoices = {
+      create: jest.fn().mockResolvedValue({ toObject: () => saved }),
+      find: jest.fn().mockReturnValue({
+        select: () => ({
+          lean: () => ({
+            cursor: () => ({
+              async *[Symbol.asyncIterator]() {
+                yield saved;
+              },
+            }),
+          }),
+        }),
+      }),
+    };
+    const businessStats = {
+      updateOne: jest.fn(async (_filter: unknown, update: { $inc?: unknown; $set?: Record<string, unknown> }) => {
+        if (update.$inc) throw new Error("precompute write failed");
+        if (update.$set) Object.assign(rollup, update.$set);
+        return {};
+      }),
+      findOne: jest.fn(async () => rollup),
+    };
+    const stats = new InvoiceStatsService(
+      invoices as never,
+      {
+        updateOne: jest.fn().mockRejectedValue(new Error("precompute write failed")),
+        deleteMany: jest.fn().mockResolvedValue({}),
+        insertMany: jest.fn().mockResolvedValue([]),
+      } as never,
+      businessStats as never,
+    );
+    const service = new InvoicesService(
+      invoices as never,
+      { findOne: jest.fn().mockResolvedValue({ _id: customerId, name: "Walk In" }) } as never,
+      { find: jest.fn().mockResolvedValue([]), updateOne: jest.fn() } as never,
+      {
+        findOne: jest.fn().mockResolvedValue({ _id: businessId, name: "hawkey", mobile: "9717360112" }),
+        findOneAndUpdate: jest.fn().mockResolvedValue({ invoiceSeq: 9 }),
+      } as never,
+      stats,
+    );
+
+    const out = await service.create(user(), {
+      customerName: "Walk In",
+      invoiceDate: "2026-09-24",
+      lines: [{ name: "Notebook", qty: 2, rate: 100, gstRate: 18 }],
+    });
+    const deadline = Date.now() + 1000;
+    while (rollup.sales !== out.grandTotal && Date.now() < deadline) {
+      await new Promise((resolve) => setImmediate(resolve));
+    }
+
+    expect(out.invoiceNumber).toBe("INV-0009");
+    expect(out.grandTotal).toBe(236);
+    expect(invoices.create).toHaveBeenCalled();
+    expect(rollup.sales).toBe(236);
+    expect(rollup.count).toBe(1);
+    expect(rollup.due).toBe(236);
+    expect(rollup.rebuilt).toBe(true);
   });
 });

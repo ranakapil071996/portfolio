@@ -34,6 +34,11 @@ export class InvoicesController {
     return this.invoices.templates(user);
   }
 
+  @Get("stats")
+  stats(@CurrentUser() user: AuthUser) {
+    return this.invoices.charts(user);
+  }
+
   @Get(":id/pdf")
   async pdf(
     @CurrentUser() user: AuthUser,

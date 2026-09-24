@@ -790,27 +790,7 @@
 
   function tabPanel(tab, s) {
     var biz = s && s.business;
-    if (tab === "home") {
-      return (
-        '<header class="bill-stage-head"><h2>' +
-        esc(t("tools.billing.tabHome", "Home")) +
-        "</h2><p>" +
-        esc(t("tools.billing.signedIn", "Overview of this business. Use the sidebar to open invoices, customers, and more.")) +
-        "</p></header>" +
-        homeProfileCard() +
-        '<div class="billing-meta">' +
-        "<div><span>" +
-        esc(t("tools.billing.mobile", "Mobile number")) +
-        "</span><strong>+91 " +
-        esc(s.user.mobile) +
-        "</strong></div>" +
-        "<div><span>" +
-        esc(t("tools.billing.gstin", "GSTIN")) +
-        "</span><strong>" +
-        esc((biz && biz.gstin) || t("tools.billing.gstinEmpty", "Not added")) +
-        "</strong></div></div>"
-      );
-    }
+    if (tab === "home") return "";
     if (tab === "settings") {
       return (
         '<header class="bill-stage-head"><h2>' +
@@ -5746,15 +5726,517 @@
     go("app/settings/profile");
   }
 
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  function monthShort(ym) {
+    var parts = String(ym || "").split("-");
+    var index = Number(parts[1]) - 1;
+    return MONTHS[index] || ym;
+  }
+
+  function dayLabel(iso) {
+    var parts = String(iso || "").split("-");
+    if (parts.length < 3) return String(iso || "");
+    return Number(parts[2]) + " " + monthShort(iso) + " " + parts[0];
+  }
+
+  function monthLabel(ym) {
+    return monthShort(ym) + " " + String(ym || "").slice(0, 4);
+  }
+
+  function monthRange(ym) {
+    var parts = String(ym || "").split("-");
+    var year = Number(parts[0]);
+    var month = Number(parts[1]);
+    if (!year || !month) return { from: "", to: "" };
+    var last = new Date(Date.UTC(year, month, 0)).getUTCDate();
+    var mm = String(month).padStart(2, "0");
+    return {
+      from: year + "-" + mm + "-01",
+      to: year + "-" + mm + "-" + String(last).padStart(2, "0"),
+    };
+  }
+
+  function dayShort(iso, index, total) {
+    if (total > 16 && index % 5 !== 0 && index !== total - 1) return "";
+    return String(iso || "").slice(8);
+  }
+
+  function billsLabel(count) {
+    var n = Number(count) || 0;
+    return n + " " + (n === 1 ? t("tools.billing.homeBill", "bill") : t("tools.billing.homeBills", "bills"));
+  }
+
+  function salesTip(row) {
+    var bills = billsLabel(row.count);
+    var gst = Number(row.gst) > 0 ? " · GST " + moneyInr(row.gst) : "";
+    return moneyInr(row.sales) + " · " + bills + gst;
+  }
+
+  function chartHitAttrs(title, body) {
+    return (
+      ' data-chart-hit="1" data-tip-title="' +
+      esc(title) +
+      '" data-tip-body="' +
+      esc(body) +
+      '" aria-label="' +
+      esc(title + ". " + body) +
+      '"'
+    );
+  }
+
+  function chartBars(rows, key, tone, labelFor, hrefFor, titleFor) {
+    var max = 0;
+    var i;
+    for (i = 0; i < rows.length; i += 1) max = Math.max(max, Number(rows[i][key]) || 0);
+    if (max <= 0) max = 1;
+    var w = 640;
+    var h = 176;
+    var gap = rows.length > 20 ? 2 : 8;
+    var bw = (w - gap * Math.max(0, rows.length - 1)) / Math.max(1, rows.length);
+    var bars = rows
+      .map(function (row, index) {
+        var value = Number(row[key]) || 0;
+        var bh = value <= 0 ? 3 : Math.max(6, (value / max) * (h - 32));
+        var x = index * (bw + gap);
+        var width = Math.max(rows.length > 20 ? 2 : 6, bw);
+        var y = h - 24 - bh;
+        var label = labelFor(row, index, rows.length);
+        var title = titleFor(row);
+        var href = hrefFor(row);
+        return (
+          '<a class="bill-bar-link' +
+          (value <= 0 ? " is-empty" : "") +
+          '" href="' +
+          esc(href) +
+          '"' +
+          chartHitAttrs(title, salesTip(row)) +
+          '><rect class="bill-bar-col" x="' +
+          x.toFixed(1) +
+          '" y="0" width="' +
+          width.toFixed(1) +
+          '" height="' +
+          (h - 22) +
+          '"></rect><rect class="bill-bar bill-bar-' +
+          tone +
+          '" x="' +
+          x.toFixed(1) +
+          '" y="' +
+          y.toFixed(1) +
+          '" width="' +
+          width.toFixed(1) +
+          '" height="' +
+          bh.toFixed(1) +
+          '" rx="' +
+          Math.min(5, width / 2).toFixed(1) +
+          '"></rect>' +
+          (label
+            ? '<text class="bill-bar-label" x="' +
+              (x + width / 2).toFixed(1) +
+              '" y="' +
+              (h - 6) +
+              '" text-anchor="middle">' +
+              esc(label) +
+              "</text>"
+            : "") +
+          "</a>"
+        );
+      })
+      .join("");
+    return (
+      '<svg class="bill-chart-svg" viewBox="0 0 ' +
+      w +
+      " " +
+      h +
+      '" role="group"><defs><linearGradient id="bill-grad-' +
+      tone +
+      '" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="' +
+      (tone === "month" ? "#6d28d9" : "#1d4ed8") +
+      '"/><stop offset="100%" stop-color="' +
+      (tone === "month" ? "#c4b5fd" : "#7dd3fc") +
+      '"/></linearGradient></defs><line class="bill-chart-base" x1="0" y1="' +
+      (h - 24) +
+      '" x2="' +
+      w +
+      '" y2="' +
+      (h - 24) +
+      '"></line>' +
+      bars +
+      "</svg>"
+    );
+  }
+
+  function chartDonut(paid, due) {
+    var total = Math.max(0, paid) + Math.max(0, due);
+    var r = 46;
+    var c = 2 * Math.PI * r;
+    var paidLen = total > 0 ? (paid / total) * c : 0;
+    var dueLen = total > 0 ? c - paidLen : 0;
+    var empty = total <= 0;
+    var paidHref = listHref("invoices", 1, { pay: "paid" });
+    var dueHref = listHref("invoices", 1, { pay: "unpaid" });
+    var paidTitle = t("tools.billing.homeCollected", "Collected");
+    var dueTitle = t("tools.billing.homeOutstanding", "Outstanding");
+    return (
+      '<svg class="bill-donut" viewBox="0 0 120 120" role="group">' +
+      '<circle class="bill-donut-track" cx="60" cy="60" r="' +
+      r +
+      '" fill="none" stroke-width="12"></circle>' +
+      (empty
+        ? ""
+        : '<a class="bill-donut-link" href="' +
+          esc(paidHref) +
+          '"' +
+          chartHitAttrs(paidTitle, moneyInr(paid)) +
+          '><circle class="bill-donut-paid" cx="60" cy="60" r="' +
+          r +
+          '" fill="none" stroke-width="12" stroke-dasharray="' +
+          paidLen.toFixed(2) +
+          " " +
+          (c - paidLen).toFixed(2) +
+          '" transform="rotate(-90 60 60)"></circle></a>' +
+          '<a class="bill-donut-link" href="' +
+          esc(dueHref) +
+          '"' +
+          chartHitAttrs(dueTitle, moneyInr(due)) +
+          '><circle class="bill-donut-due" cx="60" cy="60" r="' +
+          r +
+          '" fill="none" stroke-width="12" stroke-dasharray="' +
+          dueLen.toFixed(2) +
+          " " +
+          (c - dueLen).toFixed(2) +
+          '" stroke-dashoffset="' +
+          (-paidLen).toFixed(2) +
+          '" transform="rotate(-90 60 60)"></circle></a>') +
+      '<text class="bill-donut-value" x="60" y="58" text-anchor="middle">' +
+      esc(total > 0 ? Math.round((paid / total) * 100) + "%" : "—") +
+      '</text><text class="bill-donut-caption" x="60" y="74" text-anchor="middle">' +
+      esc(paidTitle) +
+      "</text></svg>"
+    );
+  }
+
+  function clearChartTip() {
+    var old = document.getElementById("bill-chart-tip");
+    if (old) old.remove();
+  }
+
+  function bindHomeCharts(root) {
+    clearChartTip();
+    var tip = document.createElement("div");
+    tip.id = "bill-chart-tip";
+    tip.className = "bill-chart-tip";
+    tip.hidden = true;
+    tip.innerHTML = "<strong></strong><span></span>";
+    document.body.appendChild(tip);
+    var titleEl = tip.querySelector("strong");
+    var bodyEl = tip.querySelector("span");
+    var current = null;
+
+    function hitOf(target) {
+      return target && target.closest ? target.closest("[data-chart-hit]") : null;
+    }
+
+    function show(hit, event) {
+      current = hit;
+      titleEl.textContent = hit.getAttribute("data-tip-title") || "";
+      bodyEl.textContent = hit.getAttribute("data-tip-body") || "";
+      tip.hidden = false;
+      var pad = 12;
+      var x = event.clientX + 14;
+      var y = event.clientY + 18;
+      var rect = tip.getBoundingClientRect();
+      if (x + rect.width > window.innerWidth - pad) x = event.clientX - rect.width - 14;
+      if (y + rect.height > window.innerHeight - pad) y = event.clientY - rect.height - 14;
+      tip.style.left = Math.max(pad, x) + "px";
+      tip.style.top = Math.max(pad, y) + "px";
+    }
+
+    root.addEventListener("pointerover", function (event) {
+      var hit = hitOf(event.target);
+      if (!hit || hit === current) return;
+      show(hit, event);
+    });
+    root.addEventListener("pointermove", function (event) {
+      if (!current || tip.hidden) return;
+      show(current, event);
+    });
+    root.addEventListener("pointerout", function (event) {
+      if (hitOf(event.relatedTarget) === current) return;
+      current = null;
+      tip.hidden = true;
+    });
+    root.addEventListener("focusin", function (event) {
+      var hit = hitOf(event.target);
+      if (!hit) return;
+      var rect = hit.getBoundingClientRect();
+      show(hit, { clientX: rect.left + rect.width / 2, clientY: rect.top });
+    });
+    root.addEventListener("focusout", function (event) {
+      if (root.contains(event.relatedTarget)) return;
+      current = null;
+      tip.hidden = true;
+    });
+    root.addEventListener("click", function (event) {
+      var hit = hitOf(event.target);
+      if (!hit || hit.tagName === "A") return;
+      var group = hit.closest("[data-chart-select]");
+      if (!group) return;
+      var on = hit.classList.contains("is-on");
+      Array.prototype.forEach.call(group.querySelectorAll(".is-on"), function (el) {
+        el.classList.remove("is-on");
+      });
+      var detail = group.querySelector(".bill-mode-detail");
+      if (on) {
+        if (detail) detail.hidden = true;
+        return;
+      }
+      hit.classList.add("is-on");
+      current = null;
+      tip.hidden = true;
+      if (detail) {
+        detail.hidden = false;
+        detail.textContent = (hit.getAttribute("data-tip-title") || "") + " — " + (hit.getAttribute("data-tip-body") || "");
+      }
+    });
+  }
+
+  function homeChartsHtml(data) {
+    var totals = data.totals || {};
+    var month = data.month || {};
+    var today = data.today || {};
+    var daily = Array.isArray(data.daily) ? data.daily : [];
+    var monthly = Array.isArray(data.monthly) ? data.monthly : [];
+    var modes = Array.isArray(data.payModes) ? data.payModes : [];
+    var modeMax = 0;
+    modes.forEach(function (mode) {
+      modeMax = Math.max(modeMax, Number(mode.amount) || 0);
+    });
+    var collected = Number(totals.paid) || 0;
+    var modeRows = modes
+      .map(function (mode) {
+        var known = PAY_MODES.filter(function (item) {
+          return item.id === mode.mode;
+        })[0];
+        var label = known ? t(known.key, known.label) : mode.mode;
+        var amount = Number(mode.amount) || 0;
+        var width = modeMax > 0 ? Math.max(amount > 0 ? 6 : 0, (amount / modeMax) * 100) : 0;
+        var share = collected > 0 ? Math.round((amount / collected) * 100) : 0;
+        var body = moneyInr(amount) + (amount > 0 ? " · " + share + "%" : "");
+        return (
+          '<button type="button" class="bill-mode-row' +
+          (amount > 0 ? "" : " is-empty") +
+          '"' +
+          chartHitAttrs(label, body) +
+          '><span>' +
+          esc(label) +
+          '</span><span class="bill-mode-track"><span class="bill-mode-fill" style="width:' +
+          width.toFixed(1) +
+          '%"></span></span><strong>' +
+          esc(moneyInr(amount)) +
+          "</strong></button>"
+        );
+      })
+      .join("");
+    var monthSpan = monthRange(month.month);
+    function kpi(label, value, hint, href, tip) {
+      return (
+        '<a class="bill-kpi is-link" href="' +
+        esc(href) +
+        '"' +
+        chartHitAttrs(label, tip) +
+        "><span>" +
+        esc(label) +
+        "</span><strong>" +
+        esc(value) +
+        "</strong>" +
+        (hint ? "<em>" + esc(hint) + "</em>" : "") +
+        "</a>"
+      );
+    }
+    var billsWord = billsLabel;
+    return (
+      '<div class="bill-kpis">' +
+      kpi(
+        t("tools.billing.homeToday", "Today"),
+        moneyInr(today.sales),
+        billsWord(today.count),
+        listHref("invoices", 1, { from: today.day || "", to: today.day || "" }),
+        moneyInr(today.sales) + " · " + billsWord(today.count),
+      ) +
+      kpi(
+        t("tools.billing.homeMonth", "This month"),
+        moneyInr(month.sales),
+        billsWord(month.count),
+        listHref("invoices", 1, monthSpan),
+        moneyInr(month.sales) + " · " + billsWord(month.count),
+      ) +
+      kpi(
+        t("tools.billing.homeCollected", "Collected"),
+        moneyInr(totals.paid),
+        (totals.collectionRate || 0) + "%",
+        listHref("invoices", 1, { pay: "paid" }),
+        moneyInr(totals.paid) + " · " + String(totals.paidCount || 0) + " " + t("tools.billing.invoicePaid", "Paid"),
+      ) +
+      kpi(
+        t("tools.billing.homeOutstanding", "Outstanding"),
+        moneyInr(totals.due),
+        String((totals.partialCount || 0) + (totals.unpaidCount || 0)) + " " + t("tools.billing.homeOpen", "open"),
+        listHref("invoices", 1, { pay: "unpaid" }),
+        moneyInr(totals.due) + " · " + String(totals.unpaidCount || 0) + " " + t("tools.billing.invoiceUnpaid", "Unpaid"),
+      ) +
+      kpi(
+        t("tools.billing.homeGst", "GST this month"),
+        moneyInr(month.gst),
+        t("tools.billing.homeGstHint", "Tax on this month's bills"),
+        listHref("invoices", 1, monthSpan),
+        moneyInr(month.gst),
+      ) +
+      "</div>" +
+      '<div class="bill-chart-grid">' +
+      '<section class="bill-chart glass"><h3>' +
+      esc(t("tools.billing.homeDaily", "Daily sales")) +
+      "</h3><p>" +
+      esc(t("tools.billing.homeDailyLead", "Last 30 days, by invoice date.")) +
+      "</p>" +
+      chartBars(
+        daily,
+        "sales",
+        "daily",
+        function (row, index, total) {
+          return dayShort(row.day, index, total);
+        },
+        function (row) {
+          return listHref("invoices", 1, { from: row.day, to: row.day });
+        },
+        function (row) {
+          return dayLabel(row.day);
+        },
+      ) +
+      "</section>" +
+      '<section class="bill-chart glass"><h3>' +
+      esc(t("tools.billing.homeMonthly", "Monthly sales")) +
+      "</h3><p>" +
+      esc(t("tools.billing.homeMonthlyLead", "Last 12 months.")) +
+      "</p>" +
+      chartBars(
+        monthly,
+        "sales",
+        "month",
+        function (row) {
+          return monthShort(row.month);
+        },
+        function (row) {
+          return listHref("invoices", 1, monthRange(row.month));
+        },
+        function (row) {
+          return monthLabel(row.month);
+        },
+      ) +
+      "</section>" +
+      '<section class="bill-chart glass bill-chart-split"><h3>' +
+      esc(t("tools.billing.homePaidUnpaid", "Collected and outstanding")) +
+      "</h3><p>" +
+      esc(t("tools.billing.homePaidLead", "Money received against every open and settled bill.")) +
+      '</p><div class="bill-split">' +
+      chartDonut(collected, Number(totals.due) || 0) +
+      '<ul class="bill-split-legend"><li><a class="bill-legend-link" href="' +
+      esc(listHref("invoices", 1, { pay: "paid" })) +
+      '"' +
+      chartHitAttrs(t("tools.billing.homeCollected", "Collected"), moneyInr(totals.paid)) +
+      '><i class="is-paid"></i><span>' +
+      esc(t("tools.billing.homeCollected", "Collected")) +
+      "</span><strong>" +
+      esc(moneyInr(totals.paid)) +
+      '</strong></a></li><li><a class="bill-legend-link" href="' +
+      esc(listHref("invoices", 1, { pay: "unpaid" })) +
+      '"' +
+      chartHitAttrs(t("tools.billing.homeOutstanding", "Outstanding"), moneyInr(totals.due)) +
+      '><i class="is-due"></i><span>' +
+      esc(t("tools.billing.homeOutstanding", "Outstanding")) +
+      "</span><strong>" +
+      esc(moneyInr(totals.due)) +
+      '</strong></a></li><li><a class="bill-legend-link" href="' +
+      esc(listHref("invoices", 1, { pay: "partial" })) +
+      '"' +
+      chartHitAttrs(
+        t("tools.billing.invoicePartial", "Partial"),
+        billsLabel(totals.partialCount),
+      ) +
+      '><i class="is-count"></i><span>' +
+      esc(t("tools.billing.homeStatusMix", "Paid · partial · unpaid")) +
+      "</span><strong>" +
+      esc(String(totals.paidCount || 0) + " · " + String(totals.partialCount || 0) + " · " + String(totals.unpaidCount || 0)) +
+      "</strong></a></li></ul></div></section>" +
+      '<section class="bill-chart glass"><h3>' +
+      esc(t("tools.billing.homeModes", "How you get paid")) +
+      "</h3><p>" +
+      esc(t("tools.billing.homeModesLead", "Collected amount by pay mode.")) +
+      '</p><div class="bill-modes" data-chart-select="modes">' +
+      modeRows +
+      '<p class="bill-mode-detail" hidden></p></div></section></div>'
+    );
+  }
+
+  function homeMeta(s) {
+    var biz = s && s.business;
+    return (
+      '<div class="billing-meta">' +
+      "<div><span>" +
+      esc(t("tools.billing.mobile", "Mobile number")) +
+      "</span><strong>+91 " +
+      esc(s.user.mobile) +
+      "</strong></div>" +
+      "<div><span>" +
+      esc(t("tools.billing.gstin", "GSTIN")) +
+      "</span><strong>" +
+      esc((biz && biz.gstin) || t("tools.billing.gstinEmpty", "Not added")) +
+      "</strong></div></div>"
+    );
+  }
+
+  function homeView(s) {
+    var stage = document.getElementById("bill-stage");
+    if (!stage) return;
+    stage.innerHTML =
+      '<header class="bill-stage-head"><h2>' +
+      esc(t("tools.billing.tabHome", "Home")) +
+      "</h2><p>" +
+      esc(t("tools.billing.homeChartsLead", "Sales, collections, and tax for this business.")) +
+      "</p></header>" +
+      homeProfileCard() +
+      '<div id="bill-home-charts" class="bill-charts" aria-live="polite"><p class="bill-charts-loading">' +
+      esc(t("tools.billing.homeChartsLoading", "Loading sales…")) +
+      "</p></div>" +
+      homeMeta(s);
+    api("/invoices/stats", { timeout: 20000 })
+      .then(function (data) {
+        var box = document.getElementById("bill-home-charts");
+        if (!box || view().tab !== "home") return;
+        box.innerHTML = homeChartsHtml(data || {});
+        bindHomeCharts(box);
+      })
+      .catch(function (ex) {
+        var box = document.getElementById("bill-home-charts");
+        if (!box || view().tab !== "home") return;
+        box.innerHTML = '<p class="bill-charts-loading">' + esc(ex.message || t("tools.billing.error", "Request failed")) + "</p>";
+      });
+  }
+
   function appView(tab, screen, extra) {
     var s = state.session;
     if (!s) return;
+    clearChartTip();
     tab = tab || "home";
     fillDrawer(tab === "new" ? "items" : tab);
     bindDrawerOnce();
     setDrawer(drawerOpen());
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
+    if (tab === "home") {
+      homeView(s);
+      return;
+    }
     if (tab === "items" && screen === "new") {
       itemFormView();
       return;
