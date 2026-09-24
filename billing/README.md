@@ -43,15 +43,20 @@ Invoice print: open a saved invoice and pick a **template** (Classic GST, Modern
 | `POST` | `/api/auth/logout` | clears cookie |
 | `GET` | `/api/items?page=&limit=&q=&sort=&dir=` | cookie — `sort=name\|sku\|type\|hsn\|price\|gst\|stock` |
 | `POST` | `/api/items` | cookie |
+| `GET` | `/api/items/:id` | cookie |
+| `PATCH` | `/api/items/:id` | cookie — same body as create |
+| `DELETE` | `/api/items/:id` | cookie — soft delete |
 | `GET` | `/api/customers?page=&limit=&q=&sort=&dir=` | cookie — `sort=name\|mobile\|gstin\|place` |
 | `POST` | `/api/customers` | cookie |
 | `GET` | `/api/customers/:id` | cookie — full record for invoicing |
+| `PATCH` | `/api/customers/:id` | cookie — same body as create |
+| `DELETE` | `/api/customers/:id` | cookie — soft delete |
 | `GET` | `/api/invoices?page=&limit=&q=&sort=&dir=&from=&to=&pay=` | cookie — `sort=number\|date\|customer\|place\|total\|status`, `pay=unpaid\|partial\|paid` |
 | `POST` | `/api/invoices` | cookie — `{ customerId, invoiceDate?, notes?, payMode?, paid?, lines: [{ itemId, qty, rate? }] }` |
 | `GET` | `/api/invoices/:id` | cookie |
 | `PATCH` | `/api/invoices/:id` | cookie — same body as create |
 | `PATCH` | `/api/invoices/:id/paid` | cookie — `{ payMode? }` marks the bill paid |
-| `DELETE` | `/api/invoices/:id` | cookie |
+| `DELETE` | `/api/invoices/:id` | cookie — soft delete, restores catalog stock |
 | `GET` | `/api/invoices/templates` | cookie — layouts + printer sizes + saved default |
 | `GET` | `/api/invoices/:id/pdf` | cookie — `?template=classic\|modern\|minimal\|thermal&printer=a4\|a5\|thermal80\|thermal58` |
 | `GET` | `/api/hsn?q=&type=` | cookie — find HSN/SAC + GST rate |

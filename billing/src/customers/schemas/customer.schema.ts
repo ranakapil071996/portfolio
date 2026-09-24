@@ -41,11 +41,20 @@ export class Customer {
 
   @Prop({ default: true })
   isActive!: boolean;
+
+  @Prop({ index: true })
+  deletedAt?: Date;
 }
 
 export type CustomerDocument = HydratedDocument<Customer>;
 export const CustomerSchema = SchemaFactory.createForClass(Customer);
 
 CustomerSchema.index({ businessId: 1, name: 1 });
-CustomerSchema.index({ businessId: 1, gstin: 1 }, { unique: true, sparse: true });
-CustomerSchema.index({ businessId: 1, mobile: 1 }, { unique: true, sparse: true });
+CustomerSchema.index(
+  { businessId: 1, gstin: 1 },
+  { unique: true, partialFilterExpression: { gstin: { $type: "string" }, deletedAt: null } },
+);
+CustomerSchema.index(
+  { businessId: 1, mobile: 1 },
+  { unique: true, partialFilterExpression: { mobile: { $type: "string" }, deletedAt: null } },
+);

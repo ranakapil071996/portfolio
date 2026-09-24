@@ -169,6 +169,9 @@ export class Invoice {
 
   @Prop({ trim: true, maxlength: 400 })
   notes?: string;
+
+  @Prop({ index: true })
+  deletedAt?: Date;
 }
 
 export type InvoiceDocument = HydratedDocument<Invoice>;

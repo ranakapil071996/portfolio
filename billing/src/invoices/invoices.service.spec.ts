@@ -328,7 +328,8 @@ describe("InvoicesService", () => {
     const itemId = new Types.ObjectId();
     const row = {
       lines: [{ source: "catalog", type: "goods", itemId, qty: 2 }],
-      deleteOne: jest.fn().mockResolvedValue({}),
+      deletedAt: undefined,
+      save: jest.fn().mockResolvedValue(undefined),
     };
     const items = { updateOne: jest.fn().mockResolvedValue({}) };
     const service = new InvoicesService(
@@ -342,6 +343,7 @@ describe("InvoicesService", () => {
       { _id: itemId, businessId },
       { $inc: { stockQty: 2 } },
     );
-    expect(row.deleteOne).toHaveBeenCalled();
+    expect(row.save).toHaveBeenCalled();
+    expect(row.deletedAt).toBeInstanceOf(Date);
   });
 });

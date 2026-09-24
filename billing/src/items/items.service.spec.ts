@@ -1,4 +1,4 @@
-import { ConflictException, ForbiddenException } from "@nestjs/common";
+import { ConflictException, ForbiddenException, NotFoundException } from "@nestjs/common";
 import { Types } from "mongoose";
 import { ItemsService } from "./items.service";
 import type { CreateItemDto } from "./dto/create-item.dto";
@@ -93,6 +93,51 @@ describe("ItemsService", () => {
     expect(out.items).toHaveLength(1);
     expect(find.skip).toHaveBeenCalledWith(10);
     expect(find.limit).toHaveBeenCalledWith(10);
+  });
+
+  it("updates an item and can soft-delete it", async () => {
+    const id = new Types.ObjectId();
+    const business = { _id: new Types.ObjectId() };
+    const row = {
+      _id: id,
+      businessId: business._id,
+      isActive: true,
+      deletedAt: undefined as Date | undefined,
+      set: jest.fn(),
+      save: jest.fn().mockResolvedValue(undefined),
+      toObject: () => ({
+        _id: id,
+        name: "Notebook Plus",
+        type: "goods",
+        unit: "pcs",
+        salePrice: 60,
+        gstRate: 18,
+        taxInclusive: false,
+        cessRate: 0,
+        stockQty: 10,
+        isActive: false,
+      }),
+    };
+    const service = new ItemsService(
+      { findOne: jest.fn().mockResolvedValue(row), exists: jest.fn().mockResolvedValue(null) } as never,
+      { findOne: jest.fn().mockResolvedValue(business) } as never,
+    );
+    const updated = await service.update(user(), String(id), dto({ name: "Notebook Plus", salePrice: 60 }));
+    expect(updated.name).toBe("Notebook Plus");
+    const removed = await service.remove(user(), String(id));
+    expect(removed).toEqual({ ok: true });
+    expect(row.isActive).toBe(false);
+    expect(row.deletedAt).toBeInstanceOf(Date);
+  });
+
+  it("returns not found for a missing item", async () => {
+    const service = new ItemsService(
+      { findOne: jest.fn().mockResolvedValue(null) } as never,
+      { findOne: jest.fn().mockResolvedValue({ _id: new Types.ObjectId() }) } as never,
+    );
+    await expect(service.findOne(user(), new Types.ObjectId().toHexString())).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
   });
 
   it("rejects a duplicate SKU", async () => {

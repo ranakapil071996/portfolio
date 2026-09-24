@@ -62,7 +62,7 @@ export class CustomersService {
   }> {
     const business = await this.requireBusiness(user);
     const take = Math.min(50, Math.max(1, limit || 10));
-    const filter: Record<string, unknown> = { businessId: business._id };
+    const filter: Record<string, unknown> = { businessId: business._id, deletedAt: null };
     const query = (q || "").trim();
     if (query) {
       const rx = new RegExp(escapeRegex(query), "i");
@@ -88,23 +88,7 @@ export class CustomersService {
   }
 
   async findOne(user: AuthUser, id: string): Promise<CustomerPayload> {
-    const business = await this.requireBusiness(user);
-    if (!Types.ObjectId.isValid(id)) {
-      throw new NotFoundException({
-        error: "customer_not_found",
-        message: "Customer not found",
-      });
-    }
-    const row = await this.customers.findOne({
-      _id: new Types.ObjectId(id),
-      businessId: business._id,
-    });
-    if (!row) {
-      throw new NotFoundException({
-        error: "customer_not_found",
-        message: "Customer not found",
-      });
-    }
+    const row = await this.loadOwned(user, id);
     return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
   }
 
@@ -112,35 +96,8 @@ export class CustomersService {
     const business = await this.requireBusiness(user);
     const gstin = normalizeGstin(dto.gstin);
     const mobile = dto.mobile ? normalizeMobile(dto.mobile) : undefined;
-    if (gstin) {
-      const taken = await this.customers.exists({ businessId: business._id, gstin });
-      if (taken) {
-        throw new ConflictException({
-          error: "gstin_taken",
-          message: "A customer with this GSTIN already exists",
-        });
-      }
-    }
-    if (mobile) {
-      const taken = await this.customers.exists({ businessId: business._id, mobile });
-      if (taken) {
-        throw new ConflictException({
-          error: "mobile_taken",
-          message: "A customer with this mobile number already exists",
-        });
-      }
-    }
-
-    let stateCode = dto.stateCode;
-    let state = stateName(stateCode);
-    if (!stateCode && gstin) {
-      const derived = stateFromGstin(gstin);
-      if (derived) {
-        stateCode = derived.code;
-        state = derived.name;
-      }
-    }
-
+    await this.assertUnique(business._id, gstin, mobile);
+    const { stateCode, state } = this.resolveState(dto.stateCode, gstin);
     const created = await this.customers.create({
       businessId: business._id,
       userId: new Types.ObjectId(user.id),
@@ -157,6 +114,107 @@ export class CustomersService {
       isActive: true,
     });
     return this.toPayload(created.toObject() as unknown as Record<string, unknown>);
+  }
+
+  async update(user: AuthUser, id: string, dto: CreateCustomerDto): Promise<CustomerPayload> {
+    const row = await this.loadOwned(user, id);
+    const gstin = normalizeGstin(dto.gstin);
+    const mobile = dto.mobile ? normalizeMobile(dto.mobile) : undefined;
+    await this.assertUnique(row.businessId, gstin, mobile, row._id);
+    const { stateCode, state } = this.resolveState(dto.stateCode, gstin);
+    row.set({
+      name: dto.name.trim(),
+      mobile,
+      email: dto.email?.trim().toLowerCase() || undefined,
+      gstin,
+      address: dto.address?.trim() || undefined,
+      city: dto.city?.trim() || undefined,
+      stateCode,
+      state,
+      pincode: dto.pincode,
+      notes: dto.notes?.trim() || undefined,
+    });
+    await row.save();
+    return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
+  }
+
+  async remove(user: AuthUser, id: string): Promise<{ ok: true }> {
+    const row = await this.loadOwned(user, id);
+    row.deletedAt = new Date();
+    row.isActive = false;
+    await row.save();
+    return { ok: true };
+  }
+
+  private resolveState(stateCode?: string, gstin?: string) {
+    let code = stateCode;
+    let state = stateName(code);
+    if (!code && gstin) {
+      const derived = stateFromGstin(gstin);
+      if (derived) {
+        code = derived.code;
+        state = derived.name;
+      }
+    }
+    return { stateCode: code, state };
+  }
+
+  private async assertUnique(
+    businessId: Types.ObjectId,
+    gstin?: string,
+    mobile?: string,
+    exceptId?: Types.ObjectId,
+  ) {
+    if (gstin) {
+      const taken = await this.customers.exists({
+        businessId,
+        gstin,
+        deletedAt: null,
+        ...(exceptId ? { _id: { $ne: exceptId } } : {}),
+      });
+      if (taken) {
+        throw new ConflictException({
+          error: "gstin_taken",
+          message: "A customer with this GSTIN already exists",
+        });
+      }
+    }
+    if (mobile) {
+      const taken = await this.customers.exists({
+        businessId,
+        mobile,
+        deletedAt: null,
+        ...(exceptId ? { _id: { $ne: exceptId } } : {}),
+      });
+      if (taken) {
+        throw new ConflictException({
+          error: "mobile_taken",
+          message: "A customer with this mobile number already exists",
+        });
+      }
+    }
+  }
+
+  private async loadOwned(user: AuthUser, id: string) {
+    const business = await this.requireBusiness(user);
+    if (!Types.ObjectId.isValid(id)) {
+      throw new NotFoundException({
+        error: "customer_not_found",
+        message: "Customer not found",
+      });
+    }
+    const row = await this.customers.findOne({
+      _id: new Types.ObjectId(id),
+      businessId: business._id,
+      deletedAt: null,
+    });
+    if (!row) {
+      throw new NotFoundException({
+        error: "customer_not_found",
+        message: "Customer not found",
+      });
+    }
+    return row;
   }
 
   private async requireBusiness(user: AuthUser) {

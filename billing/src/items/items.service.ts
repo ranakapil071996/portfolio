@@ -1,4 +1,9 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import type { AuthUser } from "../auth/auth.types";
@@ -53,7 +58,7 @@ export class ItemsService {
   ): Promise<{ items: ItemPayload[]; page: number; limit: number; total: number; pages: number }> {
     const business = await this.requireBusiness(user);
     const take = Math.min(50, Math.max(1, limit || 10));
-    const filter: Record<string, unknown> = { businessId: business._id };
+    const filter: Record<string, unknown> = { businessId: business._id, deletedAt: null };
     const query = (q || "").trim();
     if (query) {
       const rx = new RegExp(escapeRegex(query), "i");
@@ -81,15 +86,7 @@ export class ItemsService {
   async create(user: AuthUser, dto: CreateItemDto): Promise<ItemPayload> {
     const business = await this.requireBusiness(user);
     const sku = dto.sku?.trim() || undefined;
-    if (sku) {
-      const taken = await this.items.exists({ businessId: business._id, sku });
-      if (taken) {
-        throw new ConflictException({
-          error: "sku_taken",
-          message: "An item with this SKU already exists",
-        });
-      }
-    }
+    await this.assertUniqueSku(business._id, sku);
     const created = await this.items.create({
       businessId: business._id,
       userId: new Types.ObjectId(user.id),
@@ -109,6 +106,80 @@ export class ItemsService {
       isActive: true,
     });
     return this.toPayload(created.toObject() as unknown as Record<string, unknown>);
+  }
+
+  async findOne(user: AuthUser, id: string): Promise<ItemPayload> {
+    const row = await this.loadOwned(user, id);
+    return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
+  }
+
+  async update(user: AuthUser, id: string, dto: CreateItemDto): Promise<ItemPayload> {
+    const row = await this.loadOwned(user, id);
+    const sku = dto.sku?.trim() || undefined;
+    await this.assertUniqueSku(row.businessId, sku, row._id);
+    row.set({
+      name: dto.name.trim(),
+      sku,
+      description: dto.description?.trim() || undefined,
+      type: dto.type,
+      hsnSac: dto.hsnSac,
+      unit: dto.unit,
+      salePrice: dto.salePrice,
+      purchasePrice: dto.purchasePrice,
+      gstRate: dto.gstRate,
+      taxInclusive: dto.taxInclusive,
+      cessRate: dto.cessRate ?? 0,
+      stockQty: dto.type === "service" ? 0 : (dto.stockQty ?? 0),
+      lowStockAt: dto.type === "service" ? undefined : dto.lowStockAt,
+    });
+    await row.save();
+    return this.toPayload(row.toObject() as unknown as Record<string, unknown>);
+  }
+
+  async remove(user: AuthUser, id: string): Promise<{ ok: true }> {
+    const row = await this.loadOwned(user, id);
+    row.deletedAt = new Date();
+    row.isActive = false;
+    await row.save();
+    return { ok: true };
+  }
+
+  private async assertUniqueSku(businessId: Types.ObjectId, sku?: string, exceptId?: Types.ObjectId) {
+    if (!sku) return;
+    const taken = await this.items.exists({
+      businessId,
+      sku,
+      deletedAt: null,
+      ...(exceptId ? { _id: { $ne: exceptId } } : {}),
+    });
+    if (taken) {
+      throw new ConflictException({
+        error: "sku_taken",
+        message: "An item with this SKU already exists",
+      });
+    }
+  }
+
+  private async loadOwned(user: AuthUser, id: string) {
+    const business = await this.requireBusiness(user);
+    if (!Types.ObjectId.isValid(id)) {
+      throw new NotFoundException({
+        error: "item_not_found",
+        message: "Item not found",
+      });
+    }
+    const row = await this.items.findOne({
+      _id: new Types.ObjectId(id),
+      businessId: business._id,
+      deletedAt: null,
+    });
+    if (!row) {
+      throw new NotFoundException({
+        error: "item_not_found",
+        message: "Item not found",
+      });
+    }
+    return row;
   }
 
   private async requireBusiness(user: AuthUser) {

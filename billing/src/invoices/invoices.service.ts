@@ -146,7 +146,7 @@ export class InvoicesService {
   }> {
     const business = await this.requireBusiness(user);
     const take = Math.min(50, Math.max(1, limit || 10));
-    const filter: Record<string, unknown> = { businessId: business._id };
+    const filter: Record<string, unknown> = { businessId: business._id, deletedAt: null };
     const query = (q || "").trim();
     if (query) {
       const rx = new RegExp(escapeRegex(query), "i");
@@ -193,6 +193,7 @@ export class InvoicesService {
     const row = await this.invoices.findOne({
       _id: new Types.ObjectId(id),
       businessId: business._id,
+      deletedAt: null,
     });
     if (!row) {
       throw new NotFoundException({
@@ -297,8 +298,15 @@ export class InvoicesService {
 
   async remove(user: AuthUser, id: string): Promise<{ ok: true }> {
     const { business, row } = await this.loadOwned(user, id);
+    if (row.deletedAt) {
+      throw new NotFoundException({
+        error: "invoice_not_found",
+        message: "Invoice not found",
+      });
+    }
     await this.applyStockDelta(business._id, (row.lines || []) as InvoiceLine[], []);
-    await row.deleteOne();
+    row.deletedAt = new Date();
+    await row.save();
     return { ok: true };
   }
 
@@ -341,6 +349,7 @@ export class InvoicesService {
     const row = await this.invoices.findOne({
       _id: new Types.ObjectId(id),
       businessId: business._id,
+      deletedAt: null,
     });
     if (!row) {
       throw new NotFoundException({
@@ -376,6 +385,7 @@ export class InvoicesService {
       const customer = await this.customers.findOne({
         _id: new Types.ObjectId(dto.customerId),
         businessId: business._id,
+        deletedAt: null,
       });
       if (!customer) {
         throw new NotFoundException({
@@ -403,6 +413,7 @@ export class InvoicesService {
       ? await this.items.find({
           _id: { $in: itemIds.map((id) => new Types.ObjectId(id)) },
           businessId: business._id,
+          deletedAt: null,
         })
       : [];
     const byId = new Map(itemRows.map((item) => [String(item._id), item]));

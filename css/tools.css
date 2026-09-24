@@ -1083,27 +1083,84 @@ html.billing-boot .bill-boot {
 }
 
 .bill-chip {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   margin-left: 0.35rem;
-  padding: 0.08rem 0.4rem;
+  padding: 0.16rem 0.55rem;
   border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 6px 16px rgba(2, 6, 23, 0.18);
+  backdrop-filter: blur(14px) saturate(1.35);
+  -webkit-backdrop-filter: blur(14px) saturate(1.35);
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
 }
 
 .bill-chip-warn {
-  background: rgba(251, 113, 133, 0.16);
-  color: #fb7185;
+  color: #fecdd3;
+  background: linear-gradient(180deg, rgba(251, 113, 133, 0.38), rgba(244, 63, 94, 0.14));
+  border-color: rgba(251, 113, 133, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 228, 230, 0.28),
+    0 8px 18px rgba(244, 63, 94, 0.18);
 }
 
 .bill-chip-paid {
-  background: rgba(52, 211, 153, 0.16);
-  color: #34d399;
+  color: #a7f3d0;
+  background: linear-gradient(180deg, rgba(52, 211, 153, 0.4), rgba(16, 185, 129, 0.14));
+  border-color: rgba(52, 211, 153, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(209, 250, 229, 0.32),
+    0 8px 18px rgba(16, 185, 129, 0.2);
 }
 
 .bill-chip-partial {
-  background: rgba(251, 191, 36, 0.18);
-  color: #fbbf24;
+  color: #fde68a;
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.42), rgba(245, 158, 11, 0.14));
+  border-color: rgba(251, 191, 36, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(254, 243, 199, 0.32),
+    0 8px 18px rgba(245, 158, 11, 0.18);
+}
+
+[data-theme="light"] .bill-chip {
+  border-color: rgba(15, 23, 42, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.42));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .bill-chip-warn {
+  color: #9f1239;
+  background: linear-gradient(180deg, rgba(255, 241, 242, 0.92), rgba(254, 205, 211, 0.72));
+  border-color: rgba(190, 18, 60, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 8px 20px rgba(190, 18, 60, 0.12);
+}
+
+[data-theme="light"] .bill-chip-paid {
+  color: #065f46;
+  background: linear-gradient(180deg, rgba(236, 253, 245, 0.94), rgba(167, 243, 208, 0.7));
+  border-color: rgba(5, 150, 105, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 20px rgba(5, 150, 105, 0.14);
+}
+
+[data-theme="light"] .bill-chip-partial {
+  color: #92400e;
+  background: linear-gradient(180deg, rgba(255, 251, 235, 0.94), rgba(253, 230, 138, 0.72));
+  border-color: rgba(180, 83, 9, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 20px rgba(180, 83, 9, 0.12);
 }
 
 .bill-pay-due {
@@ -1309,12 +1366,54 @@ html.billing-boot .bill-boot {
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgba(2, 6, 23, 0.55);
+  background: rgba(2, 6, 23, 0.58);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+}
+
+[data-theme="light"] .bill-pay-mask {
+  background: rgba(241, 245, 249, 0.55);
 }
 
 .bill-pay-dialog {
   width: min(22rem, 100%);
   padding: 1.15rem 1.2rem 1.2rem;
+}
+
+.bill-confirm-dialog {
+  width: min(24rem, 100%);
+  padding: 1.35rem 1.3rem 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 24px 48px rgba(2, 6, 23, 0.35);
+}
+
+[data-theme="light"] .bill-confirm-dialog {
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 24px 48px rgba(15, 23, 42, 0.12);
+}
+
+.billing-software .btn-danger {
+  background: linear-gradient(180deg, rgba(244, 63, 94, 0.92), rgba(225, 29, 72, 0.88));
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 10px 22px rgba(225, 29, 72, 0.28);
+}
+
+.billing-software .btn-danger:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 12px 28px rgba(225, 29, 72, 0.38);
+}
+
+[data-theme="light"] .billing-software .btn-danger {
+  background: linear-gradient(180deg, #e11d48, #be123c);
+  border-color: rgba(159, 18, 57, 0.25);
 }
 
 .bill-pay-dialog h3 {
@@ -1390,7 +1489,7 @@ html.billing-boot .bill-boot {
 .billing-software .bill-item-form input[type="number"],
 .billing-software .bill-item-form input[type="email"],
 .billing-software .bill-item-form input[type="date"],
-.billing-software .bill-item-form select,
+.billing-software .bill-item-form .tool-field > select,
 .billing-software .bill-item-form textarea {
   width: 100%;
   font: inherit;
@@ -1403,7 +1502,7 @@ html.billing-boot .bill-boot {
 }
 
 .billing-software .tool-field > select,
-.billing-software .bill-item-form select {
+.billing-software .bill-item-form .tool-field > select {
   appearance: none;
   -webkit-appearance: none;
   background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
@@ -1425,7 +1524,7 @@ html.billing-boot .bill-boot {
 
 .billing-software .tool-field > input:focus,
 .billing-software .tool-field > select:focus,
-.bill-item-form select:focus,
+.bill-item-form .tool-field > select:focus,
 .bill-item-form textarea:focus,
 .bill-item-form input:focus {
   outline: none;
@@ -1898,9 +1997,13 @@ html[dir="rtl"] .tool-table td { text-align: start; }
 .bill-select-btn {
   border-radius: 12px;
   padding: 0.7rem 0.85rem;
+  flex-wrap: nowrap;
+  min-height: 2.85rem;
+  white-space: nowrap;
 }
 
 .bill-select-label {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1976,6 +2079,15 @@ html[dir="rtl"] .tool-table td { text-align: start; }
   cursor: pointer;
 }
 
+.bill-select-opt-hint {
+  display: block;
+  margin-top: 0.12rem;
+  color: var(--text-muted);
+  font-style: normal;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
 .bill-dd-opt {
   padding: 0.42rem 0.55rem;
 }
@@ -2000,13 +2112,19 @@ html[dir="rtl"] .tool-table td { text-align: start; }
   width: 100%;
 }
 
+.billing-software .bill-select select,
 .bill-select select {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  background: none !important;
+  pointer-events: none !important;
+  clip: rect(0, 0, 0, 0);
 }
 
 .bill-suggest-list .bill-hsn-hit {

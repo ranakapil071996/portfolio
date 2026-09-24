@@ -43,6 +43,7 @@ describe("CustomersService", () => {
     const customers = {
       exists: jest.fn().mockResolvedValue(null),
       create: jest.fn().mockResolvedValue(created),
+      findOne: jest.fn(),
     };
     const service = new CustomersService(
       customers as never,
@@ -145,6 +146,43 @@ describe("CustomersService", () => {
     const out = await service.findOne(user(), String(id));
     expect(out.id).toBe(String(id));
     expect(out.name).toBe("Sharma Stores");
+  });
+
+  it("updates a customer and can soft-delete them", async () => {
+    const id = new Types.ObjectId();
+    const business = { _id: new Types.ObjectId() };
+    const row = {
+      _id: id,
+      businessId: business._id,
+      isActive: true,
+      deletedAt: undefined as Date | undefined,
+      set: jest.fn(),
+      save: jest.fn().mockResolvedValue(undefined),
+      toObject: () => ({
+        _id: id,
+        name: "Sharma Mart",
+        gstin: "27AAAAA0000A1Z5",
+        stateCode: "27",
+        state: "Maharashtra",
+        isActive: false,
+      }),
+    };
+    const customers = {
+      findOne: jest.fn().mockResolvedValue(row),
+      exists: jest.fn().mockResolvedValue(null),
+    };
+    const service = new CustomersService(
+      customers as never,
+      { findOne: jest.fn().mockResolvedValue(business) } as never,
+    );
+    const updated = await service.update(user(), String(id), dto({ name: "Sharma Mart", gstin: "27AAAAA0000A1Z5" }));
+    expect(updated.name).toBe("Sharma Mart");
+    expect(row.set).toHaveBeenCalled();
+    const removed = await service.remove(user(), String(id));
+    expect(removed).toEqual({ ok: true });
+    expect(row.isActive).toBe(false);
+    expect(row.deletedAt).toBeInstanceOf(Date);
+    expect(row.save).toHaveBeenCalled();
   });
 
   it("returns not found for a missing customer", async () => {

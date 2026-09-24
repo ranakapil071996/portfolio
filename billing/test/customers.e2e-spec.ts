@@ -93,6 +93,38 @@ describe("Customers (e2e)", () => {
     expect(one.body.pincode).toBe("400001");
   });
 
+  it("updates a customer and soft-deletes them from lists", async () => {
+    const server = app.getHttpServer();
+    const created = await request(server)
+      .post("/api/customers")
+      .set("Cookie", cookie)
+      .send({
+        name: "Kapoor Mart",
+        mobile: "9988776655",
+        gstin: "07AAAAA0000A1Z5",
+        city: "Delhi",
+      })
+      .expect(201);
+
+    const patched = await request(server)
+      .patch(`/api/customers/${created.body.id}`)
+      .set("Cookie", cookie)
+      .send({
+        name: "Kapoor Stores",
+        mobile: "9988776655",
+        gstin: "07AAAAA0000A1Z5",
+        city: "Noida",
+      })
+      .expect(200);
+    expect(patched.body.name).toBe("Kapoor Stores");
+    expect(patched.body.city).toBe("Noida");
+
+    await request(server).delete(`/api/customers/${created.body.id}`).set("Cookie", cookie).expect(200);
+    const listed = await request(server).get("/api/customers?page=1&limit=50").set("Cookie", cookie).expect(200);
+    expect(listed.body.items.find((row: { id: string }) => row.id === created.body.id)).toBeUndefined();
+    await request(server).get(`/api/customers/${created.body.id}`).set("Cookie", cookie).expect(404);
+  });
+
   it("rejects a duplicate GSTIN and an empty name", async () => {
     const server = app.getHttpServer();
 

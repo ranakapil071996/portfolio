@@ -426,7 +426,11 @@
       lowStockAt: type === "service" ? undefined : low,
     };
     setBusy(form, true);
-    api("/items", { method: "POST", body: payload })
+    var editId = form.getAttribute("data-edit-id") || "";
+    api(editId ? "/items/" + encodeURIComponent(editId) : "/items", {
+      method: editId ? "PATCH" : "POST",
+      body: payload,
+    })
       .then(function () {
         toast(t("tools.billing.itemSaved", "Item saved"));
         go("app/items");
@@ -487,7 +491,11 @@
       notes: notes || undefined,
     };
     setBusy(form, true);
-    api("/customers", { method: "POST", body: payload })
+    var editId = form.getAttribute("data-edit-id") || "";
+    api(editId ? "/customers/" + encodeURIComponent(editId) : "/customers", {
+      method: editId ? "PATCH" : "POST",
+      body: payload,
+    })
       .then(function () {
         toast(t("tools.billing.customerSaved", "Customer saved"));
         go("app/customers");
@@ -1272,6 +1280,8 @@
               esc(String(it.gstRate)) +
               "%</td><td>" +
               (it.type === "service" ? "—" : esc(String(it.stockQty)) + low) +
+              "</td><td>" +
+              itemActionButtons(it) +
               "</td></tr>"
             );
           })
@@ -1290,12 +1300,15 @@
             sortTh(t("tools.billing.itemPrice", "Sale price"), "price", query) +
             sortTh("GST", "gst", query) +
             sortTh(t("tools.billing.itemStock", "Stock"), "stock", query) +
-            "</tr></thead><tbody>" +
+            "<th>" +
+            esc(t("tools.billing.invoiceActions", "Actions")) +
+            "</th></tr></thead><tbody>" +
             rows +
             "</tbody></table></div>" +
             listPager("items", current, pages, from, to, total, query, "tools.billing.itemsPages", "Item pages"),
         );
         bindListTools("items", query);
+        bindItemActions(stage);
       })
       .catch(function (ex) {
         var status = document.getElementById("items-status");
@@ -1303,7 +1316,68 @@
       });
   }
 
-  function itemFormView() {
+  function itemActionButtons(it) {
+    var id = it && it.id;
+    return (
+      '<div class="bill-inv-actions">' +
+      '<button type="button" class="bill-act" data-item-act="edit" data-id="' +
+      esc(id) +
+      '">' +
+      esc(t("tools.billing.invoiceEdit", "Edit")) +
+      "</button>" +
+      '<button type="button" class="bill-act bill-act-danger" data-item-act="del" data-id="' +
+      esc(id) +
+      '">' +
+      esc(t("tools.billing.invoiceDelete", "Delete")) +
+      "</button></div>"
+    );
+  }
+
+  function deleteItem(id) {
+    return confirmDialog({
+      title: t("tools.billing.itemDeleteTitle", "Delete item"),
+      message: t(
+        "tools.billing.itemDeleteConfirm",
+        "Delete this item? Existing invoices keep the line. It will no longer appear in the catalog.",
+      ),
+      ok: t("tools.billing.invoiceDelete", "Delete"),
+      danger: true,
+    }).then(function (ok) {
+      if (!ok) return false;
+      return api("/items/" + encodeURIComponent(id), { method: "DELETE" }).then(function () {
+        toast(t("tools.billing.itemDeleted", "Item deleted"));
+        return true;
+      });
+    });
+  }
+
+  function bindItemActions(root) {
+    if (!root || root._itemActs) return;
+    root._itemActs = true;
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest("[data-item-act]") : null;
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var id = btn.getAttribute("data-id");
+      var act = btn.getAttribute("data-item-act");
+      if (act === "edit") {
+        go("app/items/" + id + "/edit");
+        return;
+      }
+      if (act === "del") {
+        deleteItem(id)
+          .then(function (ok) {
+            if (ok) itemsListView(view().screen);
+          })
+          .catch(function (ex) {
+            toast(ex.message);
+          });
+      }
+    });
+  }
+
+  function itemFormView(editId) {
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
     var units = ["pcs", "nos", "kg", "g", "ltr", "mtr", "box", "hour", "day", "sqft"];
@@ -1315,11 +1389,13 @@
     stage.innerHTML =
       '<header class="bill-stage-head">' +
       "<h2>" +
-      esc(t("tools.billing.addItemTitle", "Add item")) +
+      esc(editId ? t("tools.billing.editItemTitle", "Edit item") : t("tools.billing.addItemTitle", "Add item")) +
       "</h2><p>" +
       esc(t("tools.billing.addItemLead", "These fields are used when you put the item on an invoice.")) +
       "</p></header>" +
-      '<form id="bill-item-form" class="bill-item-form glass" method="post" action="#" onsubmit="return false;">' +
+      '<form id="bill-item-form" class="bill-item-form glass" method="post" action="#" data-edit-id="' +
+      esc(editId || "") +
+      '" onsubmit="return false;">' +
       '<div class="bill-form-grid">' +
       '<div class="tool-field bill-span-2"><label for="item-name">' +
       esc(t("tools.billing.itemName", "Item name")) +
@@ -1382,7 +1458,7 @@
       "</label>" +
       '<input id="item-cess" type="number" inputmode="decimal" min="0" max="100" step="0.01" value="0" /></div>' +
       '<div class="tool-field" id="item-stock-field"><label for="item-stock">' +
-      esc(t("tools.billing.itemStock", "Opening stock")) +
+      esc(editId ? t("tools.billing.itemStock", "Stock") : t("tools.billing.itemOpeningStock", "Opening stock")) +
       "</label>" +
       '<input id="item-stock" type="number" inputmode="decimal" min="0" max="10000000" step="0.001" value="0" /></div>' +
       '<div class="tool-field" id="item-low-field"><label for="item-low">' +
@@ -1393,7 +1469,7 @@
       '<p class="billing-err" id="billing-error" role="alert"></p>' +
       '<div class="billing-actions">' +
       '<button class="btn btn-primary" type="submit">' +
-      esc(t("tools.billing.saveItem", "Save item")) +
+      esc(editId ? t("tools.billing.saveItemChanges", "Save changes") : t("tools.billing.saveItem", "Save item")) +
       '</button><a class="btn btn-ghost" href="#app/items">' +
       esc(t("tools.billing.backToItems", "Back to items")) +
       "</a></div></form>" +
@@ -1455,7 +1531,41 @@
     bindHsnFinder();
     enhanceSelects(stage);
     var nameEl = document.getElementById("item-name");
-    if (nameEl) nameEl.focus();
+    if (nameEl && !editId) nameEl.focus();
+    if (editId) {
+      api("/items/" + encodeURIComponent(editId))
+        .then(fillItemForm)
+        .catch(function (ex) {
+          toast(ex.message);
+          go("app/items");
+        });
+    }
+  }
+
+  function fillItemForm(it) {
+    function setVal(id, value) {
+      var el = document.getElementById(id);
+      if (el) el.value = value == null ? "" : String(value);
+    }
+    setVal("item-name", it.name);
+    setVal("item-sku", it.sku);
+    setVal("item-desc", it.description);
+    setVal("item-type", it.type || "goods");
+    setVal("item-hsn", it.hsnSac);
+    setVal("item-unit", it.unit || "pcs");
+    setVal("item-sale", it.salePrice);
+    setVal("item-cost", it.purchasePrice);
+    setVal("item-gst", it.gstRate);
+    setVal("item-taxmode", it.taxInclusive ? "inc" : "exc");
+    setVal("item-cess", it.cessRate);
+    setVal("item-stock", it.stockQty);
+    setVal("item-low", it.lowStockAt);
+    refreshSelect(document.getElementById("item-type"));
+    refreshSelect(document.getElementById("item-unit"));
+    refreshSelect(document.getElementById("item-gst"));
+    refreshSelect(document.getElementById("item-taxmode"));
+    var typeEl = document.getElementById("item-type");
+    if (typeEl) typeEl.dispatchEvent(new Event("change"));
   }
 
   function itemTypeValue() {
@@ -1972,6 +2082,8 @@
               "</td><td>" +
               esc(place) +
               (it.pincode ? '<span class="bill-sub">' + esc(it.pincode) + "</span>" : "") +
+              "</td><td>" +
+              customerActionButtons(it) +
               "</td></tr>"
             );
           })
@@ -1985,7 +2097,9 @@
             sortTh(t("tools.billing.mobile", "Mobile number"), "mobile", query) +
             sortTh(t("tools.billing.gstin", "GSTIN"), "gstin", query) +
             sortTh(t("tools.billing.customerPlace", "Place of supply"), "place", query) +
-            "</tr></thead><tbody>" +
+            "<th>" +
+            esc(t("tools.billing.invoiceActions", "Actions")) +
+            "</th></tr></thead><tbody>" +
             rows +
             "</tbody></table></div>" +
             listPager(
@@ -2001,6 +2115,7 @@
             ),
         );
         bindListTools("customers", query);
+        bindCustomerActions(stage);
       })
       .catch(function (ex) {
         var status = document.getElementById("customers-status");
@@ -2008,7 +2123,121 @@
       });
   }
 
-  function customerFormView() {
+  function customerActionButtons(it) {
+    var id = it && it.id;
+    return (
+      '<div class="bill-inv-actions">' +
+      '<button type="button" class="bill-act" data-cust-act="edit" data-id="' +
+      esc(id) +
+      '">' +
+      esc(t("tools.billing.invoiceEdit", "Edit")) +
+      "</button>" +
+      '<button type="button" class="bill-act bill-act-danger" data-cust-act="del" data-id="' +
+      esc(id) +
+      '">' +
+      esc(t("tools.billing.invoiceDelete", "Delete")) +
+      "</button></div>"
+    );
+  }
+
+  function confirmDialog(opts) {
+    opts = opts || {};
+    return new Promise(function (resolve) {
+      var existing = document.getElementById("bill-confirm-mask");
+      if (existing) existing.remove();
+      var mask = document.createElement("div");
+      mask.id = "bill-confirm-mask";
+      mask.className = "bill-pay-mask bill-confirm-mask";
+      mask.innerHTML =
+        '<div class="bill-pay-dialog bill-confirm-dialog glass" role="alertdialog" aria-modal="true" aria-labelledby="bill-confirm-title" aria-describedby="bill-confirm-copy">' +
+        '<h3 id="bill-confirm-title">' +
+        esc(opts.title || t("tools.billing.confirmTitle", "Please confirm")) +
+        '</h3><p id="bill-confirm-copy">' +
+        esc(opts.message || "") +
+        '</p><div class="billing-actions">' +
+        '<button type="button" class="btn btn-ghost" data-confirm="no">' +
+        esc(opts.cancel || t("tools.billing.invoiceCancel", "Cancel")) +
+        '</button><button type="button" class="btn ' +
+        (opts.danger ? "btn-danger" : "btn-primary") +
+        '" data-confirm="yes">' +
+        esc(opts.ok || t("tools.billing.confirmOk", "Confirm")) +
+        "</button></div></div>";
+      function close(value) {
+        document.removeEventListener("keydown", onKey);
+        mask.remove();
+        resolve(value);
+      }
+      function onKey(e) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          close(false);
+        }
+        if (e.key === "Enter" && document.activeElement && document.activeElement.getAttribute("data-confirm") === "yes") {
+          e.preventDefault();
+          close(true);
+        }
+      }
+      mask.addEventListener("click", function (e) {
+        if (e.target === mask) {
+          close(false);
+          return;
+        }
+        var btn = e.target.closest ? e.target.closest("[data-confirm]") : null;
+        if (!btn) return;
+        close(btn.getAttribute("data-confirm") === "yes");
+      });
+      document.addEventListener("keydown", onKey);
+      document.body.appendChild(mask);
+      var cancelBtn = mask.querySelector('[data-confirm="no"]');
+      if (cancelBtn) cancelBtn.focus();
+    });
+  }
+
+  function deleteCustomer(id) {
+    return confirmDialog({
+      title: t("tools.billing.customerDeleteTitle", "Delete customer"),
+      message: t(
+        "tools.billing.customerDeleteConfirm",
+        "Delete this customer? Existing invoices keep their snapshot.",
+      ),
+      ok: t("tools.billing.invoiceDelete", "Delete"),
+      danger: true,
+    }).then(function (ok) {
+      if (!ok) return false;
+      return api("/customers/" + encodeURIComponent(id), { method: "DELETE" }).then(function () {
+        toast(t("tools.billing.customerDeleted", "Customer deleted"));
+        return true;
+      });
+    });
+  }
+
+  function bindCustomerActions(root) {
+    if (!root || root._custActs) return;
+    root._custActs = true;
+    root.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest("[data-cust-act]") : null;
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var id = btn.getAttribute("data-id");
+      var act = btn.getAttribute("data-cust-act");
+      if (act === "edit") {
+        go("app/customers/" + id + "/edit");
+        return;
+      }
+      if (act === "del") {
+        deleteCustomer(id)
+          .then(function (ok) {
+            if (ok) customersListView(view().screen);
+          })
+          .catch(function (ex) {
+            toast(ex.message);
+          });
+      }
+    });
+  }
+
+  function customerFormView(editId) {
     var stage = document.getElementById("bill-stage");
     if (!stage) return;
     var stateOpts =
@@ -2021,11 +2250,13 @@
     stage.innerHTML =
       '<header class="bill-stage-head">' +
       "<h2>" +
-      esc(t("tools.billing.addCustomerTitle", "Add customer")) +
+      esc(editId ? t("tools.billing.editCustomerTitle", "Edit customer") : t("tools.billing.addCustomerTitle", "Add customer")) +
       "</h2><p>" +
       esc(t("tools.billing.addCustomerLead", "These details are copied onto invoices for this customer.")) +
       "</p></header>" +
-      '<form id="bill-customer-form" class="bill-item-form glass" method="post" action="#" onsubmit="return false;">' +
+      '<form id="bill-customer-form" class="bill-item-form glass" method="post" action="#" data-edit-id="' +
+      esc(editId || "") +
+      '" onsubmit="return false;">' +
       '<div class="bill-form-grid">' +
       '<div class="tool-field bill-span-2"><label for="customer-name">' +
       esc(t("tools.billing.customerName", "Customer name")) +
@@ -2075,7 +2306,7 @@
       '<p class="billing-err" id="billing-error" role="alert"></p>' +
       '<div class="billing-actions">' +
       '<button class="btn btn-primary" type="submit">' +
-      esc(t("tools.billing.saveCustomer", "Save customer")) +
+      esc(editId ? t("tools.billing.saveCustomerChanges", "Save changes") : t("tools.billing.saveCustomer", "Save customer")) +
       '</button><a class="btn btn-ghost" href="#app/customers">' +
       esc(t("tools.billing.backToCustomers", "Back to customers")) +
       "</a></div></form>";
@@ -2100,7 +2331,32 @@
     if (gstEl) gstEl.addEventListener("blur", fillStateFromGstin);
     enhanceSelects(stage);
     var nameEl = document.getElementById("customer-name");
-    if (nameEl) nameEl.focus();
+    if (nameEl && !editId) nameEl.focus();
+    if (editId) {
+      api("/customers/" + encodeURIComponent(editId))
+        .then(fillCustomerForm)
+        .catch(function (ex) {
+          toast(ex.message);
+          go("app/customers");
+        });
+    }
+  }
+
+  function fillCustomerForm(c) {
+    function setVal(id, value) {
+      var el = document.getElementById(id);
+      if (el) el.value = value || "";
+    }
+    setVal("customer-name", c.name);
+    setVal("customer-mobile", c.mobile);
+    setVal("customer-email", c.email);
+    setVal("customer-gstin", c.gstin);
+    setVal("customer-address", c.address);
+    setVal("customer-city", c.city);
+    setVal("customer-state", c.stateCode);
+    refreshSelect(document.getElementById("customer-state"));
+    setVal("customer-pincode", c.pincode);
+    setVal("customer-notes", c.notes);
   }
 
   var invDraft = { customer: null, lines: [], charges: [], seq: 0 };
@@ -2198,16 +2454,20 @@
   }
 
   function deleteInvoice(id) {
-    if (
-      !window.confirm(
-        t("tools.billing.invoiceDeleteConfirm", "Delete this invoice? Catalog stock will be restored."),
-      )
-    ) {
-      return Promise.resolve(false);
-    }
-    return api("/invoices/" + encodeURIComponent(id), { method: "DELETE" }).then(function () {
-      toast(t("tools.billing.invoiceDeleted", "Invoice deleted"));
-      return true;
+    return confirmDialog({
+      title: t("tools.billing.invoiceDeleteTitle", "Delete invoice"),
+      message: t(
+        "tools.billing.invoiceDeleteConfirm",
+        "Delete this invoice? It will be hidden and catalog stock restored.",
+      ),
+      ok: t("tools.billing.invoiceDelete", "Delete"),
+      danger: true,
+    }).then(function (ok) {
+      if (!ok) return false;
+      return api("/invoices/" + encodeURIComponent(id), { method: "DELETE" }).then(function () {
+        toast(t("tools.billing.invoiceDeleted", "Invoice deleted"));
+        return true;
+      });
     });
   }
 
@@ -2817,6 +3077,8 @@
     btn.innerHTML = '<span class="bill-select-label">' + esc(selectLabel(sel) || "—") + "</span>";
     menu.innerHTML = Array.prototype.map
       .call(sel.options, function (opt) {
+        var label = String(opt.textContent || "").trim() || "—";
+        var hint = String(opt.getAttribute("data-hint") || "").trim();
         return (
           '<button type="button" class="bill-select-opt' +
           (opt.value === cur ? " is-on" : "") +
@@ -2825,7 +3087,10 @@
           '"' +
           (opt.disabled ? " disabled" : "") +
           ">" +
-          esc(String(opt.textContent || "").trim() || "—") +
+          "<span>" +
+          esc(label) +
+          "</span>" +
+          (hint ? '<em class="bill-select-opt-hint">' + esc(hint) + "</em>" : "") +
           "</button>"
         );
       })
@@ -5189,10 +5454,10 @@
           row.id +
           '"' +
           (row.id === choice.printer ? " selected" : "") +
-          ">" +
-          esc(t("tools.billing.invoicePrinter_" + row.id, row.name)) +
-          " — " +
+          ' data-hint="' +
           esc(row.hint) +
+          '">' +
+          esc(t("tools.billing.invoicePrinter_" + row.id, row.name)) +
           "</option>"
         );
       })
@@ -5494,12 +5759,20 @@
       itemFormView();
       return;
     }
+    if (tab === "items" && isObjectId(screen) && extra === "edit") {
+      itemFormView(screen);
+      return;
+    }
     if (tab === "items") {
       itemsListView(screen);
       return;
     }
     if (tab === "customers" && screen === "new") {
       customerFormView();
+      return;
+    }
+    if (tab === "customers" && isObjectId(screen) && extra === "edit") {
+      customerFormView(screen);
       return;
     }
     if (tab === "customers") {

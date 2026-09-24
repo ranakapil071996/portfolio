@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { CurrentUser } from "../common/current-user.decorator";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import type { AuthUser } from "../auth/auth.types";
@@ -25,5 +25,16 @@ export class CustomersController {
   @HttpCode(201)
   create(@CurrentUser() user: AuthUser, @Body() body: CreateCustomerDto) {
     return this.customers.create(user, body);
+  }
+
+  @Patch(":id")
+  update(@CurrentUser() user: AuthUser, @Param("id") id: string, @Body() body: CreateCustomerDto) {
+    return this.customers.update(user, id, body);
+  }
+
+  @Delete(":id")
+  @HttpCode(200)
+  remove(@CurrentUser() user: AuthUser, @Param("id") id: string) {
+    return this.customers.remove(user, id);
   }
 }

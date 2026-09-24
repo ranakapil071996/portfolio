@@ -54,10 +54,16 @@ export class Item {
 
   @Prop({ default: true })
   isActive!: boolean;
+
+  @Prop({ index: true })
+  deletedAt?: Date;
 }
 
 export type ItemDocument = HydratedDocument<Item>;
 export const ItemSchema = SchemaFactory.createForClass(Item);
 
 ItemSchema.index({ businessId: 1, name: 1 });
-ItemSchema.index({ businessId: 1, sku: 1 }, { unique: true, sparse: true });
+ItemSchema.index(
+  { businessId: 1, sku: 1 },
+  { unique: true, partialFilterExpression: { sku: { $type: "string" }, deletedAt: null } },
+);
